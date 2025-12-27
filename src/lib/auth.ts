@@ -1,0 +1,96 @@
+export function getCookie(name: string) {
+  if (typeof document === 'undefined') return undefined;
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    const cookie = parts.pop()?.split(';').shift();
+    if (cookie) {
+      try {
+        return decodeURIComponent(cookie.trim());
+      } catch {
+        return cookie.trim();
+      }
+    }
+  }
+  return undefined;
+}
+
+type CookieOptions = {
+  path?: string;
+  maxAge?: number;
+  sameSite?: 'lax' | 'strict' | 'none';
+  secure?: boolean;
+};
+
+export function setCookie(
+  name: string,
+  value: string,
+  options: CookieOptions = {}
+) {
+  if (typeof document === 'undefined') return;
+  const parts = [
+    `${name}=${encodeURIComponent(value)}`,
+    `path=${options.path ?? '/'}`,
+    options.maxAge ? `max-age=${options.maxAge}` : '',
+    `sameSite=${options.sameSite ?? 'lax'}`,
+    options.secure ? 'secure' : '',
+  ].filter(Boolean);
+  document.cookie = parts.join('; ');
+}
+
+export function deleteCookie(name: string) {
+  if (typeof document === 'undefined') return;
+  document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax`;
+}
+
+export function getUserRoles(): string[] | null {
+  const cookieValue = getCookie('userRole');
+  if (!cookieValue) return null;
+  try {
+    const roles: string[] = JSON.parse(cookieValue);
+    return roles.map((r) => r.toLowerCase());
+  } catch (err) {
+    console.error('Failed to parse user roles from cookie:', err);
+    return null;
+  }
+}
+
+export function getAuthFlag(): boolean {
+  // Prefer explicit auth cookie; fallback to local token presence
+  return !!getCookie('auth') || !!localStorage.getItem('token');
+}
+
+export function setToken(token: string) {
+  localStorage.setItem('token', token);
+}
+
+export function clearToken() {
+  localStorage.removeItem('token');
+}
+
+export function emitAuthChange() {
+  try {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('authchange'));
+    }
+  } catch {
+    // noop
+  }
+}
+
+export function logout() {
+  clearToken();
+  deleteCookie('jwtToken');
+  deleteCookie('refreshToken');
+  deleteCookie('userRole');
+  deleteCookie('auth');
+  emitAuthChange();
+  setTimeout(() => {
+    try {
+      // Redirect to login
+      window.location.href = '/login';
+    } catch (err) {
+      void err; // noop
+    }
+  }, 100);
+}

@@ -8,7 +8,7 @@ const TestimonialSection: FC = () => {
   const testimonialSlides = [
     [
       {
-        text: 'The Bridge podcasts are incredibly engaging and insightful. They bridge the gap between complex topics and everyday understanding.',
+        text: 'The Bridge podcasts are incredibly engaging and insightful.',
         name: '@podcastfan1',
         link: '#',
         platform: 'Spotify Listener',
@@ -141,14 +141,16 @@ const TestimonialSection: FC = () => {
         <div className="container mx-auto">
           <div className="row justify-content-center mb-5">
             <div className="col-xl-6 col-lg-8 text-center">
-              <h3 className="text-size-xl fw-bold mb-4">Testimonials</h3>
-              <h5 className="text-uppercase ls-2 fw-medium op-07">
+              <h3 className="mb-4 text-4xl md:text-6xl font-grotesk-bold">
+                Testimonials
+              </h3>
+              <h5 className="text-uppercase ls-2 op-07 font-grotesk-medium">
                 ❤️ What Our Customers Say About Us ❤️
               </h5>
             </div>
           </div>
         </div>
-        <section className="swiper_wrapper h-auto">
+        <section className="swiper_wrapper h-auto mb-20">
           <Swiper
             className="testimonial-swiper"
             modules={[FreeMode, Scrollbar]}
@@ -177,7 +179,7 @@ const TestimonialSection: FC = () => {
                             href={testimonial.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-primary! font-bold!"
+                            className="text-primary font-bold"
                           >
                             {testimonial.name}
                           </a>

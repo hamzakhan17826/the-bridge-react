@@ -45,13 +45,11 @@ const Events: FC = () => {
   ];
 
   return (
-    <section className="pb-6 pt-[150px]">
+    <section className="py-20 md:py-28 my-24 bg-gray-50">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-8">
-          <h3 className="text-2xl md:text-3xl font-grotesk-bold">
-            Upcoming Events
-          </h3>
-        </div>
+        <h3 className="text-center mb-8 text-3xl md:text-6xl font-grotesk-bold">
+          Upcoming Events
+        </h3>
 
         <Swiper
           className="events-swiper"
@@ -67,12 +65,12 @@ const Events: FC = () => {
         >
           {events.map((event, index) => (
             <SwiperSlide key={index}>
-              <article className="rounded-2xl shadow-sm hover:shadow p-3 bg-white">
+              <article className="h-full flex flex-col rounded-2xl shadow-sm hover:shadow p-3 bg-white">
                 <div className="relative overflow-hidden rounded-xl">
                   <img
                     src={event.image}
                     alt={event.title}
-                    className="w-full h-[300px] object-cover"
+                    className="w-full object-cover object-center h-96"
                   />
                   <div className="absolute top-3 left-3">
                     <span className="inline-flex items-center px-3 py-1 text-sm rounded-full bg-white text-gray-900 shadow">
@@ -80,21 +78,21 @@ const Events: FC = () => {
                     </span>
                   </div>
                 </div>
-                <div className="p-4">
+                <div className="p-4 flex-1 flex flex-col">
                   <div className="mb-1">
-                    <span className="uppercase tracking-wide text-xs text-gray-600 font-grotesk-medium">
+                    <span className="uppercase tracking-wide text-xs text-gray-600 font-grotesk-light">
                       {event.date}
                     </span>
                   </div>
-                  <h3 className="text-xl font-grotesk-bold">
-                    <a href="#" className="text-gray-900">
+                  <h3 className="">
+                    <a href="#" className="text-gray-900 font-grotesk-bold">
                       {event.title}
                     </a>
                   </h3>
                   <p className="my-3 text-gray-700 font-grotesk-light">
                     {event.description}
                   </p>
-                  <div className="text-gray-700 font-grotesk-medium">
+                  <div className="mt-auto pt-4 border-t border-gray-100 text-gray-700 font-grotesk-medium">
                     <span className="mr-1">📍</span>
                     {event.location}
                   </div>

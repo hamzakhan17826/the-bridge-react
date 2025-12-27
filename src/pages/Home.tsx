@@ -1,14 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 import HeroSection from '../components/ui/HeroSection';
-import Navbar from '../components/layouts/Navbar';
 import AboutSection from '../components/ui/AboutSection';
 import PodcastSlider from '../components/ui/PodcastSection';
-import type { PodcastItem } from '../lib/types';
+import type { PodcastItem } from '../types/types';
 import EventsSection from '../components/ui/EventSection';
 import TestimonialSection from '../components/ui/TestimonialSection';
 import MembershipSection from '../components/ui/MembershipSection';
 import CallToAction from '../components/ui/CTASection';
-import Footer from '../components/layouts/Footer';
 
 const podcasts: PodcastItem[] = [
   {
@@ -58,7 +56,6 @@ const Home = () => (
     <Helmet>
       <title>Home Page</title>
     </Helmet>
-    <Navbar />
     <HeroSection />
     <AboutSection />
     <PodcastSlider
@@ -71,7 +68,6 @@ const Home = () => (
     <TestimonialSection />
     <MembershipSection />
     <CallToAction />
-    <Footer />
   </>
 );
 

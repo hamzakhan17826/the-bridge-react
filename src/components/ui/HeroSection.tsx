@@ -11,14 +11,14 @@ export default function HeroSection() {
               <div className="uppercase tracking-widest mb-4 text-gray-600">
                 Bridging Two Worlds
               </div>
-              <h1 className="mb-2 text-3xl! md:text-5xl! lg:text-6xl leading-tight">
+              <h1 className="mb-2 text-3xl md:text-5xl lg:text-6xl leading-tight">
                 A modern stage where{' '}
                 <span className="font-playfair italic font-semibold text-primary lowercase md:text-6xl">
                   mediums
                 </span>{' '}
                 rise together
               </h1>
-              <p className="mt-3 text-lg! md:text-lg text-gray-700">
+              <p className="mt-3 text-lg md:text-lg text-gray-700">
                 The Bridge is a sacred space where sitters, developing mediums,
                 and professional mediums connect with spirit through evidence,
                 healing, and community.
@@ -29,7 +29,7 @@ export default function HeroSection() {
             <div className="mt-6 mb-8 flex flex-wrap gap-3">
               <Link
                 to="/events"
-                className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-3 text-white! hover:opacity-90 transition"
+                className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-3 text-white hover:opacity-90 transition"
               >
                 View Events
               </Link>
@@ -45,7 +45,7 @@ export default function HeroSection() {
             <div className="flex items-center gap-8">
               <div>
                 <h3
-                  className="font-playfair text-5xl! md:text-4xl mb-0"
+                  className="font-playfair text-5xl md:text-4xl mb-0"
                   style={{ lineHeight: '0.85' }}
                 >
                   137K
@@ -57,7 +57,7 @@ export default function HeroSection() {
               </span>
               <div>
                 <h3
-                  className="font-playfair text-5xl! md:text-4xl mb-0"
+                  className="font-playfair text-5xl md:text-4xl mb-0"
                   style={{ lineHeight: '0.85' }}
                 >
                   2.1M

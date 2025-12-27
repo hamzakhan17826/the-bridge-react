@@ -24,12 +24,12 @@ const AboutSection = () => {
               </span>
             </h4>
             <div>
-              <h2 className="mb-2 mt-4 text-3xl md:text-6xl! font-grotesk-bold">
+              <h2 className="mb-2 mt-4 text-3xl md:text-6xl font-grotesk-bold">
                 Where the seen meets the unseen
               </h2>
               <div className="opacity-80 border-b-2 border-primary w-24" />
             </div>
-            <p className="mt-4 text-lg! font-grotesk-medium">
+            <p className="mt-4 text-lg font-grotesk-light">
               <strong>The Bridge</strong> is a modern digital platform for
               evidential mediumship, spiritual development, and community
               connection. It serves three core groups: <strong>Sitters</strong>,{' '}
@@ -37,24 +37,23 @@ const AboutSection = () => {
               <strong>Professional Mediums</strong>.
             </p>
 
-            <ul className="text-lg! space-y-2">
+            <ul className="text-lg space-y-2">
               <li>
-                <strong className="font-bold">Sitters:</strong> Book readings,
-                attend live demonstrations, and access event replays.
+                <strong>Sitters:</strong> Book readings, attend live
+                demonstrations, and access event replays.
               </li>
               <li>
-                <strong className="font-bold">Developing Mediums:</strong> Build
-                skills through circles, workshops, and mentorship.
+                <strong>Developing Mediums:</strong> Build skills through
+                circles, workshops, and mentorship.
               </li>
               <li>
-                <strong className="font-bold">Professional Mediums:</strong>{' '}
-                Showcase services, grow a client base, and connect with a
-                like-minded community.
+                <strong>Professional Mediums:</strong> Showcase services, grow a
+                client base, and connect with a like-minded community.
               </li>
             </ul>
             <a
               href="#"
-              className="inline-flex mt-3 items-center rounded-lg bg-primary px-4 py-2 text-white! hover:opacity-90"
+              className="inline-flex mt-3 items-center rounded-lg bg-primary px-4 py-2 text-white hover:opacity-90"
             >
               Learn More
             </a>
@@ -64,48 +63,48 @@ const AboutSection = () => {
               <div className="w-[350px] h-[350px] -ml-[30px] -mt-[25px] lg:w-[500px] lg:h-[500px] lg:-ml-[50px] lg:-mt-[50px]">
                 <div className="flex items-center justify-between h-full">
                   <div>
-                    <div className="rounded-full min-w-20 min-h-20 lg:min-w-24 lg:min-h-24 p-1 lg:p-2 bg-white shadow-[0_0_35px_rgba(140,152,164,0.2)] flex items-center justify-center dark:bg-slate-50 dark:shadow-none">
+                    <div className="rounded-full min-w-20 min-h-20 lg:min-w-28 lg:min-h-28 p-1 lg:p-2 bg-white shadow-[0_0_35px_rgba(140,152,164,0.2)] flex items-center justify-center dark:bg-slate-50 dark:shadow-none">
                       <div className="text-center">
                         <div className="text-primary lg:text-[28px]">
                           <CountUp start={1} end={500} duration={2} />
                         </div>
-                        <p className="font-bold! text-gray-500 mb-0">Mediums</p>
+                        <p className="font-bold text-gray-500 mb-0">Mediums</p>
                       </div>
                     </div>
                   </div>
                   <div className="flex h-full flex-col justify-between">
-                    <div className="rounded-full min-w-20 min-h-20 lg:min-w-24 lg:min-h-24 p-1 lg:p-2 bg-white shadow-[0_0_35px_rgba(140,152,164,0.2)] flex items-center justify-center dark:bg-slate-50 dark:shadow-none">
+                    <div className="rounded-full min-w-20 min-h-20 lg:min-w-28 lg:min-h-28 p-1 lg:p-2 bg-white shadow-[0_0_35px_rgba(140,152,164,0.2)] flex items-center justify-center dark:bg-slate-50 dark:shadow-none">
                       <div className="text-center">
                         <div className="text-sky-500 lg:text-[28px]">
                           <CountUp start={1} end={2000} duration={1.4} />
                         </div>
-                        <p className="font-bold! text-gray-500 mb-0">Sitters</p>
+                        <p className="font-bold text-gray-500 mb-0">Sitters</p>
                       </div>
                     </div>
-                    <div className="rounded-full min-w-20 min-h-20 lg:min-w-24 lg:min-h-24 p-1 lg:p-2 bg-white shadow-[0_0_35px_rgba(140,152,164,0.2)] flex items-center justify-center dark:bg-slate-50 dark:shadow-none">
+                    <div className="rounded-full min-w-20 min-h-20 lg:min-w-28 lg:min-h-28 p-1 lg:p-2 bg-white shadow-[0_0_35px_rgba(140,152,164,0.2)] flex items-center justify-center dark:bg-slate-50 dark:shadow-none">
                       <div className="text-center">
                         <div className="text-red-500 lg:text-[28px]">
                           <CountUp start={1} end={150} duration={2.1} />
                         </div>
-                        <p className="font-bold! text-gray-500 mb-0">Events</p>
+                        <p className="font-bold text-gray-500 mb-0">Events</p>
                       </div>
                     </div>
-                    <div className="rounded-full min-w-20 min-h-20 lg:min-w-24 lg:min-h-24 p-1 lg:p-2 bg-white shadow-[0_0_35px_rgba(140,152,164,0.2)] flex items-center justify-center dark:bg-slate-50 dark:shadow-none">
+                    <div className="rounded-full min-w-20 min-h-20 lg:min-w-28 lg:min-h-28 p-1 lg:p-2 bg-white shadow-[0_0_35px_rgba(140,152,164,0.2)] flex items-center justify-center dark:bg-slate-50 dark:shadow-none">
                       <div className="text-center">
                         <div className="text-amber-500 lg:text-[28px]">
                           <CountUp start={1} end={5000} duration={2.4} />
                         </div>
-                        <p className="font-bold! text-gray-500 mb-0">Members</p>
+                        <p className="font-bold text-gray-500 mb-0">Members</p>
                       </div>
                     </div>
                   </div>
                   <div>
-                    <div className="rounded-full min-w-20 min-h-20 lg:min-w-24 lg:min-h-24 p-1 lg:p-2 bg-white shadow-[0_0_35px_rgba(140,152,164,0.2)] flex items-center justify-center dark:bg-slate-50 dark:shadow-none">
+                    <div className="rounded-full min-w-20 min-h-20 lg:min-w-28 lg:min-h-28 p-1 lg:p-2 bg-white shadow-[0_0_35px_rgba(140,152,164,0.2)] flex items-center justify-center dark:bg-slate-50 dark:shadow-none">
                       <div className="text-center">
                         <div className="text-primary lg:text-[28px]">
                           <CountUp start={1} end={1000} duration={2.4} />
                         </div>
-                        <p className="font-bold! text-gray-500 mb-0">Replays</p>
+                        <p className="font-bold text-gray-500 mb-0">Replays</p>
                       </div>
                     </div>
                   </div>

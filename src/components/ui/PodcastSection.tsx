@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import type { PodcastSliderProps } from '../../lib/types';
+import type { PodcastSliderProps } from '../../types/types';
 
 const PodcastSlider: FC<PodcastSliderProps> = ({
   podcasts,
@@ -26,7 +26,7 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
             <div className="text-lg opacity-80 mb-3 font-grotesk-light text-white">
               {subtitle}
             </div>
-            <h2 className="mb-0 text-4xl md:text-6xl! text-white!">{title}</h2>
+            <h2 className="mb-0 text-4xl md:text-6xl text-white">{title}</h2>
           </div>
           <div className="shrink-0">
             <a
@@ -80,7 +80,7 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
                       <h3 className="mb-2">
                         <a
                           href="#"
-                          className="text-white! text-6xl! font-grotesk-bold!"
+                          className="text-white text-6xl font-grotesk-bold"
                         >
                           {podcast.episode}
                         </a>
@@ -131,7 +131,7 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
                     </div>
                   </div>
                   <h3 className="mb-0 p-3 text-gray-900">
-                    <a href="#" className="text-gray-900 font-grotesk-bold!">
+                    <a href="#" className="text-gray-900 font-grotesk-bold">
                       {podcast.title}
                     </a>
                   </h3>
