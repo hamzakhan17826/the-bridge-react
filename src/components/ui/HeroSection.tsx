@@ -35,7 +35,7 @@ export default function HeroSection() {
               </Link>
               <Link
                 to="/membership"
-                className="inline-flex items-center justify-center rounded-full border-2 border-gray-300 px-5 py-3 text-gray-900 hover:border-primary transition dark:text-gray-100 dark:border-gray-600"
+                className="inline-flex items-center justify-center rounded-full border-2 border-gray-300 px-5 py-3 text-gray-900 hover:border-primary transition"
               >
                 Join Membership
               </Link>

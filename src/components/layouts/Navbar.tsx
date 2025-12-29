@@ -179,7 +179,7 @@ export default function Navbar() {
                   <NavLink
                     to="/register"
                     className={({ isActive }) =>
-                      `${isActive ? 'text-white bg-primary px-2 py-1 rounded-lg' : 'text-white bg-primary px-2 py-1 rounded-lg text-gray-900'}`
+                      `${isActive ? 'text-white bg-primary px-2 py-1 rounded-lg' : 'text-white bg-primary px-2 py-1 rounded-lg'}`
                     }
                   >
                     Register
