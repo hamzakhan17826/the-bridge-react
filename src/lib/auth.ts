@@ -56,16 +56,8 @@ export function getUserRoles(): string[] | null {
 }
 
 export function getAuthFlag(): boolean {
-  // Prefer explicit auth cookie; fallback to local token presence
-  return !!getCookie('auth') || !!localStorage.getItem('token');
-}
-
-export function setToken(token: string) {
-  localStorage.setItem('token', token);
-}
-
-export function clearToken() {
-  localStorage.removeItem('token');
+  // Prefer explicit auth cookie; fallback to jwtToken cookie presence
+  return !!getCookie('auth') || !!getCookie('jwtToken');
 }
 
 export function emitAuthChange() {
@@ -79,7 +71,6 @@ export function emitAuthChange() {
 }
 
 export function logout() {
-  clearToken();
   deleteCookie('jwtToken');
   deleteCookie('refreshToken');
   deleteCookie('userRole');

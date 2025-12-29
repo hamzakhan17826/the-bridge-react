@@ -1,5 +1,5 @@
 import api from '../lib/api';
-import { setToken, setCookie, emitAuthChange } from '../lib/auth';
+import { setCookie, emitAuthChange } from '../lib/auth';
 
 export type LoginFormState = {
   success: boolean;
@@ -22,8 +22,14 @@ export async function loginUser(
 
     if (res.status === 200 && result?.result === true) {
       if (result.jwtToken) {
-        setToken(result.jwtToken);
         setCookie('auth', '1', { path: '/', sameSite: 'lax' });
+        // Mirror jwt token into a non-httpOnly cookie for client-side checks
+        setCookie('jwtToken', result.jwtToken, {
+          path: '/',
+          sameSite: 'lax',
+          // Make persistent only if rememberMe is set; otherwise session cookie
+          maxAge: payload.rememberMe ? 60 * 60 * 24 * 30 : undefined,
+        });
       }
       if (Array.isArray(result.roles)) {
         try {

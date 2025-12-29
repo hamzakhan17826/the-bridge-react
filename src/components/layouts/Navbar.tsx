@@ -39,7 +39,6 @@ export default function Navbar() {
     };
   }, [accountOpen]);
 
-  // Keep auth state in sync with cookies/localStorage
   useEffect(() => {
     const update = () => {
       setIsLoggedIn(getAuthFlag());
@@ -47,7 +46,7 @@ export default function Navbar() {
     };
     const onAuthChange = () => update();
     const onStorage = (e: StorageEvent) => {
-      if (['token', 'auth', 'userRole'].includes(e.key || '')) update();
+      if (['auth', 'userRole'].includes(e.key || '')) update();
     };
     const onFocus = () => update();
     window.addEventListener('authchange', onAuthChange as EventListener);
@@ -169,15 +168,22 @@ export default function Navbar() {
                 </div>
               ) : (
                 <>
-                  <Link to="/login" className="text-gray-900">
+                  <NavLink
+                    to="/login"
+                    className={({ isActive }) =>
+                      `${isActive ? 'text-primary font-bold' : 'text-gray-900'}`
+                    }
+                  >
                     Login
-                  </Link>
-                  <Link
+                  </NavLink>
+                  <NavLink
                     to="/register"
-                    className="text-white bg-primary px-2 py-1 rounded-lg"
+                    className={({ isActive }) =>
+                      `${isActive ? 'text-white bg-primary px-2 py-1 rounded-lg' : 'text-white bg-primary px-2 py-1 rounded-lg text-gray-900'}`
+                    }
                   >
                     Register
-                  </Link>
+                  </NavLink>
                 </>
               )}
             </div>

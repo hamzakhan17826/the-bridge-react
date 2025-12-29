@@ -1,18 +1,26 @@
 import axios from 'axios';
 import { refreshToken } from './refresh';
-import { logout } from './auth';
+import { logout, getCookie } from './auth';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001',
   timeout: 10000,
-  withCredentials: true,
+  withCredentials: false,
 });
 
 // Request Interceptor (JWT add karo)
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const token = getCookie('jwtToken');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+  }
+  // Ensure Content-Type is set for JSON requests, but not for FormData
+  if (
+    !config.headers['Content-Type'] &&
+    config.data &&
+    !(config.data instanceof FormData)
+  ) {
+    config.headers['Content-Type'] = 'application/json';
   }
   return config;
 });
@@ -37,7 +45,7 @@ api.interceptors.response.use(
         }
         const ok = await (refreshPromise as Promise<boolean>);
         if (ok) {
-          const token = localStorage.getItem('token');
+          const token = getCookie('jwtToken');
           if (token) {
             originalRequest.headers = {
               ...(originalRequest.headers || {}),

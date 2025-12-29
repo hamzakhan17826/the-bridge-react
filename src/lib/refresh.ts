@@ -1,4 +1,4 @@
-import { getCookie, setCookie, setToken, logout } from './auth';
+import { getCookie, setCookie } from './auth';
 
 export async function refreshToken(): Promise<boolean> {
   console.log('🔄 [RefreshToken] Attempting token refresh...');
@@ -10,7 +10,7 @@ export async function refreshToken(): Promise<boolean> {
     const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
+      // credentials: 'include',
       body: JSON.stringify(rt ? { refreshToken: rt } : {}),
     });
 
@@ -19,7 +19,6 @@ export async function refreshToken(): Promise<boolean> {
     if (!res.ok) {
       const text = await res.text().catch(() => '');
       console.error('❌ [RefreshToken] Refresh failed:', text);
-      logout();
       return false;
     }
 
@@ -31,8 +30,12 @@ export async function refreshToken(): Promise<boolean> {
     });
 
     if (data.jwtToken) {
-      setToken(data.jwtToken);
       setCookie('auth', '1', { path: '/', sameSite: 'lax' });
+      // Mirror jwt token into a non-httpOnly cookie for client-side checks
+      setCookie('jwtToken', data.jwtToken, {
+        path: '/',
+        sameSite: 'lax',
+      });
     }
     if (data.roles) {
       try {
@@ -55,7 +58,6 @@ export async function refreshToken(): Promise<boolean> {
     return true;
   } catch (error) {
     console.error('❌ [RefreshToken] Network/Unexpected error:', error);
-    logout();
     return false;
   }
 }
