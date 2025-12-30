@@ -193,18 +193,14 @@ export default function UserProfile() {
       <div className="container mx-auto px-6">
         <div className="mx-auto max-w-2xl">
           <div className="rounded-2xl border border-gray-200 bg-white shadow-2xl p-6 md:p-8 mt-4">
-            <h3 className="text-2xl md:text-3xl font-grotesk-bold mb-6">
-              My Profile
-            </h3>
+            <h3 className="text-2xl md:text-3xl  mb-6">My Profile</h3>
 
             {loading && <p className="text-gray-600">Loading your profile…</p>}
 
             <form onSubmit={onSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-grotesk-light text-gray-700">
-                    First Name
-                  </label>
+                  <label className="block  text-gray-700">First Name</label>
                   <input
                     type="text"
                     name="firstName"
@@ -214,9 +210,7 @@ export default function UserProfile() {
                   />
                 </div>
                 <div>
-                  <label className="block font-grotesk-light text-gray-700">
-                    Last Name
-                  </label>
+                  <label className="block  text-gray-700">Last Name</label>
                   <input
                     type="text"
                     name="lastName"
@@ -228,9 +222,7 @@ export default function UserProfile() {
               </div>
 
               <div>
-                <label className="block font-grotesk-light text-gray-700">
-                  Username
-                </label>
+                <label className="block  text-gray-700">Username</label>
                 <input
                   type="text"
                   name="userName"
@@ -241,7 +233,7 @@ export default function UserProfile() {
               </div>
 
               <div>
-                <label className="block font-grotesk-light text-gray-700">
+                <label className="block  text-gray-700">
                   Email (read-only)
                 </label>
                 <div className="relative mt-2">
@@ -264,9 +256,7 @@ export default function UserProfile() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-grotesk-light text-gray-700">
-                    Country
-                  </label>
+                  <label className="block  text-gray-700">Country</label>
                   <Select<Opt<number>, false>
                     options={countryOptions}
                     value={selectedCountry}
@@ -289,9 +279,7 @@ export default function UserProfile() {
                   />
                 </div>
                 <div>
-                  <label className="block font-grotesk-light text-gray-700">
-                    City
-                  </label>
+                  <label className="block  text-gray-700">City</label>
                   <Select<Opt<number>, false>
                     options={cityOptions}
                     value={selectedCity}
@@ -311,9 +299,7 @@ export default function UserProfile() {
               </div>
 
               <div>
-                <label className="block font-grotesk-light text-gray-700">
-                  Address Line 1
-                </label>
+                <label className="block  text-gray-700">Address Line 1</label>
                 <input
                   type="text"
                   name="addressLine1"
@@ -323,9 +309,7 @@ export default function UserProfile() {
                 />
               </div>
               <div>
-                <label className="block font-grotesk-light text-gray-700">
-                  Address Line 2
-                </label>
+                <label className="block  text-gray-700">Address Line 2</label>
                 <input
                   type="text"
                   name="addressLine2"
@@ -336,9 +320,7 @@ export default function UserProfile() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-grotesk-light text-gray-700">
-                    Postal Code
-                  </label>
+                  <label className="block  text-gray-700">Postal Code</label>
                   <input
                     type="text"
                     name="postalCode"
@@ -348,9 +330,7 @@ export default function UserProfile() {
                   />
                 </div>
                 <div>
-                  <label className="block font-grotesk-light text-gray-700">
-                    Date of Birth
-                  </label>
+                  <label className="block  text-gray-700">Date of Birth</label>
                   <input
                     type="date"
                     name="dateOfBirth"
@@ -362,9 +342,7 @@ export default function UserProfile() {
               </div>
 
               <div>
-                <label className="block font-grotesk-light text-gray-700">
-                  Gender
-                </label>
+                <label className="block  text-gray-700">Gender</label>
                 <select
                   name="gender"
                   value={gender}

@@ -71,9 +71,7 @@ export default function VerifyEmailPage() {
                     d="M4 7.5L7 10l4-5m-3.5 9.5a7 7 0 1 1 0-14a7 7 0 0 1 0 14Z"
                   />
                 </svg>
-                <h4 className="text-2xl font-grotesk-bold mt-4">
-                  {result.message}
-                </h4>
+                <h4 className="text-2xl  mt-4">{result.message}</h4>
                 <p className="mt-2">Redirecting to login in 3 seconds...</p>
                 <button
                   onClick={() => navigate('/login')}
@@ -84,9 +82,7 @@ export default function VerifyEmailPage() {
               </>
             ) : (
               <>
-                <h4 className="text-xl font-grotesk-bold text-red-600">
-                  Verification Failed
-                </h4>
+                <h4 className="text-xl  text-red-600">Verification Failed</h4>
                 <p className="mt-2">{result?.message}</p>
                 <button
                   onClick={() => navigate('/register')}

@@ -23,7 +23,7 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
       <div className="container mx-auto px-6 pt-10 lg:pt-16">
         <div className="flex items-end justify-between mb-10 lg:mb-16">
           <div className="max-w-7xl">
-            <div className="text-lg opacity-80 mb-3 font-grotesk-light text-white">
+            <div className="text-lg opacity-80 mb-3  text-white">
               {subtitle}
             </div>
             <h2 className="mb-0 text-4xl md:text-6xl text-white">{title}</h2>
@@ -31,7 +31,7 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
           <div className="shrink-0">
             <a
               href="#"
-              className="inline-flex items-center rounded-full bg-white px-5 py-2 text-primary font-grotesk-medium shadow-sm hover:shadow"
+              className="inline-flex items-center rounded-full bg-white px-5 py-2 text-primary  shadow-sm hover:shadow"
             >
               {buttonText}
             </a>
@@ -78,10 +78,7 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
                     {/* Foreground content */}
                     <div className="relative z-10 flex flex-col items-start justify-end p-4">
                       <h3 className="mb-2">
-                        <a
-                          href="#"
-                          className="text-white text-6xl font-grotesk-bold"
-                        >
+                        <a href="#" className="text-white text-6xl ">
                           {podcast.episode}
                         </a>
                       </h3>
@@ -131,7 +128,7 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
                     </div>
                   </div>
                   <h3 className="mb-0 p-3 text-gray-900">
-                    <a href="#" className="text-gray-900 font-grotesk-bold">
+                    <a href="#" className="text-gray-900 ">
                       {podcast.title}
                     </a>
                   </h3>

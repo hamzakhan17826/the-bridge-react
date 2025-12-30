@@ -74,10 +74,10 @@ export default function Navbar() {
                   </div>
                 </div>
                 <div className="hidden sm:block">
-                  <h1 className="text-xl font-grotesk-bold text-gray-900 group-hover:text-purple-700 transition-colors duration-200">
+                  <h1 className="text-xl  text-gray-900 group-hover:text-purple-700 transition-colors duration-200">
                     The Bridge
                   </h1>
-                  <p className="text-xs text-purple-600 font-grotesk-medium -mt-1 mb-0">
+                  <p className="text-xs text-purple-600 mb-0">
                     Bridging Two Worlds
                   </p>
                 </div>
@@ -89,7 +89,7 @@ export default function Navbar() {
               <NavLink
                 to="/"
                 className={({ isActive }) =>
-                  `relative px-4 py-2 rounded-xl font-grotesk-medium text-sm transition-all duration-200 ${
+                  `relative px-4 py-2 rounded-xl text-sm transition-all duration-200 ${
                     isActive
                       ? 'text-white bg-linear-to-r from-purple-500 to-blue-500 shadow-lg'
                       : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
@@ -101,7 +101,7 @@ export default function Navbar() {
               <NavLink
                 to="/episodes"
                 className={({ isActive }) =>
-                  `relative px-4 py-2 rounded-xl font-grotesk-medium text-sm transition-all duration-200 ${
+                  `relative px-4 py-2 rounded-xl text-sm transition-all duration-200 ${
                     isActive
                       ? 'text-white bg-linear-to-r from-purple-500 to-blue-500 shadow-lg'
                       : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
@@ -113,7 +113,7 @@ export default function Navbar() {
               <NavLink
                 to="/reviews"
                 className={({ isActive }) =>
-                  `relative px-4 py-2 rounded-xl font-grotesk-medium text-sm transition-all duration-200 ${
+                  `relative px-4 py-2 rounded-xl text-sm transition-all duration-200 ${
                     isActive
                       ? 'text-white bg-linear-to-r from-purple-500 to-blue-500 shadow-lg'
                       : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
@@ -125,7 +125,7 @@ export default function Navbar() {
               <NavLink
                 to="/blogs"
                 className={({ isActive }) =>
-                  `relative px-4 py-2 rounded-xl font-grotesk-medium text-sm transition-all duration-200 ${
+                  `relative px-4 py-2 rounded-xl text-sm transition-all duration-200 ${
                     isActive
                       ? 'text-white bg-linear-to-r from-purple-500 to-blue-500 shadow-lg'
                       : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
@@ -137,7 +137,7 @@ export default function Navbar() {
               <NavLink
                 to="/contact"
                 className={({ isActive }) =>
-                  `relative px-4 py-2 rounded-xl font-grotesk-medium text-sm transition-all duration-200 ${
+                  `relative px-4 py-2 rounded-xl text-sm transition-all duration-200 ${
                     isActive
                       ? 'text-white bg-linear-to-r from-purple-500 to-blue-500 shadow-lg'
                       : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
@@ -150,7 +150,7 @@ export default function Navbar() {
                 <NavLink
                   to="/dashboard"
                   className={({ isActive }) =>
-                    `relative px-4 py-2 rounded-xl font-grotesk-medium text-sm transition-all duration-200 ${
+                    `relative px-4 py-2 rounded-xl text-sm transition-all duration-200 ${
                       isActive
                         ? 'text-white bg-linear-to-r from-purple-500 to-blue-500 shadow-lg'
                         : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
@@ -168,7 +168,7 @@ export default function Navbar() {
                 <div className="relative" ref={dropdownRef}>
                   <button
                     type="button"
-                    className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-xl bg-linear-to-r from-purple-100 to-blue-100 hover:from-purple-200 hover:to-blue-200 text-purple-700 font-grotesk-medium text-sm transition-all duration-200 transform hover:scale-105 cursor-pointer"
+                    className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-xl bg-linear-to-r from-purple-100 to-blue-100 hover:from-purple-200 hover:to-blue-200 text-purple-700 text-sm transition-all duration-200 transform hover:scale-105 cursor-pointer"
                     aria-haspopup="menu"
                     aria-expanded={accountOpen}
                     onClick={() => setAccountOpen((v) => !v)}
@@ -184,7 +184,7 @@ export default function Navbar() {
                       <div className="p-2">
                         <Link
                           to="/profile"
-                          className="flex items-center gap-3 px-4 py-3 text-sm font-grotesk-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-200"
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-200"
                           onClick={() => setAccountOpen(false)}
                         >
                           <UserCircle2 className="w-4 h-4" />
@@ -193,7 +193,7 @@ export default function Navbar() {
                         {/* {userRoles.includes('user') && (
                           <Link
                             to="/dashboard"
-                            className="flex items-center gap-3 px-4 py-3 text-sm font-grotesk-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-200"
+                            className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-200"
                             onClick={() => setAccountOpen(false)}
                           >
                             <Sparkles className="w-4 h-4" />
@@ -202,7 +202,7 @@ export default function Navbar() {
                         )} */}
                         <div className="my-2 h-px bg-linear-to-r from-transparent via-purple-200 to-transparent"></div>
                         <button
-                          className="flex items-center gap-3 w-full px-4 py-3 text-sm font-grotesk-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all duration-200"
+                          className="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all duration-200"
                           onClick={() => {
                             setAccountOpen(false);
                             clientLogout();
@@ -220,7 +220,7 @@ export default function Navbar() {
                   <NavLink
                     to="/login"
                     className={({ isActive }) =>
-                      `px-4 py-2 rounded-xl font-grotesk-medium text-sm transition-all duration-200 ${
+                      `px-4 py-2 rounded-xl text-sm transition-all duration-200 ${
                         isActive
                           ? 'text-purple-600 bg-purple-100'
                           : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
@@ -232,7 +232,7 @@ export default function Navbar() {
                   <NavLink
                     to="/register"
                     className={({ isActive }) =>
-                      `px-6 py-2 rounded-xl font-grotesk-medium text-sm text-white bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 ${
+                      `px-6 py-2 rounded-xl text-sm text-white bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 ${
                         isActive ? 'ring-2 ring-purple-300' : ''
                       }`
                     }
@@ -268,7 +268,7 @@ export default function Navbar() {
                 <NavLink
                   to="/"
                   className={({ isActive }) =>
-                    `px-4 py-3 rounded-xl font-grotesk-medium text-sm transition-all duration-200 ${
+                    `px-4 py-3 rounded-xl text-sm transition-all duration-200 ${
                       isActive
                         ? 'text-white bg-linear-to-r from-purple-500 to-blue-500 shadow-lg'
                         : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
@@ -281,7 +281,7 @@ export default function Navbar() {
                 <NavLink
                   to="/episodes"
                   className={({ isActive }) =>
-                    `px-4 py-3 rounded-xl font-grotesk-medium text-sm transition-all duration-200 ${
+                    `px-4 py-3 rounded-xl text-sm transition-all duration-200 ${
                       isActive
                         ? 'text-white bg-linear-to-r from-purple-500 to-blue-500 shadow-lg'
                         : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
@@ -294,7 +294,7 @@ export default function Navbar() {
                 <NavLink
                   to="/reviews"
                   className={({ isActive }) =>
-                    `px-4 py-3 rounded-xl font-grotesk-medium text-sm transition-all duration-200 ${
+                    `px-4 py-3 rounded-xl text-sm transition-all duration-200 ${
                       isActive
                         ? 'text-white bg-linear-to-r from-purple-500 to-blue-500 shadow-lg'
                         : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
@@ -307,7 +307,7 @@ export default function Navbar() {
                 <NavLink
                   to="/blogs"
                   className={({ isActive }) =>
-                    `px-4 py-3 rounded-xl font-grotesk-medium text-sm transition-all duration-200 ${
+                    `px-4 py-3 rounded-xl text-sm transition-all duration-200 ${
                       isActive
                         ? 'text-white bg-linear-to-r from-purple-500 to-blue-500 shadow-lg'
                         : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
@@ -320,7 +320,7 @@ export default function Navbar() {
                 <NavLink
                   to="/contact"
                   className={({ isActive }) =>
-                    `px-4 py-3 rounded-xl font-grotesk-medium text-sm transition-all duration-200 ${
+                    `px-4 py-3 rounded-xl text-sm transition-all duration-200 ${
                       isActive
                         ? 'text-white bg-linear-to-r from-purple-500 to-blue-500 shadow-lg'
                         : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
@@ -334,7 +334,7 @@ export default function Navbar() {
                   <NavLink
                     to="/dashboard"
                     className={({ isActive }) =>
-                      `px-4 py-3 rounded-xl font-grotesk-medium text-sm transition-all duration-200 ${
+                      `px-4 py-3 rounded-xl text-sm transition-all duration-200 ${
                         isActive
                           ? 'text-white bg-linear-to-r from-purple-500 to-blue-500 shadow-lg'
                           : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
@@ -352,14 +352,14 @@ export default function Navbar() {
                   <div className="space-y-2">
                     <Link
                       to="/profile"
-                      className="flex items-center gap-3 px-4 py-3 text-sm font-grotesk-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-200"
+                      className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-200"
                       onClick={() => setIsOpen(false)}
                     >
                       <UserCircle2 className="w-4 h-4" />
                       Profile
                     </Link>
                     <button
-                      className="flex items-center gap-3 w-full px-4 py-3 text-sm font-grotesk-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all duration-200"
+                      className="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all duration-200"
                       onClick={() => {
                         setIsOpen(false);
                         clientLogout();
@@ -374,7 +374,7 @@ export default function Navbar() {
                     <NavLink
                       to="/login"
                       className={({ isActive }) =>
-                        `block px-4 py-3 rounded-xl font-grotesk-medium text-sm text-center transition-all duration-200 ${
+                        `block px-4 py-3 rounded-xl text-sm text-center transition-all duration-200 ${
                           isActive
                             ? 'text-purple-600 bg-purple-100'
                             : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
@@ -387,7 +387,7 @@ export default function Navbar() {
                     <NavLink
                       to="/register"
                       className={({ isActive }) =>
-                        `block px-4 py-3 rounded-xl font-grotesk-medium text-sm text-center text-white bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 shadow-lg transition-all duration-200 ${
+                        `block px-4 py-3 rounded-xl text-sm text-center text-white bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 shadow-lg transition-all duration-200 ${
                           isActive ? 'ring-2 ring-purple-300' : ''
                         }`
                       }

@@ -5,18 +5,18 @@ const CallToAction = () => {
         <div className="grid lg:grid-cols-2 items-center gap-10">
           {/* Left content */}
           <div>
-            <h2 className="text-white text-3xl md:text-5xl font-grotesk-bold mb-4">
+            <h2 className="text-white text-3xl md:text-5xl  mb-4">
               Ready to Connect with the Spirit World?
             </h2>
-            <p className="text-white/80 text-lg mb-6 font-grotesk-light">
+            <p className="text-white/80 text-lg mb-6 ">
               Join our community of seekers and mediums to deepen your spiritual
               journey and access exclusive resources.
             </p>
             <div className="flex flex-wrap gap-3">
-              <button className="inline-flex items-center rounded-md bg-white text-primary font-grotesk-medium px-5 py-3 shadow-sm hover:bg-gray-100 hover:text-primary-dark">
+              <button className="inline-flex items-center rounded-md bg-white text-primary  px-5 py-3 shadow-sm hover:bg-gray-100 hover:text-primary-dark">
                 Join Now
               </button>
-              <button className="inline-flex items-center rounded-md border border-white text-white font-grotesk-medium px-5 py-3 hover:bg-white hover:text-primary">
+              <button className="inline-flex items-center rounded-md border border-white text-white  px-5 py-3 hover:bg-white hover:text-primary">
                 Learn More
               </button>
             </div>
@@ -26,9 +26,7 @@ const CallToAction = () => {
           <div>
             <div className="bg-white rounded-2xl shadow-lg">
               <div className="p-6 md:p-8">
-                <h3 className="text-3xl font-grotesk-bold mb-4 text-gray-800">
-                  Book a Reading
-                </h3>
+                <h3 className="text-3xl  mb-4 text-gray-800">Book a Reading</h3>
                 <form>
                   <div className="mb-4">
                     <input
@@ -60,7 +58,7 @@ const CallToAction = () => {
                   </div>
                   <button
                     type="submit"
-                    className="w-full rounded-lg bg-primary hover:bg-primary-dark text-white font-grotesk-medium py-3"
+                    className="w-full rounded-lg bg-primary hover:bg-primary-dark text-white  py-3"
                   >
                     Book Now
                   </button>

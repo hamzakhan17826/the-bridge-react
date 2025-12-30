@@ -53,17 +53,13 @@ export default function ResetPasswordPage() {
       <div className="container mx-auto px-6">
         <div className="mx-auto max-w-2xl">
           <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-6 md:p-8 mt-4">
-            <h3 className="text-2xl md:text-3xl font-grotesk-bold mb-4">
-              Reset Password
-            </h3>
-            <p className="mb-6 text-gray-700 font-grotesk-light">
+            <h3 className="text-2xl md:text-3xl  mb-4">Reset Password</h3>
+            <p className="mb-6 text-gray-700 ">
               Enter your new password below.
             </p>
             <form ref={formRef} onSubmit={onSubmit} className="space-y-4">
               <div>
-                <label className="block font-grotesk-light text-gray-700">
-                  New Password
-                </label>
+                <label className="block  text-gray-700">New Password</label>
                 <input
                   type="password"
                   name="newPassword"
@@ -73,7 +69,7 @@ export default function ResetPasswordPage() {
                 />
               </div>
               <div>
-                <label className="block font-grotesk-light text-gray-700">
+                <label className="block  text-gray-700">
                   Confirm New Password
                 </label>
                 <input

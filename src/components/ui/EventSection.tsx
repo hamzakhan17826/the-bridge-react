@@ -48,7 +48,7 @@ const Events: FC = () => {
   return (
     <section className="py-20 md:py-28 bg-gray-50">
       <div className="container mx-auto px-6">
-        <h3 className="text-center mb-8 text-3xl md:text-6xl font-grotesk-bold">
+        <h3 className="text-center mb-8 text-3xl md:text-6xl ">
           Upcoming Events
         </h3>
 
@@ -81,19 +81,17 @@ const Events: FC = () => {
                 </div>
                 <div className="p-4 flex-1 flex flex-col">
                   <div className="mb-1">
-                    <span className="uppercase tracking-wide text-xs text-gray-600 font-grotesk-light">
+                    <span className="uppercase tracking-wide text-xs text-gray-600 ">
                       {event.date}
                     </span>
                   </div>
                   <h3 className="">
-                    <a href="#" className="text-gray-900 font-grotesk-bold">
+                    <a href="#" className="text-gray-900 ">
                       {event.title}
                     </a>
                   </h3>
-                  <p className="my-3 text-gray-700 font-grotesk-light">
-                    {event.description}
-                  </p>
-                  <div className="mt-auto pt-4 border-t border-gray-100 text-gray-700 font-grotesk-medium">
+                  <p className="my-3 text-gray-700 ">{event.description}</p>
+                  <div className="mt-auto pt-4 border-t border-gray-100 text-gray-700 ">
                     <span className="mr-1">📍</span>
                     {event.location}
                   </div>
@@ -107,7 +105,7 @@ const Events: FC = () => {
         <div className="text-center mt-12">
           <Link
             to="/events"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-grotesk-medium text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white  text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
           >
             View All Events
             <svg

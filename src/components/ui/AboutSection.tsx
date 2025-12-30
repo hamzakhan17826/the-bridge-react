@@ -19,17 +19,17 @@ const AboutSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <div>
             <h4 className="mb-0">
-              <span className="relative inline-block top-[-1px] rounded-sm px-2 py-1 bg-primary text-white font-grotesk-medium">
+              <span className="relative inline-block top-[-1px] rounded-sm px-2 py-1 bg-primary text-white">
                 About Us
               </span>
             </h4>
             <div>
-              <h2 className="mb-2 mt-4 text-3xl md:text-6xl font-grotesk-bold">
+              <h2 className="mb-2 mt-4 text-3xl md:text-6xl">
                 Where the seen meets the unseen
               </h2>
               <div className="opacity-80 border-b-2 border-primary w-24" />
             </div>
-            <p className="mt-4 text-lg font-grotesk-light">
+            <p className="mt-4 text-lg">
               <strong>The Bridge</strong> is a modern digital platform for
               evidential mediumship, spiritual development, and community
               connection. It serves three core groups: <strong>Sitters</strong>,{' '}

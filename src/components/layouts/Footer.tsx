@@ -74,9 +74,7 @@ const Footer: FC = () => {
                 <Heart className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-grotesk-bold text-white">
-                  The Bridge
-                </h3>
+                <h3 className="text-xl text-white">The Bridge</h3>
                 <p className="text-sm text-purple-200 mb-0">
                   Bridging Two Worlds
                 </p>
@@ -103,15 +101,13 @@ const Footer: FC = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-grotesk-semibold text-white mb-6">
-              Quick Links
-            </h4>
+            <h4 className="text-lg text-white mb-6">Quick Links</h4>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-gray-300 hover:text-purple-300 transition-colors duration-200 text-sm font-grotesk-light"
+                    className="text-gray-300 hover:text-purple-300 transition-colors duration-200 text-sm"
                   >
                     {link.label}
                   </a>
@@ -122,15 +118,13 @@ const Footer: FC = () => {
 
           {/* Services */}
           <div>
-            <h4 className="text-lg font-grotesk-semibold text-white mb-6">
-              Services
-            </h4>
+            <h4 className="text-lg text-white mb-6">Services</h4>
             <ul className="space-y-3">
               {services.map((service) => (
                 <li key={service.label}>
                   <a
                     href={service.href}
-                    className="text-gray-300 hover:text-purple-300 transition-colors duration-200 text-sm font-grotesk-light"
+                    className="text-gray-300 hover:text-purple-300 transition-colors duration-200 text-sm"
                   >
                     {service.label}
                   </a>
@@ -141,9 +135,7 @@ const Footer: FC = () => {
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-lg font-grotesk-semibold text-white mb-6">
-              Connect With Us
-            </h4>
+            <h4 className="text-lg text-white mb-6">Connect With Us</h4>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-purple-300 mt-0.5 flex-shrink-0" />
@@ -177,7 +169,7 @@ const Footer: FC = () => {
         {/* Newsletter Signup */}
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 mb-8 border border-white/20">
           <div className="text-center max-w-2xl mx-auto">
-            <h4 className="text-xl font-grotesk-semibold text-white mb-3">
+            <h4 className="text-xl text-white mb-3">
               Stay Connected with Spirit
             </h4>
             <p className="text-gray-300 text-sm mb-6">
@@ -190,7 +182,7 @@ const Footer: FC = () => {
                 placeholder="Enter your email"
                 className="flex-1 px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm"
               />
-              <button className="px-6 py-3 cursor-pointer bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-grotesk-medium rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900">
+              <button className="px-6 py-3 cursor-pointer bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900">
                 Subscribe
               </button>
             </div>
@@ -202,7 +194,7 @@ const Footer: FC = () => {
       <div className="relative z-10 border-t border-white/10 bg-black/20 backdrop-blur-sm">
         <div className="container mx-auto px-6 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-sm text-gray-400 font-grotesk-light">
+            <div className="text-sm text-gray-400">
               © {year} The Bridge. All rights reserved. Made with{' '}
               <Heart className="w-4 h-4 inline text-red-400 mx-1" /> for
               spiritual connection.
@@ -210,13 +202,13 @@ const Footer: FC = () => {
             <div className="flex gap-6 text-sm">
               <a
                 href="/privacy"
-                className="text-gray-400 hover:text-purple-300 transition-colors font-grotesk-light"
+                className="text-gray-400 hover:text-purple-300 transition-colors"
               >
                 Privacy Policy
               </a>
               <a
                 href="/terms"
-                className="text-gray-400 hover:text-purple-300 transition-colors font-grotesk-light"
+                className="text-gray-400 hover:text-purple-300 transition-colors"
               >
                 Terms of Service
               </a>

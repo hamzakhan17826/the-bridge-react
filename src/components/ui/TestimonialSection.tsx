@@ -141,10 +141,8 @@ const TestimonialSection: FC = () => {
         <div className="container mx-auto">
           <div className="row justify-content-center mb-5">
             <div className="col-xl-6 col-lg-8 text-center">
-              <h3 className="mb-4 text-4xl md:text-6xl font-grotesk-bold">
-                Testimonials
-              </h3>
-              <h5 className="text-uppercase ls-2 op-07 font-grotesk-medium">
+              <h3 className="mb-4 text-4xl md:text-6xl ">Testimonials</h3>
+              <h5 className="text-uppercase ls-2 op-07 ">
                 ❤️ What Our Customers Say About Us ❤️
               </h5>
             </div>

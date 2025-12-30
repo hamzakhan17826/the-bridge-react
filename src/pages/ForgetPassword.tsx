@@ -29,18 +29,14 @@ export default function ForgetPasswordPage() {
       <div className="container mx-auto px-6">
         <div className="mx-auto max-w-2xl">
           <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-6 md:p-8 mt-4">
-            <h3 className="text-2xl md:text-3xl font-grotesk-bold mb-4">
-              Forget Password
-            </h3>
-            <p className="mb-6 text-gray-700 font-grotesk-light">
+            <h3 className="text-2xl md:text-3xl  mb-4">Forget Password</h3>
+            <p className="mb-6 text-gray-700 ">
               Enter your email address and we'll send you a link to reset your
               password.
             </p>
             <form ref={formRef} onSubmit={onSubmit} className="space-y-4">
               <div>
-                <label className="block font-grotesk-light text-gray-700">
-                  Email
-                </label>
+                <label className="block  text-gray-700">Email</label>
                 <input
                   type="email"
                   name="email"

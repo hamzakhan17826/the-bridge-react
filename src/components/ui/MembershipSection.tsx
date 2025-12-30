@@ -4,24 +4,22 @@ const MembershipSection = () => {
   return (
     <section className="py-24 md:py-32 mt-24 bg-gray-50">
       <div className="container mx-auto px-6">
-        <h3 className="text-4xl md:text-6xl font-grotesk-bold text-center mb-12">
+        <h3 className="text-4xl md:text-6xl  text-center mb-12">
           Choose Your Membership
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {/* General Medium */}
           <div className="rounded-2xl shadow-sm hover:shadow px-5 py-4 bg-white">
-            <h2 className="text-4xl font-grotesk-medium">General Medium</h2>
-            <p className="mt-3 mb-2 text-gray-700 font-grotesk-light">
+            <h2 className="text-4xl ">General Medium</h2>
+            <p className="mt-3 mb-2 text-gray-700 ">
               For sitters & spiritual seekers looking for insight, healing, and
               meaningful connection
             </p>
-            <div className="flex gap-2 font-grotesk-bold">
+            <div className="flex gap-2 ">
               <span className="text-gray-900 text-3xl align-text-top">$</span>
               <span className="text-gray-900 text-5xl">10</span>
-              <span className="text-gray-500 text-lg flex items-end font-grotesk-italic">
-                /mo
-              </span>
+              <span className="text-gray-500 text-lg flex items-end ">/mo</span>
             </div>
             <div className="mt-4">
               <a
@@ -70,17 +68,15 @@ const MembershipSection = () => {
             <span className="absolute right-0 top-0 inline-flex items-center rounded-tr-xl px-3 py-1 text-xs uppercase tracking-wide bg-primary text-white">
               Popular
             </span>
-            <h2 className="text-4xl font-grotesk-medium">Development Medium</h2>
-            <p className="mt-3 mb-2 text-gray-700 font-grotesk-light">
+            <h2 className="text-4xl ">Development Medium</h2>
+            <p className="mt-3 mb-2 text-gray-700 ">
               For developing mediums seeking structure, guided practice,
               confidence, and professional growth
             </p>
-            <div className="flex gap-2 font-grotesk-bold">
+            <div className="flex gap-2 ">
               <span className="text-gray-900 text-3xl align-text-top">$</span>
               <span className="text-gray-900 text-5xl">19</span>
-              <span className="text-gray-500 text-lg flex items-end font-grotesk-italic">
-                /mo
-              </span>
+              <span className="text-gray-500 text-lg flex items-end ">/mo</span>
             </div>
             <div className="mt-4">
               <a
@@ -122,19 +118,15 @@ const MembershipSection = () => {
 
           {/* Professional Medium */}
           <div className="rounded-2xl shadow-sm hover:shadow px-5 py-4 bg-white">
-            <h2 className="text-4xl font-grotesk-medium">
-              Professional Medium
-            </h2>
-            <p className="mt-3 mb-2 text-gray-700 font-grotesk-light">
+            <h2 className="text-4xl ">Professional Medium</h2>
+            <p className="mt-3 mb-2 text-gray-700 ">
               For active, serving mediums ready for public visibility,
               professional support, and aligned opportunities.
             </p>
-            <div className="flex gap-2 font-grotesk-bold">
+            <div className="flex gap-2 ">
               <span className="text-gray-900 text-3xl align-text-top">$</span>
               <span className="text-gray-900 text-5xl">29</span>
-              <span className="text-gray-500 text-lg flex items-end font-grotesk-italic">
-                /mo
-              </span>
+              <span className="text-gray-500 text-lg flex items-end ">/mo</span>
             </div>
             <div className="mt-4">
               <a
