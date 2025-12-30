@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { Link } from 'react-router-dom';
 
 const Events: FC = () => {
   const events = [
@@ -101,6 +102,29 @@ const Events: FC = () => {
             </SwiperSlide>
           ))}
         </Swiper>
+
+        {/* View All Events Button */}
+        <div className="text-center mt-12">
+          <Link
+            to="/events"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-grotesk-medium text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
+          >
+            View All Events
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </Link>
+        </div>
       </div>
     </section>
   );

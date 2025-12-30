@@ -19,6 +19,8 @@ import Users from './pages/dashboard/Users';
 import Settings from './pages/dashboard/Settings';
 import DashboardLayout from './components/layouts/dashboard/DashboardLayout';
 import ContactUsPage from './pages/ContactUs';
+import MediumProfile from './pages/MediumProfile';
+import Events from './pages/Events';
 // import { ThemeProvider } from '@/components/theme-provider';
 
 function App() {
@@ -32,6 +34,8 @@ function App() {
             <Routes>
               <Route element={<AppLayout />}>
                 <Route path="/" element={<Home />} />
+                <Route path="/events" element={<Events />} />
+                <Route path="/mediums/:slug" element={<MediumProfile />} />
                 <Route
                   path="/register"
                   element={

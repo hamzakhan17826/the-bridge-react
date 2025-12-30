@@ -68,8 +68,8 @@ const Home = () => (
     <EventsSection />
     <MeetTheMediums />
     <TestimonialSection />
-    <MembershipSection />
     <CallToAction />
+    <MembershipSection />
   </>
 );
 

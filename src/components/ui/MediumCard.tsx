@@ -1,4 +1,4 @@
-import { Star, Video, Calendar, Award, MapPin, Clock } from 'lucide-react';
+import { Star, Video, Award, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 import { Button } from './button';

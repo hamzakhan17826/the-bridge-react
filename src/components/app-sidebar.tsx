@@ -29,128 +29,143 @@ import {
 // This is sample data.
 const data = {
   user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
+    name: 'Spiritual Seeker',
+    email: 'seeker@thebridge.com',
+    avatar: '/images/team/default-avatar.png',
   },
   teams: [
     {
       name: 'The Bridge',
       logo: GalleryVerticalEnd,
-      plan: 'Enterprise',
+      plan: 'Spiritual Platform',
     },
     {
-      name: 'Acme Corp.',
+      name: 'Medium Community',
       logo: AudioWaveform,
-      plan: 'Startup',
+      plan: 'Connected',
     },
     {
-      name: 'Evil Corp.',
+      name: 'Spiritual Network',
       logo: Command,
-      plan: 'Free',
+      plan: 'Active',
     },
   ],
   navMain: [
     {
-      title: 'Playground',
-      url: '#',
+      title: 'Home',
+      url: '/',
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: 'History',
-          url: '#',
+          title: 'Dashboard',
+          url: '/#dashboard',
         },
         {
-          title: 'Starred',
-          url: '#',
+          title: 'About Us',
+          url: '/#about',
         },
         {
-          title: 'Settings',
-          url: '#',
+          title: 'Features',
+          url: '/#features',
         },
       ],
     },
     {
-      title: 'Models',
-      url: '#',
-      icon: Bot,
+      title: 'Episodes',
+      url: '/episodes',
+      icon: AudioWaveform,
       items: [
         {
-          title: 'Genesis',
-          url: '#',
+          title: 'Latest Episodes',
+          url: '/episodes?filter=latest',
         },
         {
-          title: 'Explorer',
-          url: '#',
+          title: 'Popular Episodes',
+          url: '/episodes?filter=popular',
         },
         {
-          title: 'Quantum',
-          url: '#',
+          title: 'By Medium',
+          url: '/episodes?filter=medium',
         },
       ],
     },
     {
-      title: 'Documentation',
-      url: '#',
+      title: 'Reviews',
+      url: '/reviews',
       icon: BookOpen,
       items: [
         {
-          title: 'Introduction',
-          url: '#',
+          title: 'All Reviews',
+          url: '/reviews',
         },
         {
-          title: 'Get Started',
-          url: '#',
+          title: 'Top Rated',
+          url: '/reviews?sort=rating',
         },
         {
-          title: 'Tutorials',
-          url: '#',
-        },
-        {
-          title: 'Changelog',
-          url: '#',
+          title: 'Recent Reviews',
+          url: '/reviews?sort=recent',
         },
       ],
     },
     {
-      title: 'Settings',
-      url: '#',
+      title: 'Blogs',
+      url: '/blogs',
+      icon: Bot,
+      items: [
+        {
+          title: 'All Articles',
+          url: '/blogs',
+        },
+        {
+          title: 'Spiritual Guides',
+          url: '/blogs?category=guides',
+        },
+        {
+          title: 'Medium Stories',
+          url: '/blogs?category=stories',
+        },
+        {
+          title: 'Community',
+          url: '/blogs?category=community',
+        },
+      ],
+    },
+    {
+      title: 'Contact',
+      url: '/contact',
       icon: Settings2,
       items: [
         {
-          title: 'General',
-          url: '#',
+          title: 'Get in Touch',
+          url: '/contact',
         },
         {
-          title: 'Team',
-          url: '#',
+          title: 'Support',
+          url: '/contact?type=support',
         },
         {
-          title: 'Billing',
-          url: '#',
-        },
-        {
-          title: 'Limits',
-          url: '#',
+          title: 'Partnerships',
+          url: '/contact?type=partnerships',
         },
       ],
     },
   ],
   projects: [
     {
-      name: 'Design Engineering',
-      url: '#',
+      name: 'Medium Profiles',
+      url: '/mediums',
       icon: Frame,
     },
     {
-      name: 'Sales & Marketing',
-      url: '#',
+      name: 'Community Hub',
+      url: '/community',
       icon: PieChart,
     },
     {
-      name: 'Travel',
-      url: '#',
+      name: 'Spiritual Events',
+      url: '/events',
       icon: Map,
     },
   ],
