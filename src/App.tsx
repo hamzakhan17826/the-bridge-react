@@ -1,5 +1,5 @@
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Home from './pages/Home';
@@ -13,8 +13,10 @@ import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
 import AppLayout from './components/layouts/AppLayout';
 import { RequireAuth, RedirectIfAuth } from './components/system/RouteGuards';
-
-// Removed unused ErrorFallback; use render-props pattern instead
+import Overview from './pages/dashboard/Overview';
+import Users from './pages/dashboard/Users';
+import Settings from './pages/dashboard/Settings';
+import DashboardLayout from './components/layouts/dashboard/DashboardLayout';
 
 function App() {
   return (
@@ -62,6 +64,20 @@ function App() {
                     </RequireAuth>
                   }
                 />
+              </Route>
+              <Route
+                path="/dashboard"
+                element={
+                  <RequireAuth>
+                    <DashboardLayout>
+                      <Outlet />
+                    </DashboardLayout>
+                  </RequireAuth>
+                }
+              >
+                <Route index element={<Overview />} />
+                <Route path="users" element={<Users />} />
+                <Route path="settings" element={<Settings />} />
               </Route>
             </Routes>
             <ToastContainer />
