@@ -87,7 +87,7 @@ interface MediumProfile {
 const mockMediumProfile: MediumProfile = {
   id: '1',
   name: 'Sarah Mitchell',
-  photoUrl: '/images/team/1.jpg',
+  photoUrl: '/images/team/11.jpg',
   specialty: 'Evidential Medium',
   tagline: 'Bridging hearts through spirit communication',
   bio: 'Sarah Mitchell is a renowned evidential medium with over 15 years of experience connecting people with their loved ones in spirit. Her compassionate approach and dedication to providing clear, specific evidence have touched thousands of lives worldwide.',
@@ -514,7 +514,7 @@ const MediumProfile = () => {
                       key={index}
                       className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
                     >
-                      <h3 className="text-lg font-semibold text-purple-900 mb-3">
+                      <h3 className="text-lg font-semibold text-purple-600 mb-3">
                         {focus.name}
                       </h3>
                       <p className="text-gray-700">{focus.description}</p>

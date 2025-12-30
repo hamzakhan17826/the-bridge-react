@@ -14,7 +14,7 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
 }) => {
   const items = podcasts && podcasts.length ? podcasts : [];
   return (
-    <div className="mb-24 relative overflow-hidden pb-12">
+    <div className="relative overflow-hidden pb-12">
       {/* Background with gradient */}
       <div className="absolute inset-0 bg-linear-to-br from-purple-600 via-blue-600 to-purple-800"></div>
 

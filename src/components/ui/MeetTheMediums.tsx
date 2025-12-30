@@ -131,7 +131,7 @@ const MeetTheMediums: FC = () => {
   ];
 
   return (
-    <section className="pb-20 md:pb-28 mb-24 bg-linear-to-br from-purple-50 via-white to-blue-50 relative overflow-hidden">
+    <section className="py-20 md:pb-28 bg-linear-to-br from-purple-50 via-white to-blue-50 relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute top-20 left-10 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
       <div

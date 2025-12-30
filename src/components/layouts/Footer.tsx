@@ -68,8 +68,8 @@ const Footer: FC = () => {
       <div className="relative z-10 container mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Brand Section */}
-          <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-6">
+          <div className="lg:col-span-1 text-center md:text-left">
+            <div className="flex flex-col md:flex-row items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
                 <Heart className="w-6 h-6 text-white" />
               </div>
@@ -85,7 +85,7 @@ const Footer: FC = () => {
               mediums connect with spirit through evidence, healing, and
               community.
             </p>
-            <div className="flex gap-4">
+            <div className="flex justify-center md:justify-start gap-4">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
@@ -100,9 +100,9 @@ const Footer: FC = () => {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className="text-center md:text-left">
             <h4 className="text-lg text-white mb-6">Quick Links</h4>
-            <ul className="space-y-3">
+            <ul className="space-y-3 inline-block md:block">
               {quickLinks.map((link) => (
                 <li key={link.label}>
                   <a
@@ -117,9 +117,9 @@ const Footer: FC = () => {
           </div>
 
           {/* Services */}
-          <div>
+          <div className="text-center md:text-left">
             <h4 className="text-lg text-white mb-6">Services</h4>
-            <ul className="space-y-3">
+            <ul className="space-y-3 inline-block md:block">
               {services.map((service) => (
                 <li key={service.label}>
                   <a
@@ -134,17 +134,17 @@ const Footer: FC = () => {
           </div>
 
           {/* Contact Info */}
-          <div>
+          <div className="text-center md:text-left">
             <h4 className="text-lg text-white mb-6">Connect With Us</h4>
             <div className="space-y-4">
-              <div className="flex items-start gap-3">
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-3">
                 <MapPin className="w-4 h-4 text-purple-300 mt-0.5 flex-shrink-0" />
-                <div className="text-sm ">
+                <div className="text-sm text-center md:text-left">
                   <p className="text-gray-300">123 Spiritual Way</p>
                   <p className="text-gray-300">Metaphysical City, MC 12345</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col md:flex-row items-center md:items-center gap-3">
                 <Phone className="w-4 h-4 text-purple-300 flex-shrink-0" />
                 <a
                   href="tel:+15551234567"
@@ -153,7 +153,7 @@ const Footer: FC = () => {
                   +1 (555) 123-4567
                 </a>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col md:flex-row items-center md:items-center gap-3">
                 <Mail className="w-4 h-4 text-purple-300 flex-shrink-0" />
                 <a
                   href="mailto:hello@thebridge.com"
