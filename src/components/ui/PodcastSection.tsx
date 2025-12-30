@@ -14,7 +14,7 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
   const items = podcasts && podcasts.length ? podcasts : [];
   return (
     <div
-      className="mt-0"
+      className="mb-24"
       style={{
         background:
           'linear-gradient(to bottom, var(--color-primary) 60%, #fff 60%)',

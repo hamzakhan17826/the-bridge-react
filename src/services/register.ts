@@ -44,7 +44,7 @@ export async function fetchCities(countryId: number): Promise<City[]> {
   try {
     const res = await api.get(`/Resources/ListCities`, {
       // Swagger shows both `id` and `countryId` in query; send both to satisfy server binding
-      params: { id: countryId, countryId },
+      params: { countryId },
     });
     console.log('Cities response data:', res.data);
     return res.data as City[];

@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage';
 import ForgetPasswordPage from './pages/ForgetPassword';
 import ResetPasswordPage from './pages/ResetPassword';
 import VerifyEmailPage from './pages/VerifyEmail';
+import VerifyChangeEmailPage from './pages/VerifyChangeEmail';
 import UserProfile from './components/ui/UserProfile';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
@@ -58,6 +59,10 @@ function App() {
                 <Route
                   path="/Account/VerifyEmail"
                   element={<VerifyEmailPage />}
+                />
+                <Route
+                  path="/Account/VerifyChangeEmail"
+                  element={<VerifyChangeEmailPage />}
                 />
                 <Route
                   path="/profile"

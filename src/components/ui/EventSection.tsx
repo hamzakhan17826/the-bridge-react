@@ -45,7 +45,7 @@ const Events: FC = () => {
   ];
 
   return (
-    <section className="py-20 md:py-28 my-24 bg-gray-50">
+    <section className="py-20 md:py-28 bg-gray-50">
       <div className="container mx-auto px-6">
         <h3 className="text-center mb-8 text-3xl md:text-6xl font-grotesk-bold">
           Upcoming Events

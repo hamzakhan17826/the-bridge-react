@@ -4,6 +4,7 @@ import AboutSection from '../components/ui/AboutSection';
 import PodcastSlider from '../components/ui/PodcastSection';
 import type { PodcastItem } from '../types/types';
 import EventsSection from '../components/ui/EventSection';
+import MeetTheMediums from '../components/ui/MeetTheMediums';
 import TestimonialSection from '../components/ui/TestimonialSection';
 import MembershipSection from '../components/ui/MembershipSection';
 import CallToAction from '../components/ui/CTASection';
@@ -65,6 +66,7 @@ const Home = () => (
       buttonText="View All"
     />
     <EventsSection />
+    <MeetTheMediums />
     <TestimonialSection />
     <MembershipSection />
     <CallToAction />

@@ -11,10 +11,14 @@ import {
   getUserIdFromToken,
   type AppUserProfile,
 } from '../../services/user-profile';
+import { useNavigate } from 'react-router-dom';
+import { deleteCookie, emitAuthChange, getCookie } from '../../lib/auth';
+import { verifyChangeEmail } from '@/services/verify-change-email';
 
 type Opt<T = string> = { value: T; label: string };
 
 export default function UserProfile() {
+  const navigate = useNavigate();
   const [userId] = useState<string>(getUserIdFromToken() ?? '');
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -27,6 +31,14 @@ export default function UserProfile() {
   const [selectedCity, setSelectedCity] = useState<Opt<number> | null>(null);
 
   const [profile, setProfile] = useState<AppUserProfile | null>(null);
+  const [initialProfile, setInitialProfile] = useState<AppUserProfile | null>(
+    null
+  );
+
+  // Modal state
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [newEmail, setNewEmail] = useState('');
+  const [emailSubmitting, setEmailSubmitting] = useState(false);
 
   // Controlled states for form fields
   const [firstName, setFirstName] = useState('');
@@ -56,6 +68,7 @@ export default function UserProfile() {
       if (res.success && res.data) {
         console.log('🚀 User profile loaded:', res.data);
         setProfile(res.data);
+        setInitialProfile({ ...res.data }); // Store initial values for diff
         // Set controlled states
         setFirstName(res.data.firstName || '');
         setLastName(res.data.lastName || '');
@@ -100,27 +113,76 @@ export default function UserProfile() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!profile || submitting) return;
+    if (!profile || !initialProfile || submitting) return;
     const pascalFd = new FormData();
-    // Append from states
-    pascalFd.append('FirstName', firstName);
-    pascalFd.append('LastName', lastName);
-    pascalFd.append('UserName', userName);
-    pascalFd.append('Email', profile?.email || '');
-    pascalFd.append('AddressLine1', addressLine1);
-    pascalFd.append('AddressLine2', addressLine2);
-    pascalFd.append('PostalCode', postalCode);
-    pascalFd.append('DateOfBirth', dateOfBirth);
-    pascalFd.append('Gender', gender);
-    // Add fields not in states
-    pascalFd.append('CountryId', (selectedCountry?.value ?? 0).toString());
-    pascalFd.append('CityId', (selectedCity?.value ?? 0).toString());
+
+    // Helper to append only if changed
+    const appendIfChanged = (
+      key: string,
+      current: string | number | undefined,
+      initial: string | number | undefined
+    ) => {
+      if (current !== initial) {
+        pascalFd.append(key, current?.toString() || '');
+      }
+    };
+
+    // Always send required fields
+    pascalFd.append('UserName', userName.trim());
+
+    // Compare and append changed fields
+    appendIfChanged('FirstName', firstName.trim(), initialProfile.firstName);
+    appendIfChanged('LastName', lastName.trim(), initialProfile.lastName);
+    appendIfChanged(
+      'AddressLine1',
+      addressLine1.trim(),
+      initialProfile.addressLine1
+    );
+    appendIfChanged(
+      'AddressLine2',
+      addressLine2.trim(),
+      initialProfile.addressLine2
+    );
+    appendIfChanged('PostalCode', postalCode.trim(), initialProfile.postalCode);
+    appendIfChanged('DateOfBirth', dateOfBirth, initialProfile.dateOfBirth);
+    appendIfChanged('Gender', gender, initialProfile.gender);
+
+    // For selects
+    const currentCountryId = selectedCountry?.value;
+    if (currentCountryId !== initialProfile.countryId) {
+      pascalFd.append('CountryId', currentCountryId?.toString() || '');
+    }
+    const currentCityId = selectedCity?.value;
+    if (currentCityId !== initialProfile.cityId) {
+      pascalFd.append('CityId', currentCityId?.toString() || '');
+    }
+
+    // Always send email? But since read-only, and not changed, skip
+    // pascalFd.append('Email', profile.email); // Skip if not changed
+
+    // Always send this?
     pascalFd.append('ChangeEmailPreferencesKey', 'false');
+
+    // If no changes, maybe don't submit
+    if (pascalFd.entries().next().done) {
+      toast.info('No changes detected.');
+      return;
+    }
+
     setSubmitting(true);
     const res = await updateUserProfile(pascalFd);
     setSubmitting(false);
     if (res.success) {
       toast.success(res.message);
+      // Logout as per backend requirement, but without page refresh
+      deleteCookie('jwtToken');
+      deleteCookie('refreshToken');
+      deleteCookie('userRole');
+      deleteCookie('auth');
+      deleteCookie('sidebar_state');
+      emitAuthChange();
+      // Navigate to login without refresh
+      navigate('/login');
     } else {
       toast.error(res.errors?.join(', ') || res.message);
     }
@@ -193,6 +255,7 @@ export default function UserProfile() {
                   <button
                     type="button"
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm border border-primary px-1 rounded-2xl text-primary hover:text-white hover:bg-primary cursor-pointer"
+                    onClick={() => setEmailModalOpen(true)}
                   >
                     Change
                   </button>
@@ -322,6 +385,80 @@ export default function UserProfile() {
           </div>
         </div>
       </div>
+
+      {/* Email Change Modal */}
+      {emailModalOpen && (
+        <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 className="text-xl font-bold mb-4">Change Email</h3>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                if (!newEmail.trim()) return;
+                setEmailSubmitting(true);
+                const userId = getUserIdFromToken();
+                const token = getCookie('jwtToken');
+                console.log('userId, token, newEmail :', {
+                  userId,
+                  token,
+                  newEmail,
+                });
+                if (!userId || !token) {
+                  toast.error('Authentication required.');
+                  setEmailSubmitting(false);
+                  return;
+                }
+                const res = await verifyChangeEmail(
+                  userId,
+                  token,
+                  newEmail.trim()
+                );
+                setEmailSubmitting(false);
+                if (res.success) {
+                  toast.success(res.message);
+                  setEmailModalOpen(false);
+                  setNewEmail('');
+                } else {
+                  toast.error(res.message);
+                }
+              }}
+            >
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">
+                  New Email
+                </label>
+                <input
+                  type="email"
+                  value={newEmail}
+                  onChange={(e) => setNewEmail(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  placeholder="Enter new email"
+                  required
+                />
+              </div>
+              <div className="flex justify-end space-x-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmailModalOpen(false);
+                    setNewEmail('');
+                  }}
+                  className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={emailSubmitting}
+                  className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 disabled:opacity-50"
+                >
+                  {emailSubmitting ? 'Sending...' : 'Send Verification'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

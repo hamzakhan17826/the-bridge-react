@@ -98,14 +98,6 @@ export type UpdateAppUserProfilePayload = Partial<AppUserProfile>;
 export async function updateUserProfile(
   formData: FormData
 ): Promise<ProfileResponse> {
-  const userName = formData.get('UserName') as string;
-  if (!userName) {
-    return {
-      success: false,
-      message: 'Username is required to update profile.',
-      errors: ['Missing Username.'],
-    };
-  }
   try {
     const res = await api.post('/Account/UpdateAppUserProfile', formData);
     const result = res.data;

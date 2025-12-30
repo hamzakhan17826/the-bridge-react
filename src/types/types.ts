@@ -47,3 +47,24 @@ export interface SubmitButtonProps {
   className?: string;
   disabled?: boolean;
 }
+
+export interface Medium {
+  id: string;
+  name: string;
+  photoUrl: string;
+  specialty: string; // e.g., "Evidential Medium"
+  tagline: string; // Short one-liner about the medium
+  focus: string[]; // Areas of focus like ["Spirit Communication", "Healing"]
+  ratingAverage: number;
+  ratingCount: number;
+  bookingEnabled: boolean;
+  slug: string; // for profile URL
+  availabilityStatus: 'available' | 'upcoming-events' | 'guest-medium' | 'busy';
+  nextEvent?: {
+    title: string;
+    date: string;
+    time: string;
+  };
+  videoCount: number; // Number of videos/lectures
+  experience: string; // e.g., "15+ years"
+}
