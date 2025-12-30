@@ -415,6 +415,7 @@
 @media (min-width: 768px) {
   .podcast-swiper .swiper-wrapper {
     margin-bottom: 40px;
+    margin-top: 40px;
   }
 }
 /* Podcast section end */
@@ -425,44 +426,51 @@
 }
 .events-swiper .swiper-slide {
   height: auto;
+  padding: 0 10px; /* Add padding to prevent overflow when scaling */
 }
 .events-swiper .swiper-wrapper {
   margin-bottom: 50px;
   margin-top: 50px;
 }
+.events-swiper {
+  overflow: visible; /* Allow scaled cards to be visible */
+}
 /* Testimonial section end */
 
 /* Testimonial section start */
-.block-testimonials-3 .swiper-slide {
+.testimonial-swiper .swiper-slide {
   width: 400px;
   padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.block-testimonials-3 .testimonial-col {
-  border: 1px solid #eee;
-  border-radius: 4px;
-  padding: 30px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.05);
+.testimonial-swiper .testimonial-col {
+  margin-bottom: 0; /* Remove margin since padding is handled by swiper-slide */
 }
 
-.block-testimonials-3 .testimonial-col p {
+.testimonial-swiper .testimonial-col p {
   font-size: 16px;
   line-height: 26px !important;
   margin-bottom: 20px;
 }
 
-.block-testimonials-3 .swiper-horizontal > .swiper-scrollbar {
-  width: 75%;
-  max-width: 700px;
+.testimonial-swiper .swiper-horizontal > .swiper-scrollbar {
+  width: 90%;
+  max-width: 1200px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.06);
+  height: 4px;
+  bottom: -20px;
 }
 
-.block-testimonials-3 .swiper,
-.block-testimonials-3 .swiper-wrapper {
+.testimonial-swiper .swiper,
+.testimonial-swiper .swiper-wrapper {
   cursor: ew-resize !important;
+  padding-bottom: 40px; /* Space for scrollbar */
+  padding-top: 40px;
 }
 /* End Testimonial section */
 

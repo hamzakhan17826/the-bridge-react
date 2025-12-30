@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Scrollbar } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
+import { Quote, Heart, Star } from 'lucide-react';
 
 const TestimonialSection: FC = () => {
   const testimonialSlides = [
@@ -136,24 +137,39 @@ const TestimonialSection: FC = () => {
     ],
   ];
   return (
-    <section className="block-testimonials-3">
-      <div className="content-wrap">
-        <div className="container mx-auto">
-          <div className="row justify-content-center mb-5">
-            <div className="col-xl-6 col-lg-8 text-center">
-              <h3 className="mb-4 text-4xl md:text-6xl ">Testimonials</h3>
-              <h5 className="text-uppercase ls-2 op-07 ">
-                ❤️ What Our Customers Say About Us ❤️
-              </h5>
-            </div>
+    <section className="py-20 md:py-28 bg-linear-to-br from-purple-50 via-white to-blue-50 relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute top-20 right-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
+      <div
+        className="absolute bottom-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"
+        style={{ animationDelay: '1s' }}
+      ></div>
+
+      <div className="max-full mx-auto px-6 relative z-10">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-purple-100 to-blue-100 text-purple-700 font-poppins font-medium text-sm mb-6">
+            <Star className="w-4 h-4" />
+            Community Voices
           </div>
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-poppins leading-tight mb-4">
+            What Our{' '}
+            <span className="bg-linear-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              Community
+            </span>{' '}
+            Says
+          </h2>
+          <p className="text-lg md:text-xl text-gray-600 font-lato max-w-3xl mx-auto">
+            Hear from our listeners, sitters, and mediums about their
+            experiences with The Bridge.
+          </p>
         </div>
-        <section className="swiper_wrapper h-auto mb-20">
+
+        <div className="w-full">
           <Swiper
             className="testimonial-swiper"
             modules={[FreeMode, Scrollbar]}
             slidesPerView="auto"
-            spaceBetween={0}
+            spaceBetween={20}
             freeMode
             grabCursor
             scrollbar={{ draggable: true }}
@@ -161,30 +177,48 @@ const TestimonialSection: FC = () => {
             {testimonialSlides.map((slide, slideIndex) => (
               <SwiperSlide key={slideIndex}>
                 {slide.map((testimonial, index) => (
-                  <div className="testimonial-col" key={index}>
-                    <p>{testimonial.text}</p>
-                    <div className="flex items-start">
-                      <img
-                        src={testimonial.image}
-                        alt="User"
-                        className="rounded-full w-10 h-10"
-                        width={40}
-                        height={40}
-                      />
-                      <div className="ms-3">
-                        <h5 className="mb-0">
-                          <a
-                            href={testimonial.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-primary font-bold"
-                          >
-                            {testimonial.name}
-                          </a>
-                        </h5>
-                        <h6 className="fw-normal mb-0 op-06 ">
-                          {testimonial.platform}
-                        </h6>
+                  <div className="testimonial-col group" key={index}>
+                    <div className="relative p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-purple-100">
+                      {/* Quote icon */}
+                      <div className="absolute -top-3 -left-3 w-12 h-12 bg-linear-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg">
+                        <Quote className="w-6 h-6 text-white" />
+                      </div>
+
+                      {/* Testimonial text */}
+                      <p className="text-gray-700 font-lato leading-relaxed mb-6 pt-4 italic">
+                        "{testimonial.text}"
+                      </p>
+
+                      {/* User info */}
+                      <div className="flex items-center gap-4">
+                        <div className="relative">
+                          <img
+                            src={testimonial.image}
+                            alt={testimonial.name}
+                            className="rounded-full w-12 h-12 object-cover border-2 border-purple-200 group-hover:border-purple-400 transition-colors"
+                            width={48}
+                            height={48}
+                          />
+                          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-400 rounded-full border-2 border-white"></div>
+                        </div>
+                        <div className="flex-1">
+                          <h5 className="mb-1">
+                            <a
+                              href={testimonial.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-purple-700 hover:text-purple-800 font-poppins font-semibold transition-colors"
+                            >
+                              {testimonial.name}
+                            </a>
+                          </h5>
+                          <div className="flex items-center gap-2">
+                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-purple-100 text-purple-600 text-xs font-medium">
+                              <Heart className="w-3 h-3" />
+                              {testimonial.platform}
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -193,7 +227,7 @@ const TestimonialSection: FC = () => {
             ))}
             <div className="swiper-scrollbar" />
           </Swiper>
-        </section>
+        </div>
       </div>
     </section>
   );

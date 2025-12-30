@@ -1,24 +1,47 @@
 import { Link } from 'react-router-dom';
+import { Users, Heart, Sparkles, ArrowRight } from 'lucide-react';
 
 export default function HeroSection() {
   return (
-    <section className="relative overflow-hidden">
-      <div className="container mx-auto px-6 py-10 lg:py-16">
-        <div className="flex flex-col lg:flex-row items-center gap-10">
+    <section className="relative overflow-hidden bg-linear-to-br from-purple-50 via-white to-blue-50">
+      {/* Background Elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
+        <div
+          className="absolute top-40 right-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"
+          style={{ animationDelay: '1s' }}
+        ></div>
+        <div
+          className="absolute bottom-20 left-1/2 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"
+          style={{ animationDelay: '2s' }}
+        ></div>
+      </div>
+
+      <div className="relative container mx-auto px-6 py-16 lg:py-24">
+        <div className="flex flex-col lg:flex-row items-center gap-16">
           {/* Left: Text & Actions */}
-          <div className="w-full lg:w-1/2 pt-4 lg:pt-8">
-            <div className="relative z-10">
-              <div className="uppercase tracking-widest mb-4 text-gray-600">
+          <div className="w-full lg:w-1/2 space-y-8">
+            <div className="space-y-6">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-purple-100 to-blue-100 text-purple-700 font-poppins font-medium text-sm">
+                <Sparkles className="w-4 h-4" />
                 Bridging Two Worlds
               </div>
-              <h1 className="mb-2 text-3xl md:text-5xl lg:text-6xl leading-tight">
+
+              {/* Main Heading */}
+              <h1 className="text-4xl md:text-6xl lg:text-7xl leading-tight font-poppins">
                 A modern stage where{' '}
-                <span className="font-playfair italic font-semibold text-primary lowercase md:text-6xl">
-                  mediums
+                <span className="relative inline-block">
+                  <span className="relative z-10 font-playfair italic font-semibold bg-linear-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                    mediums
+                  </span>
+                  <div className="absolute -bottom-2 left-0 right-0 h-3 bg-linear-to-r from-purple-200 to-blue-200 rounded-lg -z-10"></div>
                 </span>{' '}
                 rise together
               </h1>
-              <p className="mt-3 text-lg md:text-lg text-gray-700">
+
+              {/* Description */}
+              <p className="text-lg md:text-xl text-gray-600 font-lato leading-relaxed max-w-lg">
                 The Bridge is a sacred space where sitters, developing mediums,
                 and professional mediums connect with spirit through evidence,
                 healing, and community.
@@ -26,56 +49,97 @@ export default function HeroSection() {
             </div>
 
             {/* Actions */}
-            <div className="mt-6 mb-8 flex flex-wrap gap-3">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 to="/events"
-                className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-3 text-white hover:opacity-90 transition"
+                className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
                 View Events
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 to="/membership"
-                className="inline-flex items-center justify-center rounded-full border-2 border-gray-300 px-5 py-3 text-gray-900 hover:border-primary transition"
+                className="inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-purple-200 text-purple-700 hover:bg-purple-50 hover:border-purple-300 font-poppins font-semibold rounded-2xl transition-all duration-300"
               >
+                <Heart className="w-5 h-5" />
                 Join Membership
               </Link>
             </div>
 
             {/* Stats */}
-            <div className="flex items-center gap-8">
-              <div>
-                <h3
-                  className="font-playfair text-5xl md:text-4xl mb-0"
-                  style={{ lineHeight: '0.85' }}
-                >
-                  137K
-                </h3>
-                <small className="text-sm opacity-80">Listeners</small>
+            <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-200">
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <Users className="w-5 h-5 text-purple-600" />
+                  <span className="font-playfair text-4xl md:text-5xl font-bold text-gray-900">
+                    137K
+                  </span>
+                </div>
+                <p className="text-sm text-gray-600 font-lato">
+                  Active Listeners
+                </p>
               </div>
-              <span className="mx-2 md:mx-5 text-4xl opacity-30 leading-none">
-                ·
-              </span>
-              <div>
-                <h3
-                  className="font-playfair text-5xl md:text-4xl mb-0"
-                  style={{ lineHeight: '0.85' }}
-                >
-                  2.1M
-                </h3>
-                <small className="text-sm opacity-80">Followers</small>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <Heart className="w-5 h-5 text-blue-600" />
+                  <span className="font-playfair text-4xl md:text-5xl font-bold text-gray-900">
+                    2.1M
+                  </span>
+                </div>
+                <p className="text-sm text-gray-600 font-lato">
+                  Community Members
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Right: Image */}
-          <div className="flex justify-center w-full lg:w-1/2 lg:flex lg:justify-end">
-            <img
-              src="/images/people-connection-on-bridge.png"
-              alt="People connecting on a bridge"
-              className="w-3/4 lg:w-4/5 h-auto rounded-lg"
-              width={450}
-              height={450}
-            />
+          {/* Right: Enhanced Visual */}
+          <div className="w-full lg:w-1/2 relative">
+            <div className="relative">
+              {/* Main Image */}
+              <div className="relative z-10">
+                <img
+                  src="https://plus.unsplash.com/premium_photo-1663100390144-4056139c1af1?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  alt="Spiritual community gathering - seniors holding hands in prayer circle"
+                  className="w-full h-auto rounded-3xl shadow-2xl"
+                  width={600}
+                  height={600}
+                />
+                {/* Floating Elements */}
+                <div className="absolute -top-4 -right-4 w-20 h-20 bg-linear-to-r from-purple-400 to-blue-400 rounded-2xl flex items-center justify-center shadow-lg animate-bounce">
+                  <Sparkles className="w-8 h-8 text-white" />
+                </div>
+                <div
+                  className="absolute -bottom-4 -left-4 w-16 h-16 bg-linear-to-r from-blue-400 to-purple-400 rounded-2xl flex items-center justify-center shadow-lg animate-bounce"
+                  style={{ animationDelay: '1s' }}
+                >
+                  <Heart className="w-6 h-6 text-white" />
+                </div>
+              </div>
+
+              {/* Background Cards */}
+              <div className="absolute -top-8 -left-8 w-full h-full bg-linear-to-r from-purple-100 to-blue-100 rounded-3xl -z-10 transform rotate-3"></div>
+              <div className="absolute -bottom-8 -right-8 w-full h-full bg-linear-to-r from-blue-100 to-purple-100 rounded-3xl -z-20 transform -rotate-3"></div>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="flex items-center gap-4 mt-8 justify-center lg:justify-start">
+              <div className="flex -space-x-2">
+                <div className="w-10 h-10 rounded-full bg-linear-to-r from-purple-400 to-blue-400 border-2 border-white flex items-center justify-center">
+                  <span className="text-xs font-bold text-white">A</span>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-linear-to-r from-blue-400 to-purple-400 border-2 border-white flex items-center justify-center">
+                  <span className="text-xs font-bold text-white">B</span>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-linear-to-r from-purple-400 to-pink-400 border-2 border-white flex items-center justify-center">
+                  <span className="text-xs font-bold text-white">C</span>
+                </div>
+              </div>
+              <div className="text-sm text-gray-600 font-lato">
+                <span className="font-semibold text-gray-900">500+</span> active
+                members
+              </div>
+            </div>
           </div>
         </div>
       </div>
