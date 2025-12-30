@@ -1,5 +1,5 @@
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Home from './pages/Home';
@@ -17,6 +17,7 @@ import Overview from './pages/dashboard/Overview';
 import Users from './pages/dashboard/Users';
 import Settings from './pages/dashboard/Settings';
 import DashboardLayout from './components/layouts/dashboard/DashboardLayout';
+// import { ThemeProvider } from '@/components/theme-provider';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
       <QueryErrorResetBoundary>
         {() => (
           <BrowserRouter>
+            {/* <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme"> */}
             <RefreshToken />
             <Routes>
               <Route element={<AppLayout />}>
@@ -69,9 +71,7 @@ function App() {
                 path="/dashboard"
                 element={
                   <RequireAuth>
-                    <DashboardLayout>
-                      <Outlet />
-                    </DashboardLayout>
+                    <DashboardLayout />
                   </RequireAuth>
                 }
               >
@@ -81,6 +81,7 @@ function App() {
               </Route>
             </Routes>
             <ToastContainer />
+            {/* </ThemeProvider> */}
           </BrowserRouter>
         )}
       </QueryErrorResetBoundary>
