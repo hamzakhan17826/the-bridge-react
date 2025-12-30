@@ -168,7 +168,7 @@ export default function Navbar() {
                 <div className="relative" ref={dropdownRef}>
                   <button
                     type="button"
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-linear-to-r from-purple-100 to-blue-100 hover:from-purple-200 hover:to-blue-200 text-purple-700 font-grotesk-medium text-sm transition-all duration-200 transform hover:scale-105"
+                    className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-xl bg-linear-to-r from-purple-100 to-blue-100 hover:from-purple-200 hover:to-blue-200 text-purple-700 font-grotesk-medium text-sm transition-all duration-200 transform hover:scale-105 cursor-pointer"
                     aria-haspopup="menu"
                     aria-expanded={accountOpen}
                     onClick={() => setAccountOpen((v) => !v)}
@@ -190,7 +190,7 @@ export default function Navbar() {
                           <UserCircle2 className="w-4 h-4" />
                           Profile
                         </Link>
-                        {userRoles.includes('user') && (
+                        {/* {userRoles.includes('user') && (
                           <Link
                             to="/dashboard"
                             className="flex items-center gap-3 px-4 py-3 text-sm font-grotesk-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-200"
@@ -199,7 +199,7 @@ export default function Navbar() {
                             <Sparkles className="w-4 h-4" />
                             Dashboard
                           </Link>
-                        )}
+                        )} */}
                         <div className="my-2 h-px bg-linear-to-r from-transparent via-purple-200 to-transparent"></div>
                         <button
                           className="flex items-center gap-3 w-full px-4 py-3 text-sm font-grotesk-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all duration-200"
@@ -216,7 +216,7 @@ export default function Navbar() {
                   )}
                 </div>
               ) : (
-                <div className="flex items-center gap-3">
+                <div className="hidden lg:flex items-center gap-3">
                   <NavLink
                     to="/login"
                     className={({ isActive }) =>
