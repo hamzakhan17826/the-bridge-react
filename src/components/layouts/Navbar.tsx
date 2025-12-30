@@ -119,8 +119,16 @@ export default function Navbar() {
               >
                 Contact
               </NavLink>
-              <div className="h-6 w-px bg-gray-300" />
-
+              {isLoggedIn && userRoles.includes('user') && (
+                <NavLink
+                  to="/dashboard"
+                  className={({ isActive }) =>
+                    `${isActive ? 'text-primary font-bold' : 'text-gray-900'}`
+                  }
+                >
+                  Dashboard
+                </NavLink>
+              )}
               {isLoggedIn ? (
                 <div className="relative" ref={dropdownRef}>
                   <button
@@ -143,15 +151,6 @@ export default function Navbar() {
                         >
                           Profile
                         </Link>
-                        {userRoles.includes('admin') && (
-                          <Link
-                            to="/dashboard"
-                            className="py-2 text-gray-900 hover:text-gray-700"
-                            onClick={() => setAccountOpen(false)}
-                          >
-                            Dashboard
-                          </Link>
-                        )}
                         <div className="my-2 h-px w-full bg-gray-200" />
                         <button
                           className="py-2 px-2 text-left text-gray-900 hover:text-gray-700 cursor-pointer"
@@ -258,7 +257,7 @@ export default function Navbar() {
                   >
                     Profile
                   </Link>
-                  {userRoles.includes('admin') && (
+                  {userRoles.includes('user') && (
                     <Link
                       to="/dashboard"
                       className="py-2 text-gray-900"

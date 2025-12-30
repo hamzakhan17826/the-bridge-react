@@ -17,6 +17,7 @@ import Overview from './pages/dashboard/Overview';
 import Users from './pages/dashboard/Users';
 import Settings from './pages/dashboard/Settings';
 import DashboardLayout from './components/layouts/dashboard/DashboardLayout';
+import ContactUsPage from './pages/ContactUs';
 // import { ThemeProvider } from '@/components/theme-provider';
 
 function App() {
@@ -63,6 +64,14 @@ function App() {
                   element={
                     <RequireAuth>
                       <UserProfile />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/contact"
+                  element={
+                    <RequireAuth>
+                      <ContactUsPage />
                     </RequireAuth>
                   }
                 />
