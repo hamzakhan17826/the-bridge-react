@@ -58,7 +58,7 @@ const ContactUsPage = () => {
     <>
       <div className="max-w-7xl mx-auto py-20">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Connect The Bridge</h1>
+          <h1 className="text-4xl font-bold mb-4">Contact The Bridge</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Reach out to our community of mediums and spiritual seekers. Whether
             you&apos;re seeking guidance, booking a reading, or joining our
@@ -71,7 +71,7 @@ const ContactUsPage = () => {
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
               <div className="flex">
                 <div className="w-1/2">
-                  <div className="bg-linear-to-b from-primary to-primary-dark p-10 text-white h-full">
+                  <div className="bg-linear-to-br from-purple-500 to-blue-500 p-10 text-white h-full">
                     <h3 className="mb-6 text-2xl font-bold text-white">
                       Get in touch
                     </h3>
@@ -86,9 +86,9 @@ const ContactUsPage = () => {
                       <div>
                         <h6 className="mb-0 font-medium text-white">Address</h6>
                         <p className="mb-0 text-white">
-                          123 Business Avenue, Suite 100
+                          123 Spiritual Way
                           <br />
-                          New York, NY 10001
+                          Metaphysical City, MC 12345
                         </p>
                       </div>
                     </div>
@@ -107,32 +107,32 @@ const ContactUsPage = () => {
                       </div>
                       <div>
                         <h6 className="mb-0 font-medium text-white">Email</h6>
-                        <p className="mb-0 text-white">contact@company.com</p>
+                        <p className="mb-0 text-white">hello@thebridge.com</p>
                       </div>
                     </div>
                     <div className="mt-8">
                       <h6 className="mb-3 font-medium text-white">Follow Us</h6>
                       <a
                         href="#"
-                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-white hover:text-primary hover:-translate-y-1"
+                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-purple-500 hover:text-white hover:-translate-y-1"
                       >
                         <Facebook />
                       </a>
                       <a
                         href="#"
-                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-white hover:text-primary hover:-translate-y-1"
+                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-purple-500 hover:text-white hover:-translate-y-1"
                       >
                         <Twitter />
                       </a>
                       <a
                         href="#"
-                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-white hover:text-primary hover:-translate-y-1"
+                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-purple-500 hover:text-white hover:-translate-y-1"
                       >
                         <Linkedin />
                       </a>
                       <a
                         href="#"
-                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-white hover:text-primary hover:-translate-y-1"
+                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-purple-500 hover:text-white hover:-translate-y-1"
                       >
                         <Instagram />
                       </a>
@@ -150,7 +150,7 @@ const ContactUsPage = () => {
                         <input
                           type="text"
                           name="name"
-                          className="w-full rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-primary focus:outline-none"
+                          className="w-full rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-purple-400 focus:outline-none"
                           placeholder="John Doe"
                           required
                           value={formData.name}
@@ -162,7 +162,7 @@ const ContactUsPage = () => {
                         <input
                           type="email"
                           name="email"
-                          className="w-full rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-primary focus:outline-none"
+                          className="w-full rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-purple-400 focus:outline-none"
                           placeholder="john@example.com"
                           required
                           value={formData.email}
@@ -175,7 +175,7 @@ const ContactUsPage = () => {
                         </label>
                         <select
                           name="subject"
-                          className="w-full rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-primary focus:outline-none"
+                          className="w-full rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-purple-400 focus:outline-none"
                           required
                           value={formData.subject}
                           onChange={handleChange}
@@ -208,7 +208,7 @@ const ContactUsPage = () => {
                         </label>
                         <textarea
                           name="message"
-                          className="w-full h-32 rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-primary focus:outline-none resize-none"
+                          className="w-full h-32 rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-purple-400 focus:outline-none resize-none"
                           placeholder="Your message here..."
                           required
                           value={formData.message}
@@ -222,7 +222,6 @@ const ContactUsPage = () => {
                         width="100%"
                         height="100%"
                         src="https://www.openstreetmap.org/export/embed.html?bbox=-139.61425781250003%2C19.269665296502332%2C-66.22558593750001%2C50.764259357116465&amp;layer=mapnik"
-                        style={{ border: '1px solid black' }}
                       ></iframe>
                       <br />
                       <small>

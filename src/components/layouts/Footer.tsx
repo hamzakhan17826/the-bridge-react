@@ -1,4 +1,6 @@
 import type { FC } from 'react';
+import { useState, useRef } from 'react';
+import { toast } from 'react-toastify';
 import {
   Facebook,
   Twitter,
@@ -9,9 +11,40 @@ import {
   MapPin,
   Heart,
 } from 'lucide-react';
+import { submitContactFormObject } from '../../services/contact-us';
 
 const Footer: FC = () => {
   const year = new Date().getFullYear();
+  const [loading, setLoading] = useState(false);
+  const emailRef = useRef<HTMLInputElement>(null);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const email = emailRef.current?.value.trim();
+
+    if (!email) {
+      toast.error('Please enter your email.');
+      return;
+    }
+
+    setLoading(true);
+    const result = await submitContactFormObject({
+      name: 'Newsletter Subscriber',
+      email,
+      subject: 'Newsletter Subscription',
+      message: 'Subscribe to newsletter',
+    });
+    setLoading(false);
+
+    if (result.success) {
+      toast.success(
+        'Subscribed to newsletter successfully! Stay tuned for updates.'
+      );
+      if (emailRef.current) emailRef.current.value = '';
+    } else {
+      toast.error(result.message);
+    }
+  };
 
   const quickLinks = [
     { label: 'Home', href: '/' },
@@ -178,12 +211,18 @@ const Footer: FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input
+                ref={emailRef}
                 type="email"
+                required
                 placeholder="Enter your email"
                 className="flex-1 px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm"
               />
-              <button className="px-6 py-3 cursor-pointer bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900">
-                Subscribe
+              <button
+                onClick={handleSubscribe}
+                disabled={loading}
+                className="px-6 py-3 cursor-pointer bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? 'Subscribing...' : 'Subscribe'}
               </button>
             </div>
           </div>

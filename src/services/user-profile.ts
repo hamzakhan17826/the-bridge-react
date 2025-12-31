@@ -127,3 +127,38 @@ export async function updateUserProfile(
     };
   }
 }
+
+export async function changePassword(payload: {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}): Promise<ProfileResponse> {
+  try {
+    const res = await api.post('/Account/ChangePassword', payload);
+    const result = res.data;
+    const ok =
+      res.status === 200 && (result?.result === true || !('result' in result));
+    return {
+      success: ok,
+      message:
+        result?.message ||
+        (ok ? 'Password changed successfully.' : 'Password change failed.'),
+      errors: result?.errors,
+    };
+  } catch (error: unknown) {
+    const err = error as {
+      response?: {
+        data?: { message?: string; errors?: Record<string, string[]> };
+      };
+    };
+    const d = err.response?.data;
+    const errors = d?.errors
+      ? (Object.values(d.errors).flat() as string[])
+      : undefined;
+    return {
+      success: false,
+      message: d?.message || 'Could not connect to the server.',
+      errors: errors ?? ['Server connection failed.'],
+    };
+  }
+}

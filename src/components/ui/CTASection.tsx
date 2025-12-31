@@ -1,6 +1,47 @@
+import { useState, useRef } from 'react';
+import { toast } from 'react-toastify';
 import { Sparkles, ArrowRight, Calendar, Users, Heart } from 'lucide-react';
+import { submitContactFormObject } from '../../services/contact-us';
 
 const CallToAction = () => {
+  const [loading, setLoading] = useState(false);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const interestRef = useRef<HTMLSelectElement>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const name = nameRef.current?.value.trim();
+    const email = emailRef.current?.value.trim();
+    const interest = interestRef.current?.value;
+
+    if (!name || !email || !interest) {
+      toast.error('Please fill in all fields.');
+      return;
+    }
+
+    setLoading(true);
+    const result = await submitContactFormObject({
+      name,
+      email,
+      subject: 'Book a Reading',
+      message: interest,
+    });
+    setLoading(false);
+
+    if (result.success) {
+      toast.success(
+        'Your booking request has been sent successfully! We will contact you soon.'
+      );
+      // Reset form
+      if (nameRef.current) nameRef.current.value = '';
+      if (emailRef.current) emailRef.current.value = '';
+      if (interestRef.current) interestRef.current.value = '';
+    } else {
+      toast.error(result.message);
+    }
+  };
+
   return (
     <section className="relative py-20 md:py-28 bg-linear-to-br from-purple-50 via-white to-blue-50 overflow-hidden">
       {/* Decorative background elements */}
@@ -95,14 +136,16 @@ const CallToAction = () => {
               </div>
 
               <div className="p-6 md:p-8">
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSubmit}>
                   <div>
                     <label className="block text-sm font-poppins font-medium text-gray-700 mb-2">
                       Your Name
                     </label>
                     <div className="relative">
                       <input
+                        ref={nameRef}
                         type="text"
+                        required
                         className="w-full rounded-xl bg-gray-50 border-2 border-gray-200 p-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200 font-lato"
                         placeholder="Enter your full name"
                       />
@@ -116,7 +159,9 @@ const CallToAction = () => {
                     </label>
                     <div className="relative">
                       <input
+                        ref={emailRef}
                         type="email"
+                        required
                         className="w-full rounded-xl bg-gray-50 border-2 border-gray-200 p-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200 font-lato"
                         placeholder="your.email@example.com"
                       />
@@ -130,6 +175,8 @@ const CallToAction = () => {
                     </label>
                     <div className="relative">
                       <select
+                        ref={interestRef}
+                        required
                         className="w-full rounded-xl bg-gray-50 border-2 border-gray-200 p-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200 font-lato appearance-none"
                         defaultValue=""
                       >
@@ -154,11 +201,18 @@ const CallToAction = () => {
 
                   <button
                     type="submit"
-                    className="w-full group inline-flex items-center justify-center gap-3 px-8 py-4 bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-poppins font-semibold text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
+                    disabled={loading}
+                    className="w-full group inline-flex items-center justify-center gap-3 px-8 py-4 bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-poppins font-semibold text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Calendar className="w-5 h-5" />
-                    Book Your Session
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    {loading ? (
+                      'Submitting...'
+                    ) : (
+                      <>
+                        <Calendar className="w-5 h-5" />
+                        Book Your Session
+                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      </>
+                    )}
                   </button>
                 </form>
 
