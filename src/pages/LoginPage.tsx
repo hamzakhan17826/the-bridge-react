@@ -172,13 +172,6 @@ export default function LoginPage() {
             </div>
           </form>
         </div>
-
-        {/* Footer */}
-        <div className="text-center mt-8">
-          <p className="text-xs text-gray-500">
-            © 2025 The Bridge. All rights reserved.
-          </p>
-        </div>
       </div>
     </div>
   );

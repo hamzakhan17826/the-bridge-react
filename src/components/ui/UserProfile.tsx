@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
-import type { StylesConfig } from 'react-select';
 import { toast } from 'react-toastify';
 import SubmitButton from './SubmitButton';
 import type { Country, City } from '../../types/types';
@@ -12,8 +11,17 @@ import {
   type AppUserProfile,
 } from '../../services/user-profile';
 import { useNavigate } from 'react-router-dom';
-import { deleteCookie, emitAuthChange, getCookie } from '../../lib/auth';
-import { verifyChangeEmail } from '@/services/verify-change-email';
+import { deleteCookie, emitAuthChange } from '../../lib/auth';
+import {
+  User,
+  Mail,
+  MapPin,
+  Calendar,
+  Users,
+  Home,
+  Hash,
+  Sparkles,
+} from 'lucide-react';
 
 type Opt<T = string> = { value: T; label: string };
 
@@ -36,21 +44,20 @@ export default function UserProfile() {
   );
 
   // Modal state
-  const [emailModalOpen, setEmailModalOpen] = useState(false);
-  const [newEmail, setNewEmail] = useState('');
-  const [emailSubmitting, setEmailSubmitting] = useState(false);
+  // const [emailModalOpen, setEmailModalOpen] = useState(false);
+  // const [newEmail, setNewEmail] = useState('');
+  // const [emailSubmitting, setEmailSubmitting] = useState(false);
 
   // Controlled states for form fields
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   const [addressLine1, setAddressLine1] = useState('');
   const [addressLine2, setAddressLine2] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [gender, setGender] = useState('');
-
-  const singleStyles: StylesConfig<Opt<number>, false> = {};
 
   useEffect(() => {
     const init = async () => {
@@ -73,6 +80,7 @@ export default function UserProfile() {
         setFirstName(res.data.firstName || '');
         setLastName(res.data.lastName || '');
         setUserName(res.data.userName || '');
+        setEmail(res.data.email || '');
         setAddressLine1(res.data.addressLine1 || '');
         setAddressLine2(res.data.addressLine2 || '');
         setPostalCode(res.data.postalCode || '');
@@ -133,6 +141,7 @@ export default function UserProfile() {
     // Compare and append changed fields
     appendIfChanged('FirstName', firstName.trim(), initialProfile.firstName);
     appendIfChanged('LastName', lastName.trim(), initialProfile.lastName);
+    appendIfChanged('Email', email.trim(), initialProfile.email);
     appendIfChanged(
       'AddressLine1',
       addressLine1.trim(),
@@ -189,186 +198,312 @@ export default function UserProfile() {
   };
 
   return (
-    <section className="py-16 md:py-24">
-      <div className="container mx-auto px-6">
-        <div className="mx-auto max-w-2xl">
-          <div className="rounded-2xl border border-gray-200 bg-white shadow-2xl p-6 md:p-8 mt-4">
-            <h3 className="text-2xl md:text-3xl  mb-6">My Profile</h3>
+    <section className="relative py-16 md:py-24 bg-linear-to-br from-purple-50 via-white to-blue-50 overflow-hidden">
+      {/* Decorative orbs */}
+      {/* <div className="absolute top-10 left-10 w-20 h-20 bg-purple-200 rounded-full opacity-30 animate-pulse"></div> */}
+      {/* <div className="absolute bottom-10 right-10 w-32 h-32 bg-blue-200 rounded-full opacity-20 animate-pulse"></div> */}
+      {/* <div className="absolute top-1/2 left-11/12 w-16 h-16 bg-pink-200 rounded-full opacity-25 animate-pulse"></div> */}
 
-            {loading && <p className="text-gray-600">Loading your profile…</p>}
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="mx-auto max-w-4xl">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <Sparkles className="w-4 h-4" />
+              My Profile
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              Manage Your Account
+            </h1>
+            <p className="text-gray-600 mt-2">
+              Update your personal information and preferences
+            </p>
+          </div>
 
-            <form onSubmit={onSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block  text-gray-700">First Name</label>
-                  <input
-                    type="text"
-                    name="firstName"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2"
-                  />
+          <div className="bg-white rounded-3xl shadow-2xl border border-purple-100 p-8 md:p-12">
+            {loading && (
+              <div className="text-center py-8">
+                <div className="animate-spin w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading your profile…</p>
+              </div>
+            )}
+
+            <form onSubmit={onSubmit} className="space-y-8">
+              {/* Personal Information */}
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                  <User className="w-5 h-5 text-purple-600" />
+                  Personal Information
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      First Name
+                    </label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="text"
+                        name="firstName"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                        placeholder="Enter first name"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Last Name
+                    </label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="text"
+                        name="lastName"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                        placeholder="Enter last name"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label className="block  text-gray-700">Last Name</label>
-                  <input
-                    type="text"
-                    name="lastName"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2"
-                  />
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Username
+                  </label>
+                  <div className="relative">
+                    <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      type="text"
+                      name="userName"
+                      value={userName}
+                      onChange={(e) => setUserName(e.target.value)}
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                      placeholder="Enter username"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      type="email"
+                      name="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                      placeholder="Enter email address"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Date of Birth
+                    </label>
+                    <div className="relative">
+                      <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="date"
+                        name="dateOfBirth"
+                        value={dateOfBirth}
+                        onChange={(e) => setDateOfBirth(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Gender
+                    </label>
+                    <div className="relative">
+                      <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <select
+                        name="gender"
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200 appearance-none"
+                      >
+                        <option value="">Select gender</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div>
-                <label className="block  text-gray-700">Username</label>
-                <input
-                  type="text"
-                  name="userName"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2"
-                />
-              </div>
-
-              <div>
-                <label className="block  text-gray-700">
-                  Email (read-only)
-                </label>
-                <div className="relative mt-2">
-                  <input
-                    type="email"
-                    name="email"
-                    value={profile?.email || ''}
-                    readOnly
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 pr-16 bg-gray-50"
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm border border-primary px-1 rounded-2xl text-primary hover:text-white hover:bg-primary cursor-pointer"
-                    onClick={() => setEmailModalOpen(true)}
-                  >
-                    Change
-                  </button>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block  text-gray-700">Country</label>
-                  <Select<Opt<number>, false>
-                    options={countryOptions}
-                    value={selectedCountry}
-                    onChange={async (opt) => {
-                      setSelectedCountry(opt ?? null);
-                      if (opt?.value) {
-                        const data = await fetchCities(opt.value);
-                        setCities(data);
-                        setSelectedCity(null);
-                      } else {
-                        setCities([]);
-                        setSelectedCity(null);
+              {/* Location Information */}
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                  <MapPin className="w-5 h-5 text-purple-600" />
+                  Location Information
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Country
+                    </label>
+                    <Select<Opt<number>, false>
+                      options={countryOptions}
+                      value={selectedCountry}
+                      onChange={async (opt) => {
+                        setSelectedCountry(opt ?? null);
+                        if (opt?.value) {
+                          const data = await fetchCities(opt.value);
+                          setCities(data);
+                          setSelectedCity(null);
+                        } else {
+                          setCities([]);
+                          setSelectedCity(null);
+                        }
+                      }}
+                      placeholder="Select country..."
+                      classNamePrefix="select"
+                      className="mt-1"
+                      styles={{
+                        control: (base) => ({
+                          ...base,
+                          borderRadius: '0.75rem',
+                          borderColor: '#d1d5db',
+                          '&:hover': { borderColor: '#9333ea' },
+                          '&:focus-within': {
+                            borderColor: '#9333ea',
+                            boxShadow: '0 0 0 3px rgba(147, 51, 234, 0.1)',
+                          },
+                          paddingLeft: '2.5rem',
+                          minHeight: '48px',
+                        }),
+                        placeholder: (base) => ({ ...base, color: '#9ca3af' }),
+                      }}
+                      isClearable
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      City
+                    </label>
+                    <Select<Opt<number>, false>
+                      options={cityOptions}
+                      value={selectedCity}
+                      onChange={(opt) => setSelectedCity(opt ?? null)}
+                      placeholder={
+                        selectedCountry
+                          ? 'Select city...'
+                          : 'Select country first'
                       }
-                    }}
-                    placeholder="Select country..."
-                    classNamePrefix="select"
-                    className="mt-2"
-                    styles={singleStyles}
-                    isClearable
-                  />
-                </div>
-                <div>
-                  <label className="block  text-gray-700">City</label>
-                  <Select<Opt<number>, false>
-                    options={cityOptions}
-                    value={selectedCity}
-                    onChange={(opt) => setSelectedCity(opt ?? null)}
-                    placeholder={
-                      selectedCountry
-                        ? 'Select city...'
-                        : 'Select country first'
-                    }
-                    classNamePrefix="select"
-                    className="mt-2"
-                    styles={singleStyles}
-                    isDisabled={!selectedCountry}
-                    isClearable
-                  />
+                      classNamePrefix="select"
+                      className="mt-1"
+                      styles={{
+                        control: (base) => ({
+                          ...base,
+                          borderRadius: '0.75rem',
+                          borderColor: '#d1d5db',
+                          '&:hover': { borderColor: '#9333ea' },
+                          '&:focus-within': {
+                            borderColor: '#9333ea',
+                            boxShadow: '0 0 0 3px rgba(147, 51, 234, 0.1)',
+                          },
+                          paddingLeft: '2.5rem',
+                          minHeight: '48px',
+                        }),
+                        placeholder: (base) => ({ ...base, color: '#9ca3af' }),
+                      }}
+                      isDisabled={!selectedCountry}
+                      isClearable
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div>
-                <label className="block  text-gray-700">Address Line 1</label>
-                <input
-                  type="text"
-                  name="addressLine1"
-                  value={addressLine1}
-                  onChange={(e) => setAddressLine1(e.target.value)}
-                  className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2"
+              {/* Address Information */}
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                  <Home className="w-5 h-5 text-purple-600" />
+                  Address Information
+                </h2>
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Address Line 1
+                    </label>
+                    <div className="relative">
+                      <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="text"
+                        name="addressLine1"
+                        value={addressLine1}
+                        onChange={(e) => setAddressLine1(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                        placeholder="Enter address line 1"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Address Line 2
+                    </label>
+                    <div className="relative">
+                      <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="text"
+                        name="addressLine2"
+                        value={addressLine2}
+                        onChange={(e) => setAddressLine2(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                        placeholder="Enter address line 2 (optional)"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Postal Code
+                    </label>
+                    <div className="relative">
+                      <Hash className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="text"
+                        name="postalCode"
+                        value={postalCode}
+                        onChange={(e) => setPostalCode(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                        placeholder="Enter postal code"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-6 border-t border-gray-200">
+                <SubmitButton
+                  text={submitting ? 'Saving Changes...' : 'Save Changes'}
+                  className="w-full py-3 bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-xl transition-all duration-200 transform hover:scale-105"
                 />
               </div>
-              <div>
-                <label className="block  text-gray-700">Address Line 2</label>
-                <input
-                  type="text"
-                  name="addressLine2"
-                  value={addressLine2}
-                  onChange={(e) => setAddressLine2(e.target.value)}
-                  className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2"
-                />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block  text-gray-700">Postal Code</label>
-                  <input
-                    type="text"
-                    name="postalCode"
-                    value={postalCode}
-                    onChange={(e) => setPostalCode(e.target.value)}
-                    className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2"
-                  />
-                </div>
-                <div>
-                  <label className="block  text-gray-700">Date of Birth</label>
-                  <input
-                    type="date"
-                    name="dateOfBirth"
-                    value={dateOfBirth}
-                    onChange={(e) => setDateOfBirth(e.target.value)}
-                    className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block  text-gray-700">Gender</label>
-                <select
-                  name="gender"
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2"
-                >
-                  <option value="">Select…</option>
-                  <option value="M">Male</option>
-                  <option value="F">Female</option>
-                </select>
-              </div>
-
-              <SubmitButton
-                text={submitting ? 'Saving…' : 'Save Changes'}
-                className="w-full"
-              />
             </form>
           </div>
         </div>
       </div>
 
       {/* Email Change Modal */}
+      {/*
       {emailModalOpen && (
-        <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
-            <h3 className="text-xl font-bold mb-4">Change Email</h3>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl shadow-2xl border border-purple-100 p-8 w-full max-w-md relative">
+            <div className="absolute -top-4 -left-4 w-8 h-8 bg-purple-200 rounded-full opacity-50"></div>
+            <div className="absolute -bottom-4 -right-4 w-6 h-6 bg-blue-200 rounded-full opacity-50"></div>
+            <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+              <Mail className="w-6 h-6 text-purple-600" />
+              Change Email
+            </h3>
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
@@ -376,11 +511,6 @@ export default function UserProfile() {
                 setEmailSubmitting(true);
                 const userId = getUserIdFromToken();
                 const token = getCookie('jwtToken');
-                console.log('userId, token, newEmail :', {
-                  userId,
-                  token,
-                  newEmail,
-                });
                 if (!userId || !token) {
                   toast.error('Authentication required.');
                   setEmailSubmitting(false);
@@ -401,34 +531,37 @@ export default function UserProfile() {
                 }
               }}
             >
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">
-                  New Email
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  New Email Address
                 </label>
-                <input
-                  type="email"
-                  value={newEmail}
-                  onChange={(e) => setNewEmail(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  placeholder="Enter new email"
-                  required
-                />
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="email"
+                    value={newEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                    placeholder="Enter new email address"
+                    required
+                  />
+                </div>
               </div>
-              <div className="flex justify-end space-x-2">
+              <div className="flex justify-end space-x-3">
                 <button
                   type="button"
                   onClick={() => {
                     setEmailModalOpen(false);
                     setNewEmail('');
                   }}
-                  className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
+                  className="px-6 py-2 text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={emailSubmitting}
-                  className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 disabled:opacity-50"
+                  className="px-6 py-2 bg-linear-to-r from-purple-600 to-blue-600 text-white rounded-xl hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                 >
                   {emailSubmitting ? 'Sending...' : 'Send Verification'}
                 </button>
@@ -437,6 +570,7 @@ export default function UserProfile() {
           </div>
         </div>
       )}
+      */}
     </section>
   );
 }

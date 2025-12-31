@@ -17,22 +17,24 @@ export async function verifyChangeEmail(
     };
   }
   try {
-    console.log('Verifying change email for:', { userId, token, newEmail });
     const res = await api.get('/Account/VerifyChangeEmail', {
       params: { userId, token, newEmail },
     });
     const result = res.data;
-    if (res.status === 200 && result?.result) {
+    console.log('VerifyChangeEmail response:', result);
+    console.log('res status', res.status);
+    if (res.status === 200) {
       return {
         success: true,
         message:
           result.message ||
-          'Email change request sent successfully. Please check your new email for verification.',
+          'Your email has been successfully changed. You can now log in with your new email.',
       };
     } else {
       return {
         success: false,
-        message: result?.message || 'Failed to send email change request.',
+        message:
+          result?.message || 'The verification link is invalid or has expired.',
       };
     }
   } catch (error: unknown) {

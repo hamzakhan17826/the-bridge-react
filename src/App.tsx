@@ -12,6 +12,7 @@ import VerifyChangeEmailPage from './pages/VerifyChangeEmail';
 import UserProfile from './components/ui/UserProfile';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
+import ScrollToTop from './components/system/ScrollToTop';
 import AppLayout from './components/layouts/AppLayout';
 import { RequireAuth, RedirectIfAuth } from './components/system/RouteGuards';
 import Overview from './pages/dashboard/Overview';
@@ -31,6 +32,7 @@ function App() {
           <BrowserRouter>
             {/* <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme"> */}
             <RefreshToken />
+            <ScrollToTop />
             <Routes>
               <Route element={<AppLayout />}>
                 <Route path="/" element={<Home />} />
