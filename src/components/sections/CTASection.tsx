@@ -49,7 +49,7 @@ const CallToAction = () => {
       right: 'right-10',
       width: 'w-72',
       height: 'h-72',
-      color: 'bg-purple-200',
+      color: 'bg-primary-200',
       delay: '0s',
     },
     {
@@ -57,7 +57,7 @@ const CallToAction = () => {
       left: 'left-10',
       width: 'w-72',
       height: 'h-72',
-      color: 'bg-blue-200',
+      color: 'bg-secondary-200',
       delay: '1s',
     },
     {
@@ -65,7 +65,7 @@ const CallToAction = () => {
       left: 'left-1/2',
       width: 'w-96',
       height: 'h-96',
-      color: 'bg-linear-to-r from-purple-100 to-blue-100',
+      color: 'bg-linear-to-r from-primary-100 to-secondary-100',
       delay: '2s',
       transform: 'transform -translate-x-1/2 -translate-y-1/2',
       blur: 'blur-3xl',
@@ -74,7 +74,7 @@ const CallToAction = () => {
   ];
 
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden">
+    <section className="relative py-20 md:py-28 bg-linear-to-br from-purple-50 via-white to-blue-50 overflow-hidden">
       <BackgroundDecorations decorations={backgroundDecorations} />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -82,7 +82,7 @@ const CallToAction = () => {
           {/* Left content */}
           <div className="space-y-8">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-purple-100 to-blue-100 text-purple-700 font-poppins font-medium text-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-primary-100 to-secondary-100 text-primary-700 font-poppins font-medium text-sm">
               <Sparkles className="w-4 h-4" />
               Join Our Community
             </div>
@@ -90,7 +90,7 @@ const CallToAction = () => {
             {/* Main heading */}
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-poppins leading-tight">
               Ready to Connect with the{' '}
-              <span className="bg-linear-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
                 Spirit World
               </span>
               ?
@@ -104,12 +104,12 @@ const CallToAction = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap gap-4">
-              <button className="group inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2">
+              <button className="group inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2">
                 <Users className="w-5 h-5" />
                 Join Now
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
-              <button className="group inline-flex items-center gap-3 px-8 py-4 border-2 border-purple-500 text-purple-600 hover:bg-purple-500 hover:text-white font-poppins font-semibold rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2">
+              <button className="group inline-flex items-center gap-3 px-8 py-4 border-2 border-primary-500 text-primary-600 hover:bg-primary-500 hover:text-white font-poppins font-semibold rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2">
                 <Heart className="w-5 h-5" />
                 Learn More
               </button>
@@ -126,8 +126,8 @@ const CallToAction = () => {
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Calendar className="w-4 h-4 text-blue-600" />
+                <div className="w-8 h-8 bg-secondary-100 rounded-full flex items-center justify-center">
+                  <Calendar className="w-4 h-4 text-secondary-600" />
                 </div>
                 <span className="text-sm text-gray-600 font-lato">
                   Weekly Events
@@ -139,11 +139,11 @@ const CallToAction = () => {
           {/* Right form card */}
           <div className="relative">
             {/* Floating decorative element */}
-            <div className="absolute -top-8 -right-8 w-32 h-32 bg-linear-to-r from-purple-200 to-blue-200 rounded-3xl -z-10 transform rotate-12 opacity-60 animate-pulse"></div>
+            <div className="absolute -top-8 -right-8 w-32 h-32 bg-linear-to-r from-primary-200 to-secondary-200 rounded-3xl -z-10 transform rotate-12 opacity-60 animate-pulse"></div>
 
-            <div className="relative bg-white rounded-3xl shadow-2xl border border-purple-100 overflow-hidden">
+            <div className="relative bg-white rounded-3xl shadow-2xl border border-primary-100 overflow-hidden">
               {/* Header with gradient */}
-              <div className="bg-linear-to-r from-purple-500 to-blue-500 p-6 text-white">
+              <div className="bg-linear-to-r from-primary-500 to-secondary-500 p-6 text-white">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
                     <Calendar className="w-5 h-5" />
@@ -152,7 +152,7 @@ const CallToAction = () => {
                     Book a Reading
                   </h3>
                 </div>
-                <p className="text-purple-100 font-lato">
+                <p className="text-primary-100 font-lato">
                   Connect with experienced mediums today
                 </p>
               </div>
@@ -168,7 +168,7 @@ const CallToAction = () => {
                         ref={nameRef}
                         type="text"
                         required
-                        className="w-full rounded-xl bg-gray-50 border-2 border-gray-200 p-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200 font-lato"
+                        className="w-full rounded-xl bg-gray-50 border-2 border-gray-200 p-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all duration-200 font-lato"
                         placeholder="Enter your full name"
                       />
                       <Users className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -184,7 +184,7 @@ const CallToAction = () => {
                         ref={emailRef}
                         type="email"
                         required
-                        className="w-full rounded-xl bg-gray-50 border-2 border-gray-200 p-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200 font-lato"
+                        className="w-full rounded-xl bg-gray-50 border-2 border-gray-200 p-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all duration-200 font-lato"
                         placeholder="your.email@example.com"
                       />
                       <Heart className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -199,7 +199,7 @@ const CallToAction = () => {
                       <select
                         ref={interestRef}
                         required
-                        className="w-full rounded-xl bg-gray-50 border-2 border-gray-200 p-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200 font-lato appearance-none"
+                        className="w-full rounded-xl bg-gray-50 border-2 border-gray-200 p-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all duration-200 font-lato appearance-none"
                         defaultValue=""
                       >
                         <option value="" disabled>
@@ -224,7 +224,7 @@ const CallToAction = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full group inline-flex items-center justify-center gap-3 px-8 py-4 bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-poppins font-semibold text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full group inline-flex items-center justify-center gap-3 px-8 py-4 bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-poppins font-semibold text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? (
                       'Submitting...'

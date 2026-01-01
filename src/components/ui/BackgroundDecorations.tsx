@@ -24,7 +24,7 @@ export default function BackgroundDecorations({
       {decorations.map((decoration, index) => (
         <div
           key={index}
-          className={`absolute ${decoration.color} rounded-full mix-blend-multiply filter ${decoration.blur || 'blur-xl'} ${decoration.opacity || 'opacity-30'} animate-pulse ${decoration.transform || ''}`}
+          className={`absolute ${decoration.top} ${decoration.right} ${decoration.bottom} ${decoration.left} ${decoration.width} ${decoration.height} ${decoration.color} rounded-full mix-blend-multiply filter ${decoration.blur || 'blur-xl'} ${decoration.opacity || 'opacity-30'} animate-pulse ${decoration.transform || ''}`}
           style={{
             top: decoration.top,
             left: decoration.left,

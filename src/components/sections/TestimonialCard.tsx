@@ -14,9 +14,9 @@ interface TestimonialCardProps {
 
 export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
   return (
-    <div className="relative p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-purple-100">
+    <div className="relative p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-primary-100">
       {/* Quote icon */}
-      <div className="absolute -top-3 -left-3 w-12 h-12 bg-linear-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg">
+      <div className="absolute -top-3 -left-3 w-12 h-12 bg-linear-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center shadow-lg">
         <Quote className="w-6 h-6 text-white" />
       </div>
 
@@ -31,7 +31,7 @@ export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
           <img
             src={testimonial.image}
             alt={testimonial.name}
-            className="rounded-full w-12 h-12 object-cover border-2 border-purple-200 group-hover:border-purple-400 transition-colors"
+            className="rounded-full w-12 h-12 object-cover border-2 border-primary-200 group-hover:border-primary-400 transition-colors"
             width={48}
             height={48}
           />
@@ -43,13 +43,13 @@ export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
               href={testimonial.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-purple-700 hover:text-purple-800 font-poppins font-semibold transition-colors"
+              className="text-primary-700 hover:text-primary-800 font-poppins font-semibold transition-colors"
             >
               {testimonial.name}
             </a>
           </h5>
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-purple-100 text-purple-600 text-xs font-medium">
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-primary-100 text-primary-600 text-xs font-medium">
               <Heart className="w-3 h-3" />
               {testimonial.platform}
             </span>

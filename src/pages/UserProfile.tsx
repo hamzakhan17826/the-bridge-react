@@ -271,21 +271,21 @@ export default function UserProfile() {
   };
 
   return (
-    <section className="relative py-16 md:py-24 bg-linear-to-br from-purple-50 via-white to-blue-50 overflow-hidden">
+    <section className="relative py-16 md:py-24 bg-linear-to-br from-primary-50 via-white to-secondary-50 overflow-hidden">
       {/* Decorative orbs */}
-      {/* <div className="absolute top-10 left-10 w-20 h-20 bg-purple-200 rounded-full opacity-30 animate-pulse"></div> */}
-      {/* <div className="absolute bottom-10 right-10 w-32 h-32 bg-blue-200 rounded-full opacity-20 animate-pulse"></div> */}
+      {/* <div className="absolute top-10 left-10 w-20 h-20 bg-primary-200 rounded-full opacity-30 animate-pulse"></div> */}
+      {/* <div className="absolute bottom-10 right-10 w-32 h-32 bg-secondary-200 rounded-full opacity-20 animate-pulse"></div> */}
       {/* <div className="absolute top-1/2 left-11/12 w-16 h-16 bg-pink-200 rounded-full opacity-25 animate-pulse"></div> */}
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="mx-auto max-w-4xl">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
               <Sparkles className="w-4 h-4" />
               My Profile
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
               Manage Your Account
             </h1>
             <p className="text-gray-600 mt-2">
@@ -293,10 +293,10 @@ export default function UserProfile() {
             </p>
           </div>
 
-          <div className="bg-white rounded-3xl shadow-2xl border border-purple-100 p-8 md:p-12">
+          <div className="bg-white rounded-3xl shadow-2xl border border-primary-100 p-8 md:p-12">
             {loading && (
               <div className="text-center py-8">
-                <div className="animate-spin w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full mx-auto mb-4"></div>
+                <div className="animate-spin w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full mx-auto mb-4"></div>
                 <p className="text-gray-600">Loading your profile…</p>
               </div>
             )}
@@ -305,7 +305,7 @@ export default function UserProfile() {
               {/* Personal Information */}
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                  <User className="w-5 h-5 text-purple-600" />
+                  <User className="w-5 h-5 text-primary-600" />
                   Personal Information
                 </h2>
 
@@ -323,11 +323,11 @@ export default function UserProfile() {
                           '/images/default-avatar.png'
                         }
                         alt="Profile"
-                        className="w-20 h-20 rounded-full object-cover border-4 border-purple-200"
+                        className="w-20 h-20 rounded-full object-cover border-4 border-primary-200"
                       />
                       <label
                         htmlFor="profilePicture"
-                        className="absolute bottom-0 right-0 bg-purple-600 text-white p-1 rounded-full cursor-pointer hover:bg-purple-700 transition-colors"
+                        className="absolute bottom-0 right-0 bg-primary-600 text-white p-1 rounded-full cursor-pointer hover:bg-primary-700 transition-colors"
                       >
                         <svg
                           className="w-4 h-4"
@@ -379,7 +379,7 @@ export default function UserProfile() {
                         name="firstName"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
                         placeholder="Enter first name"
                       />
                     </div>
@@ -395,7 +395,7 @@ export default function UserProfile() {
                         name="lastName"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
                         placeholder="Enter last name"
                       />
                     </div>
@@ -413,7 +413,7 @@ export default function UserProfile() {
                       name="userName"
                       value={userName}
                       onChange={(e) => setUserName(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
                       placeholder="Enter username"
                     />
                   </div>
@@ -430,7 +430,7 @@ export default function UserProfile() {
                       name="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
                       placeholder="Enter email address"
                     />
                   </div>
@@ -448,7 +448,7 @@ export default function UserProfile() {
                         name="dateOfBirth"
                         value={dateOfBirth}
                         onChange={(e) => setDateOfBirth(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
                       />
                     </div>
                   </div>
@@ -462,7 +462,7 @@ export default function UserProfile() {
                         name="gender"
                         value={gender}
                         onChange={(e) => setGender(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200 appearance-none"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200 appearance-none"
                       >
                         <option value="">Select gender</option>
                         <option value="M">Male</option>
@@ -476,7 +476,7 @@ export default function UserProfile() {
               {/* Location Information */}
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-purple-600" />
+                  <MapPin className="w-5 h-5 text-primary-600" />
                   Location Information
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -559,7 +559,7 @@ export default function UserProfile() {
               {/* Address Information */}
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                  <Home className="w-5 h-5 text-purple-600" />
+                  <Home className="w-5 h-5 text-primary-600" />
                   Address Information
                 </h2>
                 <div className="space-y-6">
@@ -574,7 +574,7 @@ export default function UserProfile() {
                         name="addressLine1"
                         value={addressLine1}
                         onChange={(e) => setAddressLine1(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
                         placeholder="Enter address line 1"
                       />
                     </div>
@@ -590,7 +590,7 @@ export default function UserProfile() {
                         name="addressLine2"
                         value={addressLine2}
                         onChange={(e) => setAddressLine2(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
                         placeholder="Enter address line 2 (optional)"
                       />
                     </div>
@@ -606,7 +606,7 @@ export default function UserProfile() {
                         name="postalCode"
                         value={postalCode}
                         onChange={(e) => setPostalCode(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
                         placeholder="Enter postal code"
                       />
                     </div>
@@ -628,7 +628,7 @@ export default function UserProfile() {
                   <button
                     type="button"
                     onClick={() => setPasswordModalOpen(true)}
-                    className="px-4 py-2 bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-xl transition-all duration-200"
+                    className="px-4 py-2 bg-linear-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white font-medium rounded-xl transition-all duration-200"
                   >
                     Change Password
                   </button>
@@ -638,7 +638,7 @@ export default function UserProfile() {
               <div className="pt-6 border-t border-gray-200">
                 <SubmitButton
                   text={submitting ? 'Saving Changes...' : 'Save Changes'}
-                  className="w-full py-3 bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-xl transition-all duration-200 transform hover:scale-105"
+                  className="w-full py-3 bg-linear-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white font-medium rounded-xl transition-all duration-200 transform hover:scale-105"
                 />
               </div>
             </form>
@@ -649,11 +649,11 @@ export default function UserProfile() {
       {/* Password Change Modal */}
       {passwordModalOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl shadow-2xl border border-purple-100 p-8 w-full max-w-md relative">
-            <div className="absolute -top-4 -left-4 w-8 h-8 bg-purple-200 rounded-full opacity-50"></div>
-            <div className="absolute -bottom-4 -right-4 w-6 h-6 bg-blue-200 rounded-full opacity-50"></div>
+          <div className="bg-white rounded-3xl shadow-2xl border border-primary-100 p-8 w-full max-w-md relative">
+            <div className="absolute -top-4 -left-4 w-8 h-8 bg-primary-200 rounded-full opacity-50"></div>
+            <div className="absolute -bottom-4 -right-4 w-6 h-6 bg-secondary-200 rounded-full opacity-50"></div>
             <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-              <Sparkles className="w-6 h-6 text-purple-600" />
+              <Sparkles className="w-6 h-6 text-primary-600" />
               Change Password
             </h3>
             <form
@@ -701,7 +701,7 @@ export default function UserProfile() {
                   type="password"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
                   placeholder="Enter current password"
                   required
                 />
@@ -714,7 +714,7 @@ export default function UserProfile() {
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
                   placeholder="Enter new password"
                   required
                 />
@@ -727,7 +727,7 @@ export default function UserProfile() {
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
                   placeholder="Confirm new password"
                   required
                 />
@@ -748,7 +748,7 @@ export default function UserProfile() {
                 <button
                   type="submit"
                   disabled={passwordSubmitting}
-                  className="px-6 py-2 bg-linear-to-r from-purple-600 to-blue-600 text-white rounded-xl hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                  className="px-6 py-2 bg-linear-to-r from-primary-600 to-secondary-600 text-white rounded-xl hover:from-primary-700 hover:to-secondary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                 >
                   {passwordSubmitting ? 'Changing...' : 'Change Password'}
                 </button>

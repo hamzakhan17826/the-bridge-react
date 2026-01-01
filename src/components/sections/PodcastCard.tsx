@@ -40,14 +40,14 @@ export default function PodcastCard({ podcast }: PodcastCardProps) {
           </div>
 
           <div className="flex items-center gap-2 mb-4">
-            <button className="group/btn inline-flex items-center justify-center w-10 h-10 rounded-full bg-white text-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110">
+            <button className="group/btn inline-flex items-center justify-center w-10 h-10 rounded-full bg-white text-primary-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110">
               <Play className="w-5 h-5 group-hover/btn:translate-x-0.5 transition-transform" />
             </button>
 
             <div className="flex gap-2">
               <a
                 href="#"
-                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-700 hover:text-purple-700 transition-all duration-300 transform hover:scale-110 shadow-md"
+                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-700 hover:text-primary-700 transition-all duration-300 transform hover:scale-110 shadow-md"
                 title="Listen on Apple Podcasts"
               >
                 <img
@@ -58,7 +58,7 @@ export default function PodcastCard({ podcast }: PodcastCardProps) {
               </a>
               <a
                 href="#"
-                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-700 hover:text-blue-700 transition-all duration-300 transform hover:scale-110 shadow-md"
+                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-700 hover:text-secondary-700 transition-all duration-300 transform hover:scale-110 shadow-md"
                 title="Listen on Google Podcasts"
               >
                 <img

@@ -159,11 +159,11 @@ const Events = () => {
       case 'live':
         return 'bg-red-100 text-red-800 border-red-200';
       case 'virtual':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-secondary-100 text-secondary-800 border-secondary-200';
       case 'in-person':
         return 'bg-green-100 text-green-800 border-green-200';
       case 'webinar':
-        return 'bg-purple-100 text-purple-800 border-purple-200';
+        return 'bg-primary-100 text-primary-800 border-primary-200';
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
@@ -189,7 +189,7 @@ const Events = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Section */}
-      <section className="bg-linear-to-r from-purple-500 to-blue-500 text-white py-20">
+      <section className="bg-linear-to-r from-primary-500 to-secondary-500 text-white py-20">
         <div className="container mx-auto px-6">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl  mb-4 text-white">
@@ -215,7 +215,7 @@ const Events = () => {
                 placeholder="Search events..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent "
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent "
               />
             </div>
 
@@ -224,7 +224,7 @@ const Events = () => {
               <select
                 value={selectedFilter}
                 onChange={(e) => setSelectedFilter(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent  bg-white"
+                className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent  bg-white"
               >
                 <option value="all">All Types</option>
                 <option value="live">Live Events</option>
@@ -236,7 +236,7 @@ const Events = () => {
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent  bg-white"
+                className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent  bg-white"
               >
                 <option value="all">All Status</option>
                 <option value="upcoming">Upcoming</option>
@@ -298,7 +298,7 @@ const Events = () => {
                               event.status === 'upcoming'
                                 ? 'bg-green-100 text-green-800'
                                 : event.status === 'ongoing'
-                                  ? 'bg-blue-100 text-blue-800'
+                                  ? 'bg-secondary-100 text-secondary-800'
                                   : 'bg-gray-100 text-gray-800'
                             }`}
                           >
@@ -312,18 +312,18 @@ const Events = () => {
                       <div className="p-6">
                         {/* Date and Time */}
                         <div className="flex items-center gap-2 mb-3">
-                          <Calendar className="w-4 h-4 text-purple-600" />
+                          <Calendar className="w-4 h-4 text-primary-600" />
                           <span className="text-sm text-gray-600 ">
                             {formattedDate.day}, {formattedDate.date}
                           </span>
-                          <Clock className="w-4 h-4 text-purple-600 ml-2" />
+                          <Clock className="w-4 h-4 text-primary-600 ml-2" />
                           <span className="text-sm text-gray-600 ">
                             {formattedDate.time}
                           </span>
                         </div>
 
                         {/* Title */}
-                        <h3 className="text-xl  text-gray-900 mb-3 group-hover:text-purple-600 transition-colors duration-200">
+                        <h3 className="text-xl  text-gray-900 mb-3 group-hover:text-primary-600 transition-colors duration-200">
                           {event.title}
                         </h3>
 
@@ -358,7 +358,7 @@ const Events = () => {
                           {event.tags.map((tag, index) => (
                             <span
                               key={index}
-                              className="px-2 py-1 bg-purple-50 text-purple-700 text-xs  rounded-full"
+                              className="px-2 py-1 bg-primary-50 text-primary-700 text-xs  rounded-full"
                             >
                               {tag}
                             </span>
@@ -370,7 +370,7 @@ const Events = () => {
                           <div className="text-lg  text-gray-900">
                             {event.price}
                           </div>
-                          <button className="inline-flex items-center gap-2 px-4 py-2 bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white  text-sm rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 cursor-pointer">
+                          <button className="inline-flex items-center gap-2 px-4 py-2 bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white  text-sm rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 cursor-pointer">
                             {event.status === 'upcoming'
                               ? 'Register'
                               : 'View Details'}
@@ -388,12 +388,12 @@ const Events = () => {
       </section>
 
       {/* Newsletter Signup */}
-      <section className="py-16 bg-linear-to-r from-purple-500 to-blue-500">
+      <section className="py-16 bg-linear-to-r from-primary-500 to-secondary-500">
         <div className="container mx-auto px-6 text-center">
           <h3 className="text-2xl md:text-3xl  text-white mb-4">
             Never Miss an Event
           </h3>
-          <p className="text-purple-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-primary-100 mb-8 max-w-2xl mx-auto">
             Subscribe to our newsletter and be the first to know about upcoming
             events, special workshops, and exclusive content.
           </p>
@@ -401,9 +401,9 @@ const Events = () => {
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-purple-500 "
+              className="flex-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-500 "
             />
-            <button className="px-6 py-3 bg-white text-purple-600 hover:bg-gray-50  rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-purple-500">
+            <button className="px-6 py-3 bg-white text-primary-600 hover:bg-gray-50  rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-500">
               Subscribe
             </button>
           </div>

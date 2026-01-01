@@ -19,11 +19,11 @@ const getBadgeColor = (type: string) => {
     case 'live':
       return 'bg-red-500 text-white';
     case 'virtual':
-      return 'bg-blue-500 text-white';
+      return 'bg-secondary-500 text-white';
     case 'in-person':
       return 'bg-green-500 text-white';
     case 'webinar':
-      return 'bg-purple-500 text-white';
+      return 'bg-primary-500 text-white';
     default:
       return 'bg-gray-500 text-white';
   }
@@ -54,7 +54,7 @@ export default function EventCard({ event }: EventCardProps) {
 
         {/* Hover overlay with action */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button className="bg-white/90 backdrop-blur-sm text-purple-700 px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-white transition-all duration-200 transform hover:scale-105">
+          <button className="bg-white/90 backdrop-blur-sm text-primary-700 px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-white transition-all duration-200 transform hover:scale-105">
             Learn More
           </button>
         </div>
@@ -63,14 +63,14 @@ export default function EventCard({ event }: EventCardProps) {
       <div className="p-6 flex-1 flex flex-col">
         {/* Date */}
         <div className="flex items-center gap-2 mb-3">
-          <Clock className="w-4 h-4 text-purple-600" />
-          <span className="text-sm font-medium text-purple-600 uppercase tracking-wide">
+          <Clock className="w-4 h-4 text-primary-600" />
+          <span className="text-sm font-medium text-primary-600 uppercase tracking-wide">
             {event.date}
           </span>
         </div>
 
         {/* Title */}
-        <h3 className="text-xl font-poppins font-bold text-gray-900 mb-3 group-hover:text-purple-700 transition-colors leading-tight">
+        <h3 className="text-xl font-poppins font-bold text-gray-900 mb-3 group-hover:text-primary-700 transition-colors leading-tight">
           {event.title}
         </h3>
 

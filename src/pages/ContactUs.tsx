@@ -71,7 +71,7 @@ const ContactUsPage = () => {
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
               <div className="flex">
                 <div className="w-1/2">
-                  <div className="bg-linear-to-br from-purple-500 to-blue-500 p-10 text-white h-full">
+                  <div className="bg-linear-to-br from-primary-500 to-secondary-500 p-10 text-white h-full">
                     <h3 className="mb-6 text-2xl font-bold text-white">
                       Get in touch
                     </h3>
@@ -114,25 +114,25 @@ const ContactUsPage = () => {
                       <h6 className="mb-3 font-medium text-white">Follow Us</h6>
                       <a
                         href="#"
-                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-purple-500 hover:text-white hover:-translate-y-1"
+                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-primary-500 hover:text-white hover:-translate-y-1"
                       >
                         <Facebook />
                       </a>
                       <a
                         href="#"
-                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-purple-500 hover:text-white hover:-translate-y-1"
+                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-primary-500 hover:text-white hover:-translate-y-1"
                       >
                         <Twitter />
                       </a>
                       <a
                         href="#"
-                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-purple-500 hover:text-white hover:-translate-y-1"
+                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-primary-500 hover:text-white hover:-translate-y-1"
                       >
                         <Linkedin />
                       </a>
                       <a
                         href="#"
-                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-purple-500 hover:text-white hover:-translate-y-1"
+                        className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-primary-500 hover:text-white hover:-translate-y-1"
                       >
                         <Instagram />
                       </a>
@@ -150,7 +150,7 @@ const ContactUsPage = () => {
                         <input
                           type="text"
                           name="name"
-                          className="w-full rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-purple-400 focus:outline-none"
+                          className="w-full rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-primary-400 focus:outline-none"
                           placeholder="John Doe"
                           required
                           value={formData.name}
@@ -162,7 +162,7 @@ const ContactUsPage = () => {
                         <input
                           type="email"
                           name="email"
-                          className="w-full rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-purple-400 focus:outline-none"
+                          className="w-full rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-primary-400 focus:outline-none"
                           placeholder="john@example.com"
                           required
                           value={formData.email}
@@ -175,7 +175,7 @@ const ContactUsPage = () => {
                         </label>
                         <select
                           name="subject"
-                          className="w-full rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-purple-400 focus:outline-none"
+                          className="w-full rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-primary-400 focus:outline-none"
                           required
                           value={formData.subject}
                           onChange={handleChange}
@@ -208,7 +208,7 @@ const ContactUsPage = () => {
                         </label>
                         <textarea
                           name="message"
-                          className="w-full h-32 rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-purple-400 focus:outline-none resize-none"
+                          className="w-full h-32 rounded-lg px-4 py-3 border-2 border-gray-200 transition-all duration-300 focus:border-primary-400 focus:outline-none resize-none"
                           placeholder="Your message here..."
                           required
                           value={formData.message}

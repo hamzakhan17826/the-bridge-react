@@ -17,7 +17,7 @@ export default function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <div className="text-center mb-16">
-      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-purple-100 to-blue-100 text-purple-700 font-poppins font-medium text-sm mb-6">
+      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-primary-100 to-secondary-100 text-primary-700 font-poppins font-medium text-sm mb-6">
         <Icon className="w-4 h-4" />
         {badgeText}
       </div>
@@ -27,7 +27,7 @@ export default function SectionHeader({
               <span key={index}>
                 {part}
                 {index < arr.length - 1 && (
-                  <span className="bg-linear-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                  <span className="bg-linear-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
                     {titleHighlight}
                   </span>
                 )}

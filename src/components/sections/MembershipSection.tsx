@@ -11,28 +11,28 @@ import {
 
 const MembershipSection = () => {
   return (
-    <section className="relative py-20 md:py-28 bg-linear-to-br from-purple-50 via-white to-blue-50 overflow-hidden">
+    <section className="relative py-20 md:py-28 bg-linear-to-br from-primary-50 via-white to-secondary-50 overflow-hidden">
       {/* Decorative background elements */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
+      <div className="absolute top-20 left-10 w-72 h-72 bg-primary-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
       <div
-        className="absolute bottom-20 right-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"
+        className="absolute bottom-20 right-10 w-72 h-72 bg-secondary-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"
         style={{ animationDelay: '1s' }}
       ></div>
       <div
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-linear-to-r from-purple-100 to-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-linear-to-r from-primary-100 to-secondary-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"
         style={{ animationDelay: '2s' }}
       ></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-purple-100 to-blue-100 text-purple-700 font-poppins font-medium text-sm mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-primary-100 to-secondary-100 text-primary-700 font-poppins font-medium text-sm mb-6">
             <Sparkles className="w-4 h-4" />
             Membership Plans
           </div>
           <h2 className="text-4xl md:text-6xl lg:text-7xl font-poppins leading-tight mb-4">
             Choose Your{' '}
-            <span className="bg-linear-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
               Spiritual Path
             </span>
           </h2>
@@ -44,21 +44,21 @@ const MembershipSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {/* General Medium */}
-          <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-purple-100 overflow-hidden">
+          <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-primary-100 overflow-hidden">
             {/* Decorative top border */}
-            <div className="h-1 bg-linear-to-r from-purple-400 to-blue-400"></div>
+            <div className="h-1 bg-linear-to-r from-primary-400 to-secondary-400"></div>
 
             <div className="p-8">
               {/* Icon and title */}
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-linear-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
+                <div className="w-12 h-12 bg-linear-to-r from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
                   <Users className="w-6 h-6 text-white" />
                 </div>
                 <div>
                   <h3 className="text-2xl font-poppins font-semibold text-gray-900">
                     General Medium
                   </h3>
-                  <p className="text-purple-600 font-medium text-sm">
+                  <p className="text-primary-600 font-medium text-sm">
                     Starter Plan
                   </p>
                 </div>
@@ -124,29 +124,29 @@ const MembershipSection = () => {
           </div>
 
           {/* Development Medium - Popular */}
-          <div className="group relative bg-white rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-purple-300 overflow-hidden scale-105">
+          <div className="group relative bg-white rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-primary-300 overflow-hidden scale-105">
             {/* Popular badge */}
             <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 z-20">
-              <div className="bg-linear-to-r from-purple-500 to-blue-500 text-white px-6 py-2 rounded-full font-poppins font-semibold text-sm shadow-lg">
+              <div className="bg-linear-to-r from-primary-500 to-secondary-500 text-white px-6 py-2 rounded-full font-poppins font-semibold text-sm shadow-lg">
                 <Star className="w-4 h-4 inline mr-2" />
                 Most Popular
               </div>
             </div>
 
             {/* Decorative top border */}
-            <div className="h-1 bg-linear-to-r from-purple-500 to-blue-500"></div>
+            <div className="h-1 bg-linear-to-r from-primary-500 to-secondary-500"></div>
 
             <div className="p-8 pt-12">
               {/* Icon and title */}
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-linear-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
+                <div className="w-12 h-12 bg-linear-to-r from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
                   <BookOpen className="w-6 h-6 text-white" />
                 </div>
                 <div>
                   <h3 className="text-2xl font-poppins font-semibold text-gray-900">
                     Development Medium
                   </h3>
-                  <p className="text-purple-600 font-medium text-sm">
+                  <p className="text-primary-600 font-medium text-sm">
                     Growth Plan
                   </p>
                 </div>
@@ -167,7 +167,7 @@ const MembershipSection = () => {
               </div>
 
               {/* CTA Button */}
-              <button className="w-full group mb-8 inline-flex items-center justify-center gap-3 px-6 py-4 bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2">
+              <button className="w-full group mb-8 inline-flex items-center justify-center gap-3 px-6 py-4 bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2">
                 <span>Start Growing</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
@@ -208,21 +208,21 @@ const MembershipSection = () => {
           </div>
 
           {/* Professional Medium */}
-          <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-purple-100 overflow-hidden">
+          <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-primary-100 overflow-hidden">
             {/* Decorative top border */}
-            <div className="h-1 bg-linear-to-r from-purple-400 to-blue-400"></div>
+            <div className="h-1 bg-linear-to-r from-primary-400 to-secondary-400"></div>
 
             <div className="p-8">
               {/* Icon and title */}
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-linear-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
+                <div className="w-12 h-12 bg-linear-to-r from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
                   <Crown className="w-6 h-6 text-white" />
                 </div>
                 <div>
                   <h3 className="text-2xl font-poppins font-semibold text-gray-900">
                     Professional Medium
                   </h3>
-                  <p className="text-purple-600 font-medium text-sm">
+                  <p className="text-primary-600 font-medium text-sm">
                     Professional Plan
                   </p>
                 </div>
@@ -357,15 +357,15 @@ const MembershipSection = () => {
         <div className="text-center mt-16">
           <p className="text-gray-600 font-lato mb-6">
             Not sure which plan is right for you?{' '}
-            <span className="text-purple-600 font-semibold">Contact us</span>{' '}
+            <span className="text-primary-600 font-semibold">Contact us</span>{' '}
             for a personalized recommendation.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <button className="inline-flex items-center gap-2 px-6 py-3 border-2 border-purple-500 text-purple-600 hover:bg-purple-500 hover:text-white font-poppins font-medium rounded-xl transition-all duration-200 transform hover:scale-105">
+            <button className="inline-flex items-center gap-2 px-6 py-3 border-2 border-primary-500 text-primary-600 hover:bg-primary-500 hover:text-white font-poppins font-medium rounded-xl transition-all duration-200 transform hover:scale-105">
               <Award className="w-4 h-4" />
               Compare Plans
             </button>
-            <button className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-poppins font-medium rounded-xl transition-all duration-200 transform hover:scale-105">
+            <button className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-poppins font-medium rounded-xl transition-all duration-200 transform hover:scale-105">
               <Sparkles className="w-4 h-4" />
               Start Free Trial
             </button>

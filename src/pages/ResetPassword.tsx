@@ -63,7 +63,7 @@ export default function ResetPasswordPage() {
                 <input
                   type="password"
                   name="newPassword"
-                  className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary"
+                  className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary-400"
                   placeholder="Enter new password"
                   required
                 />
@@ -75,7 +75,7 @@ export default function ResetPasswordPage() {
                 <input
                   type="password"
                   name="confirmPassword"
-                  className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary"
+                  className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary-400"
                   placeholder="Confirm new password"
                   required
                 />
@@ -85,7 +85,7 @@ export default function ResetPasswordPage() {
                 className="w-full"
               />
               <div className="text-sm text-gray-600">
-                <Link to="/login" className="text-primary">
+                <Link to="/login" className="text-primary-400">
                   Back to Login
                 </Link>
               </div>

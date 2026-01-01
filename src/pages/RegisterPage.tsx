@@ -36,26 +36,26 @@ const ResendVerificationForm = () => {
   };
 
   return (
-    <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-      <p className="font-semibold text-blue-900 mb-3">
+    <div className="mb-6 p-4 bg-secondary-50 border border-secondary-200 rounded-xl">
+      <p className="font-semibold text-secondary-900 mb-3">
         Already registered but didn't get a verification email?
       </p>
       <form ref={resendFormRef} onSubmit={onSubmit} className="flex gap-2">
         <div className="relative flex-1">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Mail className="h-4 w-4 text-blue-400" />
+            <Mail className="h-4 w-4 text-secondary-400" />
           </div>
           <input
             type="email"
             name="email"
-            className="w-full pl-9 pr-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm"
+            className="w-full pl-9 pr-3 py-2 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-secondary-500 focus:border-transparent transition-colors text-sm"
             placeholder="Enter your email"
             required
           />
         </div>
         <SubmitButton
           text={loading ? 'Sending…' : 'Resend'}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors"
+          className="px-4 py-2 bg-secondary-600 hover:bg-secondary-700 text-white text-sm rounded-lg transition-colors"
         />
       </form>
     </div>
@@ -175,7 +175,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-purple-50 to-blue-50 relative overflow-hidden py-8">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-primary-50 to-secondary-50 relative overflow-hidden py-8">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <svg
@@ -206,7 +206,7 @@ export default function RegisterPage() {
         <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
           {/* Logo/Brand */}
           <div className="text-center mb-6">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-r from-purple-600 to-blue-600 rounded-full mb-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-r from-primary-600 to-secondary-600 rounded-full mb-4">
               <svg
                 className="w-8 h-8 text-white"
                 fill="currentColor"
@@ -240,7 +240,7 @@ export default function RegisterPage() {
                 <input
                   type="email"
                   name="email"
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
                   placeholder="john@example.com"
                   required
                 />
@@ -333,7 +333,7 @@ export default function RegisterPage() {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
-                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
                   placeholder="Create a password"
                   required
                 />
@@ -362,7 +362,7 @@ export default function RegisterPage() {
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   name="confirmPassword"
-                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
                   placeholder="Confirm your password"
                   required
                 />
@@ -413,7 +413,7 @@ export default function RegisterPage() {
             <div className="flex items-start gap-3">
               <input
                 id="termsCheck"
-                className="h-4 w-4 mt-1 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                className="h-4 w-4 mt-1 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                 type="checkbox"
                 name="isUserAgeedToTerms"
                 required
@@ -423,7 +423,7 @@ export default function RegisterPage() {
                 <a
                   href="/terms-and-conditions"
                   target="_blank"
-                  className="text-purple-600 hover:text-purple-500 font-medium"
+                  className="text-primary-600 hover:text-primary-500 font-medium"
                 >
                   Terms and Conditions
                 </a>
@@ -433,7 +433,7 @@ export default function RegisterPage() {
 
             <SubmitButton
               text={submitting ? 'Creating account…' : 'Create Account'}
-              className="w-full py-3 bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105"
+              className="w-full py-3 bg-linear-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105"
             />
 
             <div className="text-center">
@@ -441,7 +441,7 @@ export default function RegisterPage() {
                 Already have an account?{' '}
                 <Link
                   to="/login"
-                  className="font-medium text-purple-600 hover:text-purple-500"
+                  className="font-medium text-primary-600 hover:text-primary-500"
                 >
                   Login
                 </Link>

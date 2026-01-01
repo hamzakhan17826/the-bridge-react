@@ -16,12 +16,12 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
   return (
     <div className="relative overflow-hidden pb-12">
       {/* Background with gradient */}
-      <div className="absolute inset-0 bg-linear-to-br from-purple-600 via-blue-600 to-purple-800"></div>
+      <div className="absolute inset-0 bg-linear-to-br from-primary-600 via-secondary-600 to-primary-800"></div>
 
       {/* Decorative elements */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
+      <div className="absolute top-20 left-10 w-72 h-72 bg-primary-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
       <div
-        className="absolute top-40 right-10 w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"
+        className="absolute top-40 right-10 w-72 h-72 bg-secondary-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"
         style={{ animationDelay: '1s' }}
       ></div>
       <div
@@ -43,7 +43,7 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
                     key={index}
                     className={
                       index === title.split(' ').length - 1
-                        ? 'bg-linear-to-r from-purple-200 to-blue-200 bg-clip-text text-transparent'
+                        ? 'bg-linear-to-r from-primary-200 to-secondary-200 bg-clip-text text-transparent'
                         : ''
                     }
                   >
@@ -53,7 +53,7 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
               </h2>
             </div>
             <div className="shrink-0">
-              <button className="group inline-flex items-center gap-3 px-8 py-4 bg-white text-purple-700 font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:bg-purple-50">
+              <button className="group inline-flex items-center gap-3 px-8 py-4 bg-white text-primary-700 font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:bg-primary-50">
                 <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                 {buttonText}
               </button>
@@ -123,14 +123,14 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
                         </div>
 
                         <div className="flex items-center gap-2 mb-4">
-                          <button className="group/btn inline-flex items-center justify-center w-10 h-10 rounded-full bg-white text-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110">
+                          <button className="group/btn inline-flex items-center justify-center w-10 h-10 rounded-full bg-white text-primary-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110">
                             <Play className="w-5 h-5 group-hover/btn:translate-x-0.5 transition-transform" />
                           </button>
 
                           <div className="flex gap-2">
                             <a
                               href="#"
-                              className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-700 hover:text-purple-700 transition-all duration-300 transform hover:scale-110 shadow-md"
+                              className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-700 hover:text-primary-700 transition-all duration-300 transform hover:scale-110 shadow-md"
                               title="Listen on Apple Podcasts"
                             >
                               <img
@@ -141,7 +141,7 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
                             </a>
                             <a
                               href="#"
-                              className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-700 hover:text-blue-700 transition-all duration-300 transform hover:scale-110 shadow-md"
+                              className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-700 hover:text-secondary-700 transition-all duration-300 transform hover:scale-110 shadow-md"
                               title="Listen on Google Podcasts"
                             >
                               <img
@@ -167,10 +167,10 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
                     </div>
 
                     <div className="px-2">
-                      <h3 className="text-lg font-poppins font-semibold text-gray-900 group-hover:text-purple-700 transition-colors mb-2 leading-tight">
+                      <h3 className="text-lg font-poppins font-semibold text-gray-900 group-hover:text-primary-700 transition-colors mb-2 leading-tight">
                         <a
                           href="#"
-                          className="text-white hover:underline decoration-purple-500 decoration-2 underline-offset-4"
+                          className="text-white hover:underline decoration-primary-500 decoration-2 underline-offset-4"
                         >
                           {podcast.title}
                         </a>

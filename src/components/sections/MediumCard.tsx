@@ -51,7 +51,7 @@ function MediumCard({ medium }: MediumCardProps) {
         return (
           <Badge
             variant="default"
-            className="bg-blue-100 text-blue-800 border-blue-200"
+            className="bg-secondary-100 text-secondary-800 border-secondary-200"
           >
             Upcoming Events
           </Badge>
@@ -60,7 +60,7 @@ function MediumCard({ medium }: MediumCardProps) {
         return (
           <Badge
             variant="default"
-            className="bg-purple-100 text-purple-800 border-purple-200"
+            className="bg-primary-100 text-primary-800 border-primary-200"
           >
             Guest Medium
           </Badge>
@@ -89,11 +89,11 @@ function MediumCard({ medium }: MediumCardProps) {
       {/* Circular Headshot with enhanced glow */}
       <div className="flex justify-center mb-6 relative">
         <div className="relative">
-          <div className="absolute inset-0 rounded-full bg-linear-to-r from-purple-400/20 to-blue-400/20 blur-lg scale-125"></div>
-          <div className="absolute inset-0 rounded-full bg-linear-to-r from-purple-500/10 to-blue-500/10 blur-md scale-110"></div>
+          <div className="absolute inset-0 rounded-full bg-linear-to-r from-primary-400/20 to-secondary-400/20 blur-lg scale-125"></div>
+          <div className="absolute inset-0 rounded-full bg-linear-to-r from-primary-500/10 to-secondary-500/10 blur-md scale-110"></div>
           <Avatar className="w-24 h-24 border-4 border-white shadow-lg relative z-10">
             <AvatarImage src={medium.photoUrl} alt={medium.name} />
-            <AvatarFallback className="text-xl font-semibold bg-linear-to-r from-purple-100 to-blue-100">
+            <AvatarFallback className="text-xl font-semibold bg-linear-to-r from-primary-100 to-secondary-100">
               {medium.name
                 .split(' ')
                 .map((n) => n[0])
@@ -106,7 +106,7 @@ function MediumCard({ medium }: MediumCardProps) {
       {/* Name and Specialty */}
       <div className="text-center mb-4">
         <h3 className="text-xl font-bold text-gray-900 mb-1">{medium.name}</h3>
-        <p className="text-sm font-medium text-purple-600 mb-2">
+        <p className="text-sm font-medium text-primary-600 mb-2">
           {medium.specialty}
         </p>
         <p className="text-sm text-gray-600 italic">"{medium.tagline}"</p>
@@ -115,11 +115,11 @@ function MediumCard({ medium }: MediumCardProps) {
       {/* Experience and Video Count */}
       <div className="flex items-center justify-center gap-4 mb-4">
         <div className="flex items-center gap-1 text-sm text-gray-600">
-          <Award className="w-4 h-4 text-purple-500" />
+          <Award className="w-4 h-4 text-primary-500" />
           <span>{medium.experience}</span>
         </div>
         <div className="flex items-center gap-1 text-sm text-gray-600">
-          <Video className="w-4 h-4 text-blue-500" />
+          <Video className="w-4 h-4 text-secondary-500" />
           <span>{medium.videoCount} videos</span>
         </div>
       </div>
@@ -137,15 +137,15 @@ function MediumCard({ medium }: MediumCardProps) {
 
       {/* Next Event */}
       {/* {medium.nextEvent && (
-        <div className="bg-purple-50 rounded-lg p-3 mb-4 border border-purple-100">
-          <div className="flex items-center gap-2 text-sm text-purple-700 mb-1">
+        <div className="bg-primary-50 rounded-lg p-3 mb-4 border border-primary-100">
+          <div className="flex items-center gap-2 text-sm text-primary-700 mb-1">
             <Calendar className="w-4 h-4" />
             <span className="font-medium">Next Event</span>
           </div>
-          <p className="text-xs text-purple-600 mb-1">
+          <p className="text-xs text-primary-600 mb-1">
             {medium.nextEvent.title}
           </p>
-          <div className="flex items-center gap-1 text-xs text-purple-500">
+          <div className="flex items-center gap-1 text-xs text-primary-500">
             <Clock className="w-3 h-3" />
             <span>
               {medium.nextEvent.date} • {medium.nextEvent.time}
@@ -170,7 +170,7 @@ function MediumCard({ medium }: MediumCardProps) {
           asChild
           variant="outline"
           size="sm"
-          className=" border-purple-200 hover:bg-purple-50 hover:border-purple-300"
+          className=" border-primary-200 hover:bg-primary-50 hover:border-primary-300"
         >
           <Link
             to={`/mediums/${medium.slug}`}
@@ -185,7 +185,7 @@ function MediumCard({ medium }: MediumCardProps) {
           <Button
             asChild
             size="sm"
-            className=" bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+            className="text-white bg-linear-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700"
           >
             <Link to={`/book/${medium.slug}`}>Book Session</Link>
           </Button>

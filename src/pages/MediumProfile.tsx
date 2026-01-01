@@ -273,7 +273,7 @@ const MediumProfile = () => {
         return (
           <Badge
             variant="default"
-            className="bg-blue-100 text-blue-800 border-blue-200"
+            className="bg-secondary-100 text-secondary-800 border-secondary-200"
           >
             Upcoming Events
           </Badge>
@@ -282,7 +282,7 @@ const MediumProfile = () => {
         return (
           <Badge
             variant="default"
-            className="bg-purple-100 text-purple-800 border-purple-200"
+            className="bg-primary-100 text-primary-800 border-primary-200"
           >
             Guest Medium
           </Badge>
@@ -314,7 +314,7 @@ const MediumProfile = () => {
       </Helmet>
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <section className="relative bg-linear-to-br from-purple-900 via-blue-900 to-indigo-900 text-white">
+        <section className="relative bg-linear-to-br from-primary-900 via-secondary-900 to-indigo-900 text-white">
           <div className="absolute inset-0 bg-black/20"></div>
           <div className="relative container mx-auto px-6 py-16">
             <div className="flex flex-col lg:flex-row items-center gap-12">
@@ -324,7 +324,7 @@ const MediumProfile = () => {
                   <div className="absolute inset-0 rounded-full bg-white/10 blur-2xl scale-125"></div>
                   <Avatar className="w-48 h-48 border-8 border-white/20 shadow-2xl relative z-10">
                     <AvatarImage src={profile.photoUrl} alt={profile.name} />
-                    <AvatarFallback className="text-4xl font-bold bg-linear-to-br from-purple-100 to-blue-100">
+                    <AvatarFallback className="text-4xl font-bold bg-linear-to-br from-primary-100 to-secondary-100">
                       {profile.name
                         .split(' ')
                         .map((n) => n[0])
@@ -342,10 +342,10 @@ const MediumProfile = () => {
                 <h1 className="text-4xl text-white lg:text-6xl font-bold mb-4">
                   {profile.name}
                 </h1>
-                <p className="text-xl lg:text-2xl text-purple-200 mb-2">
+                <p className="text-xl lg:text-2xl text-primary-200 mb-2">
                   {profile.specialty}
                 </p>
-                <p className="text-lg text-blue-200 italic mb-6">
+                <p className="text-lg text-secondary-200 italic mb-6">
                   "{profile.tagline}"
                 </p>
 
@@ -355,7 +355,7 @@ const MediumProfile = () => {
                     <div className="text-2xl font-bold">
                       {profile.experienceYears}+
                     </div>
-                    <div className="text-sm text-purple-200">
+                    <div className="text-sm text-primary-200">
                       Years Experience
                     </div>
                   </div>
@@ -363,13 +363,13 @@ const MediumProfile = () => {
                     <div className="text-2xl font-bold">
                       {profile.sessionCount.toLocaleString()}
                     </div>
-                    <div className="text-sm text-purple-200">Sessions</div>
+                    <div className="text-sm text-primary-200">Sessions</div>
                   </div>
                   <div className="text-center">
                     <div className="flex items-center justify-center gap-1 mb-1">
                       {renderStars(profile.ratingAverage)}
                     </div>
-                    <div className="text-sm text-purple-200">
+                    <div className="text-sm text-primary-200">
                       {profile.ratingAverage} ({profile.ratingCount})
                     </div>
                   </div>
@@ -377,7 +377,7 @@ const MediumProfile = () => {
                     <div className="text-2xl font-bold">
                       {profile.videoCount}
                     </div>
-                    <div className="text-sm text-purple-200">Videos</div>
+                    <div className="text-sm text-primary-200">Videos</div>
                   </div>
                 </div>
 
@@ -385,7 +385,7 @@ const MediumProfile = () => {
                 <div className="flex flex-wrap justify-center lg:justify-start gap-4">
                   <Button
                     size="lg"
-                    className="bg-white text-purple-900 hover:bg-gray-100 cursor-pointer"
+                    className="bg-white text-primary-900 hover:bg-gray-100 cursor-pointer"
                   >
                     <Calendar className="w-5 h-5 mr-2" />
                     Book Session
@@ -393,7 +393,7 @@ const MediumProfile = () => {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-white text-purple-900 hover:bg-white hover:text-purple-900 cursor-pointer"
+                    className="border-white text-primary-900 hover:bg-white hover:text-primary-900 cursor-pointer"
                   >
                     <Heart className="w-5 h-5 mr-2" />
                     Follow
@@ -401,7 +401,7 @@ const MediumProfile = () => {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-white text-purple-900 hover:bg-white hover:text-purple-900 cursor-pointer"
+                    className="border-white text-primary-900 hover:bg-white hover:text-primary-900 cursor-pointer"
                   >
                     <Share2 className="w-5 h-5 mr-2" />
                     Share
@@ -423,7 +423,7 @@ const MediumProfile = () => {
                 </h2>
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-xl font-semibold text-purple-900 mb-3">
+                    <h3 className="text-xl font-semibold text-primary-900 mb-3">
                       Biography
                     </h3>
                     <p className="text-gray-700 leading-relaxed">
@@ -432,7 +432,7 @@ const MediumProfile = () => {
                   </div>
                   <Separator />
                   <div>
-                    <h3 className="text-xl font-semibold text-purple-900 mb-3">
+                    <h3 className="text-xl font-semibold text-primary-900 mb-3">
                       Philosophy
                     </h3>
                     <p className="text-gray-700 leading-relaxed">
@@ -449,8 +449,8 @@ const MediumProfile = () => {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                      <Award className="w-6 h-6 text-purple-600" />
+                    <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                      <Award className="w-6 h-6 text-primary-600" />
                     </div>
                     <div>
                       <div className="font-semibold text-gray-900">
@@ -462,8 +462,8 @@ const MediumProfile = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                      <Users className="w-6 h-6 text-blue-600" />
+                    <div className="w-12 h-12 bg-secondary-100 rounded-full flex items-center justify-center">
+                      <Users className="w-6 h-6 text-secondary-600" />
                     </div>
                     <div>
                       <div className="font-semibold text-gray-900">
@@ -514,7 +514,7 @@ const MediumProfile = () => {
                       key={index}
                       className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
                     >
-                      <h3 className="text-lg font-semibold text-purple-600 mb-3">
+                      <h3 className="text-lg font-semibold text-primary-600 mb-3">
                         {focus.name}
                       </h3>
                       <p className="text-gray-700">{focus.description}</p>
@@ -531,7 +531,7 @@ const MediumProfile = () => {
                   </h2>
                   <Button
                     variant="outline"
-                    className="text-purple-600 border-purple-200 hover:bg-purple-50"
+                    className="text-primary-600 border-primary-200 hover:bg-primary-50"
                   >
                     View All Events
                     <ChevronRight className="w-4 h-4 ml-2" />
@@ -543,8 +543,8 @@ const MediumProfile = () => {
                       key={event.id}
                       className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
                     >
-                      <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center shrink-0">
-                        <Calendar className="w-6 h-6 text-purple-600" />
+                      <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center shrink-0">
+                        <Calendar className="w-6 h-6 text-primary-600" />
                       </div>
                       <div className="flex-1">
                         <h3 className="font-semibold text-gray-900">
@@ -581,7 +581,7 @@ const MediumProfile = () => {
                   </h2>
                   <Button
                     variant="outline"
-                    className="text-purple-600 border-purple-200 hover:bg-purple-50"
+                    className="text-primary-600 border-primary-200 hover:bg-primary-50"
                   >
                     View All Videos
                     <ChevronRight className="w-4 h-4 ml-2" />
@@ -627,7 +627,7 @@ const MediumProfile = () => {
                   </h2>
                   <Button
                     variant="outline"
-                    className="text-purple-600 border-purple-200 hover:bg-purple-50"
+                    className="text-primary-600 border-primary-200 hover:bg-primary-50"
                   >
                     View All Reviews
                     <ChevronRight className="w-4 h-4 ml-2" />
@@ -681,14 +681,14 @@ const MediumProfile = () => {
                       <span className="font-semibold text-gray-900">
                         Single Session
                       </span>
-                      <span className="text-lg font-bold text-purple-600">
+                      <span className="text-lg font-bold text-primary-600">
                         ${profile.pricing.singleSession}
                       </span>
                     </div>
                     <p className="text-sm text-gray-600">
                       60-minute private reading
                     </p>
-                    <Button className="w-full mt-3 bg-purple-600 hover:bg-purple-700">
+                    <Button className="w-full mt-3 bg-primary-600 hover:bg-primary-700">
                       Book Now
                     </Button>
                   </div>
@@ -697,7 +697,7 @@ const MediumProfile = () => {
                       <span className="font-semibold text-gray-900">
                         3-Session Package
                       </span>
-                      <span className="text-lg font-bold text-purple-600">
+                      <span className="text-lg font-bold text-primary-600">
                         ${profile.pricing.package3}
                       </span>
                     </div>
@@ -706,7 +706,7 @@ const MediumProfile = () => {
                     </p>
                     <Button
                       variant="outline"
-                      className="w-full mt-3 border-purple-200 text-purple-600 hover:bg-purple-50"
+                      className="w-full mt-3 border-primary-200 text-primary-600 hover:bg-primary-50"
                     >
                       Book Package
                     </Button>
@@ -716,7 +716,7 @@ const MediumProfile = () => {
                       <span className="font-semibold text-gray-900">
                         5-Session Package
                       </span>
-                      <span className="text-lg font-bold text-purple-600">
+                      <span className="text-lg font-bold text-primary-600">
                         ${profile.pricing.package5}
                       </span>
                     </div>
@@ -725,7 +725,7 @@ const MediumProfile = () => {
                     </p>
                     <Button
                       variant="outline"
-                      className="w-full mt-3 border-purple-200 text-purple-600 hover:bg-purple-50"
+                      className="w-full mt-3 border-primary-200 text-primary-600 hover:bg-primary-50"
                     >
                       Book Package
                     </Button>
@@ -740,20 +740,20 @@ const MediumProfile = () => {
                 </h3>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <Mail className="w-5 h-5 text-purple-600" />
+                    <Mail className="w-5 h-5 text-primary-600" />
                     <a
                       href={`mailto:${profile.contact.email}`}
-                      className="text-gray-700 hover:text-purple-600"
+                      className="text-gray-700 hover:text-primary-600"
                     >
                       {profile.contact.email}
                     </a>
                   </div>
                   {profile.contact.phone && (
                     <div className="flex items-center gap-3">
-                      <Phone className="w-5 h-5 text-purple-600" />
+                      <Phone className="w-5 h-5 text-primary-600" />
                       <a
                         href={`tel:${profile.contact.phone}`}
-                        className="text-gray-700 hover:text-purple-600"
+                        className="text-gray-700 hover:text-primary-600"
                       >
                         {profile.contact.phone}
                       </a>
@@ -773,7 +773,7 @@ const MediumProfile = () => {
                       href={profile.socialLinks.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 text-gray-700 hover:text-purple-600"
+                      className="flex items-center gap-3 text-gray-700 hover:text-primary-600"
                     >
                       <BookOpen className="w-5 h-5" />
                       Personal Website
@@ -784,7 +784,7 @@ const MediumProfile = () => {
                       href={`https://instagram.com/${profile.socialLinks.instagram.replace('@', '')}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 text-gray-700 hover:text-purple-600"
+                      className="flex items-center gap-3 text-gray-700 hover:text-primary-600"
                     >
                       📷 Instagram
                     </a>
@@ -794,7 +794,7 @@ const MediumProfile = () => {
                       href={`https://youtube.com/${profile.socialLinks.youtube}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 text-gray-700 hover:text-purple-600"
+                      className="flex items-center gap-3 text-gray-700 hover:text-primary-600"
                     >
                       📺 YouTube
                     </a>

@@ -72,20 +72,20 @@ const Footer: FC = () => {
       icon: Facebook,
       href: '#',
       label: 'Facebook',
-      color: 'hover:bg-blue-600',
+      color: 'hover:bg-secondary-600',
     },
     { icon: Twitter, href: '#', label: 'Twitter', color: 'hover:bg-black' },
     {
       icon: Instagram,
       href: '#',
       label: 'Instagram',
-      color: 'hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500',
+      color: 'hover:bg-gradient-to-r hover:from-primary-500 hover:to-pink-500',
     },
     { icon: Youtube, href: '#', label: 'YouTube', color: 'hover:bg-red-600' },
   ];
 
   return (
-    <footer className="relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
+    <footer className="relative bg-gradient-to-br from-slate-900 via-primary-900 to-slate-900 text-white overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div
@@ -103,12 +103,12 @@ const Footer: FC = () => {
           {/* Brand Section */}
           <div className="lg:col-span-1 text-center md:text-left">
             <div className="flex flex-col md:flex-row items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center">
                 <Heart className="w-6 h-6 text-white" />
               </div>
               <div>
                 <h3 className="text-xl text-white">The Bridge</h3>
-                <p className="text-sm text-purple-200 mb-0">
+                <p className="text-sm text-primary-200 mb-0">
                   Bridging Two Worlds
                 </p>
               </div>
@@ -140,7 +140,7 @@ const Footer: FC = () => {
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-gray-300 hover:text-purple-300 transition-colors duration-200 text-sm"
+                    className="text-gray-300 hover:text-primary-300 transition-colors duration-200 text-sm"
                   >
                     {link.label}
                   </a>
@@ -157,7 +157,7 @@ const Footer: FC = () => {
                 <li key={service.label}>
                   <a
                     href={service.href}
-                    className="text-gray-300 hover:text-purple-300 transition-colors duration-200 text-sm"
+                    className="text-gray-300 hover:text-primary-300 transition-colors duration-200 text-sm"
                   >
                     {service.label}
                   </a>
@@ -171,26 +171,26 @@ const Footer: FC = () => {
             <h4 className="text-lg text-white mb-6">Connect With Us</h4>
             <div className="space-y-4">
               <div className="flex flex-col md:flex-row items-center md:items-start gap-3">
-                <MapPin className="w-4 h-4 text-purple-300 mt-0.5 flex-shrink-0" />
+                <MapPin className="w-4 h-4 text-primary-300 mt-0.5 flex-shrink-0" />
                 <div className="text-sm text-center md:text-left">
                   <p className="text-gray-300">123 Spiritual Way</p>
                   <p className="text-gray-300">Metaphysical City, MC 12345</p>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row items-center md:items-center gap-3">
-                <Phone className="w-4 h-4 text-purple-300 flex-shrink-0" />
+                <Phone className="w-4 h-4 text-primary-300 flex-shrink-0" />
                 <a
                   href="tel:+15551234567"
-                  className="text-sm text-gray-300 hover:text-purple-300 transition-colors"
+                  className="text-sm text-gray-300 hover:text-primary-300 transition-colors"
                 >
                   +1 (555) 123-4567
                 </a>
               </div>
               <div className="flex flex-col md:flex-row items-center md:items-center gap-3">
-                <Mail className="w-4 h-4 text-purple-300 flex-shrink-0" />
+                <Mail className="w-4 h-4 text-primary-300 flex-shrink-0" />
                 <a
                   href="mailto:hello@thebridge.com"
-                  className="text-sm text-gray-300 hover:text-purple-300 transition-colors"
+                  className="text-sm text-gray-300 hover:text-primary-300 transition-colors"
                 >
                   hello@thebridge.com
                 </a>
@@ -215,12 +215,12 @@ const Footer: FC = () => {
                 type="email"
                 required
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm"
+                className="flex-1 px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent backdrop-blur-sm"
               />
               <button
                 onClick={handleSubscribe}
                 disabled={loading}
-                className="px-6 py-3 cursor-pointer bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 cursor-pointer bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Subscribing...' : 'Subscribe'}
               </button>
@@ -241,13 +241,13 @@ const Footer: FC = () => {
             <div className="flex gap-6 text-sm">
               <a
                 href="/privacy"
-                className="text-gray-400 hover:text-purple-300 transition-colors"
+                className="text-gray-400 hover:text-primary-300 transition-colors"
               >
                 Privacy Policy
               </a>
               <a
                 href="/terms"
-                className="text-gray-400 hover:text-purple-300 transition-colors"
+                className="text-gray-400 hover:text-primary-300 transition-colors"
               >
                 Terms of Service
               </a>

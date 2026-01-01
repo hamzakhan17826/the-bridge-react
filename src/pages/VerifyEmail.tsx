@@ -75,7 +75,7 @@ export default function VerifyEmailPage() {
                 <p className="mt-2">Redirecting to login in 3 seconds...</p>
                 <button
                   onClick={() => navigate('/login')}
-                  className="mt-4 bg-primary text-white px-4 py-2 rounded-lg"
+                  className="mt-4 bg-primary-400 text-white px-4 py-2 rounded-lg"
                 >
                   Go to Login
                 </button>
@@ -86,7 +86,7 @@ export default function VerifyEmailPage() {
                 <p className="mt-2">{result?.message}</p>
                 <button
                   onClick={() => navigate('/register')}
-                  className="mt-4 bg-primary text-white px-4 py-2 rounded-lg"
+                  className="mt-4 bg-primary-400 text-white px-4 py-2 rounded-lg"
                 >
                   Back to Register
                 </button>

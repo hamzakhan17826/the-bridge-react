@@ -32,7 +32,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-purple-50 to-blue-50 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-primary-50 to-secondary-50 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <svg
@@ -63,7 +63,7 @@ export default function LoginPage() {
         <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
           {/* Logo/Brand */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-r from-purple-600 to-blue-600 rounded-full mb-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-r from-primary-600 to-secondary-600 rounded-full mb-4">
               <svg
                 className="w-8 h-8 text-white"
                 fill="currentColor"
@@ -95,7 +95,7 @@ export default function LoginPage() {
                 <input
                   type="email"
                   name="email"
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
                   placeholder="john@example.com"
                   required
                 />
@@ -113,7 +113,7 @@ export default function LoginPage() {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
-                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
                   placeholder="Enter your password"
                   required
                 />
@@ -135,7 +135,7 @@ export default function LoginPage() {
               <div className="flex items-center">
                 <input
                   id="rememberCheck"
-                  className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                   type="checkbox"
                   name="rememberMe"
                 />
@@ -148,7 +148,7 @@ export default function LoginPage() {
               </div>
               <Link
                 to="/forget-password"
-                className="text-sm text-purple-600 hover:text-purple-500 font-medium"
+                className="text-sm text-primary-600 hover:text-primary-500 font-medium"
               >
                 Forgot password?
               </Link>
@@ -156,7 +156,7 @@ export default function LoginPage() {
 
             <SubmitButton
               text={submitting ? 'Signing in…' : 'Sign In'}
-              className="w-full py-3 bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105"
+              className="w-full py-3 bg-linear-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105"
             />
 
             <div className="text-center">
@@ -164,7 +164,7 @@ export default function LoginPage() {
                 Don't have an account?{' '}
                 <Link
                   to="/register"
-                  className="font-medium text-purple-600 hover:text-purple-500"
+                  className="font-medium text-primary-600 hover:text-primary-500"
                 >
                   Register
                 </Link>
