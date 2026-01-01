@@ -367,7 +367,7 @@ const Events = () => {
 
                         {/* Price and CTA */}
                         <div className="flex items-center justify-between">
-                          <div className="text-lg  text-gray-900">
+                          <div className="text-lg font-bold text-gray-700">
                             {event.price}
                           </div>
                           <button className="inline-flex items-center gap-2 px-4 py-2 bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white  text-sm rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 cursor-pointer">
@@ -401,7 +401,7 @@ const Events = () => {
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-500 "
+              className="flex-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-500 placeholder-white"
             />
             <button className="px-6 py-3 bg-white text-primary-600 hover:bg-gray-50  rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-500">
               Subscribe

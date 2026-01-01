@@ -99,7 +99,7 @@ export default function Navbar() {
                 Home
               </NavLink>
               <NavLink
-                to="/episodes"
+                to="/podcasts"
                 className={({ isActive }) =>
                   `relative px-4 py-2 rounded-xl text-sm transition-all duration-200 ${
                     isActive
@@ -108,7 +108,19 @@ export default function Navbar() {
                   }`
                 }
               >
-                Episodes
+                Podcasts
+              </NavLink>
+              <NavLink
+                to="/mediums"
+                className={({ isActive }) =>
+                  `relative px-4 py-2 rounded-xl text-sm transition-all duration-200 ${
+                    isActive
+                      ? 'text-white bg-linear-to-r from-primary-500 to-secondary-500 shadow-lg'
+                      : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                  }`
+                }
+              >
+                Mediums
               </NavLink>
               <NavLink
                 to="/reviews"
@@ -279,7 +291,7 @@ export default function Navbar() {
                   Home
                 </NavLink>
                 <NavLink
-                  to="/episodes"
+                  to="/podcasts"
                   className={({ isActive }) =>
                     `px-4 py-3 rounded-xl text-sm transition-all duration-200 ${
                       isActive
@@ -289,7 +301,20 @@ export default function Navbar() {
                   }
                   onClick={() => setIsOpen(false)}
                 >
-                  Episodes
+                  Podcasts
+                </NavLink>
+                <NavLink
+                  to="/mediums"
+                  className={({ isActive }) =>
+                    `px-4 py-3 rounded-xl text-sm transition-all duration-200 ${
+                      isActive
+                        ? 'text-white bg-linear-to-r from-primary-500 to-secondary-500 shadow-lg'
+                        : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                    }`
+                  }
+                  onClick={() => setIsOpen(false)}
+                >
+                  Mediums
                 </NavLink>
                 <NavLink
                   to="/reviews"

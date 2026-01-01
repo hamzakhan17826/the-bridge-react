@@ -9,6 +9,8 @@ export { default as VerifyChangeEmailPage } from './VerifyChangeEmail';
 export { default as UserProfile } from './UserProfile';
 export { default as ContactUsPage } from './ContactUs';
 export { default as MediumProfile } from './MediumProfile';
+export { default as Mediums } from './Mediums';
+export { default as Podcasts } from './Podcasts';
 export { default as Events } from './Events';
 
 // Dashboard pages

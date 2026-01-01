@@ -72,25 +72,6 @@ const data = {
       ],
     },
     {
-      title: 'Episodes',
-      url: '/episodes',
-      icon: AudioWaveform,
-      items: [
-        {
-          title: 'Latest Episodes',
-          url: '/episodes?filter=latest',
-        },
-        {
-          title: 'Popular Episodes',
-          url: '/episodes?filter=popular',
-        },
-        {
-          title: 'By Medium',
-          url: '/episodes?filter=medium',
-        },
-      ],
-    },
-    {
       title: 'Reviews',
       url: '/reviews',
       icon: BookOpen,

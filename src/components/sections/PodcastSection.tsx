@@ -3,16 +3,61 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import type { PodcastSliderProps } from '../../types/types';
+import type { PodcastSliderProps, PodcastItem } from '../../types/types';
 import { Play, Headphones, Calendar, Clock, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const PodcastSlider: FC<PodcastSliderProps> = ({
   podcasts,
-  title,
-  subtitle,
-  buttonText,
+  title = 'Featured Podcasts',
+  subtitle = 'Listen to our latest episodes',
+  buttonText = 'View All',
 }) => {
-  const items = podcasts && podcasts.length ? podcasts : [];
+  // Default podcast data if none provided
+  const defaultPodcasts: PodcastItem[] = [
+    {
+      id: 1,
+      episode: 'ep:1',
+      duration: '05:35 Mins',
+      date: 'Dec 15th, 2024',
+      title: 'Spiritual Awakening Journey',
+      image: '/images/podcasts/carousel/1.jpg',
+    },
+    {
+      id: 2,
+      episode: 'ep:2',
+      duration: '07:20 Mins',
+      date: 'Dec 8th, 2024',
+      title: 'Connecting with Spirit Guides',
+      image: '/images/podcasts/carousel/2.jpg',
+    },
+    {
+      id: 3,
+      episode: 'ep:3',
+      duration: '04:45 Mins',
+      date: 'Dec 1st, 2024',
+      title: 'Mediumship Development Tips',
+      image: '/images/podcasts/carousel/3.jpg',
+    },
+    {
+      id: 4,
+      episode: 'ep:4',
+      duration: '06:10 Mins',
+      date: 'Nov 24th, 2024',
+      title: 'Understanding Energy Healing',
+      image: '/images/podcasts/carousel/4.jpg',
+    },
+    {
+      id: 5,
+      episode: 'ep:5',
+      duration: '08:00 Mins',
+      date: 'Nov 17th, 2024',
+      title: 'Intuition and Psychic Abilities',
+      image: '/images/podcasts/carousel/5.jpg',
+    },
+  ];
+
+  const items = podcasts && podcasts.length ? podcasts : defaultPodcasts;
   return (
     <div className="relative overflow-hidden pb-12">
       {/* Background with gradient */}
@@ -53,10 +98,13 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
               </h2>
             </div>
             <div className="shrink-0">
-              <button className="group inline-flex items-center gap-3 px-8 py-4 bg-white text-primary-700 font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:bg-primary-50">
+              <Link
+                to="/podcasts"
+                className="group inline-flex items-center gap-3 px-8 py-4 bg-white text-primary-700 font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:bg-primary-50"
+              >
                 <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                 {buttonText}
-              </button>
+              </Link>
             </div>
           </div>
         </div>

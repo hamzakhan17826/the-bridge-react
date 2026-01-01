@@ -688,7 +688,7 @@ const MediumProfile = () => {
                     <p className="text-sm text-gray-600">
                       60-minute private reading
                     </p>
-                    <Button className="w-full mt-3 bg-primary-600 hover:bg-primary-700">
+                    <Button className="w-full mt-3 bg-primary-600 hover:bg-primary-700 text-white">
                       Book Now
                     </Button>
                   </div>

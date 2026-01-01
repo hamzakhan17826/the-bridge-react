@@ -13,6 +13,8 @@ import {
   UserProfile,
   ContactUsPage,
   MediumProfile,
+  Mediums,
+  Podcasts,
   Events,
   Overview,
   Users,
@@ -39,6 +41,8 @@ function App() {
               <Route element={<AppLayout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/events" element={<Events />} />
+                <Route path="/podcasts" element={<Podcasts />} />
+                <Route path="/mediums" element={<Mediums />} />
                 <Route path="/mediums/:slug" element={<MediumProfile />} />
                 <Route
                   path="/register"

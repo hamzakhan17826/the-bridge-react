@@ -19,10 +19,10 @@ export interface PodcastItem {
 }
 
 export interface PodcastSliderProps {
-  podcasts: PodcastItem[];
-  title: string;
-  subtitle: string;
-  buttonText: string;
+  podcasts?: PodcastItem[];
+  title?: string;
+  subtitle?: string;
+  buttonText?: string;
 }
 
 export interface EmailPreference {
