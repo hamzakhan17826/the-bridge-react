@@ -1,13 +1,15 @@
 import { Helmet } from 'react-helmet-async';
-import HeroSection from '../components/ui/HeroSection';
-import AboutSection from '../components/ui/AboutSection';
-import PodcastSlider from '../components/ui/PodcastSection';
+import {
+  HeroSection,
+  AboutSection,
+  PodcastSection,
+  EventSection,
+  MeetTheMediums,
+  TestimonialSection,
+  MembershipSection,
+  CTASection,
+} from '../components/sections';
 import type { PodcastItem } from '../types/types';
-import EventsSection from '../components/ui/EventSection';
-import MeetTheMediums from '../components/ui/MeetTheMediums';
-import TestimonialSection from '../components/ui/TestimonialSection';
-import MembershipSection from '../components/ui/MembershipSection';
-import CallToAction from '../components/ui/CTASection';
 
 const podcasts: PodcastItem[] = [
   {
@@ -59,16 +61,16 @@ const Home = () => (
     </Helmet>
     <HeroSection />
     <AboutSection />
-    <PodcastSlider
+    <PodcastSection
       podcasts={podcasts}
       title="Featured Podcasts"
       subtitle="Listen to our latest episodes"
       buttonText="View All"
     />
-    <EventsSection />
+    <EventSection />
     <MeetTheMediums />
     <TestimonialSection />
-    <CallToAction />
+    <CTASection />
     <MembershipSection />
   </>
 );

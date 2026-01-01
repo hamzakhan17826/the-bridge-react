@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { MediumCard } from './MediumCard';
+import { MediumCard } from '../sections';
 import { Link } from 'react-router-dom';
 import { Users, Sparkles, ArrowRight } from 'lucide-react';
 import type { Medium } from '../../types/types';

@@ -1,15 +1,13 @@
 import { Star, Video, Award, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Avatar, AvatarFallback, AvatarImage } from './avatar';
-import { Button } from './button';
-import { Badge } from './badge';
+import { Avatar, AvatarFallback, AvatarImage, Button, Badge } from '../ui';
 import type { Medium } from '../../types/types';
 
 interface MediumCardProps {
   medium: Medium;
 }
 
-export function MediumCard({ medium }: MediumCardProps) {
+function MediumCard({ medium }: MediumCardProps) {
   const renderStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -196,3 +194,5 @@ export function MediumCard({ medium }: MediumCardProps) {
     </div>
   );
 }
+
+export default MediumCard;

@@ -2,26 +2,28 @@ import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Home from './pages/Home';
-import RegisterPage from './pages/RegisterPage';
-import LoginPage from './pages/LoginPage';
-import ForgetPasswordPage from './pages/ForgetPassword';
-import ResetPasswordPage from './pages/ResetPassword';
-import VerifyEmailPage from './pages/VerifyEmail';
-import VerifyChangeEmailPage from './pages/VerifyChangeEmail';
-import UserProfile from './pages/UserProfile';
+import {
+  Home,
+  RegisterPage,
+  LoginPage,
+  ForgetPasswordPage,
+  ResetPasswordPage,
+  VerifyEmailPage,
+  VerifyChangeEmailPage,
+  UserProfile,
+  ContactUsPage,
+  MediumProfile,
+  Events,
+  Overview,
+  Users,
+  Settings,
+} from './pages';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
 import ScrollToTop from './components/system/ScrollToTop';
 import AppLayout from './components/layouts/AppLayout';
 import { RequireAuth, RedirectIfAuth } from './components/system/RouteGuards';
-import Overview from './pages/dashboard/Overview';
-import Users from './pages/dashboard/Users';
-import Settings from './pages/dashboard/Settings';
 import DashboardLayout from './components/layouts/dashboard/DashboardLayout';
-import ContactUsPage from './pages/ContactUs';
-import MediumProfile from './pages/MediumProfile';
-import Events from './pages/Events';
 // import { ThemeProvider } from '@/components/theme-provider';
 
 function App() {

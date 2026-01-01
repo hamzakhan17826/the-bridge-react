@@ -124,10 +124,15 @@
   }
 
   a {
-    @apply text-gray-800 hover:text-primary transition-colors duration-200 font-lato;
+    @apply text-gray-800 hover:text-primary transition-colors duration-200 font-lato cursor-pointer;
   }
+
   strong {
     @apply font-semibold font-poppins;
+  }
+
+  button {
+    @apply cursor-pointer;
   }
 }
 
