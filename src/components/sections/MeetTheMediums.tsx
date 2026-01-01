@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { MediumCard } from '../sections';
 import { Link } from 'react-router-dom';
 import { Users, Sparkles, ArrowRight } from 'lucide-react';
+import { BackgroundDecorations } from '../ui';
 import type { Medium } from '../../types/types';
 
 const MeetTheMediums: FC = () => {
@@ -130,14 +131,28 @@ const MeetTheMediums: FC = () => {
     // },
   ];
 
+  const backgroundDecorations = [
+    {
+      top: 'top-20',
+      left: 'left-10',
+      width: 'w-64',
+      height: 'h-64',
+      color: 'bg-purple-200',
+      delay: '0s',
+    },
+    {
+      bottom: 'bottom-20',
+      right: 'right-10',
+      width: 'w-64',
+      height: 'h-64',
+      color: 'bg-blue-200',
+      delay: '1s',
+    },
+  ];
+
   return (
-    <section className="py-20 md:pb-28 bg-linear-to-br from-purple-50 via-white to-blue-50 relative overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute top-20 left-10 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
-      <div
-        className="absolute bottom-20 right-10 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"
-        style={{ animationDelay: '1s' }}
-      ></div>
+    <section className="py-20 md:pb-28 relative overflow-hidden">
+      <BackgroundDecorations decorations={backgroundDecorations} />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">

@@ -73,9 +73,6 @@ export {
 } from './sidebar';
 export { Skeleton } from './skeleton';
 export { default as SubmitButton } from './SubmitButton';
-export {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipProvider,
-} from './tooltip';
+export { default as BackgroundDecorations } from './BackgroundDecorations';
+export { default as SectionHeader } from './SectionHeader';
+export { default as StatCard } from './StatCard';

@@ -1,20 +1,40 @@
 import { Link } from 'react-router-dom';
 import { Users, Heart, Sparkles, ArrowRight } from 'lucide-react';
+import { BackgroundDecorations, StatCard } from '../ui';
 
 export default function HeroSection() {
+  const backgroundDecorations = [
+    {
+      top: 'top-20',
+      left: 'left-10',
+      width: 'w-72',
+      height: 'h-72',
+      color: 'bg-purple-200',
+      delay: '0s',
+    },
+    {
+      top: 'top-40',
+      right: 'right-10',
+      width: 'w-72',
+      height: 'h-72',
+      color: 'bg-blue-200',
+      delay: '1s',
+    },
+    {
+      bottom: 'bottom-20',
+      left: 'left-1/2',
+      width: 'w-72',
+      height: 'h-72',
+      color: 'bg-pink-200',
+      delay: '2s',
+    },
+  ];
+
   return (
     <section className="relative overflow-hidden bg-linear-to-br from-purple-50 via-white to-blue-50">
       {/* Background Elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-        <div
-          className="absolute top-40 right-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"
-          style={{ animationDelay: '1s' }}
-        ></div>
-        <div
-          className="absolute bottom-20 left-1/2 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"
-          style={{ animationDelay: '2s' }}
-        ></div>
+        <BackgroundDecorations decorations={backgroundDecorations} />
       </div>
 
       <div className="relative container mx-auto px-6 py-16 lg:py-24">
@@ -68,28 +88,8 @@ export default function HeroSection() {
 
             {/* Stats */}
             <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-200">
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <Users className="w-5 h-5 text-purple-600" />
-                  <span className="font-playfair text-4xl md:text-5xl font-bold text-gray-900">
-                    137K
-                  </span>
-                </div>
-                <p className="text-sm text-gray-600 font-lato">
-                  Active Listeners
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <Heart className="w-5 h-5 text-blue-600" />
-                  <span className="font-playfair text-4xl md:text-5xl font-bold text-gray-900">
-                    2.1M
-                  </span>
-                </div>
-                <p className="text-sm text-gray-600 font-lato">
-                  Community Members
-                </p>
-              </div>
+              <StatCard icon={Users} number="137K" label="Active Listeners" />
+              <StatCard icon={Heart} number="2.1M" label="Community Members" />
             </div>
           </div>
 

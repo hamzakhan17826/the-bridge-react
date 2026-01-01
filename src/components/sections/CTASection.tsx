@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { toast } from 'react-toastify';
 import { Sparkles, ArrowRight, Calendar, Users, Heart } from 'lucide-react';
+import { BackgroundDecorations } from '../ui';
 import { submitContactFormObject } from '../../services/contact-us';
 
 const CallToAction = () => {
@@ -42,18 +43,39 @@ const CallToAction = () => {
     }
   };
 
+  const backgroundDecorations = [
+    {
+      top: 'top-20',
+      right: 'right-10',
+      width: 'w-72',
+      height: 'h-72',
+      color: 'bg-purple-200',
+      delay: '0s',
+    },
+    {
+      bottom: 'bottom-20',
+      left: 'left-10',
+      width: 'w-72',
+      height: 'h-72',
+      color: 'bg-blue-200',
+      delay: '1s',
+    },
+    {
+      top: 'top-1/2',
+      left: 'left-1/2',
+      width: 'w-96',
+      height: 'h-96',
+      color: 'bg-linear-to-r from-purple-100 to-blue-100',
+      delay: '2s',
+      transform: 'transform -translate-x-1/2 -translate-y-1/2',
+      blur: 'blur-3xl',
+      opacity: 'opacity-20',
+    },
+  ];
+
   return (
-    <section className="relative py-20 md:py-28 bg-linear-to-br from-purple-50 via-white to-blue-50 overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute top-20 right-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
-      <div
-        className="absolute bottom-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"
-        style={{ animationDelay: '1s' }}
-      ></div>
-      <div
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-linear-to-r from-purple-100 to-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"
-        style={{ animationDelay: '2s' }}
-      ></div>
+    <section className="relative py-20 md:py-28 overflow-hidden">
+      <BackgroundDecorations decorations={backgroundDecorations} />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 items-center gap-16">
