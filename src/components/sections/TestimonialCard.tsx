@@ -1,4 +1,5 @@
 import { Quote, Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface Testimonial {
   text: string;
@@ -39,14 +40,14 @@ export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
         </div>
         <div className="flex-1">
           <h5 className="mb-1">
-            <a
-              href={testimonial.link}
+            <Link
+              to={testimonial.link}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary-700 hover:text-primary-800 font-poppins font-semibold transition-colors"
             >
               {testimonial.name}
-            </a>
+            </Link>
           </h5>
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-primary-100 text-primary-600 text-xs font-medium">

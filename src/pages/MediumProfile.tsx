@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
   Star,
@@ -741,22 +741,22 @@ const MediumProfile = () => {
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
                     <Mail className="w-5 h-5 text-primary-600" />
-                    <a
-                      href={`mailto:${profile.contact.email}`}
+                    <Link
+                      to={`mailto:${profile.contact.email}`}
                       className="text-gray-700 hover:text-primary-600"
                     >
                       {profile.contact.email}
-                    </a>
+                    </Link>
                   </div>
                   {profile.contact.phone && (
                     <div className="flex items-center gap-3">
                       <Phone className="w-5 h-5 text-primary-600" />
-                      <a
-                        href={`tel:${profile.contact.phone}`}
+                      <Link
+                        to={`tel:${profile.contact.phone}`}
                         className="text-gray-700 hover:text-primary-600"
                       >
                         {profile.contact.phone}
-                      </a>
+                      </Link>
                     </div>
                   )}
                 </div>
@@ -769,35 +769,35 @@ const MediumProfile = () => {
                 </h3>
                 <div className="space-y-3">
                   {profile.socialLinks.website && (
-                    <a
-                      href={profile.socialLinks.website}
+                    <Link
+                      to={profile.socialLinks.website}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 text-gray-700 hover:text-primary-600"
                     >
                       <BookOpen className="w-5 h-5" />
                       Personal Website
-                    </a>
+                    </Link>
                   )}
                   {profile.socialLinks.instagram && (
-                    <a
-                      href={`https://instagram.com/${profile.socialLinks.instagram.replace('@', '')}`}
+                    <Link
+                      to={`https://instagram.com/${profile.socialLinks.instagram.replace('@', '')}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 text-gray-700 hover:text-primary-600"
                     >
                       📷 Instagram
-                    </a>
+                    </Link>
                   )}
                   {profile.socialLinks.youtube && (
-                    <a
-                      href={`https://youtube.com/${profile.socialLinks.youtube}`}
+                    <Link
+                      to={`https://youtube.com/${profile.socialLinks.youtube}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 text-gray-700 hover:text-primary-600"
                     >
                       📺 YouTube
-                    </a>
+                    </Link>
                   )}
                 </div>
               </section>

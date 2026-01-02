@@ -13,6 +13,7 @@ import {
   Linkedin,
   Instagram,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const ContactUsPage = () => {
   const [formData, setFormData] = useState({
@@ -112,30 +113,30 @@ const ContactUsPage = () => {
                     </div>
                     <div className="mt-8">
                       <h6 className="mb-3 font-medium text-white">Follow Us</h6>
-                      <a
-                        href="#"
+                      <Link
+                        to="#"
                         className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-primary-500 hover:text-white hover:-translate-y-1"
                       >
                         <Facebook />
-                      </a>
-                      <a
-                        href="#"
+                      </Link>
+                      <Link
+                        to="#"
                         className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-primary-500 hover:text-white hover:-translate-y-1"
                       >
                         <Twitter />
-                      </a>
-                      <a
-                        href="#"
+                      </Link>
+                      <Link
+                        to="#"
                         className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-primary-500 hover:text-white hover:-translate-y-1"
                       >
                         <Linkedin />
-                      </a>
-                      <a
-                        href="#"
+                      </Link>
+                      <Link
+                        to="#"
                         className="w-9 h-9 bg-white rounded-full inline-flex items-center justify-center mr-2 transition-all duration-300 hover:bg-primary-500 hover:text-white hover:-translate-y-1"
                       >
                         <Instagram />
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -225,9 +226,9 @@ const ContactUsPage = () => {
                       ></iframe>
                       <br />
                       <small>
-                        <a href="https://www.openstreetmap.org/?#map=5/36.60/-102.92">
+                        <Link to="https://www.openstreetmap.org/?#map=5/36.60/-102.92">
                           View Larger Map
-                        </a>
+                        </Link>
                       </small>
                     </div>
                   </div>

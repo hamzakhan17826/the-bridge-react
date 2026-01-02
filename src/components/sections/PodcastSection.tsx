@@ -176,8 +176,8 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
                           </button>
 
                           <div className="flex gap-2">
-                            <a
-                              href="#"
+                            <Link
+                              to="#"
                               className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-700 hover:text-primary-700 transition-all duration-300 transform hover:scale-110 shadow-md"
                               title="Listen on Apple Podcasts"
                             >
@@ -186,9 +186,9 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
                                 alt="Apple Podcasts"
                                 className="w-4 h-4"
                               />
-                            </a>
-                            <a
-                              href="#"
+                            </Link>
+                            <Link
+                              to="#"
                               className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-700 hover:text-secondary-700 transition-all duration-300 transform hover:scale-110 shadow-md"
                               title="Listen on Google Podcasts"
                             >
@@ -197,9 +197,9 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
                                 alt="Google Podcasts"
                                 className="w-4 h-4"
                               />
-                            </a>
-                            <a
-                              href="#"
+                            </Link>
+                            <Link
+                              to="#"
                               className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-700 hover:text-green-700 transition-all duration-300 transform hover:scale-110 shadow-md"
                               title="Listen on Spotify"
                             >
@@ -208,7 +208,7 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
                                 alt="Spotify"
                                 className="w-4 h-4"
                               />
-                            </a>
+                            </Link>
                           </div>
                         </div>
                       </div>
@@ -216,12 +216,12 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
 
                     <div className="px-2">
                       <h3 className="text-lg font-poppins font-semibold text-gray-900 group-hover:text-primary-700 transition-colors mb-2 leading-tight">
-                        <a
-                          href="#"
+                        <Link
+                          to="#"
                           className="text-white hover:underline decoration-primary-500 decoration-2 underline-offset-4"
                         >
                           {podcast.title}
-                        </a>
+                        </Link>
                       </h3>
                     </div>
                   </SwiperSlide>

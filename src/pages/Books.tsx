@@ -40,7 +40,7 @@ const Books = () => {
       rating: 4.9,
       reviews: 203,
       image:
-        'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1571946805638-3cc11f7ea1bb?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       category: 'Spirituality',
       pages: 285,
       published: '2022',
@@ -54,7 +54,7 @@ const Books = () => {
       rating: 4.7,
       reviews: 89,
       image:
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1603163052302-05be52a494f4?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       category: 'Development',
       pages: 256,
       published: '2024',
@@ -96,7 +96,7 @@ const Books = () => {
       rating: 4.5,
       reviews: 98,
       image:
-        'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1687967447187-f5bfcd95c270?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       category: 'Development',
       pages: 224,
       published: '2024',
@@ -207,7 +207,7 @@ const Books = () => {
                   key={book.id}
                   className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
                 >
-                  <div className="aspect-3/4 overflow-hidden">
+                  <div className="aspect-4/3 overflow-hidden">
                     <img
                       src={book.image}
                       alt={book.title}

@@ -424,13 +424,13 @@ export default function RegisterPage() {
               />
               <label className="text-sm text-gray-700" htmlFor="termsCheck">
                 I agree to the{' '}
-                <a
-                  href="/terms-and-conditions"
+                <Link
+                  to="/terms-and-conditions"
                   target="_blank"
                   className="text-primary-600 hover:text-primary-500 font-medium"
                 >
                   Terms and Conditions
-                </a>
+                </Link>
                 .
               </label>
             </div>

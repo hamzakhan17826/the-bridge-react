@@ -1,5 +1,6 @@
 import { Play, Calendar, Clock } from 'lucide-react';
 import type { PodcastItem } from '../../types/types';
+import { Link } from 'react-router-dom';
 
 interface PodcastCardProps {
   podcast: PodcastItem;
@@ -45,8 +46,8 @@ export default function PodcastCard({ podcast }: PodcastCardProps) {
             </button>
 
             <div className="flex gap-2">
-              <a
-                href="#"
+              <Link
+                to="#"
                 className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-700 hover:text-primary-700 transition-all duration-300 transform hover:scale-110 shadow-md"
                 title="Listen on Apple Podcasts"
               >
@@ -55,9 +56,9 @@ export default function PodcastCard({ podcast }: PodcastCardProps) {
                   alt="Apple Podcasts"
                   className="w-4 h-4"
                 />
-              </a>
-              <a
-                href="#"
+              </Link>
+              <Link
+                to="#"
                 className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-700 hover:text-secondary-700 transition-all duration-300 transform hover:scale-110 shadow-md"
                 title="Listen on Google Podcasts"
               >
@@ -66,7 +67,7 @@ export default function PodcastCard({ podcast }: PodcastCardProps) {
                   alt="Google Podcasts"
                   className="w-4 h-4"
                 />
-              </a>
+              </Link>
             </div>
           </div>
 

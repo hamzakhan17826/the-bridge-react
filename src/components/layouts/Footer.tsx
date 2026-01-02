@@ -12,6 +12,7 @@ import {
   Heart,
 } from 'lucide-react';
 import { submitContactFormObject } from '../../services/contact-us';
+import { Link } from 'react-router-dom';
 
 const Footer: FC = () => {
   const year = new Date().getFullYear();
@@ -120,14 +121,14 @@ const Footer: FC = () => {
             </p>
             <div className="flex justify-center md:justify-start gap-4">
               {socialLinks.map((social) => (
-                <a
+                <Link
                   key={social.label}
-                  href={social.href}
+                  to={social.href}
                   className={`w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white transition-all duration-300 transform hover:scale-110 ${social.color} hover:text-white hover:border-transparent`}
                   aria-label={social.label}
                 >
                   <social.icon className="w-4 h-4" />
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -138,12 +139,12 @@ const Footer: FC = () => {
             <ul className="space-y-3 inline-block md:block">
               {quickLinks.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-gray-300 hover:text-primary-300 transition-colors duration-200 text-sm"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -155,12 +156,12 @@ const Footer: FC = () => {
             <ul className="space-y-3 inline-block md:block">
               {services.map((service) => (
                 <li key={service.label}>
-                  <a
-                    href={service.href}
+                  <Link
+                    to={service.href}
                     className="text-gray-300 hover:text-primary-300 transition-colors duration-200 text-sm"
                   >
                     {service.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -179,21 +180,21 @@ const Footer: FC = () => {
               </div>
               <div className="flex flex-col md:flex-row items-center md:items-center gap-3">
                 <Phone className="w-4 h-4 text-primary-300 shrink-0" />
-                <a
-                  href="tel:+15551234567"
+                <Link
+                  to="tel:+15551234567"
                   className="text-sm text-gray-300 hover:text-primary-300 transition-colors"
                 >
                   +1 (555) 123-4567
-                </a>
+                </Link>
               </div>
               <div className="flex flex-col md:flex-row items-center md:items-center gap-3">
                 <Mail className="w-4 h-4 text-primary-300 shrink-0" />
-                <a
-                  href="mailto:hello@thebridge.com"
+                <Link
+                  to="mailto:hello@thebridge.com"
                   className="text-sm text-gray-300 hover:text-primary-300 transition-colors"
                 >
                   hello@thebridge.com
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -239,18 +240,18 @@ const Footer: FC = () => {
               spiritual connection.
             </div>
             <div className="flex gap-6 text-sm">
-              <a
-                href="/privacy"
+              <Link
+                to="/privacy"
                 className="text-gray-400 hover:text-primary-300 transition-colors"
               >
                 Privacy Policy
-              </a>
-              <a
-                href="/terms"
+              </Link>
+              <Link
+                to="/terms"
                 className="text-gray-400 hover:text-primary-300 transition-colors"
               >
                 Terms of Service
-              </a>
+              </Link>
             </div>
           </div>
         </div>
