@@ -22,5 +22,6 @@ export { default as Events } from './Events';
 
 // Dashboard pages
 export { default as Overview } from './dashboard/Overview';
+export { default as DashboardUserProfile } from './dashboard/UserProfile';
 export { default as Users } from './dashboard/Users';
 export { default as Settings } from './dashboard/Settings';

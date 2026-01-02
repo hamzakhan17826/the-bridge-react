@@ -72,6 +72,17 @@ const data = {
       ],
     },
     {
+      title: 'Profile',
+      url: '/dashboard/profile',
+      icon: Bot,
+      items: [
+        {
+          title: 'My Profile',
+          url: '/dashboard/profile',
+        },
+      ],
+    },
+    {
       title: 'Reviews',
       url: '/reviews',
       icon: BookOpen,

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Select from 'react-select';
 import { toast } from 'react-toastify';
 import SubmitButton from '../components/ui/SubmitButton';
 import type { Country, City } from '../types/types';
@@ -7,22 +6,20 @@ import { fetchCountries, fetchCities } from '../services/register';
 import {
   fetchUserProfile,
   updateUserProfile,
-  changePassword,
-  getUserIdFromToken,
   type AppUserProfile,
 } from '../services/user-profile';
 import { useNavigate } from 'react-router-dom';
 import { deleteCookie, emitAuthChange } from '../lib/auth';
 import {
-  User,
-  Mail,
-  MapPin,
-  Calendar,
-  Users,
-  Home,
-  Hash,
-  Sparkles,
-} from 'lucide-react';
+  ProfileHeader,
+  ProfilePictureSection,
+  PersonalInfoSection,
+  LocationInfoSection,
+  AddressInfoSection,
+  PasswordChangeSection,
+  PasswordChangeModal,
+} from '../components/profile';
+import { getUserIdFromToken } from '../lib/utils';
 
 type Opt<T = string> = { value: T; label: string };
 
@@ -51,10 +48,6 @@ export default function UserProfile() {
 
   // Password change modal states
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordSubmitting, setPasswordSubmitting] = useState(false);
 
   // Profile picture states
   const [profilePictureFile, setProfilePictureFile] = useState<File | null>(
@@ -75,30 +68,13 @@ export default function UserProfile() {
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [gender, setGender] = useState('');
 
+  // Profile picture change handler
   const handleProfilePictureChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    file: File | null,
+    preview: string | null
   ) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        toast.error('Please select a valid image file.');
-        return;
-      }
-      // Validate file size (max 5MB)
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      if (file.size > maxSize) {
-        toast.error('Image size must be less than 5MB.');
-        return;
-      }
-      setProfilePictureFile(file);
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setProfilePicturePreview(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+    setProfilePictureFile(file);
+    setProfilePicturePreview(preview);
   };
 
   useEffect(() => {
@@ -152,14 +128,7 @@ export default function UserProfile() {
     initSelections();
   }, [profile?.countryId, profile?.cityId, countries]);
 
-  const countryOptions: Opt<number>[] = countries.map((c) => ({
-    value: c.id,
-    label: c.name,
-  }));
-  const cityOptions: Opt<number>[] = cities.map((c) => ({
-    value: c.id,
-    label: c.name,
-  }));
+  // Select options are handled in LocationInfoSection component
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -279,19 +248,7 @@ export default function UserProfile() {
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="mx-auto max-w-4xl">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <Sparkles className="w-4 h-4" />
-              My Profile
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
-              Manage Your Account
-            </h1>
-            <p className="text-gray-600 mt-2">
-              Update your personal information and preferences
-            </p>
-          </div>
+          <ProfileHeader />
 
           <div className="bg-white rounded-3xl shadow-2xl border border-primary-100 p-8 md:p-12">
             {loading && (
@@ -304,336 +261,64 @@ export default function UserProfile() {
             <form onSubmit={onSubmit} className="space-y-8">
               {/* Personal Information */}
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                  <User className="w-5 h-5 text-primary-600" />
-                  Personal Information
-                </h2>
+                <ProfilePictureSection
+                  profile={profile}
+                  profilePictureFile={profilePictureFile}
+                  profilePicturePreview={profilePicturePreview}
+                  onProfilePictureChange={handleProfilePictureChange}
+                />
 
-                {/* Profile Picture */}
-                <div className="space-y-4">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Profile Picture
-                  </label>
-                  <div className="flex items-center gap-6">
-                    <div className="relative">
-                      <img
-                        src={
-                          profilePicturePreview ||
-                          profile?.profilePictureUrl ||
-                          '/images/default-avatar.png'
-                        }
-                        alt="Profile"
-                        className="w-20 h-20 rounded-full object-cover border-4 border-primary-200"
-                      />
-                      <label
-                        htmlFor="profilePicture"
-                        className="absolute bottom-0 right-0 bg-primary-600 text-white p-1 rounded-full cursor-pointer hover:bg-primary-700 transition-colors"
-                      >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                          />
-                        </svg>
-                      </label>
-                    </div>
-                    <div className="flex-1">
-                      <input
-                        id="profilePicture"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleProfilePictureChange}
-                        className="hidden"
-                      />
-                      <p className="text-sm text-gray-600 mb-2">
-                        Upload a new profile picture. Max size: 5MB. Supported
-                        formats: JPG, PNG, GIF.
-                      </p>
-                      {profilePictureFile && (
-                        <p className="text-sm text-green-600">
-                          Selected: {profilePictureFile.name} (
-                          {(profilePictureFile.size / 1024 / 1024).toFixed(2)}{' '}
-                          MB)
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                      First Name
-                    </label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="text"
-                        name="firstName"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                        placeholder="Enter first name"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Last Name
-                    </label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="text"
-                        name="lastName"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                        placeholder="Enter last name"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Username
-                  </label>
-                  <div className="relative">
-                    <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="text"
-                      name="userName"
-                      value={userName}
-                      onChange={(e) => setUserName(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                      placeholder="Enter username"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="email"
-                      name="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                      placeholder="Enter email address"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Date of Birth
-                    </label>
-                    <div className="relative">
-                      <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="date"
-                        name="dateOfBirth"
-                        value={dateOfBirth}
-                        onChange={(e) => setDateOfBirth(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Gender
-                    </label>
-                    <div className="relative">
-                      <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <select
-                        name="gender"
-                        value={gender}
-                        onChange={(e) => setGender(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200 appearance-none"
-                      >
-                        <option value="">Select gender</option>
-                        <option value="M">Male</option>
-                        <option value="F">Female</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
+                <PersonalInfoSection
+                  firstName={firstName}
+                  setFirstName={setFirstName}
+                  lastName={lastName}
+                  setLastName={setLastName}
+                  userName={userName}
+                  setUserName={setUserName}
+                  email={email}
+                  setEmail={setEmail}
+                  dateOfBirth={dateOfBirth}
+                  setDateOfBirth={setDateOfBirth}
+                  gender={gender}
+                  setGender={setGender}
+                />
               </div>
 
               {/* Location Information */}
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-primary-600" />
-                  Location Information
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Country
-                    </label>
-                    <Select<Opt<number>, false>
-                      options={countryOptions}
-                      value={selectedCountry}
-                      onChange={async (opt) => {
-                        setSelectedCountry(opt ?? null);
-                        if (opt?.value) {
-                          const data = await fetchCities(opt.value);
-                          setCities(data);
-                          setSelectedCity(null);
-                        } else {
-                          setCities([]);
-                          setSelectedCity(null);
-                        }
-                      }}
-                      placeholder="Select country..."
-                      classNamePrefix="select"
-                      className="mt-1"
-                      styles={{
-                        control: (base) => ({
-                          ...base,
-                          borderRadius: '0.75rem',
-                          borderColor: '#d1d5db',
-                          '&:hover': { borderColor: '#9333ea' },
-                          '&:focus-within': {
-                            borderColor: '#9333ea',
-                            boxShadow: '0 0 0 3px rgba(147, 51, 234, 0.1)',
-                          },
-                          paddingLeft: '2.5rem',
-                          minHeight: '48px',
-                        }),
-                        placeholder: (base) => ({ ...base, color: '#9ca3af' }),
-                      }}
-                      isClearable
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                      City
-                    </label>
-                    <Select<Opt<number>, false>
-                      options={cityOptions}
-                      value={selectedCity}
-                      onChange={(opt) => setSelectedCity(opt ?? null)}
-                      placeholder={
-                        selectedCountry
-                          ? 'Select city...'
-                          : 'Select country first'
-                      }
-                      classNamePrefix="select"
-                      className="mt-1"
-                      styles={{
-                        control: (base) => ({
-                          ...base,
-                          borderRadius: '0.75rem',
-                          borderColor: '#d1d5db',
-                          '&:hover': { borderColor: '#9333ea' },
-                          '&:focus-within': {
-                            borderColor: '#9333ea',
-                            boxShadow: '0 0 0 3px rgba(147, 51, 234, 0.1)',
-                          },
-                          paddingLeft: '2.5rem',
-                          minHeight: '48px',
-                        }),
-                        placeholder: (base) => ({ ...base, color: '#9ca3af' }),
-                      }}
-                      isDisabled={!selectedCountry}
-                      isClearable
-                    />
-                  </div>
-                </div>
-              </div>
+              <LocationInfoSection
+                countries={countries}
+                cities={cities}
+                selectedCountry={selectedCountry}
+                selectedCity={selectedCity}
+                onCountryChange={async (opt) => {
+                  setSelectedCountry(opt ?? null);
+                  if (opt?.value) {
+                    const data = await fetchCities(opt.value);
+                    setCities(data);
+                    setSelectedCity(null);
+                  } else {
+                    setCities([]);
+                    setSelectedCity(null);
+                  }
+                }}
+                onCityChange={(opt) => setSelectedCity(opt ?? null)}
+                fetchCities={fetchCities}
+              />
 
               {/* Address Information */}
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                  <Home className="w-5 h-5 text-primary-600" />
-                  Address Information
-                </h2>
-                <div className="space-y-6">
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Address Line 1
-                    </label>
-                    <div className="relative">
-                      <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="text"
-                        name="addressLine1"
-                        value={addressLine1}
-                        onChange={(e) => setAddressLine1(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                        placeholder="Enter address line 1"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Address Line 2
-                    </label>
-                    <div className="relative">
-                      <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="text"
-                        name="addressLine2"
-                        value={addressLine2}
-                        onChange={(e) => setAddressLine2(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                        placeholder="Enter address line 2 (optional)"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Postal Code
-                    </label>
-                    <div className="relative">
-                      <Hash className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="text"
-                        name="postalCode"
-                        value={postalCode}
-                        onChange={(e) => setPostalCode(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                        placeholder="Enter postal code"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <AddressInfoSection
+                addressLine1={addressLine1}
+                setAddressLine1={setAddressLine1}
+                addressLine2={addressLine2}
+                setAddressLine2={setAddressLine2}
+                postalCode={postalCode}
+                setPostalCode={setPostalCode}
+              />
 
               {/* Change Password Section */}
-              <div className="pt-6 border-t border-gray-200">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      Change Password
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      Update your account password
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setPasswordModalOpen(true)}
-                    className="px-4 py-2 bg-linear-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white font-medium rounded-xl transition-all duration-200"
-                  >
-                    Change Password
-                  </button>
-                </div>
-              </div>
+              <PasswordChangeSection
+                onOpenModal={() => setPasswordModalOpen(true)}
+              />
 
               <div className="pt-6 border-t border-gray-200">
                 <SubmitButton
@@ -647,116 +332,10 @@ export default function UserProfile() {
       </div>
 
       {/* Password Change Modal */}
-      {passwordModalOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl shadow-2xl border border-primary-100 p-8 w-full max-w-md relative">
-            <div className="absolute -top-4 -left-4 w-8 h-8 bg-primary-200 rounded-full opacity-50"></div>
-            <div className="absolute -bottom-4 -right-4 w-6 h-6 bg-secondary-200 rounded-full opacity-50"></div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-              <Sparkles className="w-6 h-6 text-primary-600" />
-              Change Password
-            </h3>
-            <form
-              onSubmit={async (e) => {
-                e.preventDefault();
-                if (newPassword !== confirmPassword) {
-                  toast.error(
-                    'New password and confirm password do not match.'
-                  );
-                  return;
-                }
-                setPasswordSubmitting(true);
-                const res = await changePassword({
-                  currentPassword,
-                  newPassword,
-                  confirmPassword,
-                });
-                setPasswordSubmitting(false);
-                if (res.success) {
-                  toast.success(
-                    'Password changed successfully! Please log in again.'
-                  );
-                  setPasswordModalOpen(false);
-                  setCurrentPassword('');
-                  setNewPassword('');
-                  setConfirmPassword('');
-                  // Logout
-                  deleteCookie('jwtToken');
-                  deleteCookie('refreshToken');
-                  deleteCookie('userRole');
-                  deleteCookie('auth');
-                  deleteCookie('sidebar_state');
-                  emitAuthChange();
-                  navigate('/login');
-                } else {
-                  toast.error(res.errors?.join(', ') || res.message);
-                }
-              }}
-            >
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Current Password
-                </label>
-                <input
-                  type="password"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                  placeholder="Enter current password"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  New Password
-                </label>
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                  placeholder="Enter new password"
-                  required
-                />
-              </div>
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Confirm New Password
-                </label>
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
-                  placeholder="Confirm new password"
-                  required
-                />
-              </div>
-              <div className="flex justify-end space-x-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setPasswordModalOpen(false);
-                    setCurrentPassword('');
-                    setNewPassword('');
-                    setConfirmPassword('');
-                  }}
-                  className="px-6 py-2 text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={passwordSubmitting}
-                  className="px-6 py-2 bg-linear-to-r from-primary-600 to-secondary-600 text-white rounded-xl hover:from-primary-700 hover:to-secondary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-                >
-                  {passwordSubmitting ? 'Changing...' : 'Change Password'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <PasswordChangeModal
+        isOpen={passwordModalOpen}
+        onClose={() => setPasswordModalOpen(false)}
+      />
     </section>
   );
 }

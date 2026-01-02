@@ -24,6 +24,7 @@ import {
   AboutUs,
   Events,
   Overview,
+  DashboardUserProfile,
   Users,
   Settings,
 } from './pages';
@@ -116,6 +117,7 @@ function App() {
                 }
               >
                 <Route index element={<Overview />} />
+                <Route path="profile" element={<DashboardUserProfile />} />
                 <Route path="users" element={<Users />} />
                 <Route path="settings" element={<Settings />} />
               </Route>

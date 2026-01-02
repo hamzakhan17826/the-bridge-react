@@ -12,6 +12,14 @@ export {
 } from './breadcrumb';
 export { Button } from './button';
 export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from './card';
+export {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
@@ -34,6 +42,7 @@ export {
   DropdownMenuSubContent,
 } from './dropdown-menu';
 export { Input } from './input';
+export { Label } from './label';
 export { Separator } from './separator';
 export {
   Sheet,

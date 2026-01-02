@@ -32,7 +32,7 @@ export default function RefreshToken() {
     const runRefresh = async () => {
       if (canceled) return;
       const ok = await refreshToken();
-      console.log('🔄 [RefreshToken] Refresh attempt result:', ok);
+      // console.log('🔄 [RefreshToken] Refresh attempt result:', ok);
       if (!ok && !canceled) {
         const jwt = getCookie('jwtToken');
         const expired = isJwtExpired(jwt);
@@ -48,7 +48,7 @@ export default function RefreshToken() {
     };
 
     const isLoggedIn = getAuthFlag();
-    console.log('🟢 isLoggedIn: ', isLoggedIn);
+    // console.log('🟢 isLoggedIn: ', isLoggedIn);
     if (isLoggedIn) {
       runRefresh();
     } else {
@@ -69,7 +69,7 @@ export default function RefreshToken() {
     );
 
     return () => {
-      console.log('🧹 [RefreshToken] Cleanup');
+      // console.log('🧹 [RefreshToken] Cleanup');
       canceled = true;
       clearInterval(interval);
     };

@@ -1,7 +1,7 @@
 import { getCookie, setCookie } from './auth';
 
 export async function refreshToken(): Promise<boolean> {
-  console.log('🔄 [RefreshToken] Attempting token refresh...');
+  // console.log('🔄 [RefreshToken] Attempting token refresh...');
   try {
     const apiBase = import.meta.env.VITE_API_BASE_URL;
     const url = `${apiBase}/Account/RefreshToken`;
@@ -14,7 +14,7 @@ export async function refreshToken(): Promise<boolean> {
       body: JSON.stringify(rt ? { refreshToken: rt } : {}),
     });
 
-    console.log('📡 [RefreshToken] Response status:', res.status);
+    // console.log('📡 [RefreshToken] Response status:', res.status);
 
     if (!res.ok) {
       const text = await res.text().catch(() => '');
@@ -23,11 +23,11 @@ export async function refreshToken(): Promise<boolean> {
     }
 
     const data = await res.json().catch(() => ({}));
-    console.log('✅ [RefreshToken] Token refreshed successfully:', {
-      hasJwtToken: !!data.jwtToken,
-      hasRefreshToken: !!data.refreshToken,
-      roles: data.roles,
-    });
+    // console.log('✅ [RefreshToken] Token refreshed successfully:', {
+    //   hasJwtToken: !!data.jwtToken,
+    //   hasRefreshToken: !!data.refreshToken,
+    //   roles: data.roles,
+    // });
 
     if (data.jwtToken) {
       setCookie('auth', '1', { path: '/', sameSite: 'lax' });

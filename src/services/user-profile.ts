@@ -1,5 +1,8 @@
 import api from '../lib/api';
-import { getCookie } from '../lib/auth';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 
 export type AppUserProfile = {
   userId: string;
@@ -31,45 +34,32 @@ export type ProfileResponse<T = unknown> = {
   errors?: string[];
 };
 
-// Attempt to extract userId from JWT payload claims
-export function getUserIdFromToken(): string | null {
-  try {
-    const token = getCookie('jwtToken');
-    if (!token) return null;
-    const parts = token.split('.');
-    if (parts.length < 2) return null;
-    const base64Url = parts[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map(function (c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join('')
-    );
-    const payload = JSON.parse(jsonPayload) as Record<string, unknown>;
-    const possibleKeys = ['userId', 'sub', 'nameid', 'nameId'];
-    for (const key of possibleKeys) {
-      const val = payload[key];
-      if (typeof val === 'string' && val.length > 0) return val;
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
+export type UpdateAppUserProfilePayload = Partial<AppUserProfile>;
 
+export type ChangePasswordPayload = {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+};
+
+// ============================================================================
+// API FUNCTIONS
+// ============================================================================
+
+/**
+ * Fetch user profile data
+ */
 export async function fetchUserProfile(
   userId?: string | null
 ): Promise<ProfileResponse<AppUserProfile>> {
   try {
     const res = await api.get('/Account/AppUserProfile', {
-      // If userId is provided use it; otherwise send null so backend uses token
       params: { userId: userId ?? null },
     });
+
     const data = res.data as AppUserProfile;
-    console.log('Fetched user profile:', data);
+    // console.log('Fetched user profile:', data);
+
     return {
       success: true,
       message: 'Profile loaded successfully.',
@@ -81,10 +71,12 @@ export async function fetchUserProfile(
         data?: { message?: string; errors?: Record<string, string[]> };
       };
     };
+
     const d = err.response?.data;
     const errors = d?.errors
       ? (Object.values(d.errors).flat() as string[])
       : undefined;
+
     return {
       success: false,
       message: d?.message || 'Failed to load profile.',
@@ -93,16 +85,19 @@ export async function fetchUserProfile(
   }
 }
 
-export type UpdateAppUserProfilePayload = Partial<AppUserProfile>;
-
+/**
+ * Update user profile data
+ */
 export async function updateUserProfile(
   formData: FormData
 ): Promise<ProfileResponse> {
   try {
     const res = await api.post('/Account/UpdateAppUserProfile', formData);
     const result = res.data;
+
     const ok =
       res.status === 200 && (result?.result === true || !('result' in result));
+
     return {
       success: ok,
       message:
@@ -116,10 +111,12 @@ export async function updateUserProfile(
         data?: { message?: string; errors?: Record<string, string[]> };
       };
     };
+
     const d = err.response?.data;
     const errors = d?.errors
       ? (Object.values(d.errors).flat() as string[])
       : undefined;
+
     return {
       success: false,
       message: d?.message || 'Could not connect to the server.',
@@ -128,16 +125,19 @@ export async function updateUserProfile(
   }
 }
 
-export async function changePassword(payload: {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}): Promise<ProfileResponse> {
+/**
+ * Change user password
+ */
+export async function changePassword(
+  payload: ChangePasswordPayload
+): Promise<ProfileResponse> {
   try {
     const res = await api.post('/Account/ChangePassword', payload);
     const result = res.data;
+
     const ok =
       res.status === 200 && (result?.result === true || !('result' in result));
+
     return {
       success: ok,
       message:
@@ -151,10 +151,12 @@ export async function changePassword(payload: {
         data?: { message?: string; errors?: Record<string, string[]> };
       };
     };
+
     const d = err.response?.data;
     const errors = d?.errors
       ? (Object.values(d.errors).flat() as string[])
       : undefined;
+
     return {
       success: false,
       message: d?.message || 'Could not connect to the server.',

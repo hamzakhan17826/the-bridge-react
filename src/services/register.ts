@@ -46,7 +46,6 @@ export async function fetchCities(countryId: number): Promise<City[]> {
       // Swagger shows both `id` and `countryId` in query; send both to satisfy server binding
       params: { countryId },
     });
-    console.log('Cities response data:', res.data);
     return res.data as City[];
   } catch (error) {
     console.error('Error fetching cities', error);
