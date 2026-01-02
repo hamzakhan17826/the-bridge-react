@@ -6,8 +6,9 @@ import {
   EventSection,
   MeetTheMediums,
   TestimonialSection,
-  MembershipSection,
+  BooksSection,
   CTASection,
+  MembershipSection,
 } from '../components/sections';
 
 const Home = () => (
@@ -18,6 +19,7 @@ const Home = () => (
     <HeroSection />
     <AboutSection />
     <PodcastSection />
+    <BooksSection />
     <EventSection />
     <MeetTheMediums />
     <TestimonialSection />

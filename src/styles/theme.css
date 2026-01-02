@@ -1,5 +1,4 @@
 @theme {
-  /* Primary Color Palette (Purple Theme) */
   --color-primary-50: #faf5ff;
   --color-primary-100: #f3e8ff;
   --color-primary-200: #e9d5ff;
@@ -12,7 +11,6 @@
   --color-primary-900: #581c87;
   --color-primary-950: #3b0764;
 
-  /* Secondary Color Palette (Blue Theme) */
   --color-secondary-50: #eff6ff;
   --color-secondary-100: #dbeafe;
   --color-secondary-200: #bfdbfe;
@@ -25,7 +23,6 @@
   --color-secondary-900: #1e3a8a;
   --color-secondary-950: #172554;
 
-  /* Accent Color Palette (Cyan Theme) */
   --color-accent-50: #ecfeff;
   --color-accent-100: #cffafe;
   --color-accent-200: #a5f3fc;

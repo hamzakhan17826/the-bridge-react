@@ -47,7 +47,6 @@
     animation: scaleIn 0.4s ease-out;
   }
 
-  /* Gradient Utilities - Purple/Blue Theme */
   .bg-gradient-primary {
     background: linear-gradient(
       135deg,
@@ -72,7 +71,6 @@
     );
   }
 
-  /* Glow Effects - Purple Theme */
   .glow-primary {
     box-shadow: 0 0 20px rgb(130 81 172 / 0.3);
   }

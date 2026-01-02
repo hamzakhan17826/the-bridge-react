@@ -314,7 +314,7 @@ const MediumProfile = () => {
       </Helmet>
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <section className="relative bg-linear-to-br from-primary-900 via-secondary-900 to-indigo-900 text-white">
+        <section className="relative bg-linear-to-br from-primary-900 to-secondary-900  text-white">
           <div className="absolute inset-0 bg-black/20"></div>
           <div className="relative container mx-auto px-6 py-16">
             <div className="flex flex-col lg:flex-row items-center gap-12">

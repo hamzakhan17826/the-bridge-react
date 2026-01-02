@@ -74,7 +74,7 @@ const CallToAction = () => {
   ];
 
   return (
-    <section className="relative py-20 md:py-28 bg-linear-to-br from-purple-50 via-white to-blue-50 overflow-hidden">
+    <section className="relative py-20 md:py-28 bg-linear-to-br from-primary-50 via-white to-secondary-50 overflow-hidden">
       <BackgroundDecorations decorations={backgroundDecorations} />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">

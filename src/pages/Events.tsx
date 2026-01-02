@@ -388,12 +388,10 @@ const Events = () => {
       </section>
 
       {/* Newsletter Signup */}
-      <section className="py-16 bg-linear-to-r from-primary-500 to-secondary-500">
+      <section className="py-16 bg-linear-to-r from-primary-50 to-secondary-50">
         <div className="container mx-auto px-6 text-center">
-          <h3 className="text-2xl md:text-3xl  text-white mb-4">
-            Never Miss an Event
-          </h3>
-          <p className="text-primary-100 mb-8 max-w-2xl mx-auto">
+          <h3 className="text-2xl md:text-3xl mb-4">Never Miss an Event</h3>
+          <p className="mb-8 max-w-2xl mx-auto">
             Subscribe to our newsletter and be the first to know about upcoming
             events, special workshops, and exclusive content.
           </p>
@@ -401,9 +399,9 @@ const Events = () => {
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-500 placeholder-white"
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-gray-500"
             />
-            <button className="px-6 py-3 bg-white text-primary-600 hover:bg-gray-50  rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-500">
+            <button className="px-6 py-3 bg-primary-600 text-white hover:bg-primary-700 rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
               Subscribe
             </button>
           </div>

@@ -15,6 +15,13 @@ import {
   MediumProfile,
   Mediums,
   Podcasts,
+  Reviews,
+  Blogs,
+  BlogPost,
+  BookDetail,
+  Books,
+  Memberships,
+  AboutUs,
   Events,
   Overview,
   Users,
@@ -43,6 +50,13 @@ function App() {
                 <Route path="/events" element={<Events />} />
                 <Route path="/podcasts" element={<Podcasts />} />
                 <Route path="/mediums" element={<Mediums />} />
+                <Route path="/blogs" element={<Blogs />} />
+                <Route path="/blogs/:slug" element={<BlogPost />} />
+                <Route path="/books" element={<Books />} />
+                <Route path="/books/:id" element={<BookDetail />} />
+                <Route path="/membership" element={<Memberships />} />
+                <Route path="/about" element={<AboutUs />} />
+                <Route path="/reviews" element={<Reviews />} />
                 <Route path="/mediums/:slug" element={<MediumProfile />} />
                 <Route
                   path="/register"

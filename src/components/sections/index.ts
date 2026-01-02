@@ -1,5 +1,6 @@
 // Barrel exports for page sections
 export { default as AboutSection } from './AboutSection';
+export { default as BooksSection } from './BooksSection';
 export { default as CTASection } from './CTASection';
 export { default as EventCard } from './EventCard';
 export { default as EventSection } from './EventSection';

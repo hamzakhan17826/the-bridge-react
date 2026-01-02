@@ -47,8 +47,8 @@ const Footer: FC = () => {
   };
 
   const quickLinks = [
-    { label: 'Home', href: '/' },
-    { label: 'About Us', href: '/about' },
+    { label: 'Blogs', href: '/blogs' },
+    { label: 'Reviews', href: '/reviews' },
     { label: 'Mediums', href: '/mediums' },
     { label: 'Events', href: '/events' },
   ];
@@ -85,7 +85,7 @@ const Footer: FC = () => {
   ];
 
   return (
-    <footer className="relative bg-gradient-to-br from-slate-900 via-primary-900 to-slate-900 text-white overflow-hidden">
+    <footer className="relative bg-linear-to-br from-slate-900 via-primary-900 to-slate-900 text-white overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div
@@ -103,7 +103,7 @@ const Footer: FC = () => {
           {/* Brand Section */}
           <div className="lg:col-span-1 text-center md:text-left">
             <div className="flex flex-col md:flex-row items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-linear-to-r from-primary-500 to-secondary-500 flex items-center justify-center">
                 <Heart className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -171,14 +171,14 @@ const Footer: FC = () => {
             <h4 className="text-lg text-white mb-6">Connect With Us</h4>
             <div className="space-y-4">
               <div className="flex flex-col md:flex-row items-center md:items-start gap-3">
-                <MapPin className="w-4 h-4 text-primary-300 mt-0.5 flex-shrink-0" />
+                <MapPin className="w-4 h-4 text-primary-300 mt-0.5 shrink-0" />
                 <div className="text-sm text-center md:text-left">
                   <p className="text-gray-300">123 Spiritual Way</p>
                   <p className="text-gray-300">Metaphysical City, MC 12345</p>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row items-center md:items-center gap-3">
-                <Phone className="w-4 h-4 text-primary-300 flex-shrink-0" />
+                <Phone className="w-4 h-4 text-primary-300 shrink-0" />
                 <a
                   href="tel:+15551234567"
                   className="text-sm text-gray-300 hover:text-primary-300 transition-colors"
@@ -187,7 +187,7 @@ const Footer: FC = () => {
                 </a>
               </div>
               <div className="flex flex-col md:flex-row items-center md:items-center gap-3">
-                <Mail className="w-4 h-4 text-primary-300 flex-shrink-0" />
+                <Mail className="w-4 h-4 text-primary-300 shrink-0" />
                 <a
                   href="mailto:hello@thebridge.com"
                   className="text-sm text-gray-300 hover:text-primary-300 transition-colors"
@@ -220,7 +220,7 @@ const Footer: FC = () => {
               <button
                 onClick={handleSubscribe}
                 disabled={loading}
-                className="px-6 py-3 cursor-pointer bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 cursor-pointer bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Subscribing...' : 'Subscribe'}
               </button>

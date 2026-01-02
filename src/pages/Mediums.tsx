@@ -309,18 +309,16 @@ const Mediums = () => {
 
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <section className="relative bg-linear-to-br from-primary-900 via-secondary-900 to-indigo-900 text-white py-20">
+        <section className="relative bg-linear-to-br from-primary-900 to-secondary-900  text-white py-20">
           <div className="absolute inset-0 bg-black/20"></div>
           <div className="relative container mx-auto px-6 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white font-poppins font-medium text-sm mb-6">
               <Users className="w-4 h-4" />
               Our Mediums
             </div>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-poppins leading-tight mb-4 text-blue-500">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-poppins leading-tight mb-4 text-white">
               Meet Our{' '}
-              <span className="bg-linear-to-r text-primary-500 bg-clip-text">
-                Spiritual{' '}
-              </span>
+              <span className="bg-linear-to-r bg-clip-text">Spiritual </span>
               Guides
             </h1>
             <p className="text-lg md:text-xl text-gray-300 font-lato max-w-3xl mx-auto">
