@@ -82,6 +82,7 @@ export {
 } from './sidebar';
 export { Skeleton } from './skeleton';
 export { default as SubmitButton } from './SubmitButton';
+export { Textarea } from './textarea';
 export { default as BackgroundDecorations } from './BackgroundDecorations';
 export { default as SectionHeader } from './SectionHeader';
 export { default as StatCard } from './StatCard';

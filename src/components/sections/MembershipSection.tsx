@@ -57,7 +57,7 @@ const MembershipSection = () => {
                 </div>
                 <div>
                   <h3 className="text-2xl font-poppins font-semibold text-gray-900">
-                    General Medium
+                    General Sitter
                   </h3>
                   <p className="text-primary-600 font-medium text-sm">
                     Starter Plan

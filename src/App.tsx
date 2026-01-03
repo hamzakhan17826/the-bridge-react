@@ -25,8 +25,10 @@ import {
   Events,
   Overview,
   DashboardUserProfile,
+  DashboardMembership,
   Users,
   Settings,
+  MembershipUpgrade,
 } from './pages';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
@@ -34,6 +36,7 @@ import ScrollToTop from './components/system/ScrollToTop';
 import AppLayout from './components/layouts/AppLayout';
 import { RequireAuth, RedirectIfAuth } from './components/system/RouteGuards';
 import DashboardLayout from './components/layouts/dashboard/DashboardLayout';
+import { BreadcrumbProvider } from '@/components/ui/breadcrumb';
 // import { ThemeProvider } from '@/components/theme-provider';
 
 function App() {
@@ -112,12 +115,19 @@ function App() {
                 path="/dashboard"
                 element={
                   <RequireAuth>
-                    <DashboardLayout />
+                    <BreadcrumbProvider>
+                      <DashboardLayout />
+                    </BreadcrumbProvider>
                   </RequireAuth>
                 }
               >
                 <Route index element={<Overview />} />
                 <Route path="profile" element={<DashboardUserProfile />} />
+                <Route path="membership" element={<DashboardMembership />} />
+                <Route
+                  path="membership/upgrade/:plan"
+                  element={<MembershipUpgrade />}
+                />
                 <Route path="users" element={<Users />} />
                 <Route path="settings" element={<Settings />} />
               </Route>

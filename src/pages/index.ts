@@ -25,3 +25,5 @@ export { default as Overview } from './dashboard/Overview';
 export { default as DashboardUserProfile } from './dashboard/UserProfile';
 export { default as Users } from './dashboard/Users';
 export { default as Settings } from './dashboard/Settings';
+export { default as DashboardMembership } from './dashboard/Membership';
+export { default as MembershipUpgrade } from './dashboard/MembershipUpgrade';

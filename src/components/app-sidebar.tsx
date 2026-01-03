@@ -83,6 +83,17 @@ const data = {
       ],
     },
     {
+      title: 'Membership',
+      url: '/dashboard/membership',
+      icon: Settings2,
+      items: [
+        {
+          title: 'Upgrade Account',
+          url: '/dashboard/membership',
+        },
+      ],
+    },
+    {
       title: 'Reviews',
       url: '/reviews',
       icon: BookOpen,
