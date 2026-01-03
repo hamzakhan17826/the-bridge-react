@@ -82,8 +82,8 @@ export default function Membership() {
             {/* Plan Selection - One per row */}
             <div className="space-y-4">
               {/* General Sitter Row */}
-              <div className="grid grid-cols-12 gap-4 p-4 border-2 rounded-lg items-center">
-                <div className="col-span-3 flex items-center gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border-2 rounded-lg">
+                <div className="md:col-span-3 flex items-center gap-3">
                   <Users className="h-6 w-6 text-muted-foreground" />
                   <div>
                     <div className="font-semibold">General Sitter</div>
@@ -95,9 +95,9 @@ export default function Membership() {
                     </div>
                   </div>
                 </div>
-                <div className="col-span-7">
+                <div className="md:col-span-7 mt-4 md:mt-0">
                   <div className="font-medium mb-2 text-sm">Features:</div>
-                  <div className="grid grid-cols-2 gap-1 text-sm text-muted-foreground">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-sm text-muted-foreground">
                     <div>• Full Replay Library</div>
                     <div>• 10% off ALL events</div>
                     <div>• 10% off ALL private readings</div>
@@ -106,11 +106,12 @@ export default function Membership() {
                     <div>• Select Bridge Library resources</div>
                   </div>
                 </div>
-                <div className="col-span-2 flex justify-end">
+                <div className="md:col-span-2 flex justify-start md:justify-end mt-4 md:mt-0">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => handleUpgrade('General Sitter')}
+                    className="w-full md:w-auto"
                   >
                     Upgrade
                   </Button>
@@ -118,8 +119,8 @@ export default function Membership() {
               </div>
 
               {/* Development Medium Row */}
-              <div className="grid grid-cols-12 gap-4 p-4 border-2 rounded-lg items-center border-primary bg-primary/5">
-                <div className="col-span-3 flex items-center gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border-2 rounded-lg border-primary bg-primary/5">
+                <div className="md:col-span-3 flex items-center gap-3">
                   <BookOpen className="h-6 w-6 text-muted-foreground" />
                   <div>
                     <div className="font-semibold">Development Medium</div>
@@ -131,9 +132,9 @@ export default function Membership() {
                     </div>
                   </div>
                 </div>
-                <div className="col-span-7">
+                <div className="md:col-span-7 mt-4 md:mt-0">
                   <div className="font-medium mb-2 text-sm">Features:</div>
-                  <div className="grid grid-cols-2 gap-1 text-sm text-muted-foreground">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-sm text-muted-foreground">
                     <div>• Everything in General Sitter</div>
                     <div>• 2 free Development Circles/month</div>
                     <div>• Demo eligibility (once verified)</div>
@@ -141,10 +142,10 @@ export default function Membership() {
                     <div>• Development resources in Library</div>
                   </div>
                 </div>
-                <div className="col-span-2 flex justify-end">
+                <div className="md:col-span-2 flex justify-start md:justify-end mt-4 md:mt-0">
                   <Button
                     size="sm"
-                    className="bg-primary text-primary-foreground hover:bg-primary/90"
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 w-full md:w-auto"
                     onClick={() => handleUpgrade('Development Medium')}
                   >
                     Upgrade
@@ -153,8 +154,8 @@ export default function Membership() {
               </div>
 
               {/* Professional Medium Row */}
-              <div className="grid grid-cols-12 gap-4 p-4 border-2 rounded-lg items-center">
-                <div className="col-span-3 flex items-center gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border-2 rounded-lg">
+                <div className="md:col-span-3 flex items-center gap-3">
                   <Crown className="h-6 w-6 text-muted-foreground" />
                   <div>
                     <div className="font-semibold">Professional Medium</div>
@@ -166,9 +167,9 @@ export default function Membership() {
                     </div>
                   </div>
                 </div>
-                <div className="col-span-7">
+                <div className="md:col-span-7 mt-4 md:mt-0">
                   <div className="font-medium mb-2 text-sm">Features:</div>
-                  <div className="grid grid-cols-2 gap-1 text-sm text-muted-foreground">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-sm text-muted-foreground">
                     <div>• Everything in Development Medium</div>
                     <div>• Public Medium Profile Page</div>
                     <div>• Directory listing in "Meet the Mediums"</div>
@@ -178,11 +179,12 @@ export default function Membership() {
                     <div>• Presenter Tools + booking integration</div>
                   </div>
                 </div>
-                <div className="col-span-2 flex justify-end">
+                <div className="md:col-span-2 flex justify-start md:justify-end mt-4 md:mt-0">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => handleUpgrade('Professional Medium')}
+                    className="w-full md:w-auto"
                   >
                     Upgrade
                   </Button>

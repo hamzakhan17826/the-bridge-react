@@ -234,8 +234,9 @@ const Footer: FC = () => {
       <div className="relative z-10 border-t border-white/10 bg-black/20 backdrop-blur-sm">
         <div className="container mx-auto px-6 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-sm text-gray-400">
-              © {year} The Bridge. All rights reserved. Made with{' '}
+            <div className="text-sm text-center md:text-left text-gray-400">
+              © {year} The Bridge. All rights reserved.{' '}
+              <br className="flex md:hidden" /> Made with{' '}
               <Heart className="w-4 h-4 inline text-red-400 mx-1" /> for
               spiritual connection.
             </div>

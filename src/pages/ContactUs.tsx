@@ -70,9 +70,9 @@ const ContactUsPage = () => {
         <div className="flex justify-center">
           <div className="w-full max-w-4xl">
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-              <div className="flex">
-                <div className="w-1/2">
-                  <div className="bg-linear-to-br from-primary-500 to-secondary-500 p-10 text-white h-full">
+              <div className="flex flex-col md:flex-row">
+                <div className="w-full md:w-1/2 order-2 md:order-1">
+                  <div className="bg-linear-to-br from-primary-500 to-secondary-500 p-10 text-white h-full rounded-b-2xl md:rounded-tl-2xl md:rounded-bl-2xl md:rounded-tr-none md:rounded-br-none">
                     <h3 className="mb-6 text-2xl font-bold text-white">
                       Get in touch
                     </h3>
@@ -140,8 +140,8 @@ const ContactUsPage = () => {
                     </div>
                   </div>
                 </div>
-                <div className="w-1/2">
-                  <div className="p-10 border border-gray-200 rounded-tr-2xl rounded-br-2xl">
+                <div className="w-full md:w-1/2 order-1 md:order-2">
+                  <div className="p-10 border border-gray-200 rounded-t-2xl md:rounded-tr-2xl md:rounded-br-2xl md:rounded-tl-none md:rounded-bl-none">
                     <h3 className="mb-6 text-2xl font-bold">
                       Send us a message
                     </h3>
