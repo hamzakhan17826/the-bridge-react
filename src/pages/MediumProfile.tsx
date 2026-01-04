@@ -21,7 +21,6 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
-import { Separator } from '../components/ui/separator';
 
 // Extended Medium Profile interface
 interface MediumProfile {
@@ -31,7 +30,6 @@ interface MediumProfile {
   specialty: string;
   tagline: string;
   bio: string;
-  philosophy: string;
   experience: string;
   experienceYears: number;
   sessionCount: number;
@@ -91,8 +89,6 @@ const mockMediumProfile: MediumProfile = {
   specialty: 'Evidential Medium',
   tagline: 'Bridging hearts through spirit communication',
   bio: 'Sarah Mitchell is a renowned evidential medium with over 15 years of experience connecting people with their loved ones in spirit. Her compassionate approach and dedication to providing clear, specific evidence have touched thousands of lives worldwide.',
-  philosophy:
-    'I believe that mediumship is not just about delivering messages, but about healing hearts and bringing peace to those who grieve. Every reading is an opportunity to demonstrate the continuity of love beyond physical life.',
   experience: '15+ years',
   experienceYears: 15,
   sessionCount: 2500,
@@ -430,15 +426,6 @@ const MediumProfile = () => {
                       {profile.bio}
                     </p>
                   </div>
-                  <Separator />
-                  <div>
-                    <h3 className="text-xl font-semibold text-primary-900 mb-3">
-                      Philosophy
-                    </h3>
-                    <p className="text-gray-700 leading-relaxed">
-                      {profile.philosophy}
-                    </p>
-                  </div>
                 </div>
               </section>
 
@@ -525,23 +512,34 @@ const MediumProfile = () => {
 
               {/* Upcoming Events */}
               <section className="bg-white rounded-2xl shadow-lg p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-3xl font-bold text-gray-900">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0 mb-6">
+                  <div className="md:hidden w-full flex justify-end">
+                    <Button
+                      variant="outline"
+                      className="text-primary-600 border-primary-200 hover:bg-primary-50"
+                    >
+                      View All Events
+                      <ChevronRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-900 text-center md:text-left">
                     Upcoming Events
                   </h2>
-                  <Button
-                    variant="outline"
-                    className="text-primary-600 border-primary-200 hover:bg-primary-50"
-                  >
-                    View All Events
-                    <ChevronRight className="w-4 h-4 ml-2" />
-                  </Button>
+                  <div className="hidden md:block">
+                    <Button
+                      variant="outline"
+                      className="text-primary-600 border-primary-200 hover:bg-primary-50"
+                    >
+                      View All Events
+                      <ChevronRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
                 </div>
                 <div className="space-y-4">
                   {profile.upcomingEvents.slice(0, 3).map((event) => (
                     <div
                       key={event.id}
-                      className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+                      className="flex flex-col md:flex-row relative text-center md:text-left items-center gap-4 p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
                     >
                       <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center shrink-0">
                         <Calendar className="w-6 h-6 text-primary-600" />
@@ -550,7 +548,7 @@ const MediumProfile = () => {
                         <h3 className="font-semibold text-gray-900">
                           {event.title}
                         </h3>
-                        <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
+                        <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-sm text-gray-600 mt-1">
                           <span className="flex items-center gap-1">
                             <Clock className="w-4 h-4" />
                             {event.date} at {event.time}
@@ -565,6 +563,7 @@ const MediumProfile = () => {
                         variant={
                           event.type === 'live' ? 'default' : 'secondary'
                         }
+                        className="absolute top-2 right-2 md:relative"
                       >
                         {event.type}
                       </Badge>
@@ -575,17 +574,28 @@ const MediumProfile = () => {
 
               {/* Video Gallery */}
               <section className="bg-white rounded-2xl shadow-lg p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-3xl font-bold text-gray-900">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0 mb-6">
+                  <div className="md:hidden w-full flex justify-end">
+                    <Button
+                      variant="outline"
+                      className="text-primary-600 border-primary-200 hover:bg-primary-50"
+                    >
+                      View All Videos
+                      <ChevronRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-900 text-center md:text-left">
                     Video Gallery
                   </h2>
-                  <Button
-                    variant="outline"
-                    className="text-primary-600 border-primary-200 hover:bg-primary-50"
-                  >
-                    View All Videos
-                    <ChevronRight className="w-4 h-4 ml-2" />
-                  </Button>
+                  <div className="hidden md:block">
+                    <Button
+                      variant="outline"
+                      className="text-primary-600 border-primary-200 hover:bg-primary-50"
+                    >
+                      View All Videos
+                      <ChevronRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {profile.videos.map((video) => (
@@ -621,17 +631,28 @@ const MediumProfile = () => {
 
               {/* Reviews & Testimonials */}
               <section className="bg-white rounded-2xl shadow-lg p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-3xl font-bold text-gray-900">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0 mb-6">
+                  <div className="md:hidden w-full flex justify-end">
+                    <Button
+                      variant="outline"
+                      className="text-primary-600 border-primary-200 hover:bg-primary-50"
+                    >
+                      View All Reviews
+                      <ChevronRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-900 text-center md:text-left">
                     Reviews & Testimonials
                   </h2>
-                  <Button
-                    variant="outline"
-                    className="text-primary-600 border-primary-200 hover:bg-primary-50"
-                  >
-                    View All Reviews
-                    <ChevronRight className="w-4 h-4 ml-2" />
-                  </Button>
+                  <div className="hidden md:block">
+                    <Button
+                      variant="outline"
+                      className="text-primary-600 border-primary-200 hover:bg-primary-50"
+                    >
+                      View All Reviews
+                      <ChevronRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
                 </div>
                 <div className="space-y-6">
                   {profile.reviews.map((review) => (

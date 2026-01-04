@@ -229,11 +229,11 @@ const BlogPost = () => {
         <section className="py-12 bg-white">
           <div className="container mx-auto px-6">
             <div className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-6 p-6 bg-gray-50 rounded-2xl">
+              <div className="flex flex-col justify-items-center md:justify-items-start md:flex-row items-center gap-6 p-6 bg-gray-50 rounded-2xl">
                 <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center shrink-0">
                   <User className="w-8 h-8 text-primary-600" />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 text-center md:text-left">
                   <h3 className="text-xl font-poppins font-semibold text-gray-900 mb-2">
                     About {blog.author}
                   </h3>

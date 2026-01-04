@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
 import { useBreadcrumb } from '@/components/ui/breadcrumb';
 import {
@@ -21,6 +22,7 @@ import {
   //   ArrowLeft,
 } from 'lucide-react';
 import { toast } from 'react-toastify';
+import api from '../../lib/api';
 
 type MembershipPlan =
   | 'general-sitter'
@@ -93,6 +95,8 @@ export default function MembershipUpgrade() {
     specialty: '',
   });
 
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -122,6 +126,24 @@ export default function MembershipUpgrade() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        toast.error('Please select a valid image file.');
+        return;
+      }
+      const maxSize = 5 * 1024 * 1024;
+      if (file.size > maxSize) {
+        toast.error('Image size must be less than 5MB.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPhotoPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPhotoPreview(null);
+    }
     setFormData((prev) => ({ ...prev, photo: file }));
   };
 
@@ -131,12 +153,11 @@ export default function MembershipUpgrade() {
 
     try {
       // TODO: Implement API call to /Register/Medium
-      // const formDataToSend = new FormData();
-      // Object.entries(formData).forEach(([key, value]) => {
-      //   if (value) formDataToSend.append(key, value);
-      // });
-
-      // await api.post('/Register/Medium', formDataToSend);
+      const formDataToSend = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== null) formDataToSend.append(key, value);
+      });
+      await api.post('/Register/Medium', formDataToSend);
 
       toast.success(
         'Application submitted successfully! Admin will review your application.'
@@ -186,20 +207,32 @@ export default function MembershipUpgrade() {
               <div className="space-y-2">
                 <Label htmlFor="photo">Profile Photo *</Label>
                 <div className="flex items-center gap-4">
-                  <Input
-                    id="photo"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                  <Label
-                    htmlFor="photo"
-                    className="flex items-center gap-2 px-4 py-2 border border-dashed border-muted-foreground/25 rounded-md cursor-pointer hover:bg-muted/50"
-                  >
-                    <Upload className="h-4 w-4" />
-                    {formData.photo ? formData.photo.name : 'Choose Photo'}
-                  </Label>
+                  <Avatar className="h-20 w-20">
+                    <AvatarImage src={photoPreview || undefined} />
+                    <AvatarFallback>Photo</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <Input
+                      id="photo"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                    <Label
+                      htmlFor="photo"
+                      className="flex items-center gap-2 px-4 py-2 border border-dashed border-muted-foreground/25 rounded-md cursor-pointer hover:bg-muted/50"
+                    >
+                      <Upload className="h-4 w-4" />
+                      Choose Photo
+                    </Label>
+                    {formData.photo && (
+                      <p className="text-sm text-green-600 mt-2">
+                        Selected: {formData.photo.name} (
+                        {(formData.photo.size / 1024 / 1024).toFixed(2)} MB)
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -225,7 +258,7 @@ export default function MembershipUpgrade() {
                   id="philosophy"
                   placeholder="Describe your spiritual philosophy..."
                   value={formData.philosophy}
-                  onChange={(e) =>
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                     handleInputChange('philosophy', e.target.value)
                   }
                   required
@@ -239,7 +272,9 @@ export default function MembershipUpgrade() {
                   id="bio"
                   placeholder="Tell us about yourself..."
                   value={formData.bio}
-                  onChange={(e) => handleInputChange('bio', e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                    handleInputChange('bio', e.target.value)
+                  }
                   required
                 />
               </div>
@@ -347,7 +382,7 @@ export default function MembershipUpgrade() {
                   <ul className="space-y-2">
                     {currentPlan.features.map((feature, index) => (
                       <li key={index} className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                        <CheckCircle className="h-4 w-4 text-green-500 shrink-0" />
                         <span className="text-sm">{feature}</span>
                       </li>
                     ))}

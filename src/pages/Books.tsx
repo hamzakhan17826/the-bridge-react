@@ -157,29 +157,30 @@ const Books = () => {
                   placeholder="Search books..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
                 />
               </div>
 
               {/* Category Filter */}
-              <div className="flex items-center gap-4">
-                <Filter className="w-5 h-5 text-gray-500" />
-                <div className="flex gap-2">
+              <div className="relative">
+                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="pl-9 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500/20 appearance-none bg-white"
+                >
                   {categories.map((category) => (
-                    <button
-                      key={category}
-                      onClick={() => setSelectedCategory(category)}
-                      className={`px-4 py-2 rounded-xl font-poppins font-medium transition-all duration-200 ${
-                        selectedCategory === category
-                          ? 'bg-primary-500 text-white shadow-lg'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
+                    <option key={category} value={category}>
                       {category}
-                    </button>
+                    </option>
                   ))}
-                </div>
+                </select>
               </div>
+            </div>
+
+            {/* Results Count */}
+            <div className="mt-4 text-sm text-gray-600">
+              Showing {filteredBooks.length} of {books.length} books
             </div>
           </div>
         </section>

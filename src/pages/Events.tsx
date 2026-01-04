@@ -189,7 +189,7 @@ const Events = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Section */}
-      <section className="bg-linear-to-r from-primary-500 to-secondary-500 text-white py-20">
+      <section className="bg-linear-to-r from-primary-900 to-secondary-900 text-white py-20">
         <div className="container mx-auto px-6">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl  mb-4 text-white">
