@@ -136,21 +136,17 @@ const data = {
       ],
     },
     {
-      title: 'Contact',
-      url: '/contact',
+      title: 'Admin',
+      url: '/dashboard/activity-logs',
       icon: Settings2,
       items: [
         {
-          title: 'Get in Touch',
-          url: '/contact',
+          title: 'Activity Logs',
+          url: '/dashboard/activity-logs',
         },
         {
-          title: 'Support',
-          url: '/contact?type=support',
-        },
-        {
-          title: 'Partnerships',
-          url: '/contact?type=partnerships',
+          title: 'User Management',
+          url: '/dashboard/users',
         },
       ],
     },

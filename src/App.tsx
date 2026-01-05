@@ -29,6 +29,7 @@ import {
   Users,
   Settings,
   MembershipUpgrade,
+  ActivityLogs,
 } from './pages';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
@@ -129,6 +130,7 @@ function App() {
                   element={<MembershipUpgrade />}
                 />
                 <Route path="users" element={<Users />} />
+                <Route path="activity-logs" element={<ActivityLogs />} />
                 <Route path="settings" element={<Settings />} />
               </Route>
             </Routes>

@@ -18,11 +18,12 @@ import {
   SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar';
+import '@/styles/dashboard/dashboard.css';
 // import { ModeToggle } from '@/components/mode-toggle';
 
 export default function Page() {
   return (
-    <SidebarProvider>
+    <SidebarProvider className="dashboard-theme">
       <AppSidebar />
       <DashboardContent />
     </SidebarProvider>

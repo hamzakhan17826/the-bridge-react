@@ -30,10 +30,14 @@ export function getUserIdFromToken(): string | null {
 
     const payload = JSON.parse(jsonPayload) as Record<string, unknown>;
     const possibleKeys = ['userId', 'sub', 'nameid', 'nameId'];
+    console.log(
+      `Extracting userId from JWT payload using keys: ${jsonPayload}`
+    );
 
     for (const key of possibleKeys) {
       const val = payload[key];
       if (typeof val === 'string' && val.length > 0) return val;
+      console.log(`JWT payload key "${key}" not found or invalid`);
     }
 
     return null;
