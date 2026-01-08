@@ -9,8 +9,73 @@ import {
   Crown,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useSubscriptionTiers } from '../../hooks/useMembership';
 
 const MembershipSection = () => {
+  const { data: tiers, isLoading, error } = useSubscriptionTiers();
+
+  // Sort tiers by displayOrder (service already provides fallback data)
+  const sortedTiers =
+    tiers?.sort((a, b) => a.displayOrder - b.displayOrder) || [];
+
+  // Separate paid tiers and free tier
+  const paidTiers = sortedTiers.filter(
+    (tier) => tier.tierCode !== 'FREETIERMEMBERSHIP'
+  );
+  const freeTier = sortedTiers.find(
+    (tier) => tier.tierCode === 'FREETIERMEMBERSHIP'
+  );
+
+  // Helper function to get tier icon
+  const getTierIcon = (tierCode: string) => {
+    switch (tierCode) {
+      case 'GENERALMEMBERSHIP':
+        return Users;
+      case 'DEVELOPMENTMEDIUM':
+        return BookOpen;
+      case 'PROFESSIONALMEDIUM':
+        return Crown;
+      case 'FREETIERMEMBERSHIP':
+        return Star;
+      default:
+        return Users;
+    }
+  };
+
+  // Helper function to get tier subtitle
+  const getTierSubtitle = (tierCode: string) => {
+    switch (tierCode) {
+      case 'GENERALMEMBERSHIP':
+        return 'Starter Plan';
+      case 'DEVELOPMENTMEDIUM':
+        return 'Growth Plan';
+      case 'PROFESSIONALMEDIUM':
+        return 'Professional Plan';
+      default:
+        return 'Plan';
+    }
+  };
+
+  // Helper function to check if tier is most popular
+  const isMostPopular = (tierCode: string) => tierCode === 'DEVELOPMENTMEDIUM';
+
+  if (isLoading && !tiers) {
+    return (
+      <section className="py-20 md:py-28">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading membership plans...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error && (!tiers || tiers.length === 0)) {
+    // Still show dummy data even on error, but could show a warning
+    console.warn('Failed to load membership plans from API, showing demo data');
+  }
   return (
     <section className="relative py-20 md:py-28 bg-linear-to-br from-primary-50 via-white to-secondary-50 overflow-hidden">
       {/* Decorative background elements */}
@@ -24,7 +89,7 @@ const MembershipSection = () => {
         style={{ animationDelay: '2s' }}
       ></div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-6 relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-primary-100 to-secondary-100 text-primary-700 font-poppins font-medium text-sm mb-6">
@@ -42,260 +107,196 @@ const MembershipSection = () => {
             carefully crafted membership tiers.
           </p>
         </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {paidTiers.map((tier, index) => {
+            const IconComponent = getTierIcon(tier.tierCode);
+            const isPopular = isMostPopular(tier.tierCode);
+            const previousTier = paidTiers[index - 1];
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-          {/* General Medium */}
-          <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-primary-100 overflow-hidden">
-            {/* Decorative top border */}
-            <div className="h-1 bg-linear-to-r from-primary-400 to-secondary-400"></div>
+            return (
+              <div
+                key={tier.id}
+                className={`group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border ${
+                  isPopular
+                    ? 'border-primary-300 scale-105'
+                    : 'border-primary-100'
+                } overflow-hidden`}
+              >
+                {/* Popular badge */}
+                {isPopular && (
+                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 z-20">
+                    <div className="bg-linear-to-r from-primary-500 to-secondary-500 text-white px-6 py-2 rounded-full font-poppins font-semibold text-sm shadow-lg">
+                      <Star className="w-4 h-4 inline mr-2" />
+                      Most Popular
+                    </div>
+                  </div>
+                )}
 
-            <div className="p-8">
-              {/* Icon and title */}
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-linear-to-r from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
-                  <Users className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-poppins font-semibold text-gray-900">
-                    General Sitter
-                  </h3>
-                  <p className="text-primary-600 font-medium text-sm">
-                    Starter Plan
+                {/* Decorative top border */}
+                <div
+                  className={`h-1 bg-linear-to-r ${
+                    isPopular
+                      ? 'from-primary-500 to-secondary-500'
+                      : 'from-primary-400 to-secondary-400'
+                  }`}
+                ></div>
+
+                <div className={`p-8 ${isPopular ? 'pt-12' : ''}`}>
+                  {/* Icon and title */}
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 bg-linear-to-r from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
+                      <IconComponent className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-poppins font-semibold text-gray-900">
+                        {tier.tierName}
+                      </h3>
+                      <p className="text-primary-600 font-medium text-sm mb-0">
+                        {getTierSubtitle(tier.tierCode)}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-gray-600 font-lato leading-relaxed mb-6">
+                    {tier.description}
                   </p>
+
+                  {/* Pricing */}
+                  <div className="flex items-baseline gap-2 mb-8">
+                    <span className="text-4xl font-poppins font-bold text-gray-900">
+                      ${tier.basePrice}
+                    </span>
+                    <span className="text-lg text-gray-500 font-lato">
+                      /month
+                    </span>
+                  </div>
+
+                  {/* CTA Button */}
+                  <button
+                    className={`w-full group mb-8 inline-flex items-center justify-center gap-3 px-6 py-4 font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                      isPopular
+                        ? 'bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white focus:ring-primary-400'
+                        : 'bg-gray-800 hover:bg-gray-900 text-white focus:ring-gray-400'
+                    }`}
+                  >
+                    <span>
+                      {tier.tierCode === 'GENERALMEMBERSHIP'
+                        ? 'Join Now'
+                        : tier.tierCode === 'DEVELOPMENTMEDIUM'
+                          ? 'Start Growing'
+                          : 'Join Now'}
+                    </span>
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </button>
+
+                  {/* Features */}
+                  <div>
+                    <h6 className="uppercase tracking-wide text-sm text-gray-600 font-poppins font-bold mb-4">
+                      {previousTier
+                        ? `Everything in ${previousTier.tierName}, plus:`
+                        : "What's Included:"}
+                    </h6>
+                    <ul className="space-y-3">
+                      {tier.features
+                        .sort((a, b) => a.displayOrder - b.displayOrder)
+                        .map((feature) => (
+                          <li
+                            key={feature.id}
+                            className="flex items-start gap-3 text-gray-700"
+                          >
+                            <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
+                            <span className="font-lato">{feature.name}</span>
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
-
-              {/* Description */}
-              <p className="text-gray-600 font-lato leading-relaxed mb-6">
-                For sitters & spiritual seekers looking for insight, healing,
-                and meaningful connection
-              </p>
-
-              {/* Pricing */}
-              <div className="flex items-baseline gap-2 mb-8">
-                <span className="text-4xl font-poppins font-bold text-gray-900">
-                  $10
-                </span>
-                <span className="text-lg text-gray-500 font-lato">/month</span>
-              </div>
-
-              {/* CTA Button */}
-              <button className="w-full group mb-8 inline-flex items-center justify-center gap-3 px-6 py-4 bg-linear-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
-                <span>Join Now</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-
-              {/* Features */}
-              <div>
-                <h6 className="uppercase tracking-wide text-sm text-gray-600 font-poppins font-bold mb-4">
-                  What's Included:
-                </h6>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">Full Replay Library</span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">10% off ALL events</span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">
-                      10% off ALL private readings
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">Early registration access</span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">Monthly newsletter</span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">
-                      Select Bridge Library resources
-                    </span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* Development Medium - Popular */}
-          <div className="group relative bg-white rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-primary-300 overflow-hidden scale-105">
-            {/* Popular badge */}
-            <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 z-20">
-              <div className="bg-linear-to-r from-primary-500 to-secondary-500 text-white px-6 py-2 rounded-full font-poppins font-semibold text-sm shadow-lg">
-                <Star className="w-4 h-4 inline mr-2" />
-                Most Popular
-              </div>
-            </div>
-
-            {/* Decorative top border */}
-            <div className="h-1 bg-linear-to-r from-primary-500 to-secondary-500"></div>
-
-            <div className="p-8 pt-12">
-              {/* Icon and title */}
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-linear-to-r from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
-                  <BookOpen className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-poppins font-semibold text-gray-900">
-                    Development Medium
-                  </h3>
-                  <p className="text-primary-600 font-medium text-sm">
-                    Growth Plan
-                  </p>
-                </div>
-              </div>
-
-              {/* Description */}
-              <p className="text-gray-600 font-lato leading-relaxed mb-6">
-                For developing mediums seeking structure, guided practice,
-                confidence, and professional growth
-              </p>
-
-              {/* Pricing */}
-              <div className="flex items-baseline gap-2 mb-8">
-                <span className="text-4xl font-poppins font-bold text-gray-900">
-                  $19
-                </span>
-                <span className="text-lg text-gray-500 font-lato">/month</span>
-              </div>
-
-              {/* CTA Button */}
-              <button className="w-full group mb-8 inline-flex items-center justify-center gap-3 px-6 py-4 bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2">
-                <span>Start Growing</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-
-              {/* Features */}
-              <div>
-                <h6 className="uppercase tracking-wide text-sm text-gray-600 font-poppins font-bold mb-4">
-                  Everything in General, plus:
-                </h6>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">
-                      2 free Development Circles/month
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">
-                      Demo eligibility (once verified)
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">
-                      10% off additional circles/workshops
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">
-                      Development resources in Library
-                    </span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* Professional Medium */}
-          <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-primary-100 overflow-hidden">
-            {/* Decorative top border */}
-            <div className="h-1 bg-linear-to-r from-primary-400 to-secondary-400"></div>
-
-            <div className="p-8">
-              {/* Icon and title */}
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-linear-to-r from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
-                  <Crown className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-poppins font-semibold text-gray-900">
-                    Professional Medium
-                  </h3>
-                  <p className="text-primary-600 font-medium text-sm">
-                    Professional Plan
-                  </p>
-                </div>
-              </div>
-
-              {/* Description */}
-              <p className="text-gray-600 font-lato leading-relaxed mb-6">
-                For active, serving mediums ready for public visibility,
-                professional support, and aligned opportunities
-              </p>
-
-              {/* Pricing */}
-              <div className="flex items-baseline gap-2 mb-8">
-                <span className="text-4xl font-poppins font-bold text-gray-900">
-                  $29
-                </span>
-                <span className="text-lg text-gray-500 font-lato">/month</span>
-              </div>
-
-              {/* CTA Button */}
-              <button className="w-full group mb-8 inline-flex items-center justify-center gap-3 px-6 py-4 bg-linear-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
-                <span>Join Now</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-
-              {/* Features */}
-              <div>
-                <h6 className="uppercase tracking-wide text-sm text-gray-600 font-poppins font-bold mb-4">
-                  Everything in Development, plus:
-                </h6>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">
-                      Public Medium Profile Page
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">
-                      Directory listing in "Meet the Mediums"
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">
-                      Unlimited demonstration eligibility
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">
-                      Charity reading requirement
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">
-                      Full Bridge Library access
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                    <span className="font-lato">
-                      Presenter Tools + booking integration
-                    </span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
+
+        {/* Free Tier Section */}
+        {freeTier && (
+          <div className="mt-16 max-w-7xl mx-auto">
+            <div className="bg-linear-to-r from-emerald-50 via-teal-50 to-cyan-50 rounded-3xl p-8 md:p-12 border border-emerald-200 shadow-xl">
+              <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+                {/* Free Badge */}
+                <div className="flex-shrink-0">
+                  <div className="relative">
+                    <div className="bg-linear-to-r from-emerald-500 to-teal-500 text-white px-6 py-3 rounded-full font-poppins font-bold text-lg shadow-lg">
+                      <Sparkles className="w-5 h-5 inline mr-2" />
+                      FREE TIER
+                    </div>
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center">
+                      <Star className="w-3 h-3 text-white fill-current" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 text-center lg:text-left">
+                  <div className="flex items-center justify-center lg:justify-start gap-4 mb-4">
+                    <div className="w-16 h-16 bg-linear-to-r from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg">
+                      <Star className="w-8 h-8 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-3xl md:text-4xl font-poppins font-bold text-gray-900 mb-2">
+                        {freeTier.tierName}
+                      </h3>
+                      <p className="text-emerald-600 font-semibold text-lg">
+                        Start Your Spiritual Journey Today
+                      </p>
+                    </div>
+                  </div>
+
+                  <p className="text-gray-600 font-lato text-lg leading-relaxed mb-6 max-w-2xl">
+                    {freeTier.description} Experience our community with no
+                    commitment required.
+                  </p>
+
+                  {/* Features */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    {freeTier.features
+                      .sort((a, b) => a.displayOrder - b.displayOrder)
+                      .slice(0, 4) // Show only first 4 features to keep it clean
+                      .map((feature) => (
+                        <div
+                          key={feature.id}
+                          className="flex items-center gap-3 text-gray-700"
+                        >
+                          <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0" />
+                          <span className="font-lato">{feature.name}</span>
+                        </div>
+                      ))}
+                  </div>
+
+                  {/* CTA Button */}
+                  <button className="inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2">
+                    <span>Get Started Free</span>
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+
+                {/* Decorative Elements */}
+                <div className="flex-shrink-0 hidden lg:block">
+                  <div className="relative">
+                    <div className="w-32 h-32 bg-linear-to-r from-emerald-200 to-teal-200 rounded-full opacity-30 animate-pulse"></div>
+                    <div
+                      className="absolute inset-4 bg-linear-to-r from-emerald-300 to-teal-300 rounded-full opacity-50 animate-pulse"
+                      style={{ animationDelay: '0.5s' }}
+                    ></div>
+                    <div
+                      className="absolute inset-8 bg-linear-to-r from-emerald-400 to-teal-400 rounded-full opacity-70 animate-pulse"
+                      style={{ animationDelay: '1s' }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Bottom CTA */}
         <div className="text-center mt-16">

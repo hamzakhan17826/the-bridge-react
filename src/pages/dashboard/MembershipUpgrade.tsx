@@ -21,67 +21,39 @@ import {
   Upload,
   //   ArrowLeft,
 } from 'lucide-react';
+import { useRegisterMedium } from '../../hooks/useMediumRegistration';
+import { useSubscriptionTiers } from '../../hooks/useMembership';
 import { toast } from 'react-toastify';
-import api from '../../lib/api';
-
-type MembershipPlan =
-  | 'general-sitter'
-  | 'development-medium'
-  | 'professional-medium';
-
-interface PlanDetails {
-  name: string;
-  price: string;
-  icon: React.ComponentType<{ className?: string }>;
-  features: string[];
-}
-
-const planDetails: Record<MembershipPlan, PlanDetails> = {
-  'general-sitter': {
-    name: 'General Sitter',
-    price: '$10/month',
-    icon: Users,
-    features: [
-      'Full Replay Library',
-      '10% off ALL events',
-      '10% off ALL private readings',
-      'Early registration access',
-      'Monthly newsletter',
-      'Select Bridge Library resources',
-    ],
-  },
-  'development-medium': {
-    name: 'Development Medium',
-    price: '$19/month',
-    icon: BookOpen,
-    features: [
-      'Everything in General Sitter',
-      '2 free Development Circles/month',
-      'Demo eligibility (once verified)',
-      '10% off additional circles/workshops',
-      'Development resources in Library',
-    ],
-  },
-  'professional-medium': {
-    name: 'Professional Medium',
-    price: '$29/month',
-    icon: Crown,
-    features: [
-      'Everything in Development Medium',
-      'Public Medium Profile Page',
-      'Directory listing in "Meet the Mediums"',
-      'Unlimited demonstration eligibility',
-      'Charity reading requirement',
-      'Full Bridge Library access',
-      'Presenter Tools + booking integration',
-    ],
-  },
-};
 
 export default function MembershipUpgrade() {
   const { plan } = useParams<{ plan: string }>();
   const navigate = useNavigate();
   const { setItems } = useBreadcrumb();
+
+  // React Query hooks
+  const { data: tiers = [], isLoading: tiersLoading } = useSubscriptionTiers();
+  const registerMediumMutation = useRegisterMedium();
+
+  // Find selected tier based on plan parameter
+  const selectedTier = tiers.find(
+    (tier) => tier.tierCode.toLowerCase() === plan
+  );
+
+  // Helper function to get tier icon
+  const getTierIcon = (tierCode: string) => {
+    switch (tierCode) {
+      case 'GENERALMEMBERSHIP':
+        return Users;
+      case 'DEVELOPMENTMEDIUM':
+        return BookOpen;
+      case 'PROFESSIONALMEDIUM':
+        return Crown;
+      case 'FREETIERMEMBERSHIP':
+        return Users; // Default for free tier
+      default:
+        return Users;
+    }
+  };
 
   const [formData, setFormData] = useState({
     photo: null as File | null,
@@ -97,28 +69,52 @@ export default function MembershipUpgrade() {
 
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   useEffect(() => {
-    if (!plan || !planDetails[plan as MembershipPlan]) {
+    if (!plan) {
       navigate('/dashboard/membership');
       return;
     }
 
-    const planDetail = planDetails[plan as MembershipPlan];
-    setItems([
-      { label: 'Dashboard', href: '/dashboard' },
-      { label: 'Membership', href: '/dashboard/membership' },
-      { label: `Upgrade to ${planDetail.name}` },
-    ]);
-  }, [plan, setItems, navigate]);
+    // If tiers are loaded but selected tier not found
+    if (tiers.length > 0 && !selectedTier) {
+      navigate('/dashboard/membership');
+      return;
+    }
 
-  if (!plan || !planDetails[plan as MembershipPlan]) {
+    if (selectedTier) {
+      const isFree = selectedTier.tierCode === 'FREETIERMEMBERSHIP';
+      setItems([
+        { label: 'Dashboard', href: '/dashboard' },
+        { label: 'Membership', href: '/dashboard/membership' },
+        {
+          label: isFree
+            ? `Get Started with ${selectedTier.tierName}`
+            : `Upgrade to ${selectedTier.tierName}`,
+        },
+      ]);
+    }
+  }, [plan, selectedTier, tiers, setItems, navigate]);
+
+  if (!plan) {
     return null;
   }
 
-  const currentPlan = planDetails[plan as MembershipPlan];
-  const IconComponent = currentPlan.icon;
+  if (tiersLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="text-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading plan details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!selectedTier) {
+    return null;
+  }
+
+  const IconComponent = getTierIcon(selectedTier.tierCode);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -149,26 +145,12 @@ export default function MembershipUpgrade() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
-    try {
-      // TODO: Implement API call to /Register/Medium
-      const formDataToSend = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        if (value !== null) formDataToSend.append(key, value);
-      });
-      await api.post('/Register/Medium', formDataToSend);
-
-      toast.success(
-        'Application submitted successfully! Admin will review your application.'
-      );
-      navigate('/dashboard/membership');
-    } catch (error) {
-      console.error('Failed to submit application:', error);
-      toast.error('Failed to submit application. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    registerMediumMutation.mutate(formData, {
+      onSuccess: () => {
+        navigate('/dashboard/membership');
+      },
+    });
   };
 
   return (
@@ -184,9 +166,15 @@ export default function MembershipUpgrade() {
           Back to Membership
         </Button> */}
         <div>
-          <h1 className="text-3xl font-bold">Upgrade to {currentPlan.name}</h1>
+          <h1 className="text-3xl font-bold">
+            {selectedTier.tierCode === 'FREETIERMEMBERSHIP'
+              ? `Get Started with ${selectedTier.tierName}`
+              : `Upgrade to ${selectedTier.tierName}`}
+          </h1>
           <p className="text-muted-foreground">
-            Complete your application for admin approval
+            {selectedTier.tierCode === 'FREETIERMEMBERSHIP'
+              ? 'Complete your profile to start your spiritual journey'
+              : 'Complete your application for admin approval'}
           </p>
         </div>
       </div>
@@ -197,8 +185,9 @@ export default function MembershipUpgrade() {
           <CardHeader>
             <CardTitle>Application Form</CardTitle>
             <CardDescription>
-              Please fill out all required information. Your application will be
-              reviewed by our admin team.
+              {selectedTier.tierCode === 'FREETIERMEMBERSHIP'
+                ? 'Please fill out your profile information to get started with your spiritual journey.'
+                : 'Please fill out all required information. Your application will be reviewed by our admin team.'}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -351,9 +340,13 @@ export default function MembershipUpgrade() {
               <Button
                 type="submit"
                 className="w-full bg-secondary-foreground text-primary-foreground hover:bg-secondary-foreground/90"
-                disabled={isSubmitting}
+                disabled={registerMediumMutation.isPending}
               >
-                {isSubmitting ? 'Submitting...' : 'Submit Application'}
+                {registerMediumMutation.isPending
+                  ? 'Submitting...'
+                  : selectedTier.tierCode === 'FREETIERMEMBERSHIP'
+                    ? 'Create Profile'
+                    : 'Submit Application'}
               </Button>
             </form>
           </CardContent>
@@ -368,9 +361,9 @@ export default function MembershipUpgrade() {
                   <IconComponent className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <CardTitle>{currentPlan.name}</CardTitle>
+                  <CardTitle>{selectedTier.tierName}</CardTitle>
                   <CardDescription className="text-2xl font-bold text-primary">
-                    {currentPlan.price}
+                    ${selectedTier.basePrice}/month
                   </CardDescription>
                 </div>
               </div>
@@ -380,32 +373,54 @@ export default function MembershipUpgrade() {
                 <div>
                   <h4 className="font-semibold mb-3">What's Included:</h4>
                   <ul className="space-y-2">
-                    {currentPlan.features.map((feature, index) => (
-                      <li key={index} className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500 shrink-0" />
-                        <span className="text-sm">{feature}</span>
-                      </li>
-                    ))}
+                    {selectedTier.features
+                      .sort((a, b) => a.displayOrder - b.displayOrder)
+                      .map((feature) => (
+                        <li
+                          key={feature.id}
+                          className="flex items-center gap-2"
+                        >
+                          <CheckCircle className="h-4 w-4 text-green-500 shrink-0" />
+                          <span className="text-sm">{feature.name}</span>
+                        </li>
+                      ))}
                   </ul>
                 </div>
 
                 <div className="pt-4 border-t">
                   <div className="text-sm text-muted-foreground space-y-2">
                     <p>
-                      <strong>Application Process:</strong>
+                      <strong>
+                        {selectedTier.tierCode === 'FREETIERMEMBERSHIP'
+                          ? 'Getting Started:'
+                          : 'Application Process:'}
+                      </strong>
                     </p>
                     <ul className="list-disc list-inside space-y-1 ml-4">
-                      <li>
-                        Submit your application with all required information
-                      </li>
-                      <li>
-                        Admin team will review your application (2-3 business
-                        days)
-                      </li>
-                      <li>
-                        Once approved, you'll receive access to your new plan
-                      </li>
-                      <li>Payment will be processed upon approval</li>
+                      {selectedTier.tierCode === 'FREETIERMEMBERSHIP' ? (
+                        <>
+                          <li>Complete your profile information</li>
+                          <li>Your profile will be created immediately</li>
+                          <li>Start exploring our community and resources</li>
+                          <li>Access all free tier features right away</li>
+                        </>
+                      ) : (
+                        <>
+                          <li>
+                            Submit your application with all required
+                            information
+                          </li>
+                          <li>
+                            Admin team will review your application (2-3
+                            business days)
+                          </li>
+                          <li>
+                            Once approved, you'll receive access to your new
+                            plan
+                          </li>
+                          <li>Payment will be processed upon approval</li>
+                        </>
+                      )}
                     </ul>
                   </div>
                 </div>

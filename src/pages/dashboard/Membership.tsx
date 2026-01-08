@@ -8,22 +8,21 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Users, BookOpen, Crown, User } from 'lucide-react';
-import { useAuthStore } from '@/stores/authStore';
 import { useBreadcrumb } from '@/components/ui/breadcrumb';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-type MembershipPlan =
-  | 'Free'
-  | 'General Sitter'
-  | 'Development Medium'
-  | 'Professional Medium';
+import { useSubscriptionTiers } from '../../hooks/useMembership';
 
 export default function Membership() {
-  const { user } = useAuthStore();
   const { setItems } = useBreadcrumb();
   const navigate = useNavigate();
-  const currentPlan: MembershipPlan = user ? 'Free' : 'Free'; // Default to Free for logged-in users
+
+  // React Query hook for data fetching
+  const {
+    data: tiers = [],
+    isLoading: tiersLoading,
+    error: tiersError,
+  } = useSubscriptionTiers();
 
   useEffect(() => {
     setItems([
@@ -32,10 +31,25 @@ export default function Membership() {
     ]);
   }, [setItems]);
 
-  const handleUpgrade = (plan: MembershipPlan) => {
-    navigate(
-      `/dashboard/membership/upgrade/${plan.toLowerCase().replace(' ', '-')}`
-    );
+  const handleUpgrade = (tierCode: string) => {
+    // Navigate to upgrade page with tier code
+    navigate(`/dashboard/membership/upgrade/${tierCode.toLowerCase()}`);
+  };
+
+  // Helper function to get tier icon
+  const getTierIcon = (tierCode: string) => {
+    switch (tierCode) {
+      case 'FREETIERMEMBERSHIP':
+        return User;
+      case 'GENERALMEMBERSHIP':
+        return Users;
+      case 'DEVELOPMENTMEDIUM':
+        return BookOpen;
+      case 'PROFESSIONALMEDIUM':
+        return Crown;
+      default:
+        return Users;
+    }
   };
 
   return (
@@ -43,7 +57,8 @@ export default function Membership() {
       <div>
         <h1 className="text-3xl font-bold">Membership Plans</h1>
         <p className="text-muted-foreground">
-          Upgrade your account to unlock more features and benefits.
+          Choose the perfect membership plan for your spiritual journey. All
+          plans include access to our community and basic features.
         </p>
       </div>
 
@@ -56,323 +71,155 @@ export default function Membership() {
             </div>
             <div>
               <CardTitle className="flex items-center gap-2">
-                Your Current Plan
+                Membership Plans
                 <Badge
                   variant="secondary"
                   className="bg-primary/20 text-primary"
                 >
-                  {currentPlan}
+                  Choose Your Plan
                 </Badge>
               </CardTitle>
               <CardDescription className="mb-0">
-                {currentPlan === 'Free'
-                  ? 'You are registered as a free user. Upgrade to access premium features.'
-                  : 'Enjoy your premium benefits!'}
+                Select a membership plan that best fits your spiritual journey
+                and unlock premium features.
               </CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Choose your membership plan to unlock premium features and
-              benefits.
-            </p>
-
-            {/* Plan Selection - One per row */}
-            <div className="space-y-4">
-              {/* General Sitter Row */}
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border-2 rounded-lg">
-                <div className="md:col-span-3 flex items-center gap-3">
-                  <Users className="h-6 w-6 text-muted-foreground" />
-                  <div>
-                    <div className="font-semibold">General Sitter</div>
-                    <div className="text-2xl font-bold">
-                      $10<span className="text-sm font-normal">/month</span>
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      Starter Plan
-                    </div>
-                  </div>
-                </div>
-                <div className="md:col-span-7 mt-4 md:mt-0">
-                  <div className="font-medium mb-2 text-sm">Features:</div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-sm text-muted-foreground">
-                    <div>• Full Replay Library</div>
-                    <div>• 10% off ALL events</div>
-                    <div>• 10% off ALL private readings</div>
-                    <div>• Early registration access</div>
-                    <div>• Monthly newsletter</div>
-                    <div>• Select Bridge Library resources</div>
-                  </div>
-                </div>
-                <div className="md:col-span-2 flex justify-start md:justify-end mt-4 md:mt-0">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleUpgrade('General Sitter')}
-                    className="w-full md:w-auto"
-                  >
-                    Upgrade
-                  </Button>
-                </div>
+            {/* Plan Selection - Dynamic from API */}
+            {tiersLoading ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading membership plans...</p>
               </div>
-
-              {/* Development Medium Row */}
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border-2 rounded-lg border-primary bg-primary/5">
-                <div className="md:col-span-3 flex items-center gap-3">
-                  <BookOpen className="h-6 w-6 text-muted-foreground" />
-                  <div>
-                    <div className="font-semibold">Development Medium</div>
-                    <div className="text-2xl font-bold">
-                      $19<span className="text-sm font-normal">/month</span>
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      Growth Plan
-                    </div>
-                  </div>
+            ) : tiersError ? (
+              <div className="text-center py-8">
+                <div className="text-red-500 mb-4">
+                  <Crown className="h-8 w-8 mx-auto mb-2" />
+                  <p className="font-semibold">Failed to load plans</p>
                 </div>
-                <div className="md:col-span-7 mt-4 md:mt-0">
-                  <div className="font-medium mb-2 text-sm">Features:</div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-sm text-muted-foreground">
-                    <div>• Everything in General Sitter</div>
-                    <div>• 2 free Development Circles/month</div>
-                    <div>• Demo eligibility (once verified)</div>
-                    <div>• 10% off additional circles/workshops</div>
-                    <div>• Development resources in Library</div>
-                  </div>
-                </div>
-                <div className="md:col-span-2 flex justify-start md:justify-end mt-4 md:mt-0">
-                  <Button
-                    size="sm"
-                    className="bg-primary text-primary-foreground hover:bg-primary/90 w-full md:w-auto"
-                    onClick={() => handleUpgrade('Development Medium')}
-                  >
-                    Upgrade
-                  </Button>
-                </div>
+                <p className="text-gray-600 text-sm">
+                  Unable to load membership plans. Please try again later.
+                </p>
               </div>
+            ) : (
+              <div className="space-y-4">
+                {tiers
+                  .sort((a, b) => a.displayOrder - b.displayOrder)
+                  .map((tier) => {
+                    const IconComponent = getTierIcon(tier.tierCode);
+                    const isPopular = tier.tierCode === 'DEVELOPMENTMEDIUM';
+                    const isFree = tier.tierCode === 'FREETIERMEMBERSHIP';
 
-              {/* Professional Medium Row */}
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border-2 rounded-lg">
-                <div className="md:col-span-3 flex items-center gap-3">
-                  <Crown className="h-6 w-6 text-muted-foreground" />
-                  <div>
-                    <div className="font-semibold">Professional Medium</div>
-                    <div className="text-2xl font-bold">
-                      $29<span className="text-sm font-normal">/month</span>
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      Professional Plan
-                    </div>
-                  </div>
-                </div>
-                <div className="md:col-span-7 mt-4 md:mt-0">
-                  <div className="font-medium mb-2 text-sm">Features:</div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-sm text-muted-foreground">
-                    <div>• Everything in Development Medium</div>
-                    <div>• Public Medium Profile Page</div>
-                    <div>• Directory listing in "Meet the Mediums"</div>
-                    <div>• Unlimited demonstration eligibility</div>
-                    <div>• Charity reading requirement</div>
-                    <div>• Full Bridge Library access</div>
-                    <div>• Presenter Tools + booking integration</div>
-                  </div>
-                </div>
-                <div className="md:col-span-2 flex justify-start md:justify-end mt-4 md:mt-0">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleUpgrade('Professional Medium')}
-                    className="w-full md:w-auto"
-                  >
-                    Upgrade
-                  </Button>
-                </div>
+                    return (
+                      <div
+                        key={tier.id}
+                        className={`grid grid-cols-1 md:grid-cols-12 gap-4 p-4 rounded-lg transition-all duration-200 hover:shadow-md ${
+                          isPopular
+                            ? 'border border-primary/20'
+                            : isFree
+                              ? 'border-emerald-200 bg-emerald-50/50'
+                              : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="md:col-span-3 flex items-center gap-3">
+                          <IconComponent
+                            className={`h-6 w-6 ${
+                              isFree
+                                ? 'text-emerald-600'
+                                : 'text-muted-foreground'
+                            }`}
+                          />
+                          <div>
+                            <div className="font-semibold flex items-center gap-2">
+                              {tier.tierName}
+                              {isPopular && (
+                                <Badge
+                                  variant="secondary"
+                                  className="text-xs bg-primary text-primary-foreground"
+                                >
+                                  Most Popular
+                                </Badge>
+                              )}
+                              {isFree && (
+                                <Badge
+                                  variant="outline"
+                                  className="text-xs border-emerald-300 text-emerald-700"
+                                >
+                                  Free
+                                </Badge>
+                              )}
+                            </div>
+                            <div className="text-2xl font-bold">
+                              ${tier.basePrice}
+                              <span className="text-sm font-normal text-muted-foreground">
+                                {tier.basePrice === 0 ? '' : '/month'}
+                              </span>
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              {tier.tierCode === 'GENERALMEMBERSHIP'
+                                ? 'Starter Plan'
+                                : tier.tierCode === 'DEVELOPMENTMEDIUM'
+                                  ? 'Growth Plan'
+                                  : tier.tierCode === 'PROFESSIONALMEDIUM'
+                                    ? 'Professional Plan'
+                                    : 'Free Plan'}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="md:col-span-7 mt-4 md:mt-0">
+                          <div className="font-medium mb-2 text-sm">
+                            Features:
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-sm text-muted-foreground">
+                            {tier.features.slice(0, 6).map((feature) => (
+                              <div
+                                key={feature.id}
+                                className="flex items-start gap-1"
+                              >
+                                <span className="text-green-500 mt-1">•</span>
+                                <span>{feature.name}</span>
+                              </div>
+                            ))}
+                            {tier.features.length > 6 && (
+                              <div className="text-xs text-muted-foreground italic">
+                                +{tier.features.length - 6} more features
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="md:col-span-2 flex justify-start md:justify-end mt-4 md:mt-0">
+                          <Button
+                            size="sm"
+                            variant={
+                              isPopular
+                                ? 'default'
+                                : isFree
+                                  ? 'outline'
+                                  : 'outline'
+                            }
+                            className={`w-full md:w-auto ${
+                              isPopular
+                                ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                                : isFree
+                                  ? 'border-emerald-300 text-emerald-700 hover:bg-emerald-50'
+                                  : ''
+                            }`}
+                            onClick={() => handleUpgrade(tier.tierCode)}
+                          >
+                            {isFree ? 'Get Started' : 'Upgrade'}
+                          </Button>
+                        </div>
+                      </div>
+                    );
+                  })}
               </div>
-            </div>
+            )}
           </div>
         </CardContent>
       </Card>
-
-      {/* Commented out lower cards for now */}
-      {/*<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        <Card className="relative">
-        <CardHeader>
-            <div className="flex items-center gap-3">
-            <div className="p-2 bg-muted rounded-lg">
-                <Users className="h-6 w-6 text-muted-foreground" />
-            </div>
-            <div>
-                <CardTitle>General Sitter</CardTitle>
-                <CardDescription className="mb-0">
-                Starter Plan
-                </CardDescription>
-            </div>
-            </div>
-            <div className="mt-4">
-            <div className="text-3xl font-bold">$10</div>
-            <div className="text-sm text-muted-foreground">/month</div>
-            </div>
-        </CardHeader>
-        <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-            For sitters & spiritual seekers looking for insight, healing,
-            and meaningful connection
-            </p>
-            <Button variant="outline" className="w-full mb-4">
-            Join Now
-            </Button>
-            <div>
-            <h4 className="font-semibold mb-2">What's Included:</h4>
-            <ul className="space-y-2 text-sm">
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                Full Replay Library
-                </li>
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                10% off ALL events
-                </li>
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                10% off ALL private readings
-                </li>
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                Early registration access
-                </li>
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                Monthly newsletter
-                </li>
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                Select Bridge Library resources
-                </li>
-            </ul>
-            </div>
-        </CardContent>
-        </Card>
-
-        <Card className="relative border-primary">
-        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-            <Badge className="bg-primary text-primary-foreground hover:bg-muted-foreground">
-            <Star className="h-3 w-3 mr-1" />
-            Most Popular
-            </Badge>
-        </div>
-        <CardHeader className="pt-8">
-            <div className="flex items-center gap-3">
-            <div className="p-2 bg-muted rounded-lg">
-                <BookOpen className="h-6 w-6 text-muted-600" />
-            </div>
-            <div>
-                <CardTitle>Development Medium</CardTitle>
-                <CardDescription className="mb-0">
-                Growth Plan
-                </CardDescription>
-            </div>
-            </div>
-            <div className="mt-4">
-            <div className="text-3xl font-bold">$19</div>
-            <div className="text-sm text-muted-foreground">/month</div>
-            </div>
-        </CardHeader>
-        <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-            For developing mediums seeking structure, guided practice,
-            confidence, and professional growth
-            </p>
-            <Button className="w-full mb-4 bg-primary text-primary-foreground hover:bg-primary/90">
-            Start Growing
-            </Button>
-            <div>
-            <h4 className="font-semibold mb-2">
-                Everything in General, plus:
-            </h4>
-            <ul className="space-y-2 text-sm">
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />2 free
-                Development Circles/month
-                </li>
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                Demo eligibility (once verified)
-                </li>
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                10% off additional circles/workshops
-                </li>
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                Development resources in Library
-                </li>
-            </ul>
-            </div>
-        </CardContent>
-        </Card>
-
-        <Card className="relative">
-        <CardHeader>
-            <div className="flex items-center gap-3">
-            <div className="p-2 bg-muted rounded-lg">
-                <Crown className="h-6 w-6 text-muted-foreground" />
-            </div>
-            <div>
-                <CardTitle>Professional Medium</CardTitle>
-                <CardDescription className="mb-0">
-                Professional Plan
-                </CardDescription>
-            </div>
-            </div>
-            <div className="mt-4">
-            <div className="text-3xl font-bold">$29</div>
-            <div className="text-sm text-muted-foreground">/month</div>
-            </div>
-        </CardHeader>
-        <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-            For active, serving mediums ready for public visibility,
-            professional support, and aligned opportunities
-            </p>
-            <Button variant="outline" className="w-full mb-4">
-            Join Now
-            </Button>
-            <div>
-            <h4 className="font-semibold mb-2">
-                Everything in Development, plus:
-            </h4>
-            <ul className="space-y-2 text-sm">
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                Public Medium Profile Page
-                </li>
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                Directory listing in "Meet the Mediums"
-                </li>
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                Unlimited demonstration eligibility
-                </li>
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                Charity reading requirement
-                </li>
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                Full Bridge Library access
-                </li>
-                <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                Presenter Tools + booking integration
-                </li>
-            </ul>
-            </div>
-        </CardContent>
-        </Card>
-        </div> */}
     </div>
   );
 }

@@ -1,38 +1,31 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Select from 'react-select';
 import type { StylesConfig } from 'react-select';
-import { toast } from 'react-toastify';
-import type { EmailPreference, Country, City } from '../types/types';
 import SubmitButton from '../components/ui/SubmitButton';
 import { Mail, Lock, Eye, EyeOff, MapPin } from 'lucide-react';
 import {
-  fetchEmailPreferences,
-  fetchCountries,
-  fetchCities,
-  resendVerificationEmail,
-  registerUser,
-  type RegisterPayload,
-} from '../services/register';
+  useEmailPreferences,
+  useCountries,
+  useCities,
+  useResendVerificationEmail,
+  useRegisterUser,
+} from '../hooks/useRegister';
+import type { RegisterPayload } from '../services/register';
 import { Link } from 'react-router-dom';
 
 const ResendVerificationForm = () => {
   const resendFormRef = useRef<HTMLFormElement>(null);
-  const [loading, setLoading] = useState(false);
+  const resendMutation = useResendVerificationEmail();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (loading) return;
     const formData = new FormData(resendFormRef.current!);
     const email = (formData.get('email') as string) || '';
-    setLoading(true);
-    const res = await resendVerificationEmail(email);
-    setLoading(false);
-    if (res.success) {
-      toast.success(res.message);
-      resendFormRef.current?.reset();
-    } else {
-      toast.error(res.errors?.join(', ') || res.message);
-    }
+    resendMutation.mutate(email, {
+      onSuccess: () => {
+        resendFormRef.current?.reset();
+      },
+    });
   };
 
   return (
@@ -58,8 +51,9 @@ const ResendVerificationForm = () => {
           />
         </div>
         <SubmitButton
-          text={loading ? 'Sending…' : 'Resend'}
+          text={resendMutation.isPending ? 'Sending…' : 'Resend'}
           className="px-4 py-2 bg-secondary-600 hover:bg-secondary-700 text-white text-sm rounded-lg transition-colors w-full md:w-1/2!"
+          disabled={resendMutation.isPending}
         />
       </form>
     </div>
@@ -68,55 +62,24 @@ const ResendVerificationForm = () => {
 
 export default function RegisterPage() {
   const formRef = useRef<HTMLFormElement>(null);
-  const [emailPreferences, setEmailPreferences] = useState<EmailPreference[]>(
-    []
-  );
-  const [countries, setCountries] = useState<Country[]>([]);
-  const [cities, setCities] = useState<City[]>([]);
+
+  // Local state for form selections and UI
   type Opt<T = string> = { value: T; label: string };
-  const [selectedEmailPreferences, setSelectedEmailPreferences] = useState<
-    Opt<string>[]
-  >([]);
   const [selectedCountry, setSelectedCountry] = useState<Opt<number> | null>(
     null
   );
   const [selectedCity, setSelectedCity] = useState<Opt<number> | null>(null);
-  const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  useEffect(() => {
-    const loadInit = async () => {
-      const [prefs, ctrs] = await Promise.all([
-        fetchEmailPreferences(),
-        fetchCountries(),
-      ]);
-      setEmailPreferences(prefs);
-      setCountries(ctrs);
-      const allOptions = prefs.map((pref) => ({
-        value: pref.emailPreferencesID,
-        label: pref.displayName,
-      }));
-      setSelectedEmailPreferences(allOptions);
-    };
-    loadInit();
-  }, []);
-
-  useEffect(() => {
-    const loadCities = async () => {
-      if (!selectedCountry) {
-        setCities([]);
-        setSelectedCity(null);
-        return;
-      }
-      console.log('Selected country changed:', selectedCountry.value);
-      const data = await fetchCities(selectedCountry.value);
-      console.log('Fetched cities:', data);
-      setCities(data);
-      setSelectedCity(null);
-    };
-    loadCities();
-  }, [selectedCountry]);
+  // React Query hooks for data fetching
+  const { data: emailPreferences = [], isLoading: prefsLoading } =
+    useEmailPreferences();
+  const { data: countries = [], isLoading: countriesLoading } = useCountries();
+  const { data: cities = [], isLoading: citiesLoading } = useCities(
+    selectedCountry?.value || null
+  );
+  const registerMutation = useRegisterUser();
   const preferenceOptions: Opt<string>[] = emailPreferences.map((pref) => ({
     value: pref.emailPreferencesID,
     label: pref.displayName,
@@ -145,9 +108,8 @@ export default function RegisterPage() {
   };
   const singleStyles: StylesConfig<Opt<number>, false> = {};
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (submitting) return;
     const fd = new FormData(formRef.current!);
     const payload: RegisterPayload = {
       email: (fd.get('email') as string) || '',
@@ -156,26 +118,15 @@ export default function RegisterPage() {
       isUserAgeedToTerms: fd.get('isUserAgeedToTerms') === 'on',
       countryId: selectedCountry?.value ?? 0,
       cityId: selectedCity?.value ?? 0,
-      selectedEmailPreferences: selectedEmailPreferences.map((p) => p.value),
+      selectedEmailPreferences: preferenceOptions.map((p) => p.value),
     };
-    setSubmitting(true);
-    const result = await registerUser(payload);
-    setSubmitting(false);
-    if (result.success) {
-      toast.success(
-        result.message || 'Registration successful! Please verify your email.'
-      );
-      formRef.current?.reset();
-      const allOptions = emailPreferences.map((pref) => ({
-        value: pref.emailPreferencesID,
-        label: pref.displayName,
-      }));
-      setSelectedEmailPreferences(allOptions);
-      setSelectedCountry(null);
-      setSelectedCity(null);
-    } else {
-      toast.error(result.errors?.join(', ') || result.message);
-    }
+    registerMutation.mutate(payload, {
+      onSuccess: () => {
+        formRef.current?.reset();
+        setSelectedCountry(null);
+        setSelectedCity(null);
+      },
+    });
   };
 
   return (
@@ -263,10 +214,14 @@ export default function RegisterPage() {
                   <Select<Opt<number>, false>
                     options={countryOptions}
                     value={selectedCountry}
-                    onChange={(opt) => setSelectedCountry(opt ?? null)}
+                    onChange={(opt) => {
+                      setSelectedCountry(opt ?? null);
+                      setSelectedCity(null); // Reset city when country changes
+                    }}
                     placeholder="Select country..."
                     classNamePrefix="select"
                     className="text-sm"
+                    isLoading={countriesLoading}
                     styles={{
                       ...singleStyles,
                       control: (base) => ({
@@ -305,6 +260,7 @@ export default function RegisterPage() {
                     }
                     classNamePrefix="select"
                     className="text-sm"
+                    isLoading={citiesLoading}
                     styles={{
                       ...singleStyles,
                       control: (base) => ({
@@ -391,12 +347,10 @@ export default function RegisterPage() {
               <Select<Opt<string>, true>
                 isMulti
                 options={preferenceOptions}
-                value={selectedEmailPreferences}
-                onChange={(selected) =>
-                  setSelectedEmailPreferences(selected as Opt<string>[])
-                }
+                value={preferenceOptions} // Pre-select all preferences
                 placeholder="Select email preferences..."
                 classNamePrefix="select"
+                isLoading={prefsLoading}
                 styles={{
                   ...multiStyles,
                   control: (base) => ({
@@ -436,8 +390,15 @@ export default function RegisterPage() {
             </div>
 
             <SubmitButton
-              text={submitting ? 'Creating account…' : 'Create Account'}
+              text={
+                registerMutation.isPending
+                  ? 'Creating account…'
+                  : 'Create Account'
+              }
               className="w-full py-3 bg-linear-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105"
+              disabled={
+                registerMutation.isPending || prefsLoading || countriesLoading
+              }
             />
 
             <div className="text-center">

@@ -61,14 +61,6 @@ const data = {
           title: 'Dashboard',
           url: '/#dashboard',
         },
-        {
-          title: 'About Us',
-          url: '/#about',
-        },
-        {
-          title: 'Features',
-          url: '/#features',
-        },
       ],
     },
     {
