@@ -304,6 +304,19 @@ export default function Navbar() {
                   Podcasts
                 </NavLink>
                 <NavLink
+                  to="/membership"
+                  className={({ isActive }) =>
+                    `px-4 py-3 rounded-xl text-sm transition-all duration-200 ${
+                      isActive
+                        ? 'text-white bg-linear-to-r from-primary-500 to-secondary-500 shadow-lg'
+                        : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                    }`
+                  }
+                  onClick={() => setIsOpen(false)}
+                >
+                  Membership
+                </NavLink>
+                <NavLink
                   to="/books"
                   className={({ isActive }) =>
                     `px-4 py-3 rounded-xl text-sm transition-all duration-200 ${

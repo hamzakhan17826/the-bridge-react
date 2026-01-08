@@ -237,7 +237,7 @@ const MembershipSection = () => {
 
                 {/* Content */}
                 <div className="flex-1 text-center lg:text-left">
-                  <div className="flex items-center justify-center lg:justify-start gap-4 mb-4">
+                  <div className="flex flex-col md:flex-row items-center justify-center md:justify-start gap-4 mb-4">
                     <div className="w-16 h-16 bg-linear-to-r from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg">
                       <Star className="w-8 h-8 text-white" />
                     </div>
