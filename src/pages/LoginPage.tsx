@@ -2,7 +2,8 @@ import { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import SubmitButton from '../components/ui/SubmitButton';
-import { loginUser, type LoginPayload } from '../services/login';
+import { loginUser } from '../services/login';
+import type { LoginPayload } from '../types/auth';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {

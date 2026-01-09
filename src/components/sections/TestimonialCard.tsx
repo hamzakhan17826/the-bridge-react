@@ -1,19 +1,12 @@
 import { Quote, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import type { Testimonial } from '../../types/content';
 
-interface Testimonial {
-  text: string;
-  name: string;
-  link: string;
-  platform: string;
-  image: string;
-}
-
-interface TestimonialCardProps {
+export default function TestimonialCard({
+  testimonial,
+}: {
   testimonial: Testimonial;
-}
-
-export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
+}) {
   return (
     <div className="relative p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-primary-100">
       {/* Quote icon */}

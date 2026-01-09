@@ -1,22 +1,8 @@
 import api from '../lib/api';
-
-export type MediumRegistrationFormState = {
-  success: boolean;
-  message: string;
-  errors?: string[];
-};
-
-export type MediumRegistrationPayload = {
-  photo: File | null;
-  experienceInYears: string;
-  philosophy: string;
-  bio: string;
-  availabilityStatus: string;
-  slug: string;
-  focus: string;
-  tagline: string;
-  specialty: string;
-};
+import type {
+  MediumRegistrationFormState,
+  MediumRegistrationPayload,
+} from '../types/medium';
 
 export async function registerMedium(
   payload: MediumRegistrationPayload

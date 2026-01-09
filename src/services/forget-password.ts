@@ -1,10 +1,5 @@
 import api from '../lib/api';
-
-export type ForgetPasswordState = {
-  success: boolean;
-  message: string;
-  errors?: string[];
-};
+import type { ForgetPasswordState } from '../types/auth';
 
 export async function sendResetLink(
   email: string

@@ -11,7 +11,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { Button, Input } from '../components/ui';
-import type { BlogItem } from '../types/types';
+import type { BlogItem } from '../types/content';
 
 const Blogs = () => {
   const [searchTerm, setSearchTerm] = useState('');

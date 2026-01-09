@@ -10,7 +10,7 @@ import {
   Quote,
 } from 'lucide-react';
 import { Button, Input } from '../components/ui';
-import type { ReviewItem } from '../types/types';
+import type { ReviewItem } from '../types/content';
 
 const Reviews = () => {
   const [searchTerm, setSearchTerm] = useState('');

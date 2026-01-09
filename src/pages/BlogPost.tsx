@@ -10,7 +10,7 @@ import {
   MessageCircle,
 } from 'lucide-react';
 import { Button } from '../components/ui';
-import type { BlogItem } from '../types/types';
+import type { BlogItem } from '../types/content';
 
 const BlogPost = () => {
   // Always show the same blog post regardless of slug

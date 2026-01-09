@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { Search, Filter, Users, Sparkles } from 'lucide-react';
 import { MediumCard } from '../components/sections';
 import { Button, Input } from '../components/ui';
-import type { Medium } from '../types/types';
+import type { Medium } from '../types/medium';
 
 const Mediums = () => {
   const [searchTerm, setSearchTerm] = useState('');

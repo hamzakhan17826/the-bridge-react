@@ -1,12 +1,4 @@
-import type { LucideIcon } from 'lucide-react';
-
-interface SectionHeaderProps {
-  badgeIcon: LucideIcon;
-  badgeText: string;
-  title: string;
-  subtitle: string;
-  titleHighlight?: string; // Word to highlight with gradient
-}
+import type { SectionHeaderProps } from '../../types/ui';
 
 export default function SectionHeader({
   badgeIcon: Icon,

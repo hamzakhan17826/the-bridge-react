@@ -7,7 +7,7 @@ import {
   resendVerificationEmail,
   registerUser,
 } from '../services/register';
-import type { EmailPreference, Country, City } from '../types/types';
+import type { EmailPreference, Country, City } from '../types/api';
 
 // Query Keys for consistent caching and invalidation
 export const registerQueryKeys = {

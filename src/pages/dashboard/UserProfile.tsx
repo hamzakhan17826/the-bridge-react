@@ -14,13 +14,13 @@ import Select from 'react-select';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Loader2, Upload, User, MapPin, Home } from 'lucide-react';
-import type { Country, City } from '../../types/types';
+import type { Country, City } from '../../types/api';
 import { fetchCountries, fetchCities } from '../../services/register';
 import {
   fetchUserProfile,
   updateUserProfile,
-  type AppUserProfile,
 } from '../../services/user-profile';
+import type { AppUserProfile } from '../../types/user';
 import { useNavigate } from 'react-router-dom';
 import { deleteCookie, emitAuthChange } from '../../lib/auth';
 import { getUserIdFromToken } from '../../lib/utils';

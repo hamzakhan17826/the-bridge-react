@@ -1,10 +1,4 @@
-import type { LucideIcon } from 'lucide-react';
-
-interface StatCardProps {
-  icon: LucideIcon;
-  number: string;
-  label: string;
-}
+import type { StatCardProps } from '../../types/ui';
 
 export default function StatCard({ icon: Icon, number, label }: StatCardProps) {
   return (

@@ -2,7 +2,8 @@ import { useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import SubmitButton from '../components/ui/SubmitButton';
-import { resetPassword, type ResetPayload } from '../services/reset-password';
+import { resetPassword } from '../services/reset-password';
+import type { ResetPayload } from '../types/auth';
 
 export default function ResetPasswordPage() {
   const [params] = useSearchParams();

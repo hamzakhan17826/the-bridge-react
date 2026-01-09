@@ -1,12 +1,8 @@
 import { Play, Calendar, Clock } from 'lucide-react';
-import type { PodcastItem } from '../../types/types';
 import { Link } from 'react-router-dom';
+import type { PodcastItem } from '../../types/content';
 
-interface PodcastCardProps {
-  podcast: PodcastItem;
-}
-
-export default function PodcastCard({ podcast }: PodcastCardProps) {
+export default function PodcastCard(podcast: PodcastItem) {
   return (
     <div className="relative group h-full flex flex-col rounded-2xl overflow-hidden shadow-lg hover:shadow-xl bg-white transform transition-all duration-300 hover:-translate-y-1">
       {/* Background Image */}

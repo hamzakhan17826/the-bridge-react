@@ -1,5 +1,5 @@
 import api from '../lib/api';
-import type { SubscriptionTier } from '../types/types';
+import type { SubscriptionTier } from '../types/membership';
 
 export async function fetchSubscriptionTiers(): Promise<SubscriptionTier[]> {
   try {

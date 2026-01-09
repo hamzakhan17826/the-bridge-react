@@ -1,54 +1,12 @@
 import api from '../lib/api';
-
-// ============================================================================
-// TYPES & INTERFACES
-// ============================================================================
-
-export type AppUserProfile = {
-  userId: string;
-  firstName: string;
-  lastName: string;
-  userName: string;
-  email: string;
-  profilePictureUrl?: string;
-  registerDateTime?: string;
-  isBlocked?: boolean;
-  isDeleted?: boolean;
-  emailConfirmed?: boolean;
-  lockoutEnd?: string | null;
-  accessFailedCount?: number;
-  countryId?: number;
-  cityId?: number;
-  addressLine1?: string;
-  addressLine2?: string;
-  postalCode?: string;
-  dateOfBirth?: string; // YYYY-MM-DD
-  gender?: string;
-  changeEmailPreferencesKey?: boolean;
-};
-
-export type ProfileResponse<T = unknown> = {
-  success: boolean;
-  message: string;
-  data?: T;
-  errors?: string[];
-};
+import type {
+  AppUserProfile,
+  ChangePasswordPayload,
+  ProfileResponse,
+} from '../types/user';
 
 export type UpdateAppUserProfilePayload = Partial<AppUserProfile>;
 
-export type ChangePasswordPayload = {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-};
-
-// ============================================================================
-// API FUNCTIONS
-// ============================================================================
-
-/**
- * Fetch user profile data
- */
 export async function fetchUserProfile(
   userId?: string | null
 ): Promise<ProfileResponse<AppUserProfile>> {

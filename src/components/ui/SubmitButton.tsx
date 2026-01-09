@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import type { SubmitButtonProps } from '../../types/types';
+import type { SubmitButtonProps } from '../../types/ui';
 
 export default function SubmitButton({
   text,

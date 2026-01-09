@@ -3,9 +3,10 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import type { PodcastSliderProps, PodcastItem } from '../../types/types';
+import type { PodcastSliderProps } from '../../types/content';
 import { Play, Headphones, Calendar, Clock, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import type { PodcastItem } from '../../types/content';
 
 const PodcastSlider: FC<PodcastSliderProps> = ({
   podcasts,
@@ -83,7 +84,7 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
                 {subtitle}
               </div>
               <h2 className="mb-0 text-4xl md:text-6xl lg:text-7xl text-white font-poppins leading-tight">
-                {title.split(' ').map((word, index) => (
+                {title.split(' ').map((word: string, index: number) => (
                   <span
                     key={index}
                     className={
@@ -134,7 +135,7 @@ const PodcastSlider: FC<PodcastSliderProps> = ({
                   },
                 }}
               >
-                {items.map((podcast) => (
+                {items.map((podcast: PodcastItem) => (
                   <SwiperSlide key={podcast.id}>
                     <div className="group relative flex flex-col justify-end min-h-[50vh] mb-6 transform transition-all duration-300 hover:scale-105">
                       {/* Background image with enhanced gradient overlay */}

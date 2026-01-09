@@ -1,24 +1,10 @@
-interface Decoration {
-  top?: string;
-  left?: string;
-  right?: string;
-  bottom?: string;
-  width: string;
-  height: string;
-  color: string;
-  delay?: string;
-  transform?: string;
-  blur?: string;
-  opacity?: string;
-}
-
-interface BackgroundDecorationsProps {
-  decorations: Decoration[];
-}
+import type { Decoration } from '../../types/ui';
 
 export default function BackgroundDecorations({
   decorations,
-}: BackgroundDecorationsProps) {
+}: {
+  decorations: Decoration[];
+}) {
   return (
     <>
       {decorations.map((decoration, index) => (

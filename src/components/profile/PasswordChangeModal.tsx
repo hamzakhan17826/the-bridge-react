@@ -4,11 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
 import { changePassword } from '../../services/user-profile';
 import { deleteCookie, emitAuthChange } from '../../lib/auth';
-
-interface PasswordChangeModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import type { PasswordChangeModalProps } from '../../types/user';
 
 const PasswordChangeModal = ({ isOpen, onClose }: PasswordChangeModalProps) => {
   const navigate = useNavigate();
@@ -58,8 +54,8 @@ const PasswordChangeModal = ({ isOpen, onClose }: PasswordChangeModalProps) => {
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-3xl shadow-2xl border border-primary-100 p-8 w-full max-w-md relative">
-        <div className="absolute -top-4 -left-4 w-8 h-8 bg-primary-200 rounded-full opacity-50"></div>
-        <div className="absolute -bottom-4 -right-4 w-6 h-6 bg-secondary-200 rounded-full opacity-50"></div>
+        {/* <div className="absolute -top-4 -left-4 w-8 h-8 bg-primary-200 rounded-full opacity-50"></div> */}
+        {/* <div className="absolute -bottom-4 -right-4 w-6 h-6 bg-secondary-200 rounded-full opacity-50"></div> */}
         <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
           <Sparkles className="w-6 h-6 text-primary-600" />
           Change Password

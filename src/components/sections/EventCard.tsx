@@ -1,18 +1,5 @@
 import { Clock, MapPin } from 'lucide-react';
-
-interface Event {
-  image: string;
-  badge: string;
-  date: string;
-  title: string;
-  description: string;
-  location: string;
-  type: string;
-}
-
-interface EventCardProps {
-  event: Event;
-}
+import type { Event } from '../../types/content';
 
 const getBadgeColor = (type: string) => {
   switch (type) {
@@ -29,7 +16,7 @@ const getBadgeColor = (type: string) => {
   }
 };
 
-export default function EventCard({ event }: EventCardProps) {
+export default function EventCard({ event }: { event: Event }) {
   return (
     <article className="group h-full flex flex-col rounded-3xl shadow-lg hover:shadow-lg bg-white overflow-hidden transform transition-all duration-300 hover:-translate-y-1">
       <div className="relative overflow-hidden">

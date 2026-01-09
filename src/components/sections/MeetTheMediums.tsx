@@ -3,7 +3,7 @@ import { MediumCard } from '../sections';
 import { Link } from 'react-router-dom';
 import { Users, Sparkles, ArrowRight } from 'lucide-react';
 import { BackgroundDecorations } from '../ui';
-import type { Medium } from '../../types/types';
+import type { Medium } from '../../types/medium';
 
 const MeetTheMediums: FC = () => {
   // Mock data - replace with API call later

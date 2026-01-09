@@ -1,19 +1,5 @@
 import { User, Mail, Calendar, Users } from 'lucide-react';
-
-interface PersonalInfoSectionProps {
-  firstName: string;
-  setFirstName: (value: string) => void;
-  lastName: string;
-  setLastName: (value: string) => void;
-  userName: string;
-  setUserName: (value: string) => void;
-  email: string;
-  setEmail: (value: string) => void;
-  dateOfBirth: string;
-  setDateOfBirth: (value: string) => void;
-  gender: string;
-  setGender: (value: string) => void;
-}
+import type { PersonalInfoSectionProps } from '../../types/user';
 
 const PersonalInfoSection = ({
   firstName,

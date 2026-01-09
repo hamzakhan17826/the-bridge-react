@@ -1,18 +1,6 @@
 import Select from 'react-select';
 import { MapPin } from 'lucide-react';
-import type { Country, City } from '../../types/types';
-
-type Opt<T = string> = { value: T; label: string };
-
-interface LocationInfoSectionProps {
-  countries: Country[];
-  cities: City[];
-  selectedCountry: Opt<number> | null;
-  selectedCity: Opt<number> | null;
-  onCountryChange: (country: Opt<number> | null) => void;
-  onCityChange: (city: Opt<number> | null) => void;
-  fetchCities: (countryId: number) => Promise<City[]>;
-}
+import type { LocationInfoSectionProps, Opt } from '../../types/user';
 
 const LocationInfoSection = ({
   countries,

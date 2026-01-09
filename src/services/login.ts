@@ -1,17 +1,6 @@
 import api from '../lib/api';
 import { setCookie, emitAuthChange } from '../lib/auth';
-
-export type LoginFormState = {
-  success: boolean;
-  message: string;
-  errors?: string[];
-};
-
-export type LoginPayload = {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-};
+import type { LoginFormState, LoginPayload } from '../types/auth';
 
 export async function loginUser(
   payload: LoginPayload

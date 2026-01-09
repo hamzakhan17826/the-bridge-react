@@ -1,9 +1,5 @@
 import api from '../lib/api';
-
-export type VerifyEmailState = {
-  success: boolean;
-  message: string;
-};
+import type { VerifyEmailState } from '../types/auth';
 
 export async function verifyEmail(
   userId: string,

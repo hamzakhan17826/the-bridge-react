@@ -1,21 +1,6 @@
 import api from '../lib/api';
-import type { EmailPreference, Country, City } from '../types/types';
-
-export type RegisterFormState = {
-  success: boolean;
-  message: string;
-  errors?: string[];
-};
-
-export type RegisterPayload = {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  isUserAgeedToTerms: boolean;
-  countryId: number;
-  cityId: number;
-  selectedEmailPreferences: string[];
-};
+import type { RegisterFormState, RegisterPayload } from '../types/auth';
+import type { EmailPreference, Country, City } from '../types/api';
 
 export async function fetchEmailPreferences(): Promise<EmailPreference[]> {
   try {

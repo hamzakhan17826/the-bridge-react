@@ -1,13 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchSubscriptionTiers } from '../services/membership';
-import type { SubscriptionTier } from '../types/types';
+import {
+  membershipQueryKeys,
+  type SubscriptionTier,
+} from '../types/membership';
 
-// Query Keys for consistent caching and invalidation
-export const membershipQueryKeys = {
-  subscriptionTiers: ['membership', 'subscriptionTiers'] as const,
-};
-
-// Hook for fetching subscription tiers
 export const useSubscriptionTiers = () => {
   return useQuery<SubscriptionTier[]>({
     queryKey: membershipQueryKeys.subscriptionTiers,

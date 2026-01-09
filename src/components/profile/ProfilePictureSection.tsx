@@ -1,12 +1,5 @@
 import { toast } from 'react-toastify';
-import type { AppUserProfile } from '../../services/user-profile';
-
-interface ProfilePictureSectionProps {
-  profile: AppUserProfile | null;
-  profilePictureFile: File | null;
-  profilePicturePreview: string | null;
-  onProfilePictureChange: (file: File | null, preview: string | null) => void;
-}
+import type { ProfilePictureSectionProps } from '../../types/user';
 
 const ProfilePictureSection = ({
   profile,

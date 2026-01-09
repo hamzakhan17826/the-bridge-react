@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import SubmitButton from '../components/ui/SubmitButton';
-import type { Country, City } from '../types/types';
+import type { Country, City } from '../types/api';
 import { fetchCountries, fetchCities } from '../services/register';
-import {
-  fetchUserProfile,
-  updateUserProfile,
-  type AppUserProfile,
-} from '../services/user-profile';
+import { fetchUserProfile, updateUserProfile } from '../services/user-profile';
+import type { AppUserProfile } from '../types/user';
 import { useNavigate } from 'react-router-dom';
 import { deleteCookie, emitAuthChange } from '../lib/auth';
 import {

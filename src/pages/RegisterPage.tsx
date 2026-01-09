@@ -10,7 +10,7 @@ import {
   useResendVerificationEmail,
   useRegisterUser,
 } from '../hooks/useRegister';
-import type { RegisterPayload } from '../services/register';
+import type { RegisterPayload } from '../types/auth';
 import { Link } from 'react-router-dom';
 
 const ResendVerificationForm = () => {

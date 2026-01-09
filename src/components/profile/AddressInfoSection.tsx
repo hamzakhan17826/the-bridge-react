@@ -1,13 +1,5 @@
 import { Home, Hash } from 'lucide-react';
-
-interface AddressInfoSectionProps {
-  addressLine1: string;
-  setAddressLine1: (value: string) => void;
-  addressLine2: string;
-  setAddressLine2: (value: string) => void;
-  postalCode: string;
-  setPostalCode: (value: string) => void;
-}
+import type { AddressInfoSectionProps } from '../../types/user';
 
 const AddressInfoSection = ({
   addressLine1,

@@ -1,17 +1,5 @@
 import api from '../lib/api';
-
-export type ResetPasswordState = {
-  success: boolean;
-  message: string;
-  errors?: string[];
-};
-
-export type ResetPayload = {
-  email: string;
-  newPassword: string;
-  confirmPassword: string;
-  token: string;
-};
+import type { ResetPasswordState, ResetPayload } from '../types/auth';
 
 export async function resetPassword(
   payload: ResetPayload

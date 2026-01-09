@@ -10,7 +10,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { Button, Input } from '../components/ui';
-import type { PodcastItem } from '../types/types';
+import type { PodcastItem } from '../types/content';
 
 const Podcasts = () => {
   const [searchTerm, setSearchTerm] = useState('');
