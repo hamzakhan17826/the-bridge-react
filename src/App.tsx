@@ -30,14 +30,21 @@ import {
   Settings,
   MembershipUpgrade,
   ActivityLogs,
+  AccessDenied,
+  DashboardAccessDenied,
 } from './pages';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
 import ScrollToTop from './components/system/ScrollToTop';
 import AppLayout from './components/layouts/AppLayout';
-import { RequireAuth, RedirectIfAuth } from './components/system/RouteGuards';
+import {
+  RequireAuth,
+  RedirectIfAuth,
+  RequireAdmin,
+} from './components/system/RouteGuards';
 import DashboardLayout from './components/layouts/dashboard/DashboardLayout';
 import { BreadcrumbProvider } from '@/components/ui/breadcrumb';
+import { AuthInitializer } from './components/system/AuthInitializer';
 // import { ThemeProvider } from '@/components/theme-provider';
 
 function App() {
@@ -49,6 +56,7 @@ function App() {
             {/* <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme"> */}
             <RefreshToken />
             <ScrollToTop />
+            <AuthInitializer />
             <Routes>
               <Route element={<AppLayout />}>
                 <Route path="/" element={<Home />} />
@@ -63,6 +71,7 @@ function App() {
                 <Route path="/about" element={<AboutUs />} />
                 <Route path="/reviews" element={<Reviews />} />
                 <Route path="/mediums/:slug" element={<MediumProfile />} />
+                <Route path="/access-denied" element={<AccessDenied />} />
                 <Route
                   path="/register"
                   element={
@@ -129,9 +138,27 @@ function App() {
                   path="membership/upgrade/:plan"
                   element={<MembershipUpgrade />}
                 />
-                <Route path="users" element={<Users />} />
-                <Route path="activity-logs" element={<ActivityLogs />} />
+                <Route
+                  path="users"
+                  element={
+                    <RequireAdmin>
+                      <Users />
+                    </RequireAdmin>
+                  }
+                />
+                <Route
+                  path="activity-logs"
+                  element={
+                    <RequireAdmin>
+                      <ActivityLogs />
+                    </RequireAdmin>
+                  }
+                />
                 <Route path="settings" element={<Settings />} />
+                <Route
+                  path="access-denied"
+                  element={<DashboardAccessDenied />}
+                />
               </Route>
             </Routes>
             <ToastContainer />

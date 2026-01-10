@@ -17,11 +17,13 @@ import {
   PasswordChangeModal,
 } from '../components/profile';
 import { getUserIdFromToken } from '../lib/utils';
+import { useAuthUser } from '../hooks/useAuthUser';
 
 type Opt<T = string> = { value: T; label: string };
 
 export default function UserProfile() {
   const navigate = useNavigate();
+  const { user: globalUser, setUser } = useAuthUser();
   const [userId] = useState<string>(getUserIdFromToken() ?? '');
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -84,13 +86,34 @@ export default function UserProfile() {
 
   useEffect(() => {
     const load = async () => {
+      // First check if we have user data in global store
+      if (globalUser) {
+        console.log('🚀 Using global user profile:', globalUser);
+        setProfile(globalUser);
+        setInitialProfile({ ...globalUser });
+        // Set controlled states
+        setFirstName(globalUser.firstName || '');
+        setLastName(globalUser.lastName || '');
+        setUserName(globalUser.userName || '');
+        setEmail(globalUser.email || '');
+        setAddressLine1(globalUser.addressLine1 || '');
+        setAddressLine2(globalUser.addressLine2 || '');
+        setPostalCode(globalUser.postalCode || '');
+        setDateOfBirth(globalUser.dateOfBirth || '');
+        setGender(globalUser.gender || '');
+        return;
+      }
+
+      // Fallback: fetch from API if not in global store
       setLoading(true);
       const res = await fetchUserProfile(userId || null);
       setLoading(false);
       if (res.success && res.data) {
-        console.log('🚀 User profile loaded:', res.data);
+        console.log('🚀 User profile loaded from API:', res.data);
         setProfile(res.data);
-        setInitialProfile({ ...res.data }); // Store initial values for diff
+        setInitialProfile({ ...res.data });
+        // Also update global store
+        setUser(res.data);
         // Set controlled states
         setFirstName(res.data.firstName || '');
         setLastName(res.data.lastName || '');
@@ -106,7 +129,7 @@ export default function UserProfile() {
       }
     };
     load();
-  }, [userId]);
+  }, [userId, globalUser, setUser]);
 
   useEffect(() => {
     const initSelections = async () => {
@@ -216,6 +239,8 @@ export default function UserProfile() {
         if (reloadRes.success && reloadRes.data) {
           setProfile(reloadRes.data);
           setInitialProfile({ ...reloadRes.data });
+          // Update global store with new data
+          setUser(reloadRes.data);
           // Update controlled states if needed
           setFirstName(reloadRes.data.firstName || '');
           setLastName(reloadRes.data.lastName || '');

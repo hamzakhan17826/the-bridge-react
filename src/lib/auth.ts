@@ -75,6 +75,10 @@ export function logout() {
   deleteCookie('refreshToken');
   deleteCookie('userRole');
   deleteCookie('auth');
+  // Clear Zustand store
+  import('../stores/authStore').then(({ useAuthStore }) => {
+    useAuthStore.getState().logout();
+  });
   emitAuthChange();
   setTimeout(() => {
     try {

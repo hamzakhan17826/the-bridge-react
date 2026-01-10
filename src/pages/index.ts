@@ -19,6 +19,7 @@ export { default as Books } from './Books';
 export { default as Memberships } from './Memberships';
 export { default as AboutUs } from './AboutUs';
 export { default as Events } from './Events';
+export { default as AccessDenied } from './AccessDenied';
 
 // Dashboard pages
 export { default as Overview } from './dashboard/Overview';
@@ -28,3 +29,4 @@ export { default as Settings } from './dashboard/Settings';
 export { default as DashboardMembership } from './dashboard/Membership';
 export { default as MembershipUpgrade } from './dashboard/MembershipUpgrade';
 export { default as ActivityLogs } from './dashboard/ActivityLogs';
+export { default as DashboardAccessDenied } from './dashboard/AccessDenied';

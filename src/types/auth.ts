@@ -1,3 +1,5 @@
+import type { AppUserProfile } from './user';
+
 export type LoginFormState = {
   success: boolean;
   message: string;
@@ -51,8 +53,11 @@ export type VerifyEmailState = {
 };
 
 export interface AuthState {
-  user: { id: string; name: string } | null;
+  user: AppUserProfile | null;
+  roles: string[];
   isLoggedIn: boolean;
-  login: (user: any) => void;
+  login: (user: AppUserProfile, roles: string[]) => void;
   logout: () => void;
+  setUser: (user: AppUserProfile) => void;
+  setRoles: (roles: string[]) => void;
 }
