@@ -4,7 +4,6 @@ import type { SubscriptionTier } from '../types/membership';
 export async function fetchSubscriptionTiers(): Promise<SubscriptionTier[]> {
   try {
     const res = await api.get('/Resources/SubscriptionsFeatures');
-    console.log('Fetched subscription tiers', res.data);
     return res.data as SubscriptionTier[];
   } catch (error) {
     console.error('Error fetching subscription tiers', error);

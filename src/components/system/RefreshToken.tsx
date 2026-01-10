@@ -48,20 +48,31 @@ export default function RefreshToken() {
     };
 
     const isLoggedIn = getAuthFlag();
+    const rememberMeFlag = getCookie('rememberMe');
+    const shouldRefresh = isLoggedIn && rememberMeFlag === '1';
+
     // console.log('🟢 isLoggedIn: ', isLoggedIn);
-    if (isLoggedIn) {
+    if (shouldRefresh) {
+      console.log(
+        '🔄 [RefreshToken] Remember me enabled; attempting initial refresh'
+      );
       runRefresh();
     } else {
-      console.log('🔴 [RefreshToken] Not logged in; skipping initial refresh');
+      console.log(
+        '🔴 [RefreshToken] Not logged in or remember me disabled; skipping initial refresh'
+      );
     }
 
     const interval = setInterval(
       () => {
         const still = getAuthFlag();
-        if (still) {
+        const stillRemember = getCookie('rememberMe') === '1';
+        if (still && stillRemember) {
           runRefresh();
         } else {
-          console.log('⏸️ [RefreshToken] User logged out; stopping refresh');
+          console.log(
+            '⏸️ [RefreshToken] User logged out or remember me disabled; stopping refresh'
+          );
           clearInterval(interval);
         }
       },

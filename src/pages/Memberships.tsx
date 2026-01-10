@@ -267,7 +267,7 @@ const Memberships = () => {
                 <div className="bg-linear-to-r from-emerald-50 via-teal-50 to-cyan-50 rounded-3xl p-8 md:p-12 border border-emerald-200 shadow-xl">
                   <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
                     {/* Free Badge */}
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                       <div className="relative">
                         <div className="bg-linear-to-r from-emerald-500 to-teal-500 text-white px-6 py-3 rounded-full font-poppins font-bold text-lg shadow-lg">
                           <Sparkles className="w-5 h-5 inline mr-2" />
@@ -324,7 +324,7 @@ const Memberships = () => {
                     </div>
 
                     {/* Decorative Elements */}
-                    <div className="flex-shrink-0 hidden lg:block">
+                    <div className="shrink-0 hidden lg:block">
                       <div className="relative">
                         <div className="w-32 h-32 bg-linear-to-r from-emerald-200 to-teal-200 rounded-full opacity-30 animate-pulse"></div>
                         <div

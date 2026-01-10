@@ -18,6 +18,7 @@ export function getCookie(name: string) {
 type CookieOptions = {
   path?: string;
   maxAge?: number;
+  expires?: Date;
   sameSite?: 'lax' | 'strict' | 'none';
   secure?: boolean;
 };
@@ -32,6 +33,7 @@ export function setCookie(
     `${name}=${encodeURIComponent(value)}`,
     `path=${options.path ?? '/'}`,
     options.maxAge ? `max-age=${options.maxAge}` : '',
+    options.expires ? `expires=${options.expires.toUTCString()}` : '',
     `sameSite=${options.sameSite ?? 'lax'}`,
     options.secure ? 'secure' : '',
   ].filter(Boolean);
@@ -75,6 +77,7 @@ export function logout() {
   deleteCookie('refreshToken');
   deleteCookie('userRole');
   deleteCookie('auth');
+  deleteCookie('rememberMe');
   // Clear Zustand store
   import('../stores/authStore').then(({ useAuthStore }) => {
     useAuthStore.getState().logout();
