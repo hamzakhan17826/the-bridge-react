@@ -1,7 +1,6 @@
-import { type ReactNode, useEffect, useState } from 'react';
+import { type ReactNode, useMemo, useState, useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { getAuthFlag } from '../../lib/auth';
-import { useAuthUser } from '../../hooks/useAuthUser';
+import { getAuthFlag, getCookie } from '../../lib/auth';
 
 function useAuthReactive(): boolean {
   const [isAuthed, setIsAuthed] = useState<boolean>(getAuthFlag());
@@ -42,17 +41,33 @@ export function RedirectIfAuth({ children }: { children: ReactNode }) {
 }
 
 export function RequireAdmin({ children }: { children: ReactNode }) {
-  const { isAdmin, isLoggedIn } = useAuthUser();
   const location = useLocation();
 
-  // First check if user is logged in
-  if (!isLoggedIn) {
-    return <Navigate to="/login" replace state={{ from: location }} />;
-  }
+  const isAuthorized = useMemo(() => {
+    // Check auth cookies
+    const hasAuthCookies = getAuthFlag();
+    if (!hasAuthCookies) {
+      return false;
+    }
 
-  // Then check if user has admin role
-  if (!isAdmin) {
-    // Redirect to access denied page based on current context
+    // Check admin role from cookies directly
+    const userRoleCookie = getCookie('userRole');
+    if (userRoleCookie) {
+      try {
+        const parsed = JSON.parse(userRoleCookie);
+        const roles = Array.isArray(parsed) ? parsed : [userRoleCookie];
+        return roles.includes('admin');
+      } catch {
+        // If parsing fails, treat as single role
+        return userRoleCookie === 'admin';
+      }
+    }
+
+    return false;
+  }, []);
+
+  // If not authorized, redirect to access denied
+  if (!isAuthorized) {
     const isInDashboard = location.pathname.startsWith('/dashboard');
     const accessDeniedPath = isInDashboard
       ? '/dashboard/access-denied'

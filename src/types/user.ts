@@ -29,6 +29,48 @@ export type AppUserProfile = {
   changeEmailPreferencesKey?: boolean;
 };
 
+// New AppUser type matching the API response
+export type AppUser = {
+  registerDateTime: string;
+  lastLoginDateTime: string;
+  emailPreferencesChangeKey: string;
+  isUserAgeedToTerms: boolean;
+  isBlocked: boolean;
+  isDeleted: boolean;
+  profilePictureUrl: string;
+  firstName: string;
+  lastName: string;
+  membershipId: string | null;
+  membership: unknown | null; // You can define a proper Membership type later
+  mediumProfile: unknown | null; // You can define a proper MediumProfile type later
+  eventRegistrations: unknown[]; // You can define proper types later
+  bookings: unknown[]; // You can define proper types later
+  countryId: number;
+  country: Country | null;
+  cityId: number;
+  city: City | null;
+  addressLine1: string;
+  addressLine2: string;
+  postalCode: string;
+  dateOfBirth: string | null;
+  gender: string | null;
+  id: string;
+  userName: string;
+  normalizedUserName: string;
+  email: string;
+  normalizedEmail: string;
+  emailConfirmed: boolean;
+  passwordHash: string;
+  securityStamp: string;
+  concurrencyStamp: string;
+  phoneNumber: string | null;
+  phoneNumberConfirmed: boolean;
+  twoFactorEnabled: boolean;
+  lockoutEnd: string | null;
+  lockoutEnabled: boolean;
+  accessFailedCount: number;
+};
+
 export type ChangePasswordPayload = {
   currentPassword: string;
   newPassword: string;

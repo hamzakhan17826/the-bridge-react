@@ -60,4 +60,5 @@ export interface AuthState {
   logout: () => void;
   setUser: (user: AppUserProfile) => void;
   setRoles: (roles: string[]) => void;
+  setLoggedIn: (loggedIn: boolean) => void;
 }

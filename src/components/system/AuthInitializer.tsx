@@ -21,10 +21,14 @@ export function AuthInitializer() {
         hasRefreshToken: !!refreshToken,
       });
 
-      // If remember me is not enabled, clear any existing auth cookies
-      if (rememberMeFlag !== '1') {
+      // If remember me is not enabled AND no cookies exist (fresh app start), clear any stale cookies
+      // But if rememberMe is '0' and cookies exist, it means user just logged in with rememberMe=false
+      // In that case, allow the session to continue for this browser session
+      const hasAnyAuthCookies = jwtToken || userRoleCookie || refreshToken;
+
+      if (rememberMeFlag !== '1' && !hasAnyAuthCookies) {
         console.log(
-          '🧹 [AUTH_INIT] Remember me disabled, clearing any existing auth cookies'
+          '🧹 [AUTH_INIT] No remember me and no auth cookies - clearing any stale cookies'
         );
         deleteCookie('auth');
         deleteCookie('jwtToken');
@@ -34,8 +38,33 @@ export function AuthInitializer() {
 
         // Clear auth store
         useAuthStore.getState().logout();
+        console.log('🔓 [AUTH_INIT] Auth state cleared for fresh app start');
+        return;
+      }
+
+      // If remember me is disabled but cookies exist, load roles but don't authenticate fully
+      if (rememberMeFlag !== '1' && hasAnyAuthCookies) {
         console.log(
-          '🔓 [AUTH_INIT] Auth state cleared for non-remember-me session'
+          '🔓 [AUTH_INIT] Remember me disabled but cookies exist - loading roles for current session'
+        );
+
+        // Parse roles from cookie and set in store
+        let roles: string[] = [];
+        if (userRoleCookie) {
+          try {
+            const parsed = JSON.parse(userRoleCookie);
+            roles = Array.isArray(parsed) ? parsed : [userRoleCookie];
+          } catch {
+            roles = [userRoleCookie];
+          }
+        }
+
+        // Set roles in store and mark as logged in for current session
+        useAuthStore.getState().setRoles(roles);
+        useAuthStore.getState().setLoggedIn(true);
+        console.log(
+          '✅ [AUTH_INIT] Roles loaded and user marked as logged in for current session:',
+          roles
         );
         return;
       }

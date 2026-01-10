@@ -3,6 +3,7 @@ import type {
   AppUserProfile,
   ChangePasswordPayload,
   ProfileResponse,
+  AppUser,
 } from '../types/user';
 
 export type UpdateAppUserProfilePayload = Partial<AppUserProfile>;
@@ -120,5 +121,23 @@ export async function changePassword(
       message: d?.message || 'Could not connect to the server.',
       errors: errors ?? ['Server connection failed.'],
     };
+  }
+}
+/**
+ * Fetch app users - returns specific user if ID provided, otherwise all users
+ */
+export async function fetchAppUsers(userId?: string): Promise<AppUser[]> {
+  try {
+    const res = await api.get('/EditUser/AppUsers', {
+      params: userId ? { id: userId } : {},
+    });
+
+    const data = res.data as AppUser[];
+    console.log('Fetched app users:', data.length, 'users');
+
+    return data;
+  } catch (error: unknown) {
+    console.error('Failed to load users:', error);
+    throw error; // Let React Query handle the error
   }
 }
