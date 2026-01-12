@@ -7,19 +7,19 @@ import { fetchUserProfile } from '../../services/user-profile';
 export function AuthInitializer() {
   useEffect(() => {
     const initializeAuth = async () => {
-      console.log('🚀 [AUTH_INIT] Initializing auth state on app start...');
+      // console.log('🚀 [AUTH_INIT] Initializing auth state on app start...');
 
       const jwtToken = getCookie('jwtToken');
       const userRoleCookie = getCookie('userRole');
       const rememberMeFlag = getCookie('rememberMe');
       const refreshToken = getCookie('refreshToken');
 
-      console.log('🍪 [AUTH_INIT] Cookies found:', {
-        hasJwtToken: !!jwtToken,
-        hasUserRole: !!userRoleCookie,
-        rememberMeFlag: rememberMeFlag,
-        hasRefreshToken: !!refreshToken,
-      });
+      // console.log('🍪 [AUTH_INIT] Cookies found:', {
+      //   hasJwtToken: !!jwtToken,
+      //   hasUserRole: !!userRoleCookie,
+      //   rememberMeFlag: rememberMeFlag,
+      //   hasRefreshToken: !!refreshToken,
+      // });
 
       // If remember me is not enabled AND no cookies exist (fresh app start), clear any stale cookies
       // But if rememberMe is '0' and cookies exist, it means user just logged in with rememberMe=false
@@ -27,9 +27,9 @@ export function AuthInitializer() {
       const hasAnyAuthCookies = jwtToken || userRoleCookie || refreshToken;
 
       if (rememberMeFlag !== '1' && !hasAnyAuthCookies) {
-        console.log(
-          '🧹 [AUTH_INIT] No remember me and no auth cookies - clearing any stale cookies'
-        );
+        // console.log(
+        //   '🧹 [AUTH_INIT] No remember me and no auth cookies - clearing any stale cookies'
+        // );
         deleteCookie('auth');
         deleteCookie('jwtToken');
         deleteCookie('userRole');
@@ -38,15 +38,15 @@ export function AuthInitializer() {
 
         // Clear auth store
         useAuthStore.getState().logout();
-        console.log('🔓 [AUTH_INIT] Auth state cleared for fresh app start');
+        // console.log('🔓 [AUTH_INIT] Auth state cleared for fresh app start');
         return;
       }
 
       // If remember me is disabled but cookies exist, load roles but don't authenticate fully
       if (rememberMeFlag !== '1' && hasAnyAuthCookies) {
-        console.log(
-          '🔓 [AUTH_INIT] Remember me disabled but cookies exist - loading roles for current session'
-        );
+        // console.log(
+        //   '🔓 [AUTH_INIT] Remember me disabled but cookies exist - loading roles for current session'
+        // );
 
         // Parse roles from cookie and set in store
         let roles: string[] = [];
@@ -62,10 +62,10 @@ export function AuthInitializer() {
         // Set roles in store and mark as logged in for current session
         useAuthStore.getState().setRoles(roles);
         useAuthStore.getState().setLoggedIn(true);
-        console.log(
-          '✅ [AUTH_INIT] Roles loaded and user marked as logged in for current session:',
-          roles
-        );
+        // console.log(
+        //   '✅ [AUTH_INIT] Roles loaded and user marked as logged in for current session:',
+        //   roles
+        // );
         return;
       }
 
@@ -74,9 +74,9 @@ export function AuthInitializer() {
 
       // If we have a JWT token, try to load user data
       if (shouldAuthenticate) {
-        console.log(
-          '🔐 [AUTH_INIT] Remember me enabled, JWT token found, loading user profile...'
-        );
+        // console.log(
+        //   '🔐 [AUTH_INIT] Remember me enabled, JWT token found, loading user profile...'
+        // );
         try {
           const userId = getUserIdFromToken();
           if (userId) {
@@ -96,12 +96,12 @@ export function AuthInitializer() {
 
               // Set user data in store
               useAuthStore.getState().login(profileResponse.data, roles);
-              console.log(
-                '✅ [AUTH_INIT] User authenticated successfully:',
-                profileResponse.data.firstName,
-                'roles:',
-                roles
-              );
+              // console.log(
+              //   '✅ [AUTH_INIT] User authenticated successfully:',
+              //   profileResponse.data.firstName,
+              //   'roles:',
+              //   roles
+              // );
             } else {
               console.log('❌ [AUTH_INIT] Failed to fetch user profile');
             }

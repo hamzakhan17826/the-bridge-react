@@ -37,7 +37,7 @@ export default function RefreshToken() {
         const jwt = getCookie('jwtToken');
         const expired = isJwtExpired(jwt);
         if (!jwt || expired) {
-          console.log('🚪 [RefreshToken] JWT missing/expired; logging out');
+          // console.log('🚪 [RefreshToken] JWT missing/expired; logging out');
           logout();
         } else {
           console.log(
@@ -53,9 +53,9 @@ export default function RefreshToken() {
 
     // console.log('🟢 isLoggedIn: ', isLoggedIn);
     if (shouldRefresh) {
-      console.log(
-        '🔄 [RefreshToken] Remember me enabled; attempting initial refresh'
-      );
+      // console.log(
+      //   '🔄 [RefreshToken] Remember me enabled; attempting initial refresh'
+      // );
       runRefresh();
     } else {
       console.log(

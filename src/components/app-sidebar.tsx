@@ -43,7 +43,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   const isAdmin = userRoles.includes('admin');
-  console.log('User Roles in Sidebar:', userRoles, 'Is Admin:', isAdmin);
+  // console.log('User Roles in Sidebar:', userRoles, 'Is Admin:', isAdmin);
   const data = {
     user: {
       name: 'Spiritual Seeker',

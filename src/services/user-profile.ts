@@ -133,7 +133,7 @@ export async function fetchAppUsers(userId?: string): Promise<AppUser[]> {
     });
 
     const data = res.data as AppUser[];
-    console.log('Fetched app users:', data.length, 'users');
+    // console.log('Fetched app users:', data.length, 'users');
 
     return data;
   } catch (error: unknown) {
