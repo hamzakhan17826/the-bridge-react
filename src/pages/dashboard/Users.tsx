@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAppUsers, useUserClaims } from '../../hooks/useUsers';
+import { useAppUsers, useUserClaims, useUserRoles } from '../../hooks/useUsers';
 import { Button } from '../../components/ui/button';
 import {
   Card,
@@ -32,6 +32,9 @@ export default function Users() {
   // Use React Query for data fetching
   const { data: users = [], isLoading, error } = useAppUsers();
   const { data: userClaims = [], isLoading: claimsLoading } = useUserClaims(
+    selectedUser?.id || ''
+  );
+  const { data: userRoles = [], isLoading: rolesLoading } = useUserRoles(
     selectedUser?.id || ''
   );
 
@@ -243,13 +246,19 @@ export default function Users() {
                 {claimsLoading ? (
                   <p>Loading claims...</p>
                 ) : userClaims.length > 0 ? (
-                  <ul className="list-disc list-inside">
-                    {userClaims.map((claim, index) => (
-                      <li key={index}>{claim.key}</li>
-                    ))}
-                  </ul>
+                  <p>{userClaims.map((claim) => `${claim.key}`).join(', ')}</p>
                 ) : (
                   <p>No claims found.</p>
+                )}
+              </div>
+              <div>
+                <label className="font-medium">Roles:</label>
+                {rolesLoading ? (
+                  <p>Loading roles...</p>
+                ) : userRoles.length > 0 ? (
+                  <p>{userRoles.map((role) => `${role.key}`).join(', ')}</p>
+                ) : (
+                  <p>No roles found.</p>
                 )}
               </div>
             </div>

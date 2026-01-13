@@ -160,3 +160,22 @@ export async function fetchUserClaims(
     throw error;
   }
 }
+
+/**
+ * Fetch user roles by userId
+ */
+export async function fetchUserRoles(
+  userId: string
+): Promise<{ key: string; value: string }[]> {
+  try {
+    const res = await api.get('/EditUser/GetUserRoles', {
+      params: { userId },
+    });
+
+    const data = res.data as { key: string; value: string }[];
+    return data;
+  } catch (error: unknown) {
+    console.error('Failed to load user roles:', error);
+    throw error;
+  }
+}
