@@ -159,6 +159,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   title: 'User Management',
                   url: '/dashboard/users',
                 },
+                {
+                  title: 'User Claims',
+                  url: '/dashboard/claims',
+                },
               ],
             },
           ]

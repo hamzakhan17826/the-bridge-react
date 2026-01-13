@@ -41,3 +41,16 @@ export function getUserIdFromToken(): string | null {
     return null;
   }
 }
+
+export function truncateText(
+  text: string,
+  maxLength: number
+): { truncated: string; full: string } {
+  if (text.length <= maxLength) {
+    return { truncated: text, full: text };
+  }
+  return {
+    truncated: `${text.substring(0, maxLength)}...`,
+    full: text,
+  };
+}

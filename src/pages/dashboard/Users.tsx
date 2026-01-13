@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useAppUsers } from '../../hooks/useUsers';
 import { Button } from '../../components/ui/button';
-import { Input } from '../../components/ui/input';
 import {
   Card,
   CardContent,
@@ -10,6 +9,12 @@ import {
 } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '../../components/ui/dialog';
+import {
   Table,
   TableBody,
   TableCell,
@@ -17,122 +22,34 @@ import {
   TableHeader,
   TableRow,
 } from '../../components/ui/table';
-import { Loader2, Search, UserCheck, UserX, RefreshCw } from 'lucide-react';
+import { Loader2, UserCheck, UserX } from 'lucide-react';
+import type { AppUser } from '../../types/user';
 
 export default function Users() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedUserId, setSelectedUserId] = useState<string>('');
+  const [selectedUser, setSelectedUser] = useState<AppUser | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Use React Query for data fetching
-  const {
-    data: users = [],
-    isLoading,
-    error,
-    refetch,
-    isRefetching,
-  } = useAppUsers(selectedUserId || undefined);
+  const { data: users = [], isLoading, error } = useAppUsers();
 
-  const handleSearch = () => {
-    if (selectedUserId.trim()) {
-      // React Query will automatically refetch when selectedUserId changes
-      setSelectedUserId(selectedUserId.trim());
-    }
-  };
-
-  const handleLoadAll = () => {
-    setSelectedUserId('');
-  };
-
-  const handleRefresh = () => {
-    refetch();
-  };
-
-  const filteredUsers = users.filter(
-    (user) =>
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.userName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
+  // const formatDate = (dateString: string) => {
+  //   return new Date(dateString).toLocaleDateString('en-US', {
+  //     year: 'numeric',
+  //     month: 'short',
+  //     day: 'numeric',
+  //     hour: '2-digit',
+  //     minute: '2-digit',
+  //   });
+  // };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Users Management</h1>
-          <p className="text-muted-foreground">
-            View and manage all application users
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="text-sm">
-            {users.length} Users
-          </Badge>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleRefresh}
-            disabled={isRefetching}
-          >
-            <RefreshCw
-              className={`w-4 h-4 mr-2 ${isRefetching ? 'animate-spin' : ''}`}
-            />
-            Refresh
-          </Button>
-        </div>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold">Users Management</h1>
+        <p className="text-muted-foreground">
+          View and manage all application users
+        </p>
       </div>
-
-      {/* Search and Filter Controls */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Search & Filter</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <Input
-                placeholder="Search by name, email, or username..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full"
-              />
-            </div>
-            <div className="flex gap-2">
-              <Input
-                placeholder="Enter specific User ID..."
-                value={selectedUserId}
-                onChange={(e) => setSelectedUserId(e.target.value)}
-                className="w-64"
-              />
-              <Button
-                onClick={handleSearch}
-                disabled={isLoading}
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
-              >
-                <Search className="w-4 h-4 mr-2" />
-                Search ID
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleLoadAll}
-                disabled={isLoading}
-              >
-                Load All Users
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Users Table */}
       <Card>
@@ -148,13 +65,6 @@ export default function Users() {
           ) : error ? (
             <div className="text-center py-8 text-destructive">
               <p>Failed to load users. Please try again.</p>
-              <Button
-                variant="outline"
-                onClick={handleRefresh}
-                className="mt-2"
-              >
-                Retry
-              </Button>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -170,7 +80,7 @@ export default function Users() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredUsers.map((user) => (
+                  {users.map((user) => (
                     <TableRow key={user.id}>
                       <TableCell>
                         <div className="flex items-center space-x-3">
@@ -224,22 +134,25 @@ export default function Users() {
                         </div>
                       </TableCell>
                       <TableCell className="text-sm">
-                        {formatDate(user.registerDateTime)}
+                        {new Date(user.registerDateTime).toLocaleString()}
                       </TableCell>
                       <TableCell className="text-sm">
-                        {user.lastLoginDateTime
-                          ? formatDate(user.lastLoginDateTime)
-                          : 'Never'}
+                        {new Date(
+                          user.lastLoginDateTime
+                            ? user.lastLoginDateTime
+                            : 'Never'
+                        ).toLocaleString()}
                       </TableCell>
                       <TableCell>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            setSelectedUserId(user.id);
+                            setSelectedUser(user);
+                            setIsModalOpen(true);
                           }}
                         >
-                          View Details
+                          View
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -249,13 +162,83 @@ export default function Users() {
             </div>
           )}
 
-          {!isLoading && !error && filteredUsers.length === 0 && (
+          {!isLoading && !error && users.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">
-              No users found matching your criteria.
+              No users found.
             </div>
           )}
         </CardContent>
       </Card>
+
+      {/* User Details Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>User Details</DialogTitle>
+          </DialogHeader>
+          {selectedUser && (
+            <div className="space-y-4">
+              <div>
+                <label className="font-medium">Name:</label>
+                <p>
+                  {selectedUser.firstName && selectedUser.lastName
+                    ? `${selectedUser.firstName} ${selectedUser.lastName}`
+                    : selectedUser.userName}
+                </p>
+              </div>
+              <div>
+                <label className="font-medium">Email:</label>
+                <p>{selectedUser.email}</p>
+              </div>
+              <div>
+                <label className="font-medium">Username:</label>
+                <p>{selectedUser.userName}</p>
+              </div>
+              <div>
+                <label className="font-medium">Status:</label>
+                <div className="flex items-center space-x-2">
+                  {selectedUser.isBlocked ? (
+                    <Badge
+                      variant="destructive"
+                      className="bg-destructive text-primary-foreground"
+                    >
+                      Blocked
+                    </Badge>
+                  ) : (
+                    <Badge
+                      variant="default"
+                      className="bg-success text-primary-foreground"
+                    >
+                      Active
+                    </Badge>
+                  )}
+                  {selectedUser.isDeleted && (
+                    <Badge variant="outline">Deleted</Badge>
+                  )}
+                </div>
+              </div>
+              <div>
+                <label className="font-medium">Email Confirmed:</label>
+                <p>{selectedUser.emailConfirmed ? 'Yes' : 'No'}</p>
+              </div>
+              <div>
+                <label className="font-medium">Registration Date:</label>
+                <p>
+                  {new Date(selectedUser.registerDateTime).toLocaleString()}
+                </p>
+              </div>
+              <div>
+                <label className="font-medium">Last Login:</label>
+                <p>
+                  {selectedUser.lastLoginDateTime
+                    ? new Date(selectedUser.lastLoginDateTime).toLocaleString()
+                    : 'Never'}
+                </p>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
