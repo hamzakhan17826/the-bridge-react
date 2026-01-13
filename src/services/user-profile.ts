@@ -141,3 +141,22 @@ export async function fetchAppUsers(userId?: string): Promise<AppUser[]> {
     throw error; // Let React Query handle the error
   }
 }
+
+/**
+ * Fetch user claims by userId
+ */
+export async function fetchUserClaims(
+  userId: string
+): Promise<{ key: string; value: string }[]> {
+  try {
+    const res = await api.get('/EditUser/GetUserClaims', {
+      params: { userId },
+    });
+
+    const data = res.data as { key: string; value: string }[];
+    return data;
+  } catch (error: unknown) {
+    console.error('Failed to load user claims:', error);
+    throw error;
+  }
+}

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchAppUsers } from '../services/user-profile';
+import { fetchAppUsers, fetchUserClaims } from '../services/user-profile';
 import type { AppUser } from '../types/user';
 
 // Query Keys for consistent caching and invalidation
@@ -34,5 +34,17 @@ export const useAppUser = (userId: string) => {
     gcTime: 10 * 60 * 1000,
     retry: 2,
     refetchOnWindowFocus: false,
+  });
+};
+
+// Hook for fetching user claims
+export const useUserClaims = (userId: string) => {
+  return useQuery<{ key: string; value: string }[]>({
+    queryKey: ['userClaims', userId],
+    queryFn: () => fetchUserClaims(userId),
+    enabled: !!userId,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    retry: 2,
   });
 };

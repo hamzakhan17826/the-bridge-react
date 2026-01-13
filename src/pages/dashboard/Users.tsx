@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAppUsers } from '../../hooks/useUsers';
+import { useAppUsers, useUserClaims } from '../../hooks/useUsers';
 import { Button } from '../../components/ui/button';
 import {
   Card,
@@ -31,6 +31,9 @@ export default function Users() {
 
   // Use React Query for data fetching
   const { data: users = [], isLoading, error } = useAppUsers();
+  const { data: userClaims = [], isLoading: claimsLoading } = useUserClaims(
+    selectedUser?.id || ''
+  );
 
   // const formatDate = (dateString: string) => {
   //   return new Date(dateString).toLocaleDateString('en-US', {
@@ -234,6 +237,20 @@ export default function Users() {
                     ? new Date(selectedUser.lastLoginDateTime).toLocaleString()
                     : 'Never'}
                 </p>
+              </div>
+              <div>
+                <label className="font-medium">Claims:</label>
+                {claimsLoading ? (
+                  <p>Loading claims...</p>
+                ) : userClaims.length > 0 ? (
+                  <ul className="list-disc list-inside">
+                    {userClaims.map((claim, index) => (
+                      <li key={index}>{claim.key}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No claims found.</p>
+                )}
               </div>
             </div>
           )}
