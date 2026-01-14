@@ -38,16 +38,6 @@ export default function Users() {
     selectedUser?.id || ''
   );
 
-  // const formatDate = (dateString: string) => {
-  //   return new Date(dateString).toLocaleDateString('en-US', {
-  //     year: 'numeric',
-  //     month: 'short',
-  //     day: 'numeric',
-  //     hour: '2-digit',
-  //     minute: '2-digit',
-  //   });
-  // };
-
   return (
     <div className="space-y-6">
       <div>
@@ -140,12 +130,12 @@ export default function Users() {
                         </div>
                       </TableCell>
                       <TableCell className="text-sm">
-                        {new Date(user.registerDateTime).toLocaleString()}
+                        {new Date(user.registerDateTime + 'Z').toLocaleString()}
                       </TableCell>
                       <TableCell className="text-sm">
                         {new Date(
                           user.lastLoginDateTime
-                            ? user.lastLoginDateTime
+                            ? user.lastLoginDateTime + 'Z'
                             : 'Never'
                         ).toLocaleString()}
                       </TableCell>
@@ -230,14 +220,18 @@ export default function Users() {
               <div>
                 <label className="font-medium">Registration Date:</label>
                 <p>
-                  {new Date(selectedUser.registerDateTime).toLocaleString()}
+                  {new Date(
+                    selectedUser.registerDateTime + 'Z'
+                  ).toLocaleString()}
                 </p>
               </div>
               <div>
                 <label className="font-medium">Last Login:</label>
                 <p>
                   {selectedUser.lastLoginDateTime
-                    ? new Date(selectedUser.lastLoginDateTime).toLocaleString()
+                    ? new Date(
+                        selectedUser.lastLoginDateTime + 'Z'
+                      ).toLocaleString()
                     : 'Never'}
                 </p>
               </div>
@@ -246,7 +240,14 @@ export default function Users() {
                 {claimsLoading ? (
                   <p>Loading claims...</p>
                 ) : userClaims.length > 0 ? (
-                  <p>{userClaims.map((claim) => `${claim.key}`).join(', ')}</p>
+                  <p>
+                    {userClaims
+                      .map(
+                        (claim) =>
+                          `${claim.key.charAt(0).toUpperCase() + claim.key.slice(1)}`
+                      )
+                      .join(', ')}
+                  </p>
                 ) : (
                   <p>No claims found.</p>
                 )}
@@ -256,7 +257,14 @@ export default function Users() {
                 {rolesLoading ? (
                   <p>Loading roles...</p>
                 ) : userRoles.length > 0 ? (
-                  <p>{userRoles.map((role) => `${role.key}`).join(', ')}</p>
+                  <p>
+                    {userRoles
+                      .map(
+                        (role) =>
+                          `${role.key.charAt(0).toUpperCase() + role.key.slice(1)}`
+                      )
+                      .join(', ')}
+                  </p>
                 ) : (
                   <p>No roles found.</p>
                 )}

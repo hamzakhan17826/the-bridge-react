@@ -39,7 +39,8 @@ export default function ActivityLogs() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [activityTypeFilter, setActivityTypeFilter] = useState('');
-  const [timestamp, setTimestamp] = useState('');
+  const [fromTimestamp, setFromTimestamp] = useState('');
+  const [toTimestamp, setToTimestamp] = useState('');
 
   const [appliedFilters, setAppliedFilters] = useState<ActivityLogsFilters>({});
 
@@ -71,7 +72,8 @@ export default function ActivityLogs() {
         appliedFilters.activityType === 'all'
           ? ''
           : appliedFilters.activityType || '',
-      timestamp: appliedFilters.timestamp || '',
+      fromTimestamp: appliedFilters.fromTimestamp || '',
+      toTimestamp: appliedFilters.toTimestamp || '',
     }),
     [appliedFilters]
   );
@@ -82,12 +84,18 @@ export default function ActivityLogs() {
       return;
     }
     setEmailError('');
-    const utcTimestamp = timestamp ? new Date(timestamp).toISOString() : '';
-    console.log(utcTimestamp);
+    const utcFromTimestamp = fromTimestamp
+      ? new Date(fromTimestamp).toISOString()
+      : '';
+    const utcToTimestamp = toTimestamp
+      ? new Date(toTimestamp).toISOString()
+      : '';
+    console.log(utcFromTimestamp, utcToTimestamp);
     setAppliedFilters({
       email,
       activityType: activityTypeFilter,
-      timestamp: utcTimestamp,
+      fromTimestamp: utcFromTimestamp,
+      toTimestamp: utcToTimestamp,
     });
     setPageNumber(1);
   };
@@ -137,7 +145,7 @@ export default function ActivityLogs() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               {/* Email Search */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">Email</label>
@@ -188,11 +196,21 @@ export default function ActivityLogs() {
 
               {/* Start Date */}
               <div className="space-y-2">
-                <label className="text-sm font-medium">Select DateTime</label>
+                <label className="text-sm font-medium">From DateTime</label>
                 <Input
                   type="datetime-local"
-                  value={timestamp}
-                  onChange={(e) => setTimestamp(e.target.value)}
+                  value={fromTimestamp}
+                  onChange={(e) => setFromTimestamp(e.target.value)}
+                  className="w-full"
+                />
+              </div>
+              {/* End Date */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium">To DateTime</label>
+                <Input
+                  type="datetime-local"
+                  value={toTimestamp}
+                  onChange={(e) => setToTimestamp(e.target.value)}
                   className="w-full"
                 />
               </div>
@@ -239,7 +257,7 @@ export default function ActivityLogs() {
                           <TableCell>{log.activityType}</TableCell>
                           <TableCell title={full}>{truncated}</TableCell>
                           <TableCell>
-                            {new Date(log.timestamp).toLocaleString()}
+                            {new Date(log.timestamp + 'Z').toLocaleString()}
                           </TableCell>
                         </TableRow>
                       );

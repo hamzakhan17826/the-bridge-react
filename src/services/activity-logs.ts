@@ -12,10 +12,12 @@ export async function fetchActivityLogs(
       pageSize,
       ...(filters?.email && { email: filters.email }),
       ...(filters?.activityType && { activityType: filters.activityType }),
-      ...(filters?.timestamp && { timestamp: filters.timestamp }),
+      ...(filters?.fromTimestamp && { fromTimestamp: filters.fromTimestamp }),
+      ...(filters?.toTimestamp && { toTimestamp: filters.toTimestamp }),
     };
 
     const response = await api.post('/System/ActivityLogs', requestData);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching activity logs: ', error);

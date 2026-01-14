@@ -17,7 +17,8 @@ export interface ActivityLogsResponse {
 export interface ActivityLogsFilters {
   email?: string;
   activityType?: string;
-  timestamp?: string;
+  fromTimestamp?: string;
+  toTimestamp?: string;
 }
 export interface ListActivityUniqueTypes {
   id: number;
