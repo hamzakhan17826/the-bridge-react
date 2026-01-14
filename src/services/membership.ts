@@ -6,7 +6,7 @@ export async function fetchSubscriptionTiers(): Promise<SubscriptionTier[]> {
     const res = await api.get('/Resources/SubscriptionsFeatures');
     return res.data as SubscriptionTier[];
   } catch (error) {
-    console.error('Error fetching subscription tiers', error);
+    console.error('Error fetching Membership tiers', error);
     // Return dummy data as fallback for UI demonstration
     return [
       {

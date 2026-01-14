@@ -33,7 +33,3 @@ export interface SubscriptionFeature {
   displayOrder: number;
   updatedAt: string;
 }
-
-export const membershipQueryKeys = {
-  subscriptionTiers: ['membership', 'subscriptionTiers'] as const,
-};
