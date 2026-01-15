@@ -6,7 +6,7 @@ import {
   clearAuthCookies,
 } from '../../lib/auth';
 import { useAuthStore } from '../../stores/authStore';
-import { getUserIdFromToken } from '../../lib/utils';
+import { getUserIdFromToken, isJwtExpired } from '../../lib/utils';
 import { fetchUserProfile } from '../../services/user-profile';
 
 export function AuthInitializer() {
@@ -14,9 +14,13 @@ export function AuthInitializer() {
     const initializeAuth = async () => {
       // console.log('🚀 [AUTH_INIT] Initializing auth state on app start...');
 
+      // Detect if this is a fresh browser session (no tab/session state yet)
+      const hasSessionMarker =
+        typeof window !== 'undefined' &&
+        typeof window.sessionStorage !== 'undefined' &&
+        window.sessionStorage.getItem('sessionStarted') === '1';
+
       const jwtToken = getCookie('jwtToken');
-      const userRoleCookie = getCookie('userRole');
-      const refreshToken = getCookie('refreshToken');
 
       // console.log('🍪 [AUTH_INIT] Cookies found:', {
       //   hasJwtToken: !!jwtToken,
@@ -24,39 +28,29 @@ export function AuthInitializer() {
       //   hasRefreshToken: !!refreshToken,
       // });
 
-      // If remember me is not enabled AND no cookies exist (fresh app start), clear any stale cookies
-      // But if rememberMe is '0' and cookies exist, it means user just logged in with rememberMe=false
-      // In that case, allow the session to continue for this browser session
-      const hasAnyAuthCookies = jwtToken || userRoleCookie || refreshToken;
-
-      if (!isRememberMeEnabled() && !hasAnyAuthCookies) {
-        // console.log(
-        //   '🧹 [AUTH_INIT] No remember me and no auth cookies - clearing any stale cookies'
-        // );
+      // If remember me is disabled: on a fresh browser session, force logout/cleanup
+      // Within the same session (reloads), allow continuing only if JWT is valid
+      if (!isRememberMeEnabled()) {
+        if (!hasSessionMarker) {
+          clearAuthCookies();
+          useAuthStore.getState().logout();
+          // Mark session so subsequent reloads within the same session can continue
+          try {
+            window.sessionStorage.setItem('sessionStarted', '1');
+          } catch (e) {
+            void e; // noop
+          }
+          return;
+        }
+        if (jwtToken && !isJwtExpired(jwtToken)) {
+          const roles = getUserRoles() ?? [];
+          useAuthStore.getState().setRoles(roles);
+          useAuthStore.getState().setLoggedIn(true);
+          return;
+        }
+        // No valid token within the same session
         clearAuthCookies();
-
-        // Clear auth store
         useAuthStore.getState().logout();
-        // console.log('🔓 [AUTH_INIT] Auth state cleared for fresh app start');
-        return;
-      }
-
-      // If remember me is disabled but cookies exist, load roles but don't authenticate fully
-      if (!isRememberMeEnabled() && hasAnyAuthCookies) {
-        // console.log(
-        //   '🔓 [AUTH_INIT] Remember me disabled but cookies exist - loading roles for current session'
-        // );
-
-        // Parse roles from cookie via helper and set in store
-        const roles = getUserRoles() ?? [];
-
-        // Set roles in store and mark as logged in for current session
-        useAuthStore.getState().setRoles(roles);
-        useAuthStore.getState().setLoggedIn(true);
-        // console.log(
-        //   '✅ [AUTH_INIT] Roles loaded and user marked as logged in for current session:',
-        //   roles
-        // );
         return;
       }
 
@@ -105,6 +99,13 @@ export function AuthInitializer() {
     };
 
     initializeAuth();
+
+    // Ensure session marker is set for the current session
+    try {
+      window.sessionStorage.setItem('sessionStarted', '1');
+    } catch (e) {
+      void e; // noop
+    }
   }, []);
 
   return null; // This component doesn't render anything

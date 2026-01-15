@@ -23,7 +23,7 @@ export async function loginUser(
         jwtToken: result.jwtToken,
         refreshToken: result.refreshToken,
         roles: Array.isArray(result.roles) ? result.roles : undefined,
-        persistent: !!payload.rememberMe,
+        persistent: payload.rememberMe,
       });
 
       // Store roles in Zustand if present
@@ -41,7 +41,7 @@ export async function loginUser(
         '🍪 [LOGIN] Setting rememberMe cookie:',
         payload.rememberMe ? '1' : '0',
         'persistent:',
-        !!payload.rememberMe
+        payload.rememberMe
       );
 
       // refreshToken is already handled via setAuthCookies above

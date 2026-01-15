@@ -1,3 +1,5 @@
+import type { CookieOptions } from '../types/auth';
+
 export function getCookie(name: string) {
   if (typeof document === 'undefined') return undefined;
   const value = `; ${document.cookie}`;
@@ -14,14 +16,6 @@ export function getCookie(name: string) {
   }
   return undefined;
 }
-
-type CookieOptions = {
-  path?: string;
-  maxAge?: number;
-  expires?: Date;
-  sameSite?: 'lax' | 'strict' | 'none';
-  secure?: boolean;
-};
 
 export function setCookie(
   name: string,
@@ -137,6 +131,14 @@ export function logout() {
   deleteCookie('userRole');
   deleteCookie('auth');
   deleteCookie('rememberMe');
+  // Also clear session marker so next load is treated as fresh session
+  try {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      window.sessionStorage.removeItem('sessionStarted');
+    }
+  } catch (e) {
+    void e; // noop
+  }
   // Clear Zustand store
   import('../stores/authStore').then(({ useAuthStore }) => {
     useAuthStore.getState().logout();

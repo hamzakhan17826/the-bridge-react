@@ -62,3 +62,11 @@ export interface AuthState {
   setRoles: (roles: string[]) => void;
   setLoggedIn: (loggedIn: boolean) => void;
 }
+
+export interface CookieOptions {
+  path?: string;
+  maxAge?: number;
+  expires?: Date;
+  sameSite?: 'lax' | 'strict' | 'none';
+  secure?: boolean;
+}
