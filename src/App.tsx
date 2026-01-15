@@ -29,6 +29,7 @@ import {
   Users,
   Settings,
   MembershipUpgrade,
+  PaymentReturn,
   ActivityLogs,
   AccessDenied,
   DashboardAccessDenied,
@@ -120,6 +121,7 @@ function App() {
                     </RequireAuth>
                   }
                 />
+                <Route path="/payment-return" element={<PaymentReturn />} />
               </Route>
               <Route
                 path="/dashboard"

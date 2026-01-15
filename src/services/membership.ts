@@ -1,5 +1,10 @@
 import api from '../lib/api';
-import type { SubscriptionTier } from '../types/membership';
+import type {
+  OrderStatusResponse,
+  PlaceMembershipOrderPayload,
+  PlaceMembershipOrderResponse,
+  SubscriptionTier,
+} from '../types/membership';
 
 export async function fetchSubscriptionTiers(): Promise<SubscriptionTier[]> {
   try {
@@ -334,5 +339,73 @@ export async function fetchSubscriptionTiers(): Promise<SubscriptionTier[]> {
         ],
       },
     ];
+  }
+}
+
+export async function placeMembershipOrder(
+  payload: PlaceMembershipOrderPayload
+): Promise<PlaceMembershipOrderResponse> {
+  try {
+    console.log('Calling placeMembershipOrder API with payload:', payload);
+    const res = await api.post('/Member/AppUserPlaceMembershipOrder', payload);
+    console.log('placeMembershipOrder API response:', res.data);
+    return res.data;
+  } catch (error: unknown) {
+    console.error('placeMembershipOrder API error:', error);
+    const err = error as {
+      response?: {
+        data?: { message?: string; errors?: string[] };
+        status?: number;
+      };
+    };
+
+    console.error('Error details:', {
+      status: err.response?.status,
+      data: err.response?.data,
+      message: err.response?.data?.message,
+      errors: err.response?.data?.errors,
+    });
+
+    throw new Error(
+      err.response?.data?.message || 'Failed to place membership order.'
+    );
+  }
+}
+
+export async function paypalWebhook(token: string): Promise<string> {
+  try {
+    const res = await api.post('/Member/PayPalWebhook', token, {
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+    });
+    return res.data; // Should be "OK"
+  } catch (error: unknown) {
+    const err = error as {
+      response?: {
+        data?: { message?: string };
+      };
+    };
+
+    throw new Error(err.response?.data?.message || 'PayPal webhook failed.');
+  }
+}
+
+export async function getOrderStatus(
+  pubTrackId: string
+): Promise<OrderStatusResponse> {
+  try {
+    const res = await api.get(`/Member/OrderStatus/${pubTrackId}`);
+    return res.data;
+  } catch (error: unknown) {
+    const err = error as {
+      response?: {
+        data?: { message?: string };
+      };
+    };
+
+    throw new Error(
+      err.response?.data?.message || 'Failed to get order status.'
+    );
   }
 }

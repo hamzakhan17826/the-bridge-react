@@ -28,5 +28,6 @@ export { default as Users } from './dashboard/Users';
 export { default as Settings } from './dashboard/Settings';
 export { default as DashboardMembership } from './dashboard/Membership';
 export { default as MembershipUpgrade } from './dashboard/MembershipUpgrade';
+export { default as PaymentReturn } from './dashboard/PaymentReturn';
 export { default as ActivityLogs } from './dashboard/ActivityLogs';
 export { default as DashboardAccessDenied } from './dashboard/AccessDenied';

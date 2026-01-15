@@ -16,8 +16,8 @@ import {
   CreditCard,
   Wallet,
 } from 'lucide-react';
-// import { useRegisterMedium } from '../../hooks/useMediumRegistration';
 import { useSubscriptionTiers } from '../../hooks/useMembership';
+import { placeMembershipOrder } from '../../services/membership';
 // import MediumRegistrationForm from '../../components/MediumRegistrationForm';
 import { Button } from '../../components/ui';
 import { Input } from '../../components/ui/input';
@@ -31,6 +31,10 @@ export default function MembershipUpgrade() {
   // State for payment form
   const [discountCode, setDiscountCode] = useState('');
   const [autoRenew, setAutoRenew] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [paymentWindow, setPaymentWindow] = useState<Window | null>(null);
+  const [showPaymentWaiting, setShowPaymentWaiting] = useState(false);
   // React Query hooks
   const { data: tiers = [], isLoading: tiersLoading } = useSubscriptionTiers();
   // const registerMediumMutation = useRegisterMedium();
@@ -111,6 +115,45 @@ export default function MembershipUpgrade() {
   //   });
   // };
 
+  const handlePayment = async (processorId: number) => {
+    if (!selectedTier) return;
+
+    setIsProcessing(true);
+    setError(null);
+
+    try {
+      const payload = {
+        membershipId: selectedTier.id,
+        discountCode: discountCode || '', // Send empty string if no discount
+        autoRenewMyMembership: autoRenew,
+        processorId,
+      };
+
+      console.log('Sending payment payload:', payload);
+
+      const response = await placeMembershipOrder(payload);
+
+      console.log('Payment API response:', response);
+
+      if (response.result && response.redirectUrl) {
+        console.log('Opening payment in new tab:', response.redirectUrl);
+        // Open payment in new tab
+        const newWindow = window.open(response.redirectUrl, '_blank');
+        setPaymentWindow(newWindow);
+        setShowPaymentWaiting(true);
+        setIsProcessing(false); // Stop the processing spinner
+      } else {
+        console.error('Payment initiation failed:', response);
+        setError(response.message || 'Failed to initiate payment');
+        setIsProcessing(false);
+      }
+    } catch (err) {
+      console.error('Payment error:', err);
+      setError(err instanceof Error ? err.message : 'Payment failed');
+      setIsProcessing(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4">
@@ -166,6 +209,12 @@ export default function MembershipUpgrade() {
 
               {/* Payment Options */}
               <div className="space-y-4">
+                {error && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-md">
+                    <p className="text-sm text-red-600">{error}</p>
+                  </div>
+                )}
+
                 <div className="space-y-2">
                   <Label htmlFor="discountCode">Discount Code (Optional)</Label>
                   <Input
@@ -196,38 +245,70 @@ export default function MembershipUpgrade() {
                 <Button
                   className="w-full bg-[#0070ba] hover:bg-[#0070ba]/90 text-white"
                   size="lg"
-                  onClick={() => {
-                    // TODO: Implement PayPal payment
-                    console.log('PayPal payment clicked', {
-                      membershipId: selectedTier.id,
-                      discountCode,
-                      autoRenewMyMembership: autoRenew,
-                      processorId: 1,
-                    });
-                  }}
+                  onClick={() => handlePayment(1)}
+                  disabled={isProcessing || showPaymentWaiting}
                 >
                   <Wallet className="w-5 h-5 mr-2" />
-                  Pay with PayPal
+                  {isProcessing ? 'Processing...' : 'Pay with PayPal'}
                 </Button>
 
                 <Button
                   variant="outline"
                   className="w-full border-[#635bff] text-[#635bff] hover:bg-[#635bff] hover:text-white"
                   size="lg"
-                  onClick={() => {
-                    // TODO: Implement Stripe payment
-                    console.log('Stripe payment clicked', {
-                      membershipId: selectedTier.id,
-                      discountCode,
-                      autoRenewMyMembership: autoRenew,
-                      processorId: 2,
-                    });
-                  }}
+                  onClick={() => handlePayment(2)}
+                  disabled={isProcessing || showPaymentWaiting}
                 >
                   <CreditCard className="w-5 h-5 mr-2" />
-                  Pay with Card
+                  {isProcessing ? 'Processing...' : 'Pay with Card'}
                 </Button>
               </div>
+
+              {/* Payment Waiting Message */}
+              {showPaymentWaiting && (
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                    <div>
+                      <p className="font-medium text-blue-900">
+                        Payment Processing
+                      </p>
+                      <p className="text-sm text-blue-700">
+                        Please complete your payment in the new tab. This page
+                        will remain open for your convenience.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        if (paymentWindow && !paymentWindow.closed) {
+                          paymentWindow.focus();
+                        } else {
+                          setShowPaymentWaiting(false);
+                          setPaymentWindow(null);
+                        }
+                      }}
+                    >
+                      {paymentWindow && !paymentWindow.closed
+                        ? 'Focus Payment Tab'
+                        : 'Close'}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setShowPaymentWaiting(false);
+                        setPaymentWindow(null);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              )}
 
               {/* Security Note */}
               <div className="text-center text-sm text-muted-foreground">
