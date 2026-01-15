@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
-import { getOrderStatus, paypalWebhook } from '../../services/membership';
+import { usePaypalWebhook, useOrderStatus } from '../../hooks/useMembership';
 
 export default function PaymentReturn() {
   const [searchParams] = useSearchParams();
@@ -13,6 +13,9 @@ export default function PaymentReturn() {
   );
   const [message, setMessage] = useState('');
 
+  const paypalWebhookMutation = usePaypalWebhook();
+  const orderStatusMutation = useOrderStatus();
+
   useEffect(() => {
     const handlePaymentReturn = async () => {
       const token = searchParams.get('token');
@@ -20,34 +23,41 @@ export default function PaymentReturn() {
 
       if (token) {
         // PayPal return with token
-        try {
-          await paypalWebhook(token);
-          setStatus('success');
-          setMessage('Payment completed successfully!');
-        } catch (error) {
-          setStatus('failed');
-          setMessage('Payment verification failed. Please contact support.');
-        }
-      } else if (pubTrackId) {
-        // Check order status
-        try {
-          const response = await getOrderStatus(pubTrackId);
-          if (response.isPaid && response.paymentStatus === 'completed') {
+        paypalWebhookMutation.mutate(token, {
+          onSuccess: () => {
             setStatus('success');
             setMessage('Payment completed successfully!');
-          } else if (response.isPaid && response.paymentStatus === 'pending') {
-            setStatus('loading');
-            setMessage('Payment is being processed. Please wait...');
-          } else {
+          },
+          onError: () => {
             setStatus('failed');
-            setMessage('Payment failed or is still processing.');
-          }
-        } catch (error) {
-          setStatus('failed');
-          setMessage(
-            'Failed to verify payment status. Please contact support.'
-          );
-        }
+            setMessage('Payment verification failed. Please contact support.');
+          },
+        });
+      } else if (pubTrackId) {
+        // Check order status
+        orderStatusMutation.mutate(pubTrackId, {
+          onSuccess: (response) => {
+            if (response.isPaid && response.paymentStatus === 'completed') {
+              setStatus('success');
+              setMessage('Payment completed successfully!');
+            } else if (
+              response.isPaid &&
+              response.paymentStatus === 'pending'
+            ) {
+              setStatus('loading');
+              setMessage('Payment is being processed. Please wait...');
+            } else {
+              setStatus('failed');
+              setMessage('Payment failed or is still processing.');
+            }
+          },
+          onError: () => {
+            setStatus('failed');
+            setMessage(
+              'Failed to verify payment status. Please contact support.'
+            );
+          },
+        });
       } else {
         setStatus('failed');
         setMessage('Invalid payment return. Please contact support.');
@@ -55,14 +65,15 @@ export default function PaymentReturn() {
     };
 
     handlePaymentReturn();
-  }, [searchParams]);
+  }, [searchParams, paypalWebhookMutation, orderStatusMutation]);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="flex items-center justify-center gap-2">
-            {status === 'loading' && (
+            {(paypalWebhookMutation.isPending ||
+              orderStatusMutation.isPending) && (
               <Loader2 className="h-6 w-6 animate-spin" />
             )}
             {status === 'success' && (
@@ -77,11 +88,13 @@ export default function PaymentReturn() {
         <CardContent className="text-center space-y-4">
           <p className="text-muted-foreground">{message}</p>
 
-          {status === 'loading' && (
-            <div className="flex justify-center">
-              <Loader2 className="h-8 w-8 animate-spin" />
-            </div>
-          )}
+          {status === 'loading' &&
+            (paypalWebhookMutation.isPending ||
+              orderStatusMutation.isPending) && (
+              <div className="flex justify-center">
+                <Loader2 className="h-8 w-8 animate-spin" />
+              </div>
+            )}
 
           <div className="flex gap-2">
             <Button

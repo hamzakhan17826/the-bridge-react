@@ -16,8 +16,10 @@ import {
   CreditCard,
   Wallet,
 } from 'lucide-react';
-import { useSubscriptionTiers } from '../../hooks/useMembership';
-import { placeMembershipOrder } from '../../services/membership';
+import {
+  useSubscriptionTiers,
+  usePlaceMembershipOrder,
+} from '../../hooks/useMembership';
 // import MediumRegistrationForm from '../../components/MediumRegistrationForm';
 import { Button } from '../../components/ui';
 import { Input } from '../../components/ui/input';
@@ -31,13 +33,12 @@ export default function MembershipUpgrade() {
   // State for payment form
   const [discountCode, setDiscountCode] = useState('');
   const [autoRenew, setAutoRenew] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [paymentWindow, setPaymentWindow] = useState<Window | null>(null);
   const [showPaymentWaiting, setShowPaymentWaiting] = useState(false);
   // React Query hooks
   const { data: tiers = [], isLoading: tiersLoading } = useSubscriptionTiers();
-  // const registerMediumMutation = useRegisterMedium();
+  const placeOrderMutation = usePlaceMembershipOrder();
 
   // Find selected tier based on plan parameter
   const selectedTier = tiers.find(
@@ -118,40 +119,35 @@ export default function MembershipUpgrade() {
   const handlePayment = async (processorId: number) => {
     if (!selectedTier) return;
 
-    setIsProcessing(true);
-    setError(null);
+    const payload = {
+      membershipId: selectedTier.id,
+      discountCode: discountCode || '', // Send empty string if no discount
+      autoRenewMyMembership: autoRenew,
+      processorId,
+    };
 
-    try {
-      const payload = {
-        membershipId: selectedTier.id,
-        discountCode: discountCode || '', // Send empty string if no discount
-        autoRenewMyMembership: autoRenew,
-        processorId,
-      };
+    console.log('Sending payment payload:', payload);
 
-      console.log('Sending payment payload:', payload);
+    placeOrderMutation.mutate(payload, {
+      onSuccess: (response) => {
+        console.log('Payment API response:', response);
 
-      const response = await placeMembershipOrder(payload);
-
-      console.log('Payment API response:', response);
-
-      if (response.result && response.redirectUrl) {
-        console.log('Opening payment in new tab:', response.redirectUrl);
-        // Open payment in new tab
-        const newWindow = window.open(response.redirectUrl, '_blank');
-        setPaymentWindow(newWindow);
-        setShowPaymentWaiting(true);
-        setIsProcessing(false); // Stop the processing spinner
-      } else {
-        console.error('Payment initiation failed:', response);
-        setError(response.message || 'Failed to initiate payment');
-        setIsProcessing(false);
-      }
-    } catch (err) {
-      console.error('Payment error:', err);
-      setError(err instanceof Error ? err.message : 'Payment failed');
-      setIsProcessing(false);
-    }
+        if (response.result && response.redirectUrl) {
+          console.log('Opening payment in new tab:', response.redirectUrl);
+          // Open payment in new tab
+          const newWindow = window.open(response.redirectUrl, '_blank');
+          setPaymentWindow(newWindow);
+          setShowPaymentWaiting(true);
+        } else {
+          console.error('Payment initiation failed:', response);
+          setError(response.message || 'Failed to initiate payment');
+        }
+      },
+      onError: (err) => {
+        console.error('Payment error:', err);
+        setError(err instanceof Error ? err.message : 'Payment failed');
+      },
+    });
   };
 
   return (
@@ -246,10 +242,12 @@ export default function MembershipUpgrade() {
                   className="w-full bg-[#0070ba] hover:bg-[#0070ba]/90 text-white"
                   size="lg"
                   onClick={() => handlePayment(1)}
-                  disabled={isProcessing || showPaymentWaiting}
+                  disabled={placeOrderMutation.isPending || showPaymentWaiting}
                 >
                   <Wallet className="w-5 h-5 mr-2" />
-                  {isProcessing ? 'Processing...' : 'Pay with PayPal'}
+                  {placeOrderMutation.isPending
+                    ? 'Processing...'
+                    : 'Pay with PayPal'}
                 </Button>
 
                 <Button
@@ -257,10 +255,12 @@ export default function MembershipUpgrade() {
                   className="w-full border-[#635bff] text-[#635bff] hover:bg-[#635bff] hover:text-white"
                   size="lg"
                   onClick={() => handlePayment(2)}
-                  disabled={isProcessing || showPaymentWaiting}
+                  disabled={placeOrderMutation.isPending || showPaymentWaiting}
                 >
                   <CreditCard className="w-5 h-5 mr-2" />
-                  {isProcessing ? 'Processing...' : 'Pay with Card'}
+                  {placeOrderMutation.isPending
+                    ? 'Processing...'
+                    : 'Pay with Card'}
                 </Button>
               </div>
 
