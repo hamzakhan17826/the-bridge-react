@@ -1,5 +1,10 @@
 import { useEffect } from 'react';
-import { getCookie, deleteCookie } from '../../lib/auth';
+import {
+  getCookie,
+  getUserRoles,
+  isRememberMeEnabled,
+  clearAuthCookies,
+} from '../../lib/auth';
 import { useAuthStore } from '../../stores/authStore';
 import { getUserIdFromToken } from '../../lib/utils';
 import { fetchUserProfile } from '../../services/user-profile';
@@ -11,13 +16,11 @@ export function AuthInitializer() {
 
       const jwtToken = getCookie('jwtToken');
       const userRoleCookie = getCookie('userRole');
-      const rememberMeFlag = getCookie('rememberMe');
       const refreshToken = getCookie('refreshToken');
 
       // console.log('🍪 [AUTH_INIT] Cookies found:', {
       //   hasJwtToken: !!jwtToken,
       //   hasUserRole: !!userRoleCookie,
-      //   rememberMeFlag: rememberMeFlag,
       //   hasRefreshToken: !!refreshToken,
       // });
 
@@ -26,15 +29,11 @@ export function AuthInitializer() {
       // In that case, allow the session to continue for this browser session
       const hasAnyAuthCookies = jwtToken || userRoleCookie || refreshToken;
 
-      if (rememberMeFlag !== '1' && !hasAnyAuthCookies) {
+      if (!isRememberMeEnabled() && !hasAnyAuthCookies) {
         // console.log(
         //   '🧹 [AUTH_INIT] No remember me and no auth cookies - clearing any stale cookies'
         // );
-        deleteCookie('auth');
-        deleteCookie('jwtToken');
-        deleteCookie('userRole');
-        deleteCookie('refreshToken');
-        deleteCookie('rememberMe');
+        clearAuthCookies();
 
         // Clear auth store
         useAuthStore.getState().logout();
@@ -43,21 +42,13 @@ export function AuthInitializer() {
       }
 
       // If remember me is disabled but cookies exist, load roles but don't authenticate fully
-      if (rememberMeFlag !== '1' && hasAnyAuthCookies) {
+      if (!isRememberMeEnabled() && hasAnyAuthCookies) {
         // console.log(
         //   '🔓 [AUTH_INIT] Remember me disabled but cookies exist - loading roles for current session'
         // );
 
-        // Parse roles from cookie and set in store
-        let roles: string[] = [];
-        if (userRoleCookie) {
-          try {
-            const parsed = JSON.parse(userRoleCookie);
-            roles = Array.isArray(parsed) ? parsed : [userRoleCookie];
-          } catch {
-            roles = [userRoleCookie];
-          }
-        }
+        // Parse roles from cookie via helper and set in store
+        const roles = getUserRoles() ?? [];
 
         // Set roles in store and mark as logged in for current session
         useAuthStore.getState().setRoles(roles);
@@ -70,7 +61,7 @@ export function AuthInitializer() {
       }
 
       // Only try to authenticate if remember me was enabled
-      const shouldAuthenticate = jwtToken && rememberMeFlag === '1';
+      const shouldAuthenticate = !!jwtToken && isRememberMeEnabled();
 
       // If we have a JWT token, try to load user data
       if (shouldAuthenticate) {
@@ -83,16 +74,8 @@ export function AuthInitializer() {
             // Fetch user profile
             const profileResponse = await fetchUserProfile(userId);
             if (profileResponse.success && profileResponse.data) {
-              // Parse roles from cookie
-              let roles: string[] = [];
-              if (userRoleCookie) {
-                try {
-                  const parsed = JSON.parse(userRoleCookie);
-                  roles = Array.isArray(parsed) ? parsed : [userRoleCookie];
-                } catch {
-                  roles = [userRoleCookie];
-                }
-              }
+              // Parse roles via helper
+              const roles = getUserRoles() ?? [];
 
               // Set user data in store
               useAuthStore.getState().login(profileResponse.data, roles);

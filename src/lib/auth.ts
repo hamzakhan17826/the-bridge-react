@@ -45,6 +45,65 @@ export function deleteCookie(name: string) {
   document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax`;
 }
 
+// Helper to check remember-me flag
+export function isRememberMeEnabled(): boolean {
+  return getCookie('rememberMe') === '1';
+}
+
+// Clear auth-related cookies without redirect
+export function clearAuthCookies() {
+  deleteCookie('auth');
+  deleteCookie('jwtToken');
+  deleteCookie('userRole');
+  deleteCookie('refreshToken');
+  deleteCookie('rememberMe');
+}
+
+// Set auth-related cookies in a consistent way
+export function setAuthCookies(params: {
+  jwtToken?: string;
+  refreshToken?: string;
+  roles?: string[];
+  persistent: boolean;
+}) {
+  const { jwtToken, refreshToken, roles, persistent } = params;
+  if (jwtToken) {
+    setCookie('auth', '1', {
+      path: '/',
+      sameSite: 'lax',
+      ...(persistent ? { maxAge: 60 * 60 * 24 * 30 } : {}),
+    });
+    setCookie('jwtToken', jwtToken, {
+      path: '/',
+      sameSite: 'lax',
+      ...(persistent ? { maxAge: 60 * 60 * 24 * 30 } : {}),
+    });
+  }
+  if (Array.isArray(roles)) {
+    try {
+      setCookie('userRole', JSON.stringify(roles), {
+        path: '/',
+        sameSite: 'lax',
+        ...(persistent ? { maxAge: 60 * 60 * 24 * 30 } : {}),
+      });
+    } catch {
+      // ignore
+    }
+  }
+  if (refreshToken) {
+    setCookie('refreshToken', refreshToken, {
+      path: '/',
+      sameSite: 'lax',
+      ...(persistent ? { maxAge: 60 * 60 * 24 * 30 } : {}),
+    });
+  }
+}
+
+// Convenience wrapper to clear cookies and logout via existing flow
+export function clearAuthCookiesAndLogout() {
+  logout();
+}
+
 export function getUserRoles(): string[] | null {
   const cookieValue = getCookie('userRole');
   if (!cookieValue) return null;

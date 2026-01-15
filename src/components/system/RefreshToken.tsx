@@ -1,33 +1,18 @@
 import { useEffect } from 'react';
 import { refreshToken } from '../../lib/refresh';
-import { getAuthFlag, logout, getCookie } from '../../lib/auth';
+import {
+  getAuthFlag,
+  logout,
+  getCookie,
+  isRememberMeEnabled,
+} from '../../lib/auth';
+import { isJwtExpired } from '../../lib/utils';
 
 export default function RefreshToken() {
   useEffect(() => {
     let canceled = false;
 
-    const isJwtExpired = (
-      token: string | undefined,
-      skewMs = 5000
-    ): boolean => {
-      if (!token) return true;
-      try {
-        const parts = token.split('.');
-        if (parts.length < 2) return true;
-        const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
-        const json = decodeURIComponent(
-          atob(base64)
-            .split('')
-            .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-            .join('')
-        );
-        const payload = JSON.parse(json) as { exp?: number };
-        const expMs = (payload.exp ?? 0) * 1000;
-        return Date.now() >= expMs - skewMs;
-      } catch {
-        return true;
-      }
-    };
+    // expiry check provided by shared utils
 
     const runRefresh = async () => {
       if (canceled) return;
@@ -48,8 +33,7 @@ export default function RefreshToken() {
     };
 
     const isLoggedIn = getAuthFlag();
-    const rememberMeFlag = getCookie('rememberMe');
-    const shouldRefresh = isLoggedIn && rememberMeFlag === '1';
+    const shouldRefresh = isLoggedIn && isRememberMeEnabled();
 
     // console.log('🟢 isLoggedIn: ', isLoggedIn);
     if (shouldRefresh) {
@@ -66,7 +50,7 @@ export default function RefreshToken() {
     const interval = setInterval(
       () => {
         const still = getAuthFlag();
-        const stillRemember = getCookie('rememberMe') === '1';
+        const stillRemember = isRememberMeEnabled();
         if (still && stillRemember) {
           runRefresh();
         } else {

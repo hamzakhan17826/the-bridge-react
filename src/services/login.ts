@@ -1,5 +1,5 @@
 import api from '../lib/api';
-import { setCookie, emitAuthChange } from '../lib/auth';
+import { setCookie, emitAuthChange, setAuthCookies } from '../lib/auth';
 import { useAuthStore } from '../stores/authStore';
 import { fetchUserProfile } from './user-profile';
 import { getUserIdFromToken } from '../lib/utils';
@@ -18,46 +18,17 @@ export async function loginUser(
         payload.rememberMe
       );
 
-      if (result.jwtToken) {
-        // Auth flag ko bhi remember me ke mutabiq set karo
-        setCookie('auth', '1', {
-          path: '/',
-          sameSite: 'lax',
-          ...(payload.rememberMe ? { maxAge: 60 * 60 * 24 * 30 } : {}),
-        });
-        console.log(
-          '🍪 [LOGIN] Setting auth cookie, persistent:',
-          !!payload.rememberMe
-        );
+      // Set auth-related cookies consistently
+      setAuthCookies({
+        jwtToken: result.jwtToken,
+        refreshToken: result.refreshToken,
+        roles: Array.isArray(result.roles) ? result.roles : undefined,
+        persistent: !!payload.rememberMe,
+      });
 
-        // Mirror jwt token into a non-httpOnly cookie for client-side checks
-        setCookie('jwtToken', result.jwtToken, {
-          path: '/',
-          sameSite: 'lax',
-          // Make persistent only if rememberMe is set; otherwise session cookie
-          ...(payload.rememberMe ? { maxAge: 60 * 60 * 24 * 30 } : {}),
-        });
-        console.log(
-          '🍪 [LOGIN] Setting jwtToken cookie, persistent:',
-          !!payload.rememberMe
-        );
-      }
+      // Store roles in Zustand if present
       if (Array.isArray(result.roles)) {
-        try {
-          setCookie('userRole', JSON.stringify(result.roles), {
-            path: '/',
-            sameSite: 'lax',
-            ...(payload.rememberMe ? { maxAge: 60 * 60 * 24 * 30 } : {}),
-          });
-          console.log(
-            '🍪 [LOGIN] Setting userRole cookie, persistent:',
-            !!payload.rememberMe
-          );
-          // Store roles in Zustand
-          useAuthStore.getState().setRoles(result.roles);
-        } catch (err) {
-          void err; // noop
-        }
+        useAuthStore.getState().setRoles(result.roles);
       }
 
       // Store remember me flag for refresh logic
@@ -73,19 +44,7 @@ export async function loginUser(
         !!payload.rememberMe
       );
 
-      if (result.refreshToken) {
-        // Mirror refresh token in a non-httpOnly cookie for client checks
-        // Backend should set httpOnly cookie as well when applicable
-        setCookie('refreshToken', result.refreshToken, {
-          path: '/',
-          sameSite: 'lax',
-          ...(payload.rememberMe ? { maxAge: 60 * 60 * 24 * 30 } : {}),
-        });
-        console.log(
-          '🍪 [LOGIN] Setting refreshToken cookie, persistent:',
-          !!payload.rememberMe
-        );
-      }
+      // refreshToken is already handled via setAuthCookies above
 
       // Fetch and store user profile in Zustand
       try {

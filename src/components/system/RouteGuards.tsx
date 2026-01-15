@@ -1,6 +1,6 @@
 import { type ReactNode, useMemo, useState, useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { getAuthFlag, getCookie } from '../../lib/auth';
+import { getAuthFlag, getUserRoles } from '../../lib/auth';
 
 function useAuthReactive(): boolean {
   const [isAuthed, setIsAuthed] = useState<boolean>(getAuthFlag());
@@ -50,17 +50,10 @@ export function RequireAdmin({ children }: { children: ReactNode }) {
       return false;
     }
 
-    // Check admin role from cookies directly
-    const userRoleCookie = getCookie('userRole');
-    if (userRoleCookie) {
-      try {
-        const parsed = JSON.parse(userRoleCookie);
-        const roles = Array.isArray(parsed) ? parsed : [userRoleCookie];
-        return roles.includes('admin');
-      } catch {
-        // If parsing fails, treat as single role
-        return userRoleCookie === 'admin';
-      }
+    // Check admin role via helper
+    const roles = getUserRoles();
+    if (roles && Array.isArray(roles)) {
+      return roles.includes('admin');
     }
 
     return false;
