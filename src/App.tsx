@@ -14,6 +14,7 @@ import {
   ContactUsPage,
   MediumProfile,
   Mediums,
+  BookMedium,
   Podcasts,
   Reviews,
   Blogs,
@@ -26,6 +27,7 @@ import {
   Overview,
   DashboardUserProfile,
   DashboardMembership,
+  MembershipOrders,
   Users,
   Settings,
   MembershipUpgrade,
@@ -33,6 +35,12 @@ import {
   ActivityLogs,
   AccessDenied,
   DashboardAccessDenied,
+  PMOnboarding,
+  PMBookings,
+  PMSchedule,
+  PMServices,
+  PMEarnings,
+  PMPayout,
 } from './pages';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
@@ -72,6 +80,7 @@ function App() {
                 <Route path="/about" element={<AboutUs />} />
                 <Route path="/reviews" element={<Reviews />} />
                 <Route path="/mediums/:slug" element={<MediumProfile />} />
+                <Route path="/book/:slug" element={<BookMedium />} />
                 <Route path="/access-denied" element={<AccessDenied />} />
                 <Route
                   path="/register"
@@ -134,8 +143,18 @@ function App() {
                 }
               >
                 <Route index element={<Overview />} />
+                <Route path="pm/onboarding" element={<PMOnboarding />} />
+                <Route path="pm/bookings" element={<PMBookings />} />
+                <Route path="pm/schedule" element={<PMSchedule />} />
+                <Route path="pm/services" element={<PMServices />} />
+                <Route path="pm/earnings" element={<PMEarnings />} />
+                <Route path="pm/payout" element={<PMPayout />} />
                 <Route path="profile" element={<DashboardUserProfile />} />
                 <Route path="membership" element={<DashboardMembership />} />
+                <Route
+                  path="membership/orders"
+                  element={<MembershipOrders />}
+                />
                 <Route
                   path="membership/upgrade/:plan"
                   element={<MembershipUpgrade />}

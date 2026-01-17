@@ -381,7 +381,10 @@ const MediumProfile = () => {
                 <div className="flex flex-wrap justify-center lg:justify-start gap-4">
                   <Button
                     size="lg"
-                    className="bg-white text-primary-900 hover:bg-gray-100 cursor-pointer"
+                    className="bg:white text-primary-900 hover:bg-gray-100 cursor-pointer"
+                    onClick={() =>
+                      window.location.assign(`/book/${slug ?? profile.id}`)
+                    }
                   >
                     <Calendar className="w-5 h-5 mr-2" />
                     Book Session
@@ -709,7 +712,12 @@ const MediumProfile = () => {
                     <p className="text-sm text-gray-600">
                       60-minute private reading
                     </p>
-                    <Button className="w-full mt-3 bg-primary-600 hover:bg-primary-700 text-white">
+                    <Button
+                      className="w-full mt-3 bg-primary-600 hover:bg-primary-700 text:white"
+                      onClick={() =>
+                        window.location.assign(`/book/${slug ?? profile.id}`)
+                      }
+                    >
                       Book Now
                     </Button>
                   </div>

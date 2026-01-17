@@ -260,7 +260,7 @@ export default function MembershipUpgrade() {
                   <CreditCard className="w-5 h-5 mr-2" />
                   {placeOrderMutation.isPending
                     ? 'Processing...'
-                    : 'Pay with Card'}
+                    : 'Pay with Stripe'}
                 </Button>
               </div>
 

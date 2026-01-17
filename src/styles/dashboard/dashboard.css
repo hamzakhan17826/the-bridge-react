@@ -78,3 +78,13 @@
   background-color: hsl(222.2 84% 4.9%);
   color: hsl(210 40% 98%);
 }
+
+.dashboard-theme .btn {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.dashboard-theme .btn:hover {
+  background-color: color-mix(in oklab, var(--primary) 90%, var(--background));
+  color: var(--primary-foreground);
+}

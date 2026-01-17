@@ -103,6 +103,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         ],
       },
       {
+        title: 'Professional Medium',
+        url: '/dashboard/pm/onboarding',
+        icon: Settings2,
+        items: [
+          { title: 'Onboarding', url: '/dashboard/pm/onboarding' },
+          { title: 'Bookings', url: '/dashboard/pm/bookings' },
+          { title: 'Schedule', url: '/dashboard/pm/schedule' },
+          { title: 'Services', url: '/dashboard/pm/services' },
+          { title: 'Earnings', url: '/dashboard/pm/earnings' },
+          { title: 'Payout', url: '/dashboard/pm/payout' },
+        ],
+      },
+      {
         title: 'Reviews',
         url: '/reviews',
         icon: BookOpen,
