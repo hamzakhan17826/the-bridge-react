@@ -3,19 +3,14 @@
 import * as React from 'react';
 import {
   AudioWaveform,
-  BookOpen,
   Bot,
   Command,
-  Frame,
   GalleryVerticalEnd,
-  Map,
-  PieChart,
   Settings2,
   SquareTerminal,
 } from 'lucide-react';
 
 import { NavMain } from '@/components/nav-main';
-import { NavProjects } from '@/components/nav-projects';
 import { NavUser } from '@/components/nav-user';
 import { TeamSwitcher } from '@/components/team-switcher';
 import {
@@ -115,48 +110,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           { title: 'Payout', url: '/dashboard/pm/payout' },
         ],
       },
-      {
-        title: 'Reviews',
-        url: '/reviews',
-        icon: BookOpen,
-        items: [
-          {
-            title: 'All Reviews',
-            url: '/reviews',
-          },
-          {
-            title: 'Top Rated',
-            url: '/reviews?sort=rating',
-          },
-          {
-            title: 'Recent Reviews',
-            url: '/reviews?sort=recent',
-          },
-        ],
-      },
-      {
-        title: 'Blogs',
-        url: '/blogs',
-        icon: Bot,
-        items: [
-          {
-            title: 'All Articles',
-            url: '/blogs',
-          },
-          {
-            title: 'Spiritual Guides',
-            url: '/blogs?category=guides',
-          },
-          {
-            title: 'Medium Stories',
-            url: '/blogs?category=stories',
-          },
-          {
-            title: 'Community',
-            url: '/blogs?category=community',
-          },
-        ],
-      },
       ...(isAdmin
         ? [
             {
@@ -172,27 +125,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   title: 'User Management',
                   url: '/dashboard/users',
                 },
+                {
+                  title: 'Orders History',
+                  url: '/dashboard/admin/orders-history',
+                },
               ],
             },
           ]
         : []),
-    ],
-    projects: [
-      {
-        name: 'Medium Profiles',
-        url: '/mediums',
-        icon: Frame,
-      },
-      {
-        name: 'Community Hub',
-        url: '/community',
-        icon: PieChart,
-      },
-      {
-        name: 'Spiritual Events',
-        url: '/events',
-        icon: Map,
-      },
     ],
   };
   return (
@@ -202,7 +142,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

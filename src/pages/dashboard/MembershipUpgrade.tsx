@@ -15,10 +15,12 @@ import {
   Crown,
   CreditCard,
   Wallet,
+  XCircle,
 } from 'lucide-react';
 import {
   useSubscriptionTiers,
   usePlaceMembershipOrder,
+  useOrderStatus,
 } from '../../hooks/useMembership';
 // import MediumRegistrationForm from '../../components/MediumRegistrationForm';
 import { Button } from '../../components/ui';
@@ -34,11 +36,16 @@ export default function MembershipUpgrade() {
   const [discountCode, setDiscountCode] = useState('');
   const [autoRenew, setAutoRenew] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [paymentWindow, setPaymentWindow] = useState<Window | null>(null);
   const [showPaymentWaiting, setShowPaymentWaiting] = useState(false);
+  // Removed unused paymentWindow and currentPubTrackId states
+  const [paymentState, setPaymentState] = useState<
+    'idle' | 'processing' | 'success' | 'failed'
+  >('idle');
+  const [pollTimer, setPollTimer] = useState<number | null>(null);
   // React Query hooks
   const { data: tiers = [], isLoading: tiersLoading } = useSubscriptionTiers();
   const placeOrderMutation = usePlaceMembershipOrder();
+  const orderStatusMutation = useOrderStatus();
 
   // Find selected tier based on plan parameter
   const selectedTier = tiers.find(
@@ -111,7 +118,6 @@ export default function MembershipUpgrade() {
   // const handleSubmit = async (formData: any) => {
   //   registerMediumMutation.mutate(formData, {
   //     onSuccess: () => {
-  //       navigate('/dashboard/membership');
   //     },
   //   });
   // };
@@ -133,11 +139,47 @@ export default function MembershipUpgrade() {
         console.log('Payment API response:', response);
 
         if (response.result && response.redirectUrl) {
-          console.log('Opening payment in new tab:', response.redirectUrl);
           // Open payment in new tab
-          const newWindow = window.open(response.redirectUrl, '_blank');
-          setPaymentWindow(newWindow);
+          window.open(response.redirectUrl, '_blank');
           setShowPaymentWaiting(true);
+          setPaymentState('processing');
+          // Start polling order status every 3s
+          if (!pollTimer) {
+            const id = window.setInterval(() => {
+              if (!response.pubTrackId) return;
+              orderStatusMutation.mutate(response.pubTrackId, {
+                onSuccess: (res) => {
+                  const statusNum = res.paymentStatus; // 1 pending, 2 completed, 3 failed, 4 cancelled
+                  if (res.isPaid && statusNum === 2) {
+                    setPaymentState('success');
+                    setShowPaymentWaiting(false);
+                    if (id) {
+                      clearInterval(id);
+                    }
+                    setPollTimer(null);
+                  } else if (statusNum === 3 || statusNum === 4) {
+                    setPaymentState('failed');
+                    setShowPaymentWaiting(false);
+                    if (id) {
+                      clearInterval(id);
+                    }
+                    setPollTimer(null);
+                  } else {
+                    setPaymentState('processing');
+                  }
+                },
+                onError: () => {
+                  setPaymentState('failed');
+                  setShowPaymentWaiting(false);
+                  if (id) {
+                    clearInterval(id);
+                  }
+                  setPollTimer(null);
+                },
+              });
+            }, 3000);
+            setPollTimer(id);
+          }
         } else {
           console.error('Payment initiation failed:', response);
           setError(response.message || 'Failed to initiate payment');
@@ -264,7 +306,7 @@ export default function MembershipUpgrade() {
                 </Button>
               </div>
 
-              {/* Payment Waiting Message */}
+              {/* Payment Status */}
               {showPaymentWaiting && (
                 <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                   <div className="flex items-center gap-3">
@@ -274,8 +316,7 @@ export default function MembershipUpgrade() {
                         Payment Processing
                       </p>
                       <p className="text-sm text-blue-700">
-                        Please complete your payment in the new tab. This page
-                        will remain open for your convenience.
+                        We are checking your payment status. Please wait...
                       </p>
                     </div>
                   </div>
@@ -284,28 +325,60 @@ export default function MembershipUpgrade() {
                       size="sm"
                       variant="outline"
                       onClick={() => {
-                        if (paymentWindow && !paymentWindow.closed) {
-                          paymentWindow.focus();
-                        } else {
-                          setShowPaymentWaiting(false);
-                          setPaymentWindow(null);
-                        }
-                      }}
-                    >
-                      {paymentWindow && !paymentWindow.closed
-                        ? 'Focus Payment Tab'
-                        : 'Close'}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
                         setShowPaymentWaiting(false);
-                        setPaymentWindow(null);
+                        if (pollTimer) {
+                          clearInterval(pollTimer);
+                          setPollTimer(null);
+                        }
+                        // no-op
                       }}
                     >
                       Cancel
                     </Button>
+                  </div>
+                </div>
+              )}
+
+              {paymentState === 'success' && (
+                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="h-6 w-6 text-green-600" />
+                    <div>
+                      <p className="font-medium text-green-900">
+                        Payment completed successfully!
+                      </p>
+                      <p className="text-sm text-green-700">
+                        Your membership upgrade is now active.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex gap-2">
+                    <Button size="sm" onClick={() => navigate('/dashboard')}>
+                      Go to Dashboard
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => navigate('/dashboard/membership')}
+                    >
+                      Back to Membership
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {paymentState === 'failed' && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <XCircle className="h-6 w-6 text-red-600" />
+                    <div>
+                      <p className="font-medium text-red-900">
+                        Payment failed or cancelled.
+                      </p>
+                      <p className="text-sm text-red-700">
+                        Please try again or contact support.
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}

@@ -40,3 +40,5 @@ export { default as PMSchedule } from './dashboard/pm/Schedule';
 export { default as PMServices } from './dashboard/pm/Services';
 export { default as PMEarnings } from './dashboard/pm/Earnings';
 export { default as PMPayout } from './dashboard/pm/Payout';
+// Admin pages
+export { default as AdminOrdersHistory } from './dashboard/admin/OrdersHistory';

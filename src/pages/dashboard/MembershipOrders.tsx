@@ -12,54 +12,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CalendarDays, CreditCard, Wallet } from 'lucide-react';
 import { format } from 'date-fns';
+import { useMyOrdersHistory } from '@/hooks/useMembership';
+import type { MyOrderHistoryItem } from '@/types/membership';
 
-type Order = {
-  id: number;
-  orderPlacedAt: string; // ISO
-  amount: number;
-  processorId: number; // 1 PayPal, 2 Stripe
-  paymentTransactionId: string;
-  paymentStatus: number; // just for future
-  isPaid: boolean;
-  paidAt?: string | null;
-  pubTrackId: string;
-};
-
-const DUMMY_ORDERS: Order[] = [
-  {
-    id: 101,
-    orderPlacedAt: new Date().toISOString(),
-    amount: 19.99,
-    processorId: 1,
-    paymentTransactionId: 'PAYPAL-TRX-ABC123',
-    paymentStatus: 2,
-    isPaid: true,
-    paidAt: new Date().toISOString(),
-    pubTrackId: 'PUB-TRACK-AAA',
-  },
-  {
-    id: 102,
-    orderPlacedAt: new Date(Date.now() - 86400000).toISOString(),
-    amount: 39.99,
-    processorId: 2,
-    paymentTransactionId: 'STRIPE-TRX-XYZ789',
-    paymentStatus: 1,
-    isPaid: false,
-    paidAt: null,
-    pubTrackId: 'PUB-TRACK-BBB',
-  },
-  {
-    id: 103,
-    orderPlacedAt: new Date(Date.now() - 3 * 86400000).toISOString(),
-    amount: 0,
-    processorId: 1,
-    paymentTransactionId: 'PAYPAL-TRX-FFF456',
-    paymentStatus: 2,
-    isPaid: true,
-    paidAt: new Date(Date.now() - 2 * 86400000).toISOString(),
-    pubTrackId: 'PUB-TRACK-CCC',
-  },
-];
+const asText = (v: unknown) => (v == null ? '' : String(v));
 
 export default function MembershipOrders() {
   const { setItems } = useBreadcrumb();
@@ -67,6 +23,7 @@ export default function MembershipOrders() {
   const [filterPaid, setFilterPaid] = useState<'all' | 'paid' | 'unpaid'>(
     'all'
   );
+  const { data: apiOrders = [], isLoading, error } = useMyOrdersHistory();
 
   useEffect(() => {
     setItems([
@@ -77,7 +34,7 @@ export default function MembershipOrders() {
   }, [setItems]);
 
   const filtered = useMemo(() => {
-    return DUMMY_ORDERS.filter((o) => {
+    return (apiOrders as MyOrderHistoryItem[]).filter((o) => {
       const matchesPaid =
         filterPaid === 'all'
           ? true
@@ -85,11 +42,11 @@ export default function MembershipOrders() {
             ? o.isPaid
             : !o.isPaid;
       const text =
-        `${o.id} ${o.paymentTransactionId} ${o.pubTrackId}`.toLowerCase();
+        `${o.id} ${o.paymentTransactionId} ${o.pubTrackId} ${o.membershipTierName} ${o.membershipTierCode}`.toLowerCase();
       const matchesQuery = text.includes(query.toLowerCase());
       return matchesPaid && matchesQuery;
     });
-  }, [filterPaid, query]);
+  }, [filterPaid, query, apiOrders]);
 
   const processorLabel = (id: number) =>
     id === 1 ? 'PayPal' : id === 2 ? 'Stripe' : 'Other';
@@ -111,6 +68,16 @@ export default function MembershipOrders() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {isLoading && (
+            <div className="text-sm text-muted-foreground mb-3">
+              Loading orders...
+            </div>
+          )}
+          {error && (
+            <div className="text-sm text-destructive mb-3">
+              Failed to load orders.
+            </div>
+          )}
           <div className="flex flex-col md:flex-row md:items-center gap-3 mb-4">
             <div className="flex gap-2">
               <Button
@@ -143,6 +110,7 @@ export default function MembershipOrders() {
                 placeholder="Search transaction or tracking id"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                className="bg-primary-foreground"
               />
             </div>
           </div>
@@ -158,6 +126,10 @@ export default function MembershipOrders() {
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <CalendarDays className="h-4 w-4" />
                     {format(new Date(o.orderPlacedAt), 'MMM dd, yyyy HH:mm')}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    {asText(o.membershipTierName)} (
+                    {asText(o.membershipTierCode)})
                   </div>
                 </div>
 
@@ -193,6 +165,11 @@ export default function MembershipOrders() {
                     className={o.isPaid ? 'bg-emerald-600 text-white' : ''}
                   >
                     {o.isPaid ? 'Paid' : 'Unpaid'}
+                  </Badge>
+                  <Badge variant="outline" className="text-xs">
+                    {o.isAutoRenewEnabled
+                      ? 'Auto-renew: On'
+                      : 'Auto-renew: Off'}
                   </Badge>
                   {o.isPaid && o.paidAt && (
                     <div className="text-xs text-muted-foreground">

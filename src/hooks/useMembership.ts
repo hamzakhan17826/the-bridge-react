@@ -4,11 +4,16 @@ import {
   placeMembershipOrder,
   paypalWebhook,
   getOrderStatus,
+  fetchMyOrdersHistory,
+  fetchAllOrdersHistory,
 } from '../services/membership';
 import {
   type SubscriptionTier,
   type PlaceMembershipOrderPayload,
   type OrderStatusResponse,
+  type MyOrderHistoryItem,
+  type AllOrdersFilters,
+  type AllOrdersResponse,
 } from '../types/membership';
 
 export const useSubscriptionTiers = () => {
@@ -54,5 +59,33 @@ export const useOrderStatus = () => {
     onError: (error) => {
       console.error('Order status retrieval failed:', error);
     },
+  });
+};
+
+export const useMyOrdersHistory = () => {
+  return useQuery<MyOrderHistoryItem[]>({
+    queryKey: ['membership', 'myOrdersHistory'],
+    queryFn: fetchMyOrdersHistory,
+    staleTime: 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+};
+
+export const useAllOrdersHistory = (
+  pageNumber: number,
+  pageSize: number,
+  filters: Partial<AllOrdersFilters>
+) => {
+  const payload: AllOrdersFilters = {
+    pageNumber,
+    pageSize,
+    ...filters,
+  };
+  return useQuery<AllOrdersResponse>({
+    queryKey: ['membership', 'allOrdersHistory', payload],
+    queryFn: () => fetchAllOrdersHistory(payload),
+    staleTime: 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    enabled: true,
   });
 };

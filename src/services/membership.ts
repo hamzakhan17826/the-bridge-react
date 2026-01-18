@@ -4,6 +4,9 @@ import type {
   PlaceMembershipOrderPayload,
   PlaceMembershipOrderResponse,
   SubscriptionTier,
+  MyOrderHistoryItem,
+  AllOrdersFilters,
+  AllOrdersResponse,
 } from '../types/membership';
 
 export async function fetchSubscriptionTiers(): Promise<SubscriptionTier[]> {
@@ -407,5 +410,27 @@ export async function getOrderStatus(
     throw new Error(
       err.response?.data?.message || 'Failed to get order status.'
     );
+  }
+}
+
+export async function fetchMyOrdersHistory(): Promise<MyOrderHistoryItem[]> {
+  try {
+    const res = await api.get('/Member/MyOrdersHistory');
+    return res.data as MyOrderHistoryItem[];
+  } catch (error: unknown) {
+    console.error('Failed to fetch MyOrdersHistory', error);
+    throw new Error('Failed to fetch orders history.');
+  }
+}
+
+export async function fetchAllOrdersHistory(
+  filters: AllOrdersFilters
+): Promise<AllOrdersResponse> {
+  try {
+    const res = await api.post('/Member/AllOrdersHistory', filters);
+    return res.data as AllOrdersResponse;
+  } catch (error: unknown) {
+    console.error('Failed to fetch AllOrdersHistory', error);
+    throw new Error('Failed to fetch all orders history.');
   }
 }
