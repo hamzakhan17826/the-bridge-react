@@ -48,7 +48,9 @@ export default function PMSchedule() {
                   <Button size="sm" variant="outline">
                     Disable
                   </Button>
-                  <Button size="sm">Block</Button>
+                  <Button size="sm" className="btn">
+                    Block
+                  </Button>
                 </div>
               </div>
             ))}

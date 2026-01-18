@@ -72,7 +72,9 @@ export default function PMBookings() {
                     <Button size="sm" variant="outline">
                       Reschedule
                     </Button>
-                    <Button size="sm">Start</Button>
+                    <Button size="sm" className="btn">
+                      Start
+                    </Button>
                   </div>
                 </div>
               ))}

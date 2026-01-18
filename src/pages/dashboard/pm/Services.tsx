@@ -35,7 +35,9 @@ export default function PMServices() {
       </CardHeader>
       <CardContent>
         <div className="flex justify-end mb-3">
-          <Button size="sm">Add Service</Button>
+          <Button size="sm" className="btn">
+            Add Service
+          </Button>
         </div>
         <div className="space-y-3">
           {[
@@ -74,7 +76,9 @@ export default function PMServices() {
                 <Button size="sm" variant="outline">
                   Duplicate
                 </Button>
-                <Button size="sm">Publish</Button>
+                <Button size="sm" className="btn">
+                  Publish
+                </Button>
               </div>
             </div>
           ))}

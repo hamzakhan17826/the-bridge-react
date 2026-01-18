@@ -55,6 +55,7 @@ export default function PMOnboarding() {
                 variant={idx === step ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setStep(idx)}
+                className={idx === step ? 'btn' : ''}
               >
                 {idx + 1}. {name}
               </Button>
@@ -185,7 +186,9 @@ export default function PMOnboarding() {
                 >
                   Open Payout Settings
                 </Button>
-                <Button onClick={() => setStep(4)}>Continue to Review</Button>
+                <Button onClick={() => setStep(4)} className="btn">
+                  Continue to Review
+                </Button>
               </div>
             </div>
           )}
@@ -210,7 +213,10 @@ export default function PMOnboarding() {
                 </div>
               </div>
               <div className="flex gap-2">
-                <Button onClick={() => navigate('/dashboard/pm/bookings')}>
+                <Button
+                  onClick={() => navigate('/dashboard/pm/bookings')}
+                  className="btn"
+                >
                   Publish Profile
                 </Button>
                 <Button
@@ -227,7 +233,11 @@ export default function PMOnboarding() {
             <Button variant="outline" onClick={prev} disabled={step === 0}>
               Back
             </Button>
-            <Button onClick={next} disabled={step === steps.length - 1}>
+            <Button
+              onClick={next}
+              disabled={step === steps.length - 1}
+              className="btn"
+            >
               Next
             </Button>
           </div>

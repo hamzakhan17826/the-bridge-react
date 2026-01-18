@@ -56,7 +56,7 @@ export default function PMPayout() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button>Save Changes</Button>
+          <Button className="btn">Save Changes</Button>
           <Button variant="outline">Connect with Stripe</Button>
         </div>
       </CardContent>

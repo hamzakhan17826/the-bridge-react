@@ -109,7 +109,7 @@ export default function Users() {
                         <div className="flex items-center space-x-2">
                           {user.isBlocked ? (
                             <Badge
-                              variant="destructive"
+                              variant="secondary"
                               className="flex items-center gap-1 bg-primary text-primary-foreground"
                             >
                               <UserX className="w-3 h-3" />
@@ -195,7 +195,7 @@ export default function Users() {
                 <div className="flex items-center space-x-2">
                   {selectedUser.isBlocked ? (
                     <Badge
-                      variant="destructive"
+                      variant="secondary"
                       className="bg-destructive text-primary-foreground"
                     >
                       Blocked
