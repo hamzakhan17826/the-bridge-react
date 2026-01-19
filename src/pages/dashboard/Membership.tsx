@@ -12,8 +12,6 @@ import { useBreadcrumb } from '@/components/ui/breadcrumb';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSubscriptionTiers } from '../../hooks/useMembership';
-import MembershipStatusCard from '@/components/dashboard/MembershipStatusCard';
-import CreditsWalletCard from '@/components/dashboard/CreditsWalletCard';
 
 export default function Membership() {
   const { setItems } = useBreadcrumb();
@@ -56,15 +54,6 @@ export default function Membership() {
 
   return (
     <div className="space-y-6">
-      {/* Current Membership Status (dummy for now) */}
-      <MembershipStatusCard
-        onManageClick={() => navigate('/dashboard/membership')}
-        onViewOrdersClick={() => navigate('/dashboard/membership/orders')}
-      />
-
-      {/* Credits Wallet (duplicate visibility here for convenience) */}
-      <CreditsWalletCard />
-
       <div>
         <h1 className="text-3xl font-bold">Membership Plans</h1>
         <p className="text-muted-foreground">

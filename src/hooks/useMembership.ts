@@ -6,6 +6,7 @@ import {
   getOrderStatus,
   fetchMyOrdersHistory,
   fetchAllOrdersHistory,
+  fetchMyActiveMemberships,
 } from '../services/membership';
 import {
   type SubscriptionTier,
@@ -14,6 +15,7 @@ import {
   type MyOrderHistoryItem,
   type AllOrdersFilters,
   type AllOrdersResponse,
+  type ActiveMembership,
 } from '../types/membership';
 
 export const useSubscriptionTiers = () => {
@@ -87,5 +89,14 @@ export const useAllOrdersHistory = (
     staleTime: 60 * 1000,
     gcTime: 10 * 60 * 1000,
     enabled: true,
+  });
+};
+
+export const useMyActiveMemberships = () => {
+  return useQuery<ActiveMembership[]>({
+    queryKey: ['membership', 'myActiveMemberships'],
+    queryFn: fetchMyActiveMemberships,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
   });
 };

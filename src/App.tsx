@@ -42,6 +42,7 @@ import {
   PMServices,
   PMEarnings,
   PMPayout,
+  MembershipOverview,
 } from './pages';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
@@ -155,6 +156,10 @@ function App() {
                 <Route
                   path="membership/orders"
                   element={<MembershipOrders />}
+                />
+                <Route
+                  path="membership/overview"
+                  element={<MembershipOverview />}
                 />
                 <Route
                   path="membership/upgrade/:plan"

@@ -26,7 +26,6 @@ export default function VerifyEmailPage() {
       setResult(res);
       setLoading(false);
       if (res.success) {
-        toast.success(res.message);
         setTimeout(() => navigate('/login'), 3000);
       } else {
         toast.error(res.message);

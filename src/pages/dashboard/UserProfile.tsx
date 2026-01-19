@@ -24,11 +24,13 @@ import type { AppUserProfile } from '../../types/user';
 import { useNavigate } from 'react-router-dom';
 import { deleteCookie, emitAuthChange } from '../../lib/auth';
 import { getUserIdFromToken } from '../../lib/utils';
+import { useAuthUser } from '../../hooks/useAuthUser';
 
 type Opt<T = string> = { value: T; label: string };
 
 export default function UserProfile() {
   const navigate = useNavigate();
+  const { setUser } = useAuthUser();
   const [userId] = useState<string>(getUserIdFromToken() ?? '');
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -204,6 +206,7 @@ export default function UserProfile() {
         const reloadRes = await fetchUserProfile(userId || null);
         if (reloadRes.success && reloadRes.data) {
           setProfile(reloadRes.data);
+          setUser(reloadRes.data); // Update global Zustand store
           setInitialProfile({ ...reloadRes.data });
           setFirstName(reloadRes.data.firstName || '');
           setLastName(reloadRes.data.lastName || '');

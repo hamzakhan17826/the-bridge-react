@@ -51,16 +51,24 @@ export default function RefreshToken() {
       () => {
         const still = getAuthFlag();
         const stillRemember = isRememberMeEnabled();
-        if (still && stillRemember) {
+        console.log(
+          '⏰ [RefreshToken] Interval check - still logged in:',
+          still,
+          'remember me:',
+          stillRemember
+        );
+        if (!still) {
+          console.log('⏸️ [RefreshToken] User logged out; stopping refresh');
+          clearInterval(interval);
+        } else if (stillRemember) {
           runRefresh();
         } else {
           console.log(
-            '⏸️ [RefreshToken] User logged out or remember me disabled; stopping refresh'
+            '⏭️ [RefreshToken] Remember me disabled; skipping refresh but keeping interval'
           );
-          clearInterval(interval);
         }
       },
-      4 * 60 * 1000
+      2 * 60 * 1000
     );
 
     return () => {

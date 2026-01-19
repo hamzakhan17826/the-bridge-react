@@ -9,48 +9,30 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
-import { differenceInDays, format } from 'date-fns';
+import { differenceInDays } from 'date-fns';
 import { Crown, Users, BookOpen, CalendarDays } from 'lucide-react';
-
-type MembershipStatus = {
-  tierCode: string;
-  tierName: string;
-  basePrice: number;
-  startDate: string; // ISO
-  endDate: string; // ISO
-  isAutoRenewEnabled: boolean;
-  features: string[];
-};
+import type { ActiveMembership } from '@/types/membership';
 
 export function MembershipStatusCard(props: {
-  status?: MembershipStatus;
+  status?: ActiveMembership;
   onManageClick?: () => void;
   onViewOrdersClick?: () => void;
   onToggleAutoRenew?: (enabled: boolean) => void;
 }) {
-  const dummy = useMemo<MembershipStatus>(() => {
-    const now = new Date();
-    const start = new Date(now.getFullYear(), now.getMonth(), 1);
-    const end = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-    return {
-      tierCode: 'GENERALMEMBERSHIP',
-      tierName: 'General Membership',
-      basePrice: 19.99,
-      startDate: start.toISOString(),
-      endDate: end.toISOString(),
-      isAutoRenewEnabled: true,
-      features: [
-        'Community Access',
-        'Member Discounts',
-        'Event Registrations',
-        'Replay Library (Selected)',
-        'Priority Support',
-        'Monthly Newsletter',
-      ],
-    };
-  }, []);
+  const status = props.status;
 
-  const status = props.status ?? dummy;
+  // If no membership data, don't render anything
+  if (!status) {
+    return null;
+  }
+
+  // Map features to strings for display
+  const featuresList = useMemo(() => {
+    return status.features.map((feature) =>
+      typeof feature === 'string' ? feature : feature.name
+    );
+  }, [status.features]);
+
   const [autoRenew, setAutoRenew] = useState<boolean>(
     status.isAutoRenewEnabled
   );
@@ -100,8 +82,14 @@ export function MembershipStatusCard(props: {
               </Badge>
             </CardTitle>
             <CardDescription className="mb-0">
-              ${status.basePrice}
-              {status.basePrice > 0 && <span>/month</span>}
+              {status.basePrice ? (
+                <>
+                  ${status.basePrice}
+                  {status.basePrice > 0 && <span>/month</span>}
+                </>
+              ) : (
+                'Active Membership'
+              )}
             </CardDescription>
           </div>
         </div>
@@ -115,8 +103,8 @@ export function MembershipStatusCard(props: {
             <div className="flex items-center gap-2 font-medium">
               <CalendarDays className="h-4 w-4 text-muted-foreground" />
               <span>
-                {format(new Date(status.startDate), 'MMM dd, yyyy')} –{' '}
-                {format(new Date(status.endDate), 'MMM dd, yyyy')}
+                {new Date(status.startDate + 'Z').toLocaleString()} –{' '}
+                {new Date(status.endDate + 'Z').toLocaleString()}
               </span>
             </div>
             <div className="text-xs text-muted-foreground mt-1">
@@ -129,15 +117,15 @@ export function MembershipStatusCard(props: {
               Included Features
             </div>
             <ul className="text-sm space-y-1">
-              {status.features.slice(0, 4).map((f, i) => (
+              {featuresList.slice(0, 4).map((f, i) => (
                 <li key={i} className="flex items-start gap-2">
                   <span className="text-green-500 mt-1">•</span>
                   <span>{f}</span>
                 </li>
               ))}
-              {status.features.length > 4 && (
+              {featuresList.length > 4 && (
                 <li className="text-xs text-muted-foreground italic">
-                  +{status.features.length - 4} more
+                  +{featuresList.length - 4} more
                 </li>
               )}
             </ul>

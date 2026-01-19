@@ -112,3 +112,24 @@ export interface AllOrdersResponse {
   membershipOrders: Array<Omit<MyOrderHistoryItem, 'membershipId'>> &
     MyOrderHistoryItem[];
 }
+
+export interface ActiveMembership {
+  id: number;
+  tierName: string;
+  tierCode: string;
+  description: string;
+  basePrice?: number; // Optional, might need to fetch from subscription tiers
+  isAutoRenewEnabled: boolean;
+  startDate: string;
+  endDate: string;
+  features: ActiveMembershipFeature[];
+}
+
+export interface ActiveMembershipFeature {
+  id: number;
+  name: string;
+  description: string;
+  remainingCredits: number;
+  startDate: string;
+  endDate: string;
+}

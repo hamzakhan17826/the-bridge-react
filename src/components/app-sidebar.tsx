@@ -21,8 +21,10 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { getCookie } from '@/lib/auth';
+import { useAuthStore } from '@/stores/authStore';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user: authUser } = useAuthStore();
   const userRoleCookie = getCookie('userRole');
   let userRoles: string[] = [];
 
@@ -38,13 +40,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   const isAdmin = userRoles.includes('admin');
-  // console.log('User Roles in Sidebar:', userRoles, 'Is Admin:', isAdmin);
+
+  // Create user object from auth store
+  const user = authUser
+    ? {
+        name:
+          authUser.firstName && authUser.lastName
+            ? `${authUser.firstName} ${authUser.lastName}`
+            : authUser.userName || 'User',
+        email: authUser.email,
+        avatar: authUser.profilePictureUrl || '/images/team/default-avatar.png',
+      }
+    : {
+        name: 'Spiritual Seeker',
+        email: 'seeker@thebridge.com',
+        avatar: '/images/team/default-avatar.png',
+      };
+
   const data = {
-    user: {
-      name: 'Spiritual Seeker',
-      email: 'seeker@thebridge.com',
-      avatar: '/images/team/default-avatar.png',
-    },
+    user,
     teams: [
       {
         name: 'The Bridge',
@@ -91,6 +105,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: '/dashboard/membership',
         icon: Settings2,
         items: [
+          {
+            title: 'Overview',
+            url: '/dashboard/membership/overview',
+          },
           {
             title: 'Upgrade Account',
             url: '/dashboard/membership',

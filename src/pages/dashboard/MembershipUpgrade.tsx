@@ -43,7 +43,11 @@ export default function MembershipUpgrade() {
   >('idle');
   const [pollTimer, setPollTimer] = useState<number | null>(null);
   // React Query hooks
-  const { data: tiers = [], isLoading: tiersLoading } = useSubscriptionTiers();
+  const {
+    data: tiers = [],
+    isLoading: tiersLoading,
+    isError: tiersError,
+  } = useSubscriptionTiers();
   const placeOrderMutation = usePlaceMembershipOrder();
   const orderStatusMutation = useOrderStatus();
 
@@ -191,6 +195,34 @@ export default function MembershipUpgrade() {
       },
     });
   };
+
+  if (tiersLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col gap-4">
+          <div>
+            <h1 className="text-3xl font-bold">Membership Upgrade</h1>
+            <p className="text-muted-foreground">Loading membership plans...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (tiersError) {
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col gap-4">
+          <div>
+            <h1 className="text-3xl font-bold">Membership Upgrade</h1>
+            <p className="text-muted-foreground">
+              Failed to load membership plans. Please try again later.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
