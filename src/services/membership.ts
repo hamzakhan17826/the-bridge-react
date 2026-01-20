@@ -69,6 +69,27 @@ export async function paypalWebhook(token: string): Promise<string> {
   }
 }
 
+export async function paypalWebhookMock(token: string): Promise<string> {
+  try {
+    const res = await api.post('/Member/PayPalWebhookMock', token, {
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+    });
+    return res.data; // Should be "OK"
+  } catch (error: unknown) {
+    const err = error as {
+      response?: {
+        data?: { message?: string };
+      };
+    };
+
+    throw new Error(
+      err.response?.data?.message || 'PayPal webhook mock failed.'
+    );
+  }
+}
+
 export async function getOrderStatus(
   pubTrackId: string
 ): Promise<OrderStatusResponse> {

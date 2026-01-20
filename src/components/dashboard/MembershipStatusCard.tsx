@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import {
   Card,
   CardContent,
@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
 import { differenceInDays } from 'date-fns';
 import { Crown, Users, BookOpen, CalendarDays } from 'lucide-react';
 import type { ActiveMembership } from '@/types/membership';
@@ -17,27 +16,19 @@ export function MembershipStatusCard(props: {
   status?: ActiveMembership;
   onManageClick?: () => void;
   onViewOrdersClick?: () => void;
-  onToggleAutoRenew?: (enabled: boolean) => void;
 }) {
   const status = props.status;
 
-  // If no membership data, don't render anything
-  if (!status) {
-    return null;
-  }
-
   // Map features to strings for display
   const featuresList = useMemo(() => {
+    if (!status) return [];
     return status.features.map((feature) =>
       typeof feature === 'string' ? feature : feature.name
     );
-  }, [status.features]);
-
-  const [autoRenew, setAutoRenew] = useState<boolean>(
-    status.isAutoRenewEnabled
-  );
+  }, [status]);
 
   const daysLeft = useMemo(() => {
+    if (!status) return 0;
     try {
       return Math.max(
         0,
@@ -46,9 +37,10 @@ export function MembershipStatusCard(props: {
     } catch {
       return 0;
     }
-  }, [status.endDate]);
+  }, [status]);
 
   const Icon = useMemo(() => {
+    if (!status) return Users;
     switch (status.tierCode) {
       case 'FREETIERMEMBERSHIP':
         return Users;
@@ -59,13 +51,12 @@ export function MembershipStatusCard(props: {
       default:
         return Users;
     }
-  }, [status.tierCode]);
+  }, [status]);
 
-  const handleToggle = (checked: boolean | 'indeterminate') => {
-    const next = checked === true;
-    setAutoRenew(next);
-    props.onToggleAutoRenew?.(next);
-  };
+  // If no membership data, don't render anything
+  if (!status) {
+    return null;
+  }
 
   return (
     <Card className="border-2 border-primary/20 bg-primary/5">
@@ -132,17 +123,18 @@ export function MembershipStatusCard(props: {
           </div>
 
           <div className="flex flex-col gap-3 justify-between">
-            <label
-              htmlFor="autoRenew"
-              className="flex items-center gap-2 text-sm"
-            >
-              <Checkbox
-                id="autoRenew"
-                checked={autoRenew}
-                onCheckedChange={handleToggle}
-              />
-              Auto-renew membership
-            </label>
+            <div className="text-sm">
+              Auto-renew membership:{' '}
+              <span
+                className={
+                  status.isAutoRenewEnabled
+                    ? 'text-green-600 font-medium'
+                    : 'text-red-600 font-medium'
+                }
+              >
+                {status.isAutoRenewEnabled ? 'Enabled' : 'Disabled'}
+              </span>
+            </div>
             <div className="flex gap-2 md:justify-end">
               <Button
                 variant="outline"

@@ -22,7 +22,7 @@ import {
   usePlaceMembershipOrder,
   useOrderStatus,
 } from '../../hooks/useMembership';
-// import MediumRegistrationForm from '../../components/MediumRegistrationForm';
+import { paypalWebhookMock } from '../../services/membership';
 import { Button } from '../../components/ui';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
@@ -143,6 +143,24 @@ export default function MembershipUpgrade() {
         console.log('Payment API response:', response);
 
         if (response.result && response.redirectUrl) {
+          // For localhost, simulate payment completion by calling mock webhook
+          if (window.location.hostname === 'localhost') {
+            try {
+              const url = new URL(response.redirectUrl);
+              const token = url.searchParams.get('token');
+              if (token) {
+                console.log('Calling PayPalWebhookMock with token:', token);
+                paypalWebhookMock(token).catch((err) =>
+                  console.error('Mock webhook failed:', err)
+                );
+              } else {
+                console.warn('No token found in redirectUrl for mock webhook');
+              }
+            } catch (err) {
+              console.error('Failed to parse redirectUrl for token:', err);
+            }
+          }
+
           // Open payment in new tab
           window.open(response.redirectUrl, '_blank');
           setShowPaymentWaiting(true);
@@ -385,7 +403,11 @@ export default function MembershipUpgrade() {
                     </div>
                   </div>
                   <div className="mt-3 flex gap-2">
-                    <Button size="sm" onClick={() => navigate('/dashboard')}>
+                    <Button
+                      size="sm"
+                      onClick={() => navigate('/dashboard')}
+                      className="btn"
+                    >
                       Go to Dashboard
                     </Button>
                     <Button
