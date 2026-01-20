@@ -133,3 +133,38 @@ export interface ActiveMembershipFeature {
   startDate: string;
   endDate: string;
 }
+
+// Admin: User Memberships listing
+export interface UserMembershipItem {
+  id: number;
+  userId: string;
+  userName?: string;
+  userEmail?: string;
+  tierName: string;
+  tierCode: string;
+  description: string;
+  isAutoRenewEnabled: boolean;
+  startDate: string; // ISO
+  endDate: string; // ISO
+  features: ActiveMembershipFeature[];
+  // Derived/runtime-only helpers (optional)
+  isActive?: boolean;
+}
+
+export interface UserMembershipsFilters {
+  userId?: string;
+  isActive?: boolean;
+  startDateFrom?: string; // ISO
+  startDateTo?: string; // ISO
+  endDateFrom?: string; // ISO
+  endDateTo?: string; // ISO
+  pageNumber?: number;
+  pageSize?: number;
+}
+
+export interface UserMembershipsResponse {
+  pageNumber: number;
+  pageSize: number;
+  totalRecords: number;
+  userMemberships: UserMembershipItem[];
+}

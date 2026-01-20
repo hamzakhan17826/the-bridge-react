@@ -2,28 +2,28 @@ import { isRememberMeEnabled, getCookie, setAuthCookies } from './auth';
 import api from './api';
 
 export async function refreshToken(): Promise<boolean> {
-  console.log('🔄 [REFRESH] Attempting token refresh...');
+  // console.log('🔄 [REFRESH] Attempting token refresh...');
 
   try {
     const rt = getCookie('refreshToken');
-    console.log('🔍 [REFRESH] Current refresh token exists:', !!rt);
+    // console.log('🔍 [REFRESH] Current refresh token exists:', !!rt);
 
     const payload = rt ? { refreshToken: rt } : {};
-    console.log('📤 [REFRESH] Sending payload:', payload);
+    // console.log('📤 [REFRESH] Sending payload:', payload);
 
     const res = await api.post('/Account/RefreshToken', payload);
     const data = res.data ?? {};
 
-    console.log('✅ [REFRESH] API Response received:', {
-      status: res.status,
-      hasJwtToken: !!data.jwtToken,
-      hasRefreshToken: !!data.refreshToken,
-      roles: data.roles,
-      fullResponse: data,
-    });
+    // console.log('✅ [REFRESH] API Response received:', {
+    //   status: res.status,
+    //   hasJwtToken: !!data.jwtToken,
+    //   hasRefreshToken: !!data.refreshToken,
+    //   roles: data.roles,
+    //   fullResponse: data,
+    // });
 
     const isPersistent = isRememberMeEnabled();
-    console.log('💾 [REFRESH] Setting cookies with persistence:', isPersistent);
+    // console.log('💾 [REFRESH] Setting cookies with persistence:', isPersistent);
 
     setAuthCookies({
       jwtToken: data.jwtToken,
@@ -32,7 +32,7 @@ export async function refreshToken(): Promise<boolean> {
       persistent: isPersistent,
     });
 
-    console.log('🎉 [REFRESH] Cookies set successfully');
+    // console.log('🎉 [REFRESH] Cookies set successfully');
     return true;
   } catch (error: unknown) {
     // Axios throws for non-2xx; log safely without using any

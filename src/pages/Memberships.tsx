@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 import {
   CheckCircle,
   ArrowRight,
@@ -13,6 +14,7 @@ import {
 import { useSubscriptionTiers } from '../hooks/useMembership';
 
 const Memberships = () => {
+  const navigate = useNavigate();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>(
     'monthly'
   );
@@ -211,6 +213,11 @@ const Memberships = () => {
 
                         {/* CTA Button */}
                         <button
+                          onClick={() =>
+                            navigate(
+                              `/dashboard/membership/upgrade/${tier.tierCode.toLowerCase()}`
+                            )
+                          }
                           className={`w-full group mb-8 inline-flex items-center justify-center gap-3 px-6 py-4 font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                             isPopular
                               ? 'bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white focus:ring-primary-400'
@@ -317,7 +324,14 @@ const Memberships = () => {
                       </div>
 
                       {/* CTA Button */}
-                      <button className="inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2">
+                      <button
+                        onClick={() =>
+                          navigate(
+                            `/dashboard/membership/upgrade/${freeTier.tierCode.toLowerCase()}`
+                          )
+                        }
+                        className="inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"
+                      >
                         <span>Get Started Free</span>
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                       </button>

@@ -17,9 +17,9 @@ export default function RefreshToken() {
     const runRefresh = async () => {
       if (canceled) return;
 
-      console.log('🚀 [RefreshToken] Starting refresh attempt...');
+      // console.log('🚀 [RefreshToken] Starting refresh attempt...');
       const ok = await refreshToken();
-      console.log('📊 [RefreshToken] Refresh result:', ok);
+      // console.log('📊 [RefreshToken] Refresh result:', ok);
 
       if (!ok && !canceled) {
         const jwt = getCookie('jwtToken');
@@ -42,7 +42,7 @@ export default function RefreshToken() {
           );
         }
       } else if (ok) {
-        console.log('✅ [RefreshToken] Refresh successful, session extended');
+        // console.log('✅ [RefreshToken] Refresh successful, session extended');
       }
     };
 
@@ -50,15 +50,15 @@ export default function RefreshToken() {
     const hasRefresh = !!getCookie('refreshToken');
     const shouldRefresh = isLoggedIn && (isRememberMeEnabled() || hasRefresh);
 
-    console.log('🏁 [RefreshToken] Component initialized:', {
-      isLoggedIn,
-      shouldRefresh,
-      rememberMeEnabled: isRememberMeEnabled(),
-    });
+    // console.log('🏁 [RefreshToken] Component initialized:', {
+    //   isLoggedIn,
+    //   shouldRefresh,
+    //   rememberMeEnabled: isRememberMeEnabled(),
+    // });
 
     // console.log('🟢 isLoggedIn: ', isLoggedIn);
     if (shouldRefresh) {
-      console.log('🚀 [RefreshToken] Starting initial refresh...');
+      // console.log('🚀 [RefreshToken] Starting initial refresh...');
       runRefresh();
     } else {
       console.log(

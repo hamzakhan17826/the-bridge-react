@@ -7,6 +7,7 @@ import {
   fetchMyOrdersHistory,
   fetchAllOrdersHistory,
   fetchMyActiveMemberships,
+  fetchUserMemberships,
 } from '../services/membership';
 import {
   type SubscriptionTier,
@@ -16,6 +17,8 @@ import {
   type AllOrdersFilters,
   type AllOrdersResponse,
   type ActiveMembership,
+  type UserMembershipsFilters,
+  type UserMembershipsResponse,
 } from '../types/membership';
 
 export const useSubscriptionTiers = () => {
@@ -98,5 +101,24 @@ export const useMyActiveMemberships = () => {
     queryFn: fetchMyActiveMemberships,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes
+  });
+};
+
+export const useUserMemberships = (
+  pageNumber: number,
+  pageSize: number,
+  filters: Partial<UserMembershipsFilters>
+) => {
+  const payload: UserMembershipsFilters = {
+    pageNumber,
+    pageSize,
+    ...filters,
+  };
+  return useQuery<UserMembershipsResponse>({
+    queryKey: ['membership', 'userMemberships', payload],
+    queryFn: () => fetchUserMemberships(payload),
+    staleTime: 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    enabled: true,
   });
 };

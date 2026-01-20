@@ -36,6 +36,7 @@ import {
   AccessDenied,
   DashboardAccessDenied,
   AdminOrdersHistory,
+  AdminUserMemberships,
   PMOnboarding,
   PMBookings,
   PMSchedule,
@@ -186,6 +187,14 @@ function App() {
                   element={
                     <RequireAdmin>
                       <AdminOrdersHistory />
+                    </RequireAdmin>
+                  }
+                />
+                <Route
+                  path="admin/user-memberships"
+                  element={
+                    <RequireAdmin>
+                      <AdminUserMemberships />
                     </RequireAdmin>
                   }
                 />

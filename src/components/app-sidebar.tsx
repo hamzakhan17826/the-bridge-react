@@ -147,6 +147,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   title: 'Orders History',
                   url: '/dashboard/admin/orders-history',
                 },
+                {
+                  title: 'User Memberships',
+                  url: '/dashboard/admin/user-memberships',
+                },
               ],
             },
           ]

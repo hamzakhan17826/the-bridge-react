@@ -8,6 +8,8 @@ import type {
   AllOrdersFilters,
   AllOrdersResponse,
   ActiveMembership,
+  UserMembershipsFilters,
+  UserMembershipsResponse,
 } from '../types/membership';
 
 export async function fetchSubscriptionTiers(): Promise<SubscriptionTier[]> {
@@ -138,5 +140,19 @@ export async function fetchMyActiveMemberships(): Promise<ActiveMembership[]> {
   } catch (error: unknown) {
     console.error('Failed to fetch MyActiveMemberships', error);
     throw new Error('Failed to fetch active memberships.');
+  }
+}
+
+export async function fetchUserMemberships(
+  filters: UserMembershipsFilters
+): Promise<UserMembershipsResponse> {
+  try {
+    const res = await api.get('/Member/UserMemberships', {
+      params: filters,
+    });
+    return res.data as UserMembershipsResponse;
+  } catch (error: unknown) {
+    console.error('Failed to fetch UserMemberships', error);
+    throw new Error('Failed to fetch user memberships.');
   }
 }
