@@ -8,47 +8,51 @@ import {
 import { useAuthStore } from '../../stores/authStore';
 import { getUserIdFromToken, isJwtExpired } from '../../lib/utils';
 import { fetchUserProfile } from '../../services/user-profile';
+import { refreshToken } from '../../lib/refresh';
 
 export function AuthInitializer() {
   useEffect(() => {
     const initializeAuth = async () => {
-      // console.log('🚀 [AUTH_INIT] Initializing auth state on app start...');
-
-      // Detect if this is a fresh browser session (no tab/session state yet)
-      const hasSessionMarker =
-        typeof window !== 'undefined' &&
-        typeof window.sessionStorage !== 'undefined' &&
-        window.sessionStorage.getItem('sessionStarted') === '1';
+      // Ensure session marker is set immediately for the current tab/session
+      try {
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+          window.sessionStorage.setItem('sessionStarted', '1');
+        }
+      } catch (e) {
+        void e; // noop
+      }
 
       const jwtToken = getCookie('jwtToken');
+      const refreshCookie = getCookie('refreshToken');
 
-      // console.log('🍪 [AUTH_INIT] Cookies found:', {
-      //   hasJwtToken: !!jwtToken,
-      //   hasUserRole: !!userRoleCookie,
-      //   hasRefreshToken: !!refreshToken,
-      // });
-
-      // If remember me is disabled: on a fresh browser session, force logout/cleanup
-      // Within the same session (reloads), allow continuing only if JWT is valid
+      // When remember-me is disabled, keep the session alive within this tab if possible.
+      // 1) If JWT is valid, mark logged-in.
+      // 2) If JWT is expired but a refresh token exists, attempt one refresh.
+      // 3) If refresh fails (or no refresh token), clear cookies and logout.
       if (!isRememberMeEnabled()) {
-        if (!hasSessionMarker) {
-          clearAuthCookies();
-          useAuthStore.getState().logout();
-          // Mark session so subsequent reloads within the same session can continue
-          try {
-            window.sessionStorage.setItem('sessionStarted', '1');
-          } catch (e) {
-            void e; // noop
-          }
-          return;
-        }
         if (jwtToken && !isJwtExpired(jwtToken)) {
           const roles = getUserRoles() ?? [];
           useAuthStore.getState().setRoles(roles);
           useAuthStore.getState().setLoggedIn(true);
           return;
         }
-        // No valid token within the same session
+
+        if (refreshCookie) {
+          try {
+            const ok = await refreshToken();
+            if (ok) {
+              const roles = getUserRoles() ?? [];
+              useAuthStore.getState().setRoles(roles);
+              useAuthStore.getState().setLoggedIn(true);
+              return;
+            }
+          } catch (err) {
+            // fall through to cleanup
+            void err;
+          }
+        }
+
+        // No valid/refreshable token: cleanup
         clearAuthCookies();
         useAuthStore.getState().logout();
         return;
@@ -100,12 +104,7 @@ export function AuthInitializer() {
 
     initializeAuth();
 
-    // Ensure session marker is set for the current session
-    try {
-      window.sessionStorage.setItem('sessionStarted', '1');
-    } catch (e) {
-      void e; // noop
-    }
+    // Session marker already set above
   }, []);
 
   return null; // This component doesn't render anything

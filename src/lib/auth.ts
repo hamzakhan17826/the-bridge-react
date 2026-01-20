@@ -61,7 +61,16 @@ export function setAuthCookies(params: {
   persistent: boolean;
 }) {
   const { jwtToken, refreshToken, roles, persistent } = params;
+
+  console.log('🍪 [AUTH] Setting auth cookies:', {
+    hasJwtToken: !!jwtToken,
+    hasRefreshToken: !!refreshToken,
+    rolesCount: roles?.length,
+    persistent,
+  });
+
   if (jwtToken) {
+    console.log('🔑 [AUTH] Setting JWT token cookie');
     setCookie('auth', '1', {
       path: '/',
       sameSite: 'lax',
@@ -72,25 +81,35 @@ export function setAuthCookies(params: {
       sameSite: 'lax',
       ...(persistent ? { maxAge: 60 * 60 * 24 * 30 } : {}),
     });
+  } else {
+    console.warn('⚠️ [AUTH] No JWT token provided to setAuthCookies');
   }
+
   if (Array.isArray(roles)) {
     try {
+      console.log('👤 [AUTH] Setting user roles cookie:', roles);
       setCookie('userRole', JSON.stringify(roles), {
         path: '/',
         sameSite: 'lax',
         ...(persistent ? { maxAge: 60 * 60 * 24 * 30 } : {}),
       });
-    } catch {
-      // ignore
+    } catch (error) {
+      console.error('❌ [AUTH] Failed to set roles cookie:', error);
     }
   }
+
   if (refreshToken) {
+    console.log('🔄 [AUTH] Setting refresh token cookie');
     setCookie('refreshToken', refreshToken, {
       path: '/',
       sameSite: 'lax',
       ...(persistent ? { maxAge: 60 * 60 * 24 * 30 } : {}),
     });
+  } else {
+    console.warn('⚠️ [AUTH] No refresh token provided to setAuthCookies');
   }
+
+  console.log('✅ [AUTH] Auth cookies set successfully');
 }
 
 // Convenience wrapper to clear cookies and logout via existing flow
