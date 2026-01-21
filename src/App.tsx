@@ -44,6 +44,7 @@ import {
   PMEarnings,
   PMPayout,
   MembershipOverview,
+  AddPodcast,
 } from './pages';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
@@ -183,7 +184,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="admin/orders-history"
+                  path="orders-history"
                   element={
                     <RequireAdmin>
                       <AdminOrdersHistory />
@@ -191,10 +192,18 @@ function App() {
                   }
                 />
                 <Route
-                  path="admin/user-memberships"
+                  path="user-memberships"
                   element={
                     <RequireAdmin>
                       <AdminUserMemberships />
+                    </RequireAdmin>
+                  }
+                />
+                <Route
+                  path="add-podcast"
+                  element={
+                    <RequireAdmin>
+                      <AddPodcast />
                     </RequireAdmin>
                   }
                 />
