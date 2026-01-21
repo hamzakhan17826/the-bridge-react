@@ -5,11 +5,7 @@ import { useMyActiveMemberships } from '@/hooks/useMembership';
 
 export default function Overview() {
   const navigate = useNavigate();
-  const {
-    data: activeMemberships,
-    isLoading,
-    error,
-  } = useMyActiveMemberships();
+  const { data: activeMemberships, isLoading } = useMyActiveMemberships();
   const currentMembership = activeMemberships?.[0]; // Take first active membership
 
   return (
@@ -24,17 +20,13 @@ export default function Overview() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           <span className="ml-2">Loading membership...</span>
         </div>
-      ) : error ? (
-        <div className="text-center p-8 text-red-500">
-          Failed to load membership information
-        </div>
-      ) : (
+      ) : currentMembership ? (
         <MembershipStatusCard
           status={currentMembership}
           onManageClick={() => navigate('/dashboard/membership')}
           onViewOrdersClick={() => navigate('/dashboard/membership/orders')}
         />
-      )}
+      ) : null}
 
       <CreditsWalletCard />
     </div>

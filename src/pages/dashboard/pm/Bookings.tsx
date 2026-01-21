@@ -54,7 +54,7 @@ export default function PMBookings() {
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="p-4 border rounded-lg flex items-center justify-between"
+                  className="p-4 border rounded-lg flex flex-col md:flex-row gap-3 md:gap-0 items-start md:items-center justify-between"
                 >
                   <div>
                     <div className="font-semibold">
@@ -64,17 +64,19 @@ export default function PMBookings() {
                       Jan 22, 2:00 PM • 60 mins • Virtual
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
                     <Badge variant="outline">Pending</Badge>
-                    <Button size="sm" variant="outline">
-                      Approve
-                    </Button>
-                    <Button size="sm" variant="outline">
-                      Reschedule
-                    </Button>
-                    <Button size="sm" className="btn">
-                      Start
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline">
+                        Approve
+                      </Button>
+                      <Button size="sm" variant="outline">
+                        Reschedule
+                      </Button>
+                      <Button size="sm" className="btn">
+                        Start
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))}

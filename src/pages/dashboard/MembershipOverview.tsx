@@ -9,11 +9,7 @@ export default function Membership() {
   const { setItems } = useBreadcrumb();
   const navigate = useNavigate();
 
-  const {
-    data: activeMemberships,
-    isLoading,
-    error,
-  } = useMyActiveMemberships();
+  const { data: activeMemberships, isLoading } = useMyActiveMemberships();
   const currentMembership = activeMemberships?.[0]; // Take first active membership
 
   useEffect(() => {
@@ -38,17 +34,13 @@ export default function Membership() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           <span className="ml-2">Loading membership...</span>
         </div>
-      ) : error ? (
-        <div className="text-center p-8 text-red-500">
-          Failed to load membership information
-        </div>
-      ) : (
+      ) : currentMembership ? (
         <MembershipStatusCard
           status={currentMembership}
           onManageClick={() => navigate('/dashboard/membership')}
           onViewOrdersClick={() => navigate('/dashboard/membership/orders')}
         />
-      )}
+      ) : null}
 
       {/* Credits Wallet (duplicate visibility here for convenience) */}
       <CreditsWalletCard />

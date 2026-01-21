@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { useUserMemberships } from '@/hooks/useMembership';
 import type {
   UserMembershipItem,
@@ -104,7 +104,7 @@ export default function AdminUserMemberships() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {/* Start Date From */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">Start From</label>
@@ -126,20 +126,6 @@ export default function AdminUserMemberships() {
                   className="w-full"
                 />
               </div>
-
-              {/* Apply */}
-              <div className="space-y-2">
-                <Button
-                  onClick={handleApplyFilters}
-                  size="sm"
-                  className="flex items-center gap-2 mt-6 bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  Apply Filters
-                </Button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
               {/* End Date From */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">End From</label>
@@ -159,6 +145,17 @@ export default function AdminUserMemberships() {
                   onChange={(e) => setEndDateTo(e.target.value)}
                   className="w-full"
                 />
+              </div>
+
+              {/* Apply */}
+              <div className="space-y-2">
+                <Button
+                  onClick={handleApplyFilters}
+                  size="sm"
+                  className="flex items-center gap-2 mt-6 bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  Apply Filters
+                </Button>
               </div>
             </div>
           </CardContent>
@@ -187,102 +184,106 @@ export default function AdminUserMemberships() {
                 </TableHeader>
                 <TableBody>
                   {memberships.length > 0 ? (
-                    memberships.map((m) => {
-                      const isOpen = !!openRows[m.id];
-                      return (
-                        <>
-                          <TableRow
-                            key={m.id}
-                            className="cursor-pointer"
-                            onClick={() => toggleRow(m.id)}
-                          >
-                            <TableCell className="align-middle">
-                              {isOpen ? (
-                                <ChevronDown className="w-4 h-4" />
-                              ) : (
-                                <ChevronRight className="w-4 h-4" />
-                              )}
-                            </TableCell>
-                            <TableCell className="align-middle">
-                              {m.userEmail || m.userName || m.userId}
-                            </TableCell>
-                            <TableCell className="align-middle">
-                              {m.tierName} ({m.tierCode})
-                            </TableCell>
-                            <TableCell className="align-middle">
-                              {m.isAutoRenewEnabled ? 'Yes' : 'No'}
-                            </TableCell>
-                            <TableCell className="align-middle">
-                              {new Date(m.startDate + 'Z').toLocaleString()}
-                            </TableCell>
-                            <TableCell className="align-middle">
-                              {new Date(m.endDate + 'Z').toLocaleString()}
-                            </TableCell>
-                          </TableRow>
-                          {isOpen && (
-                            <TableRow>
-                              <TableCell colSpan={6}>
-                                <div className="p-4 bg-muted/40 rounded-md space-y-3">
-                                  {m.description && (
-                                    <div>
-                                      <div className="text-sm font-medium">
-                                        Description
-                                      </div>
-                                      <div className="text-sm text-muted-foreground">
-                                        {m.description}
-                                      </div>
-                                    </div>
+                    memberships.map((m) => (
+                      <Fragment key={m.id}>
+                        {(() => {
+                          const isOpen = !!openRows[m.id];
+                          return (
+                            <>
+                              <TableRow
+                                className="cursor-pointer"
+                                onClick={() => toggleRow(m.id)}
+                              >
+                                <TableCell className="align-middle">
+                                  {isOpen ? (
+                                    <ChevronDown className="w-4 h-4" />
+                                  ) : (
+                                    <ChevronRight className="w-4 h-4" />
                                   )}
-                                  <div>
-                                    <div className="text-sm font-medium mb-2">
-                                      Features
-                                    </div>
-                                    {m.features && m.features.length > 0 ? (
-                                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                                        {m.features.map((f) => (
-                                          <div
-                                            key={f.id}
-                                            className="rounded border bg-background p-3"
-                                          >
-                                            <div className="text-sm font-semibold">
-                                              {f.name}
-                                            </div>
-                                            {f.description && (
-                                              <div className="text-xs text-muted-foreground mb-1">
-                                                {f.description}
-                                              </div>
-                                            )}
-                                            <div className="text-xs">
-                                              Remaining: {f.remainingCredits}
-                                            </div>
-                                            <div className="text-xs">
-                                              Start:{' '}
-                                              {new Date(
-                                                f.startDate
-                                              ).toLocaleString()}
-                                            </div>
-                                            <div className="text-xs">
-                                              End:{' '}
-                                              {new Date(
-                                                f.endDate
-                                              ).toLocaleString()}
-                                            </div>
+                                </TableCell>
+                                <TableCell className="align-middle">
+                                  {m.userEmail || m.userName || m.userId}
+                                </TableCell>
+                                <TableCell className="align-middle">
+                                  {m.tierName} ({m.tierCode})
+                                </TableCell>
+                                <TableCell className="align-middle">
+                                  {m.isAutoRenewEnabled ? 'Yes' : 'No'}
+                                </TableCell>
+                                <TableCell className="align-middle">
+                                  {new Date(m.startDate + 'Z').toLocaleString()}
+                                </TableCell>
+                                <TableCell className="align-middle">
+                                  {new Date(m.endDate + 'Z').toLocaleString()}
+                                </TableCell>
+                              </TableRow>
+                              {isOpen && (
+                                <TableRow>
+                                  <TableCell colSpan={6}>
+                                    <div className="p-4 bg-muted/40 rounded-md space-y-3">
+                                      {m.description && (
+                                        <div>
+                                          <div className="text-sm font-medium">
+                                            Description
                                           </div>
-                                        ))}
+                                          <div className="text-sm text-muted-foreground">
+                                            {m.description}
+                                          </div>
+                                        </div>
+                                      )}
+                                      <div>
+                                        <div className="text-sm font-medium mb-2">
+                                          Features
+                                        </div>
+                                        {m.features && m.features.length > 0 ? (
+                                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                            {m.features.map((f) => (
+                                              <div
+                                                key={f.id}
+                                                className="rounded border bg-background p-3"
+                                              >
+                                                <div className="text-sm font-semibold">
+                                                  {f.name}
+                                                </div>
+                                                {f.description && (
+                                                  <div className="text-xs text-muted-foreground mb-1">
+                                                    {f.description}
+                                                  </div>
+                                                )}
+                                                <div className="text-xs">
+                                                  Remaining:{' '}
+                                                  {f.remainingCredits}
+                                                </div>
+                                                <div className="text-xs">
+                                                  Start:{' '}
+                                                  {new Date(
+                                                    f.startDate
+                                                  ).toLocaleString()}
+                                                </div>
+                                                <div className="text-xs">
+                                                  End:{' '}
+                                                  {new Date(
+                                                    f.endDate
+                                                  ).toLocaleString()}
+                                                </div>
+                                              </div>
+                                            ))}
+                                          </div>
+                                        ) : (
+                                          <div className="text-sm text-muted-foreground">
+                                            No features listed
+                                          </div>
+                                        )}
                                       </div>
-                                    ) : (
-                                      <div className="text-sm text-muted-foreground">
-                                        No features listed
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                              </TableCell>
-                            </TableRow>
-                          )}
-                        </>
-                      );
-                    })
+                                    </div>
+                                  </TableCell>
+                                </TableRow>
+                              )}
+                            </>
+                          );
+                        })()}
+                      </Fragment>
+                    ))
                   ) : (
                     <TableRow>
                       <TableCell
@@ -296,7 +297,7 @@ export default function AdminUserMemberships() {
                 </TableBody>
               </Table>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="flex flex-col gap-4 sm:gap-0 md:flex-row items-center justify-end space-x-2 py-4">
               <div className="flex items-center gap-3 flex-1 text-sm text-muted-foreground">
                 Showing {(pageNumber - 1) * pageSize + 1} to{' '}
                 {Math.min(pageNumber * pageSize, totalRecords)} of{' '}

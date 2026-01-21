@@ -34,7 +34,7 @@ export default function PMServices() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex justify-end mb-3">
+        <div className="flex sm:justify-end mb-3">
           <Button size="sm" className="btn">
             Add Service
           </Button>
@@ -56,7 +56,7 @@ export default function PMServices() {
           ].map((s) => (
             <div
               key={s.name}
-              className="p-4 border rounded flex items-center justify-between"
+              className="p-4 border rounded flex flex-col gap-3 sm:gap-0 md:flex-row items-start md:items-center justify-between"
             >
               <div>
                 <div className="font-semibold">{s.name}</div>
@@ -64,21 +64,23 @@ export default function PMServices() {
                   {s.duration} mins • ${s.price}
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-2">
                 <Badge
                   variant={s.status === 'Published' ? 'secondary' : 'outline'}
                 >
                   {s.status}
                 </Badge>
-                <Button size="sm" variant="outline">
-                  Edit
-                </Button>
-                <Button size="sm" variant="outline">
-                  Duplicate
-                </Button>
-                <Button size="sm" className="btn">
-                  Publish
-                </Button>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline">
+                    Edit
+                  </Button>
+                  <Button size="sm" variant="outline">
+                    Duplicate
+                  </Button>
+                  <Button size="sm" className="btn">
+                    Publish
+                  </Button>
+                </div>
               </div>
             </div>
           ))}

@@ -279,7 +279,7 @@ export default function AdminOrdersHistory() {
                 </TableBody>
               </Table>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="flex flex-col gap-4 sm:gap-0 md:flex-row items-center justify-end space-x-2 py-4">
               <div className="flex items-center gap-3 flex-1 text-sm text-muted-foreground">
                 Showing {(pageNumber - 1) * pageSize + 1} to{' '}
                 {Math.min(pageNumber * pageSize, totalRecords)} of{' '}
