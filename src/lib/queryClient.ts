@@ -12,7 +12,7 @@ export const queryClient = new QueryClient({
         const status = (error as any)?.response?.status;
         return !status || status >= 500; // Retry only on server errors
       },
-      refetchOnWindowFocus: true, // Refetch when window regains focus
+      refetchOnWindowFocus: false, // Refetch when window regains focus
       refetchOnReconnect: true, // Refetch on network reconnect
     },
     mutations: {

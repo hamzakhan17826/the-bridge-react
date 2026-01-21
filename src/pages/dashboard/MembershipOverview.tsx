@@ -4,6 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import MembershipStatusCard from '@/components/dashboard/MembershipStatusCard';
 import CreditsWalletCard from '@/components/dashboard/CreditsWalletCard';
 import { useMyActiveMemberships } from '@/hooks/useMembership';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '../../components/ui';
 
 export default function Membership() {
   const { setItems } = useBreadcrumb();
@@ -40,7 +48,29 @@ export default function Membership() {
           onManageClick={() => navigate('/dashboard/membership')}
           onViewOrdersClick={() => navigate('/dashboard/membership/orders')}
         />
-      ) : null}
+      ) : (
+        <Card className="border-2 border-primary/20 bg-primary/5">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              No Active Membership
+            </CardTitle>
+            <CardDescription>
+              You don't have an active membership yet. Explore our membership
+              plans to unlock premium features and benefits.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex justify-center">
+              <Button
+                onClick={() => navigate('/dashboard/membership')}
+                className="btn"
+              >
+                View Membership Plans
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Credits Wallet (duplicate visibility here for convenience) */}
       <CreditsWalletCard />
