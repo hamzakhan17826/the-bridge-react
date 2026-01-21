@@ -257,13 +257,13 @@ export default function AdminUserMemberships() {
                                                 <div className="text-xs">
                                                   Start:{' '}
                                                   {new Date(
-                                                    f.startDate
+                                                    f.startDate + 'Z'
                                                   ).toLocaleString()}
                                                 </div>
                                                 <div className="text-xs">
                                                   End:{' '}
                                                   {new Date(
-                                                    f.endDate
+                                                    f.endDate + 'Z'
                                                   ).toLocaleString()}
                                                 </div>
                                               </div>

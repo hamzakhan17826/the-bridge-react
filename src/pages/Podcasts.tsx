@@ -11,6 +11,10 @@ import {
 } from 'lucide-react';
 import { Button, Input } from '../components/ui';
 import type { PodcastItem } from '../types/content';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
 
 const Podcasts = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -98,70 +102,6 @@ const Podcasts = () => {
       title: 'Intuition and Psychic Abilities',
       image: '/images/podcasts/carousel/5.jpg',
     },
-    {
-      id: 11,
-      episode: 'ep:11',
-      duration: '08:45 Mins',
-      date: 'Oct 6th, 2024',
-      title: 'Afterlife Communication Stories',
-      image: '/images/podcasts/carousel/1.jpg',
-    },
-    {
-      id: 12,
-      episode: 'ep:12',
-      duration: '05:15 Mins',
-      date: 'Sep 29th, 2024',
-      title: 'Meditation for Spiritual Growth',
-      image: '/images/podcasts/carousel/2.jpg',
-    },
-    {
-      id: 13,
-      episode: 'ep:13',
-      duration: '07:55 Mins',
-      date: 'Sep 22nd, 2024',
-      title: 'Crystal Healing and Energy Work',
-      image: '/images/podcasts/carousel/3.jpg',
-    },
-    {
-      id: 14,
-      episode: 'ep:14',
-      duration: '06:40 Mins',
-      date: 'Sep 15th, 2024',
-      title: 'Signs from the Spirit World',
-      image: '/images/podcasts/carousel/4.jpg',
-    },
-    {
-      id: 15,
-      episode: 'ep:15',
-      duration: '09:00 Mins',
-      date: 'Sep 8th, 2024',
-      title: 'Developing Your Mediumship Gifts',
-      image: '/images/podcasts/carousel/5.jpg',
-    },
-    {
-      id: 16,
-      episode: 'ep:16',
-      duration: '05:25 Mins',
-      date: 'Sep 1st, 2024',
-      title: 'Spiritual Protection Techniques',
-      image: '/images/podcasts/carousel/1.jpg',
-    },
-    {
-      id: 17,
-      episode: 'ep:17',
-      duration: '08:10 Mins',
-      date: 'Aug 25th, 2024',
-      title: 'Past Life Regression Insights',
-      image: '/images/podcasts/carousel/2.jpg',
-    },
-    {
-      id: 18,
-      episode: 'ep:18',
-      duration: '06:55 Mins',
-      date: 'Aug 18th, 2024',
-      title: 'Angel Communication and Guidance',
-      image: '/images/podcasts/carousel/3.jpg',
-    },
   ];
 
   // Sort options
@@ -172,8 +112,12 @@ const Podcasts = () => {
     { value: 'duration-desc', label: 'Longest First' },
   ];
 
-  // Filter and sort podcasts
-  const filteredPodcasts = podcasts
+  // Split podcasts into internal and external
+  const internalPodcasts = podcasts.slice(0, 5);
+  // const externalPodcasts = podcasts.slice(5);
+
+  // Filter and sort internal podcasts
+  const filteredInternal = internalPodcasts
     .filter(
       (podcast) =>
         podcast.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -193,6 +137,28 @@ const Podcasts = () => {
           return 0;
       }
     });
+
+  // Filter and sort external podcasts
+  // const filteredExternal = externalPodcasts
+  //   .filter(
+  //     (podcast) =>
+  //       podcast.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //       podcast.episode.toLowerCase().includes(searchTerm.toLowerCase())
+  //   )
+  //   .sort((a, b) => {
+  //     switch (selectedSort) {
+  //       case 'newest':
+  //         return new Date(b.date).getTime() - new Date(a.date).getTime();
+  //       case 'oldest':
+  //         return new Date(a.date).getTime() - new Date(b.date).getTime();
+  //       case 'duration-asc':
+  //         return parseInt(a.duration) - parseInt(b.duration);
+  //       case 'duration-desc':
+  //         return parseInt(b.duration) - parseInt(a.duration);
+  //       default:
+  //         return 0;
+  //     }
+  //   });
 
   const PodcastCard = ({ podcast }: { podcast: PodcastItem }) => (
     <div className="group bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex flex-col">
@@ -350,36 +316,51 @@ const Podcasts = () => {
 
             {/* Results Count */}
             <div className="mt-4 text-sm text-gray-600">
-              Showing {filteredPodcasts.length} of {podcasts.length} episodes
+              Showing {filteredInternal.length} of {internalPodcasts.length}{' '}
+              episodes
             </div>
           </div>
         </section>
 
-        {/* Podcasts Grid */}
+        {/* Podcasts Sections */}
         <section className="py-12">
           <div className="container mx-auto px-6">
-            {filteredPodcasts.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredPodcasts.map((podcast) => (
-                  <PodcastCard key={podcast.id} podcast={podcast} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-16">
-                <Headphones className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                  No episodes found
-                </h3>
-                <p className="text-gray-500">
-                  Try adjusting your search terms.
-                </p>
-              </div>
-            )}
+            {/* Internal Podcasts */}
+            <div className="mb-12">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                Our Podcasts
+              </h2>
+              {filteredInternal.length > 0 ? (
+                <Swiper
+                  modules={[Navigation]}
+                  spaceBetween={20}
+                  slidesPerView={1}
+                  navigation
+                  breakpoints={{
+                    640: { slidesPerView: 2 },
+                    768: { slidesPerView: 3 },
+                    1024: { slidesPerView: 4 },
+                  }}
+                  className="podcast-swiper pb-8"
+                >
+                  {filteredInternal.map((podcast) => (
+                    <SwiperSlide key={podcast.id}>
+                      <PodcastCard podcast={podcast} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              ) : (
+                <div className="text-center py-8">
+                  <Headphones className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500">No internal episodes found.</p>
+                </div>
+              )}
+            </div>
           </div>
         </section>
 
         {/* Call to Action */}
-        {filteredPodcasts.length > 0 && (
+        {filteredInternal.length > 0 && (
           <section className="py-16 bg-linear-to-r from-primary-50 to-secondary-50">
             <div className="container mx-auto px-6 text-center">
               <div className="max-w-3xl mx-auto">
