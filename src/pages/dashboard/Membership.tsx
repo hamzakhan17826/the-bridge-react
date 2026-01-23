@@ -11,7 +11,10 @@ import { Users, BookOpen, Crown, User } from 'lucide-react';
 import { useBreadcrumb } from '@/components/ui/breadcrumb';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSubscriptionTiers } from '../../hooks/useMembership';
+import {
+  useSubscriptionTiers,
+  useMyActiveMemberships,
+} from '../../hooks/useMembership';
 
 export default function Membership() {
   const { setItems } = useBreadcrumb();
@@ -23,6 +26,7 @@ export default function Membership() {
     isLoading: tiersLoading,
     error: tiersError,
   } = useSubscriptionTiers();
+  const { data: activeMemberships = [] } = useMyActiveMemberships();
 
   useEffect(() => {
     setItems([
@@ -191,26 +195,51 @@ export default function Membership() {
                           </div>
                         </div>
                         <div className="md:col-span-2 flex justify-start md:justify-end mt-4 md:mt-0">
-                          <Button
-                            size="sm"
-                            variant={
-                              isPopular
-                                ? 'default'
-                                : isFree
-                                  ? 'outline'
-                                  : 'outline'
-                            }
-                            className={`w-full md:w-auto ${
-                              isPopular
-                                ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                                : isFree
-                                  ? 'border-emerald-300 text-emerald-700 hover:bg-emerald-50'
-                                  : ''
-                            }`}
-                            onClick={() => handleUpgrade(tier.tierCode)}
-                          >
-                            {isFree ? 'Get Started' : 'Upgrade'}
-                          </Button>
+                          {(() => {
+                            const isAlreadyPurchased = activeMemberships.some(
+                              (membership) =>
+                                membership.tierCode === tier.tierCode ||
+                                console.log(
+                                  'Checking membership:',
+                                  membership.tierCode,
+                                  tier.tierCode
+                                )
+                            );
+                            return (
+                              <Button
+                                size="sm"
+                                variant={
+                                  isAlreadyPurchased
+                                    ? 'secondary'
+                                    : isPopular
+                                      ? 'default'
+                                      : isFree
+                                        ? 'outline'
+                                        : 'outline'
+                                }
+                                className={`w-full md:w-auto ${
+                                  isAlreadyPurchased
+                                    ? 'bg-green-500 hover:bg-green-600 text-white cursor-not-allowed opacity-75'
+                                    : isPopular
+                                      ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                                      : isFree
+                                        ? 'border-emerald-300 text-emerald-700 hover:bg-emerald-50'
+                                        : ''
+                                }`}
+                                onClick={() =>
+                                  !isAlreadyPurchased &&
+                                  handleUpgrade(tier.tierCode)
+                                }
+                                disabled={isAlreadyPurchased}
+                              >
+                                {isAlreadyPurchased
+                                  ? 'Already Purchased'
+                                  : isFree
+                                    ? 'Get Started'
+                                    : 'Upgrade'}
+                              </Button>
+                            );
+                          })()}
                         </div>
                       </div>
                     );

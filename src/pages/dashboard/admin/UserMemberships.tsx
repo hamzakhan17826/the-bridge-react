@@ -29,6 +29,10 @@ export default function AdminUserMemberships() {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
+  const [email, setEmail] = useState('');
+  const [isActiveFilter, setIsActiveFilter] = useState<
+    'all' | 'active' | 'inactive'
+  >('all');
   const [startDateFrom, setStartDateFrom] = useState('');
   const [startDateTo, setStartDateTo] = useState('');
   const [endDateFrom, setEndDateFrom] = useState('');
@@ -44,6 +48,8 @@ export default function AdminUserMemberships() {
       startDateTo: appliedFilters.startDateTo || '',
       endDateFrom: appliedFilters.endDateFrom || '',
       endDateTo: appliedFilters.endDateTo || '',
+      userEmail: appliedFilters.userEmail || '',
+      isActive: appliedFilters.isActive,
     }),
     [appliedFilters]
   );
@@ -59,6 +65,9 @@ export default function AdminUserMemberships() {
       startDateTo: sTo,
       endDateFrom: eFrom,
       endDateTo: eTo,
+      userEmail: email,
+      isActive:
+        isActiveFilter === 'all' ? undefined : isActiveFilter === 'active',
     });
     setPageNumber(1);
   };
@@ -105,6 +114,38 @@ export default function AdminUserMemberships() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {/* Email */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Email</label>
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Search by email"
+                  className="w-full"
+                />
+              </div>
+
+              {/* Is Active */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Status</label>
+                <Select
+                  value={isActiveFilter}
+                  onValueChange={(value: 'all' | 'active' | 'inactive') =>
+                    setIsActiveFilter(value)
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
               {/* Start Date From */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">Start From</label>
@@ -178,6 +219,7 @@ export default function AdminUserMemberships() {
                     <TableHead>User</TableHead>
                     <TableHead>Tier</TableHead>
                     <TableHead>Auto-Renew</TableHead>
+                    <TableHead>Status</TableHead>
                     <TableHead>Start</TableHead>
                     <TableHead>End</TableHead>
                   </TableRow>
@@ -211,6 +253,17 @@ export default function AdminUserMemberships() {
                                   {m.isAutoRenewEnabled ? 'Yes' : 'No'}
                                 </TableCell>
                                 <TableCell className="align-middle">
+                                  {m.isActive === 1 || m.isActive === true ? (
+                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                      Active
+                                    </span>
+                                  ) : (
+                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                      Inactive
+                                    </span>
+                                  )}
+                                </TableCell>
+                                <TableCell className="align-middle">
                                   {new Date(m.startDate + 'Z').toLocaleString()}
                                 </TableCell>
                                 <TableCell className="align-middle">
@@ -219,7 +272,7 @@ export default function AdminUserMemberships() {
                               </TableRow>
                               {isOpen && (
                                 <TableRow>
-                                  <TableCell colSpan={6}>
+                                  <TableCell colSpan={7}>
                                     <div className="p-4 bg-muted/40 rounded-md space-y-3">
                                       {m.description && (
                                         <div>
@@ -287,7 +340,7 @@ export default function AdminUserMemberships() {
                   ) : (
                     <TableRow>
                       <TableCell
-                        colSpan={6}
+                        colSpan={7}
                         className="text-center py-8 text-muted-foreground"
                       >
                         No memberships to display

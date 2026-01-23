@@ -148,12 +148,13 @@ export interface UserMembershipItem {
   endDate: string; // ISO
   features: ActiveMembershipFeature[];
   // Derived/runtime-only helpers (optional)
-  isActive?: boolean;
+  isActive?: boolean | number;
 }
 
 export interface UserMembershipsFilters {
   userId?: string;
-  isActive?: boolean;
+  userEmail?: string;
+  isActive?: boolean | number;
   startDateFrom?: string; // ISO
   startDateTo?: string; // ISO
   endDateFrom?: string; // ISO

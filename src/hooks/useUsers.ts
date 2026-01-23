@@ -55,7 +55,7 @@ export const useUserClaims = (userId: string) => {
 
 // Hook for fetching user roles
 export const useUserRoles = (userId: string) => {
-  return useQuery<{ key: string; value: string }[]>({
+  return useQuery<{ key: string; value: boolean }[]>({
     queryKey: ['userRoles', userId],
     queryFn: () => fetchUserRoles(userId),
     enabled: !!userId,

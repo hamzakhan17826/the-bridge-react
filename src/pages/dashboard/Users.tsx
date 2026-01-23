@@ -239,34 +239,48 @@ export default function Users() {
                 <label className="font-medium">Claims:</label>
                 {claimsLoading ? (
                   <p>Loading claims...</p>
-                ) : userClaims.length > 0 ? (
-                  <p>
-                    {userClaims
-                      .map(
-                        (claim) =>
-                          `${claim.key.charAt(0).toUpperCase() + claim.key.slice(1)}`
-                      )
-                      .join(', ')}
-                  </p>
                 ) : (
-                  <p>No claims found.</p>
+                  (() => {
+                    const activeClaims = userClaims.filter(
+                      (claim) => claim.value === 'true'
+                    );
+                    return activeClaims.length > 0 ? (
+                      <p>
+                        {activeClaims
+                          .map(
+                            (claim) =>
+                              `${claim.key.charAt(0).toUpperCase() + claim.key.slice(1)}`
+                          )
+                          .join(', ')}
+                      </p>
+                    ) : (
+                      <p>No active claims found.</p>
+                    );
+                  })()
                 )}
               </div>
               <div>
                 <label className="font-medium">Roles:</label>
                 {rolesLoading ? (
                   <p>Loading roles...</p>
-                ) : userRoles.length > 0 ? (
-                  <p>
-                    {userRoles
-                      .map(
-                        (role) =>
-                          `${role.key.charAt(0).toUpperCase() + role.key.slice(1)}`
-                      )
-                      .join(', ')}
-                  </p>
                 ) : (
-                  <p>No roles found.</p>
+                  (() => {
+                    const activeRoles = userRoles.filter(
+                      (role) => role.value === true
+                    );
+                    return activeRoles.length > 0 ? (
+                      <p>
+                        {activeRoles
+                          .map(
+                            (role) =>
+                              `${role.key.charAt(0).toUpperCase() + role.key.slice(1)}`
+                          )
+                          .join(', ')}
+                      </p>
+                    ) : (
+                      <p>No active roles found.</p>
+                    );
+                  })()
                 )}
               </div>
             </div>
