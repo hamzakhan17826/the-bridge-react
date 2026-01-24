@@ -157,9 +157,9 @@ export default function Membership() {
                               )}
                             </div>
                             <div className="text-2xl font-bold">
-                              ${tier.basePrice}
+                              ${Math.round(tier.basePrice ?? 0)}
                               <span className="text-sm font-normal text-muted-foreground">
-                                {tier.basePrice === 0 ? '' : '/month'}
+                                {(tier.basePrice ?? 0) === 0 ? '' : '/month'}
                               </span>
                             </div>
                             <div className="text-xs text-muted-foreground">
@@ -198,12 +198,7 @@ export default function Membership() {
                           {(() => {
                             const isAlreadyPurchased = activeMemberships.some(
                               (membership) =>
-                                membership.tierCode === tier.tierCode ||
-                                console.log(
-                                  'Checking membership:',
-                                  membership.tierCode,
-                                  tier.tierCode
-                                )
+                                membership.tierCode === tier.tierCode
                             );
                             return (
                               <Button

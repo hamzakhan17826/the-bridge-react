@@ -59,7 +59,7 @@ export default function ActivityLogs() {
 
   const { data: uniqueTypesData } = useListActivityUniqueTypes();
   const activityUniqueTypes =
-    (uniqueTypesData as ListActivityUniqueTypes[]) || [];
+    (uniqueTypesData as ListActivityUniqueTypes) || [];
 
   /* ********************************************* */
   /* Filter
@@ -175,21 +175,20 @@ export default function ActivityLogs() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Activity Types</SelectItem>
-                    {activityUniqueTypes?.map((type) => {
-                      const { truncated, full } = truncateText(
-                        type.activityTypeU,
-                        50
-                      );
-                      return (
-                        <SelectItem
-                          key={type.id}
-                          value={type.activityTypeU}
-                          title={full}
-                        >
-                          {truncated}
-                        </SelectItem>
-                      );
-                    })}
+                    {activityUniqueTypes
+                      ?.filter((type) => type && type.trim() !== '')
+                      ?.map((type) => {
+                        const activityTypeText = type || 'Unknown Activity';
+                        const { truncated, full } = truncateText(
+                          activityTypeText,
+                          50
+                        );
+                        return (
+                          <SelectItem key={type} value={type} title={full}>
+                            {truncated}
+                          </SelectItem>
+                        );
+                      })}
                   </SelectContent>
                 </Select>
               </div>
@@ -250,7 +249,8 @@ export default function ActivityLogs() {
                 <TableBody>
                   {logs.length > 0 ? (
                     logs.map((log) => {
-                      const { truncated, full } = truncateText(log.details, 90);
+                      const detailsText = log.details || 'No details available';
+                      const { truncated, full } = truncateText(detailsText, 90);
                       return (
                         <TableRow key={log.id}>
                           <TableCell>{log.email}</TableCell>

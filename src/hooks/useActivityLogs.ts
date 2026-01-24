@@ -19,9 +19,7 @@ export function useActivityLogs(
   });
 }
 
-export function useListActivityUniqueTypes(): UseQueryResult<
-  ListActivityUniqueTypes[]
-> {
+export function useListActivityUniqueTypes(): UseQueryResult<ListActivityUniqueTypes> {
   return useQuery({
     queryKey: ['ListActivityUniqueTypes'],
     queryFn: () => fetchListActivityUniqueTypes(),

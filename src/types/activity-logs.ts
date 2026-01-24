@@ -20,7 +20,5 @@ export interface ActivityLogsFilters {
   fromTimestamp?: string;
   toTimestamp?: string;
 }
-export interface ListActivityUniqueTypes {
-  id: number;
-  activityTypeU: string;
-}
+
+export type ListActivityUniqueTypes = string[];

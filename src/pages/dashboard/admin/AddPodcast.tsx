@@ -2,23 +2,26 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
 import { Upload, X, Play, Image as ImageIcon } from 'lucide-react';
-import { Button, Input, Textarea, Label } from '../../../components/ui';
+import {
+  Button,
+  Input,
+  Textarea,
+  Label,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Separator,
+} from '../../../components/ui';
 import Select from 'react-select';
-
-interface PodcastFormData {
-  title: string;
-  description: string;
-  audioFile: FileList;
-  imageFile: FileList;
-  duration: string;
-  tags: string[];
-  publishDate: string;
-}
+import { type PodcastFormData } from '../../../types/podcast';
 
 const AddPodcast = () => {
   const [audioPreview, setAudioPreview] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isExternal, setIsExternal] = useState(false);
 
   const {
     register,
@@ -68,14 +71,21 @@ const AddPodcast = () => {
       const formData = new FormData();
       formData.append('title', data.title);
       formData.append('description', data.description);
-      formData.append('audioFile', data.audioFile[0]);
-      if (data.imageFile[0]) formData.append('imageFile', data.imageFile[0]);
+      formData.append('isExternal', isExternal.toString());
       formData.append('duration', data.duration);
       formData.append('tags', JSON.stringify(data.tags));
       formData.append('publishDate', data.publishDate);
 
+      if (isExternal) {
+        formData.append('audioUrl', data.audioUrl);
+      } else {
+        formData.append('audioFile', data.audioFile[0]);
+      }
+
+      if (data.imageFile[0]) formData.append('imageFile', data.imageFile[0]);
+
       // TODO: API call to backend
-      console.log('Submitting podcast:', formData);
+      console.log('Submitting podcast:', Object.fromEntries(formData));
 
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -93,26 +103,32 @@ const AddPodcast = () => {
     <>
       <Helmet>
         <title>Add Podcast - The Bridge Admin</title>
+        <meta
+          name="description"
+          content="Add a new podcast episode by uploading an audio file or providing an external link."
+        />
       </Helmet>
 
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="container mx-auto px-6 max-w-4xl">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900">
-                Add New Podcast
-              </h1>
-              <p className="text-gray-600 mt-2">
-                Upload an audio file and add details for your podcast episode.
-              </p>
-            </div>
+      <div className="space-y-6 max-w-2xl">
+        <div>
+          <h1 className="text-3xl font-bold">Add New Podcast</h1>
+          <p className="text-muted-foreground">
+            Upload an audio file and add details for your podcast episode.
+          </p>
+        </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Basic Information</CardTitle>
+              <CardDescription>
+                Enter the title and description for your podcast episode.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
               {/* Title */}
               <div>
-                <Label htmlFor="title" className="text-sm font-medium">
-                  Title *
-                </Label>
+                <Label htmlFor="title">Title *</Label>
                 <Input
                   id="title"
                   {...register('title', { required: 'Title is required' })}
@@ -128,9 +144,7 @@ const AddPodcast = () => {
 
               {/* Description */}
               <div>
-                <Label htmlFor="description" className="text-sm font-medium">
-                  Description *
-                </Label>
+                <Label htmlFor="description">Description *</Label>
                 <Textarea
                   id="description"
                   {...register('description', {
@@ -150,82 +164,165 @@ const AddPodcast = () => {
                   </p>
                 )}
               </div>
+            </CardContent>
+          </Card>
 
-              {/* Audio File */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Audio Source</CardTitle>
+              <CardDescription>
+                Choose how to provide the audio for your podcast.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Audio Source Selection */}
               <div>
-                <Label className="text-sm font-medium">Audio File *</Label>
-                <div className="mt-1">
-                  <input
-                    type="file"
-                    accept="audio/*"
-                    {...register('audioFile', {
-                      required: 'Audio file is required',
-                      validate: {
-                        fileSize: (files) => {
-                          if (files[0]?.size > 100 * 1024 * 1024) {
-                            return 'File size must be less than 100MB';
-                          }
-                          return true;
-                        },
-                        fileType: (files) => {
-                          const allowedTypes = [
-                            'audio/mpeg',
-                            'audio/wav',
-                            'audio/mp4',
-                          ];
-                          if (!allowedTypes.includes(files[0]?.type)) {
-                            return 'Only MP3, WAV, or M4A files are allowed';
-                          }
-                          return true;
-                        },
-                      },
-                    })}
-                    onChange={handleAudioChange}
-                    className="hidden"
-                    id="audioFile"
-                  />
-                  <label
-                    htmlFor="audioFile"
-                    className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary-500 transition-colors"
-                  >
-                    <div className="text-center">
-                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <p className="text-sm text-gray-600">
-                        Click to upload audio file (MP3, WAV, M4A)
-                      </p>
-                      <p className="text-xs text-gray-500 mt-1">Max 100MB</p>
-                    </div>
-                  </label>
-                  {audioPreview && (
-                    <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                      <div className="flex items-center gap-4">
-                        <Play className="w-5 h-5 text-primary-600" />
-                        <div>
-                          <p className="text-sm font-medium">Audio Preview</p>
-                          <audio
-                            controls
-                            src={audioPreview}
-                            className="mt-2 w-full max-w-md"
-                          />
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => setAudioPreview(null)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                <Label className="text-sm font-medium">Audio Source *</Label>
+                <div className="mt-2 space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      id="upload"
+                      name="audioSource"
+                      checked={!isExternal}
+                      onChange={() => setIsExternal(false)}
+                      className="text-primary-600 focus:ring-primary-500"
+                    />
+                    <Label htmlFor="upload" className="text-sm">
+                      Upload Audio File
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      id="external"
+                      name="audioSource"
+                      checked={isExternal}
+                      onChange={() => setIsExternal(true)}
+                      className="text-primary-600 focus:ring-primary-500"
+                    />
+                    <Label htmlFor="external" className="text-sm">
+                      External Link (YouTube, Spotify, etc.)
+                    </Label>
+                  </div>
                 </div>
-                {errors.audioFile && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.audioFile.message}
-                  </p>
-                )}
               </div>
 
+              {/* Audio File Upload or URL Input */}
+              {!isExternal ? (
+                <div>
+                  <Label className="text-sm font-medium">Audio File *</Label>
+                  <div className="mt-1">
+                    <input
+                      type="file"
+                      accept="audio/*"
+                      {...register('audioFile', {
+                        required: !isExternal && 'Audio file is required',
+                        validate: {
+                          fileSize: (files) => {
+                            if (files && files[0]?.size > 100 * 1024 * 1024) {
+                              return 'File size must be less than 100MB';
+                            }
+                            return true;
+                          },
+                          fileType: (files) => {
+                            const allowedTypes = [
+                              'audio/mpeg',
+                              'audio/wav',
+                              'audio/mp4',
+                            ];
+                            if (
+                              files &&
+                              !allowedTypes.includes(files[0]?.type)
+                            ) {
+                              return 'Only MP3, WAV, or M4A files are allowed';
+                            }
+                            return true;
+                          },
+                        },
+                      })}
+                      onChange={handleAudioChange}
+                      className="hidden"
+                      id="audioFile"
+                    />
+                    <label
+                      htmlFor="audioFile"
+                      className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary-500 transition-colors"
+                    >
+                      <div className="text-center">
+                        <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                        <p className="text-sm text-gray-600">
+                          Click to upload audio file (MP3, WAV, M4A)
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">Max 100MB</p>
+                      </div>
+                    </label>
+                    {audioPreview && (
+                      <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-4">
+                          <Play className="w-5 h-5 text-primary-600" />
+                          <div>
+                            <p className="text-sm font-medium">Audio Preview</p>
+                            <audio
+                              controls
+                              src={audioPreview}
+                              className="mt-2 w-full max-w-md"
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setAudioPreview(null)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  {errors.audioFile && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.audioFile.message}
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  <Label htmlFor="audioUrl">Audio URL *</Label>
+                  <Input
+                    id="audioUrl"
+                    {...register('audioUrl', {
+                      required: isExternal && 'Audio URL is required',
+                      pattern: {
+                        value: /^https?:\/\/.+/,
+                        message:
+                          'Please enter a valid URL starting with http:// or https://',
+                      },
+                    })}
+                    placeholder="https://youtube.com/watch?v=... or https://spotify.com/..."
+                    className="mt-1"
+                  />
+                  {errors.audioUrl && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.audioUrl.message}
+                    </p>
+                  )}
+                  <p className="text-xs text-gray-500 mt-1">
+                    Enter the URL of the external audio source
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Thumbnail Image</CardTitle>
+              <CardDescription>
+                Upload a thumbnail image for your podcast episode.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
               {/* Image File */}
               <div>
                 <Label className="text-sm font-medium">Thumbnail Image</Label>
@@ -298,26 +395,39 @@ const AddPodcast = () => {
                   </p>
                 )}
               </div>
+            </CardContent>
+          </Card>
 
+          <Card>
+            <CardHeader>
+              <CardTitle>Additional Details</CardTitle>
+              <CardDescription>
+                Provide additional information about your podcast.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
               {/* Duration */}
               <div>
-                <Label htmlFor="duration" className="text-sm font-medium">
-                  Duration
-                </Label>
+                <Label htmlFor="duration">Duration {!isExternal && '*'}</Label>
                 <Input
                   id="duration"
-                  {...register('duration')}
+                  {...register('duration', {
+                    required:
+                      !isExternal && 'Duration is required for uploaded files',
+                  })}
                   placeholder="e.g., 45:30"
                   className="mt-1"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Auto-filled from audio file, or enter manually (MM:SS)
+                  {isExternal
+                    ? 'Optional for external links'
+                    : 'Auto-filled from audio file, or enter manually (MM:SS)'}
                 </p>
               </div>
 
               {/* Tags */}
               <div>
-                <Label className="text-sm font-medium">Tags</Label>
+                <Label>Tags</Label>
                 <Select
                   isMulti
                   options={tagOptions}
@@ -334,9 +444,7 @@ const AddPodcast = () => {
 
               {/* Publish Date */}
               <div>
-                <Label htmlFor="publishDate" className="text-sm font-medium">
-                  Publish Date
-                </Label>
+                <Label htmlFor="publishDate">Publish Date</Label>
                 <Input
                   id="publishDate"
                   type="date"
@@ -347,27 +455,24 @@ const AddPodcast = () => {
                   Leave empty for immediate publish
                 </p>
               </div>
+            </CardContent>
+          </Card>
 
-              {/* Submit */}
-              <div className="flex gap-4 pt-6">
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex-1 btn"
-                >
-                  {isSubmitting ? 'Adding Podcast...' : 'Add Podcast'}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => window.history.back()}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </form>
+          <Separator />
+
+          <div className="flex justify-end gap-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => window.history.back()}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isSubmitting} className="btn">
+              {isSubmitting ? 'Adding Podcast...' : 'Add Podcast'}
+            </Button>
           </div>
-        </div>
+        </form>
       </div>
     </>
   );

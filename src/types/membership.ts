@@ -122,6 +122,7 @@ export interface ActiveMembership {
   isAutoRenewEnabled: boolean;
   startDate: string;
   endDate: string;
+  displayOrder?: number; // Added for determining which membership to show
   features: ActiveMembershipFeature[];
 }
 

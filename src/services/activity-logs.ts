@@ -17,7 +17,6 @@ export async function fetchActivityLogs(
     };
 
     const response = await api.post('/System/ActivityLogs', requestData);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching activity logs: ', error);
@@ -28,6 +27,7 @@ export async function fetchActivityLogs(
 export async function fetchListActivityUniqueTypes() {
   try {
     const response = await api.get('/System/ListActivityUniqueTypes');
+    // console.log('ListActivityUniqueTypes response:', response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching list activity unique types', error);
