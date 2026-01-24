@@ -1,5 +1,4 @@
 import MembershipStatusCard from '@/components/dashboard/MembershipStatusCard';
-import CreditsWalletCard from '@/components/dashboard/CreditsWalletCard';
 import { useNavigate } from 'react-router-dom';
 import { useMyActiveMemberships } from '@/hooks/useMembership';
 import {
@@ -14,7 +13,10 @@ import {
 export default function Overview() {
   const navigate = useNavigate();
   const { data: activeMemberships, isLoading } = useMyActiveMemberships();
-  const currentMembership = activeMemberships?.[0]; // Take first active membership
+
+  // Dummy credits data (sum of remaining credits from CreditsWalletCard)
+  const totalRemainingCredits = 9; // 6 + 2 + 1 from dummy data
+  const totalCredits = 20; // Example total credits
 
   return (
     <div className="space-y-6">
@@ -28,9 +30,15 @@ export default function Overview() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           <span className="ml-2">Loading membership...</span>
         </div>
-      ) : currentMembership ? (
+      ) : activeMemberships && activeMemberships.length > 0 ? (
         <MembershipStatusCard
-          status={currentMembership}
+          status={activeMemberships}
+          credits={{
+            remainingCredits: totalRemainingCredits,
+            totalCredits: totalCredits,
+            onTopUp: () => console.log('Top-up clicked'),
+            onViewHistory: () => console.log('View history clicked'),
+          }}
           onManageClick={() => navigate('/dashboard/membership')}
           onViewOrdersClick={() => navigate('/dashboard/membership/orders')}
         />
@@ -57,8 +65,6 @@ export default function Overview() {
           </CardContent>
         </Card>
       )}
-
-      <CreditsWalletCard />
     </div>
   );
 }

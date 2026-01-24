@@ -13,35 +13,43 @@ import { Crown, Users, BookOpen, CalendarDays } from 'lucide-react';
 import type { ActiveMembership } from '@/types/membership';
 
 export function MembershipStatusCard(props: {
-  status?: ActiveMembership;
+  status?: ActiveMembership[];
+  credits?: {
+    remainingCredits: number;
+    totalCredits: number;
+    onTopUp?: () => void;
+    onViewHistory?: () => void;
+  };
   onManageClick?: () => void;
   onViewOrdersClick?: () => void;
 }) {
   const status = props.status;
 
-  // Map features to strings for display
-  const featuresList = useMemo(() => {
-    if (!status) return [];
-    return status.features.map((feature) =>
-      typeof feature === 'string' ? feature : feature.name
-    );
-  }, [status]);
+  // Find the membership with the highest displayOrder (same logic as MembershipOverview)
+  const currentMembership =
+    status && status.length > 0
+      ? status.reduce((highest, current) =>
+          (current.displayOrder ?? 0) > (highest.displayOrder ?? 0)
+            ? current
+            : highest
+        )
+      : null;
 
   const daysLeft = useMemo(() => {
-    if (!status) return 0;
+    if (!currentMembership) return 0;
     try {
       return Math.max(
         0,
-        differenceInDays(new Date(status.endDate), new Date())
+        differenceInDays(new Date(currentMembership.endDate), new Date())
       );
     } catch {
       return 0;
     }
-  }, [status]);
+  }, [currentMembership]);
 
   const Icon = useMemo(() => {
-    if (!status) return Users;
-    switch (status.tierCode) {
+    if (!currentMembership) return Users;
+    switch (currentMembership.tierCode) {
       case 'FREETIERMEMBERSHIP':
         return Users;
       case 'DEVELOPMENTMEDIUM':
@@ -51,10 +59,10 @@ export function MembershipStatusCard(props: {
       default:
         return Users;
     }
-  }, [status]);
+  }, [currentMembership]);
 
   // If no membership data, don't render anything
-  if (!status) {
+  if (!currentMembership) {
     return null;
   }
 
@@ -69,14 +77,14 @@ export function MembershipStatusCard(props: {
             <CardTitle className="flex items-center gap-2">
               Current Membership
               <Badge variant="secondary" className="bg-primary/20 text-primary">
-                {status.tierName}
+                {currentMembership.tierName}
               </Badge>
             </CardTitle>
             <CardDescription className="mb-0">
-              {status.basePrice ? (
+              {currentMembership.basePrice ? (
                 <>
-                  ${status.basePrice}
-                  {status.basePrice > 0 && <span>/month</span>}
+                  ${currentMembership.basePrice}
+                  {currentMembership.basePrice > 0 && <span>/month</span>}
                 </>
               ) : (
                 'Active Membership'
@@ -86,7 +94,9 @@ export function MembershipStatusCard(props: {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div
+          className={`grid grid-cols-1 ${props.credits ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-6`}
+        >
           <div>
             <div className="text-sm text-muted-foreground mb-1">
               Billing Period
@@ -94,8 +104,8 @@ export function MembershipStatusCard(props: {
             <div className="flex items-center gap-2 font-medium">
               <CalendarDays className="h-4 w-4 text-muted-foreground" />
               <span>
-                {new Date(status.startDate + 'Z').toLocaleString()} –{' '}
-                {new Date(status.endDate + 'Z').toLocaleString()}
+                {new Date(currentMembership.startDate + 'Z').toLocaleString()} –{' '}
+                {new Date(currentMembership.endDate + 'Z').toLocaleString()}
               </span>
             </div>
             <div className="text-xs text-muted-foreground mt-1">
@@ -103,36 +113,65 @@ export function MembershipStatusCard(props: {
             </div>
           </div>
 
-          <div>
-            <div className="text-sm text-muted-foreground mb-1">
-              Included Features
+          {props.credits && (
+            <div>
+              <div className="text-sm text-muted-foreground mb-1">Credits</div>
+              <div className="font-medium">
+                {props.credits.remainingCredits}/{props.credits.totalCredits}{' '}
+                remaining
+              </div>
+              <div className="h-2 bg-gray-200 rounded mt-2">
+                <div
+                  className="h-2 bg-emerald-500 rounded"
+                  style={{
+                    width: `${
+                      props.credits.totalCredits > 0
+                        ? Math.max(
+                            0,
+                            Math.min(
+                              100,
+                              Math.round(
+                                (props.credits.remainingCredits /
+                                  props.credits.totalCredits) *
+                                  100
+                              )
+                            )
+                          )
+                        : 0
+                    }%`,
+                  }}
+                />
+              </div>
+              <div className="flex gap-2 mt-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={props.credits.onTopUp}
+                >
+                  Top-up
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={props.credits.onViewHistory}
+                >
+                  View History
+                </Button>
+              </div>
             </div>
-            <ul className="text-sm space-y-1">
-              {featuresList.slice(0, 4).map((f, i) => (
-                <li key={i} className="flex items-start gap-2">
-                  <span className="text-green-500 mt-1">•</span>
-                  <span>{f}</span>
-                </li>
-              ))}
-              {featuresList.length > 4 && (
-                <li className="text-xs text-muted-foreground italic">
-                  +{featuresList.length - 4} more
-                </li>
-              )}
-            </ul>
-          </div>
+          )}
 
           <div className="flex flex-col gap-3 justify-between">
             <div className="text-sm">
               Auto-renew membership:{' '}
               <span
                 className={
-                  status.isAutoRenewEnabled
+                  currentMembership.isAutoRenewEnabled
                     ? 'text-green-600 font-medium'
                     : 'text-red-600 font-medium'
                 }
               >
-                {status.isAutoRenewEnabled ? 'Enabled' : 'Disabled'}
+                {currentMembership.isAutoRenewEnabled ? 'Enabled' : 'Disabled'}
               </span>
             </div>
             <div className="flex gap-2 md:justify-end">
