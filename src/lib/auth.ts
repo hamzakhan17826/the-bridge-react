@@ -51,6 +51,7 @@ export function clearAuthCookies() {
   deleteCookie('userRole');
   deleteCookie('refreshToken');
   deleteCookie('rememberMe');
+  deleteCookie('sidebar_state');
 }
 
 // Set auth-related cookies in a consistent way
@@ -150,6 +151,7 @@ export function logout() {
   deleteCookie('userRole');
   deleteCookie('auth');
   deleteCookie('rememberMe');
+  deleteCookie('sidebar_state');
   // Also clear session marker so next load is treated as fresh session
   try {
     if (typeof window !== 'undefined' && window.sessionStorage) {

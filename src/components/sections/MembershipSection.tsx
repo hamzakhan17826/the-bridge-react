@@ -8,10 +8,11 @@ import {
   Star,
   Crown,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSubscriptionTiers } from '../../hooks/useMembership';
 
 const MembershipSection = () => {
+  const navigate = useNavigate();
   const { data: tiers, isLoading, error } = useSubscriptionTiers();
 
   // Sort tiers by displayOrder (service already provides fallback data)
@@ -174,6 +175,7 @@ const MembershipSection = () => {
 
                   {/* CTA Button */}
                   <button
+                    onClick={() => navigate('/dashboard/membership')}
                     className={`w-full group mb-8 inline-flex items-center justify-center gap-3 px-6 py-4 font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                       isPopular
                         ? 'bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white focus:ring-primary-400'
@@ -273,7 +275,10 @@ const MembershipSection = () => {
                   </div>
 
                   {/* CTA Button */}
-                  <button className="inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2">
+                  <button
+                    onClick={() => navigate('/dashboard/membership')}
+                    className="inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"
+                  >
                     <span>Get Started Free</span>
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </button>
@@ -308,11 +313,17 @@ const MembershipSection = () => {
             for a personalized recommendation.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <button className="inline-flex items-center gap-2 px-6 py-3 border-2 border-primary-500 text-primary-600 hover:bg-primary-500 hover:text-white font-poppins font-medium rounded-xl transition-all duration-200 transform hover:scale-105">
+            <button
+              onClick={() => navigate('/dashboard/membership')}
+              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-primary-500 text-primary-600 hover:bg-primary-500 hover:text-white font-poppins font-medium rounded-xl transition-all duration-200 transform hover:scale-105"
+            >
               <Award className="w-4 h-4" />
               Compare Plans
             </button>
-            <button className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-poppins font-medium rounded-xl transition-all duration-200 transform hover:scale-105">
+            <button
+              onClick={() => navigate('/dashboard/membership')}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-poppins font-medium rounded-xl transition-all duration-200 transform hover:scale-105"
+            >
               <Sparkles className="w-4 h-4" />
               Start Free Trial
             </button>

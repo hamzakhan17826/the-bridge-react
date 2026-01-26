@@ -288,7 +288,7 @@ export default function MembershipUpgrade() {
                     <p className="text-sm text-muted-foreground">
                       {selectedTier.tierCode === 'FREETIERMEMBERSHIP'
                         ? 'Free'
-                        : `$${selectedTier.basePrice}/month`}
+                        : `$${Math.round(selectedTier.basePrice)}/month`}
                     </p>
                   </div>
                   {renderTierIcon(selectedTier.tierCode)}
@@ -457,7 +457,7 @@ export default function MembershipUpgrade() {
                 <div>
                   <CardTitle>{selectedTier.tierName}</CardTitle>
                   <CardDescription className="text-2xl font-bold text-primary">
-                    ${selectedTier.basePrice}/month
+                    ${Math.round(selectedTier.basePrice)}/month
                   </CardDescription>
                 </div>
               </div>

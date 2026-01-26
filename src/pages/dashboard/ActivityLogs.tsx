@@ -90,7 +90,6 @@ export default function ActivityLogs() {
     const utcToTimestamp = toTimestamp
       ? new Date(toTimestamp).toISOString()
       : '';
-    console.log(utcFromTimestamp, utcToTimestamp);
     setAppliedFilters({
       email,
       activityType: activityTypeFilter,
