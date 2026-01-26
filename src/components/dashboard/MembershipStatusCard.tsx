@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { differenceInDays } from 'date-fns';
 import { Crown, Users, BookOpen, CalendarDays } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import type { ActiveMembership } from '@/types/membership';
 
 export function MembershipStatusCard(props: {
@@ -60,6 +61,8 @@ export function MembershipStatusCard(props: {
         return Users;
     }
   }, [currentMembership]);
+
+  const navigate = useNavigate();
 
   // If no membership data, don't render anything
   if (!currentMembership) {
@@ -153,7 +156,10 @@ export function MembershipStatusCard(props: {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={props.credits.onViewHistory}
+                  onClick={() => {
+                    props.credits?.onViewHistory?.();
+                    navigate('/dashboard/credits-history');
+                  }}
                 >
                   View History
                 </Button>

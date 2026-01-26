@@ -14,7 +14,6 @@ export default function Overview() {
   const navigate = useNavigate();
   const { data: activeMemberships, isLoading } = useMyActiveMemberships();
 
-  // Dummy credits data (sum of remaining credits from CreditsWalletCard)
   const totalRemainingCredits = 9; // 6 + 2 + 1 from dummy data
   const totalCredits = 20; // Example total credits
 

@@ -45,6 +45,7 @@ import {
   PMPayout,
   MembershipOverview,
   AddPodcast,
+  CreditsHistory,
 } from './pages';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
@@ -131,6 +132,7 @@ function App() {
       ),
       children: [
         { index: true, element: <Overview /> },
+        { path: 'credits-history', element: <CreditsHistory /> },
         { path: 'pm/onboarding', element: <PMOnboarding /> },
         { path: 'pm/bookings', element: <PMBookings /> },
         { path: 'pm/schedule', element: <PMSchedule /> },
