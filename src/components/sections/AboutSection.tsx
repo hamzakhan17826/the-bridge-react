@@ -1,7 +1,9 @@
 import CountUp from 'react-countup';
 import { Users, BookOpen, Award, Heart, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const AboutSection = () => {
+  const navigate = useNavigate();
   return (
     <div className="bg-linear-to-br from-primary-50 via-white to-secondary-50 m-0 relative py-24 lg:pb-44">
       <div className="container mx-auto px-6 relative z-10">
@@ -80,7 +82,10 @@ const AboutSection = () => {
             </div>
 
             <div className="pt-4">
-              <button className="group inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+              <button
+                onClick={() => navigate('/about')}
+                className="group inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              >
                 <Heart className="w-5 h-5" />
                 Learn More About Us
               </button>

@@ -198,8 +198,17 @@ const Memberships = () => {
 
                         {/* Pricing */}
                         <div className="flex items-baseline gap-2 mb-8">
+                          {billingCycle === 'yearly' && (
+                            <span className="relative text-2xl text-gray-400 font-lato inline-block">
+                              ${Math.round(price * 12)}
+                              <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-400 transform -rotate-12 origin-center"></div>
+                            </span>
+                          )}
                           <span className="text-4xl font-poppins font-bold text-gray-900">
-                            ${price}
+                            $
+                            {billingCycle === 'monthly'
+                              ? Math.round(price)
+                              : Math.round(price * 12 * 0.83)}
                           </span>
                           <span className="text-lg text-gray-500 font-lato">
                             /{billingCycle === 'monthly' ? 'month' : 'year'}
@@ -426,11 +435,17 @@ const Memberships = () => {
                 current path and goals.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                <button
+                  onClick={() => navigate('/dashboard/membership')}
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                >
                   <Sparkles className="w-5 h-5" />
                   Start Free Trial
                 </button>
-                <button className="inline-flex items-center gap-3 px-8 py-4 border-2 border-primary-500 text-primary-600 hover:bg-primary-500 hover:text-white font-poppins font-semibold rounded-2xl transition-all duration-300 transform hover:scale-105">
+                <button
+                  onClick={() => navigate('/dashboard/membership')}
+                  className="inline-flex items-center gap-3 px-8 py-4 border-2 border-primary-500 text-primary-600 hover:bg-primary-500 hover:text-white font-poppins font-semibold rounded-2xl transition-all duration-300 transform hover:scale-105"
+                >
                   <Award className="w-5 h-5" />
                   Compare Plans
                 </button>
