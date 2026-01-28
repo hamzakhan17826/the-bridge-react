@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Loader2 } from 'lucide-react';
 import { useForm, useWatch } from 'react-hook-form';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { getUserIdFromToken } from '../../lib/utils';
 import {
@@ -11,6 +12,7 @@ import {
   LocationInfoSection,
   AddressInfoSection,
   PasswordChangeModal,
+  MediumProfileForm,
 } from '../../components/dashboard/profile';
 import { useProfile, type ProfileFormData } from '../../hooks/useProfile';
 
@@ -79,6 +81,7 @@ export default function UserProfile() {
   }, [profile, form]);
 
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'user' | 'medium'>('user');
 
   if (profileLoading) {
     return (
@@ -106,48 +109,66 @@ export default function UserProfile() {
         </p>
       </div>
 
-      <form onSubmit={onSubmit} className="space-y-6">
-        <ProfilePictureSection
-          profile={profile}
-          profilePictureFile={profilePictureFile}
-          profilePicturePreview={profilePicturePreview}
-          fileInputRef={fileInputRef}
-          handleProfilePictureUpload={handleProfilePictureUpload}
-          firstName={watchedFirstName}
-          lastName={watchedLastName}
-        />
+      <Tabs
+        value={activeTab}
+        onValueChange={(value: string) =>
+          setActiveTab(value as 'user' | 'medium')
+        }
+      >
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="user">User Profile</TabsTrigger>
+          <TabsTrigger value="medium">Medium Profile</TabsTrigger>
+        </TabsList>
 
-        <PersonalInfoSection register={form.register} />
+        <TabsContent value="user">
+          <form onSubmit={onSubmit} className="space-y-6">
+            <ProfilePictureSection
+              profile={profile}
+              profilePictureFile={profilePictureFile}
+              profilePicturePreview={profilePicturePreview}
+              fileInputRef={fileInputRef}
+              handleProfilePictureUpload={handleProfilePictureUpload}
+              firstName={watchedFirstName}
+              lastName={watchedLastName}
+            />
 
-        <LocationInfoSection
-          countries={countries}
-          cities={cities}
-          selectedCountry={selectedCountry}
-          selectedCity={selectedCity}
-          onCountryChange={(opt) => {
-            setSelectedCountry(opt ?? null);
-            setSelectedCity(null);
-          }}
-          onCityChange={(opt) => setSelectedCity(opt ?? null)}
-        />
+            <PersonalInfoSection register={form.register} />
 
-        <AddressInfoSection register={form.register} />
+            <LocationInfoSection
+              countries={countries}
+              cities={cities}
+              selectedCountry={selectedCountry}
+              selectedCity={selectedCity}
+              onCountryChange={(opt) => {
+                setSelectedCountry(opt ?? null);
+                setSelectedCity(null);
+              }}
+              onCityChange={(opt) => setSelectedCity(opt ?? null)}
+            />
 
-        <Separator />
+            <AddressInfoSection register={form.register} />
 
-        <div className="flex justify-end">
-          <Button
-            type="submit"
-            disabled={updateProfileMutation.isPending}
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
-          >
-            {updateProfileMutation.isPending && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Save Changes
-          </Button>
-        </div>
-      </form>
+            <Separator />
+
+            <div className="flex justify-end">
+              <Button
+                type="submit"
+                disabled={updateProfileMutation.isPending}
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+              >
+                {updateProfileMutation.isPending && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Save Changes
+              </Button>
+            </div>
+          </form>
+        </TabsContent>
+
+        <TabsContent value="medium">
+          <MediumProfileForm />
+        </TabsContent>
+      </Tabs>
 
       <PasswordChangeModal
         isOpen={passwordModalOpen}

@@ -9,11 +9,11 @@ import {
 } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '../../components/ui/dialog';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../../components/ui/dropdown-menu';
 import {
   Table,
   TableBody,
@@ -22,8 +22,9 @@ import {
   TableHeader,
   TableRow,
 } from '../../components/ui/table';
-import { Loader2, UserCheck, UserX } from 'lucide-react';
+import { Loader2, UserCheck, UserX, MoreHorizontal } from 'lucide-react';
 import type { AppUser } from '../../types/user';
+import { UserDetailsModal } from '../../components/dashboard/modals';
 
 export default function Users() {
   const [selectedUser, setSelectedUser] = useState<AppUser | null>(null);
@@ -140,16 +141,34 @@ export default function Users() {
                         ).toLocaleString()}
                       </TableCell>
                       <TableCell>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setSelectedUser(user);
-                            setIsModalOpen(true);
-                          }}
-                        >
-                          View
-                        </Button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setSelectedUser(user);
+                                setIsModalOpen(true);
+                              }}
+                              className="cursor-pointer"
+                            >
+                              View Details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => {
+                                alert(
+                                  `Edit functionality for ${user.firstName || user.userName} coming soon!`
+                                );
+                              }}
+                              className="cursor-pointer"
+                            >
+                              Edit User
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -166,127 +185,15 @@ export default function Users() {
         </CardContent>
       </Card>
 
-      {/* User Details Modal */}
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>User Details</DialogTitle>
-          </DialogHeader>
-          {selectedUser && (
-            <div className="space-y-4">
-              <div>
-                <label className="font-medium">Name:</label>
-                <p>
-                  {selectedUser.firstName && selectedUser.lastName
-                    ? `${selectedUser.firstName} ${selectedUser.lastName}`
-                    : selectedUser.userName}
-                </p>
-              </div>
-              <div>
-                <label className="font-medium">Email:</label>
-                <p>{selectedUser.email}</p>
-              </div>
-              <div>
-                <label className="font-medium">Username:</label>
-                <p>{selectedUser.userName}</p>
-              </div>
-              <div>
-                <label className="font-medium">Status:</label>
-                <div className="flex items-center space-x-2">
-                  {selectedUser.isBlocked ? (
-                    <Badge
-                      variant="secondary"
-                      className="bg-destructive text-primary-foreground"
-                    >
-                      Blocked
-                    </Badge>
-                  ) : (
-                    <Badge
-                      variant="default"
-                      className="bg-success text-primary-foreground"
-                    >
-                      Active
-                    </Badge>
-                  )}
-                  {selectedUser.isDeleted && (
-                    <Badge variant="outline">Deleted</Badge>
-                  )}
-                </div>
-              </div>
-              <div>
-                <label className="font-medium">Email Confirmed:</label>
-                <p>{selectedUser.emailConfirmed ? 'Yes' : 'No'}</p>
-              </div>
-              <div>
-                <label className="font-medium">Registration Date:</label>
-                <p>
-                  {new Date(
-                    selectedUser.registerDateTime + 'Z'
-                  ).toLocaleString()}
-                </p>
-              </div>
-              <div>
-                <label className="font-medium">Last Login:</label>
-                <p>
-                  {selectedUser.lastLoginDateTime
-                    ? new Date(
-                        selectedUser.lastLoginDateTime + 'Z'
-                      ).toLocaleString()
-                    : 'Never'}
-                </p>
-              </div>
-              <div>
-                <label className="font-medium">Claims:</label>
-                {claimsLoading ? (
-                  <p>Loading claims...</p>
-                ) : (
-                  (() => {
-                    const activeClaims = userClaims.filter(
-                      (claim) => claim.value === 'true'
-                    );
-                    return activeClaims.length > 0 ? (
-                      <p>
-                        {activeClaims
-                          .map(
-                            (claim) =>
-                              `${claim.key.charAt(0).toUpperCase() + claim.key.slice(1)}`
-                          )
-                          .join(', ')}
-                      </p>
-                    ) : (
-                      <p>No active claims found.</p>
-                    );
-                  })()
-                )}
-              </div>
-              <div>
-                <label className="font-medium">Roles:</label>
-                {rolesLoading ? (
-                  <p>Loading roles...</p>
-                ) : (
-                  (() => {
-                    const activeRoles = userRoles.filter(
-                      (role) => role.value === true
-                    );
-                    return activeRoles.length > 0 ? (
-                      <p>
-                        {activeRoles
-                          .map(
-                            (role) =>
-                              `${role.key.charAt(0).toUpperCase() + role.key.slice(1)}`
-                          )
-                          .join(', ')}
-                      </p>
-                    ) : (
-                      <p>No active roles found.</p>
-                    );
-                  })()
-                )}
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      <UserDetailsModal
+        user={selectedUser}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        claims={userClaims}
+        roles={userRoles}
+        isLoadingClaims={claimsLoading}
+        isLoadingRoles={rolesLoading}
+      />
     </div>
   );
 }

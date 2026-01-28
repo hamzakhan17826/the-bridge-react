@@ -13,9 +13,9 @@ import {
   CardHeader,
   CardTitle,
   Separator,
-} from '../../../components/ui';
+} from '../../components/ui';
 import Select from 'react-select';
-import { type PodcastFormData } from '../../../types/podcast';
+import { type PodcastFormData } from '../../types/podcast';
 
 const AddPodcast = () => {
   const [audioPreview, setAudioPreview] = useState<string | null>(null);
