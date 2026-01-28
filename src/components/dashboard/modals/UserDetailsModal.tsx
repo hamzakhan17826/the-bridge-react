@@ -4,11 +4,12 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '../../ui/dialog';
-import type { AppUser } from '../../../types/user';
+import type { AppUsersBasicDataUser } from '../../../types/user';
 
 interface UserDetailsModalProps {
-  user: AppUser | null;
+  user: AppUsersBasicDataUser | null;
   isOpen: boolean;
   onClose: () => void;
   claims?: { key: string; value: string }[];
@@ -31,6 +32,10 @@ export default function UserDetailsModal({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>User Details</DialogTitle>
+          <DialogDescription>
+            View detailed information about this user including their profile,
+            status, and permissions.
+          </DialogDescription>
         </DialogHeader>
         {user && (
           <div className="space-y-4">
@@ -70,10 +75,6 @@ export default function UserDetailsModal({
                 )}
                 {user.isDeleted && <Badge variant="outline">Deleted</Badge>}
               </div>
-            </div>
-            <div>
-              <label className="font-medium">Email Confirmed:</label>
-              <p>{user.emailConfirmed ? 'Yes' : 'No'}</p>
             </div>
             <div>
               <label className="font-medium">Registration Date:</label>

@@ -1,10 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import {
-  fetchAppUsers,
+  fetchAppUsersBasicData,
   fetchUserClaims,
   fetchUserRoles,
 } from '../services/user-profile';
-import type { AppUser } from '../types/user';
+import type {
+  AppUsersBasicDataRequest,
+  AppUsersBasicDataUser,
+} from '../types/user';
 
 // Query Keys for consistent caching and invalidation
 export const usersQueryKeys = {
@@ -16,10 +19,15 @@ export const usersQueryKeys = {
   detail: (id: string) => [...usersQueryKeys.details(), id] as const,
 };
 
-export const useAppUsers = (userId?: string) => {
-  return useQuery<AppUser[]>({
-    queryKey: usersQueryKeys.list(userId),
-    queryFn: () => fetchAppUsers(userId),
+export const useAppUsersBasicData = (params?: AppUsersBasicDataRequest) => {
+  return useQuery<{
+    users: AppUsersBasicDataUser[];
+    totalRecords: number;
+    pageNumber: number;
+    pageSize: number;
+  }>({
+    queryKey: usersQueryKeys.list(params?.userId),
+    queryFn: () => fetchAppUsersBasicData(params),
     staleTime: 2 * 60 * 1000, // 2 minutes - user data changes frequently
     gcTime: 10 * 60 * 1000, // 10 minutes cache
     retry: 2,
@@ -27,17 +35,22 @@ export const useAppUsers = (userId?: string) => {
   });
 };
 
-export const useAppUser = (userId: string) => {
-  return useQuery<AppUser[]>({
-    queryKey: usersQueryKeys.detail(userId),
-    queryFn: () => fetchAppUsers(userId),
-    enabled: !!userId, // Only fetch if userId is provided
-    staleTime: 2 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-    retry: 2,
-    refetchOnWindowFocus: false,
-  });
-};
+// export const useAppUserBasicData = (userId: string) => {
+//   return useQuery<{
+//     users: AppUsersBasicDataUser[];
+//     totalRecords: number;
+//     pageNumber: number;
+//     pageSize: number;
+//   }>({
+//     queryKey: usersQueryKeys.detail(userId),
+//     queryFn: () => fetchAppUsersBasicData({ userId }),
+//     enabled: !!userId, // Only fetch if userId is provided
+//     staleTime: 2 * 60 * 1000,
+//     gcTime: 10 * 60 * 1000,
+//     retry: 2,
+//     refetchOnWindowFocus: false,
+//   });
+// };
 
 export const useUserClaims = (userId: string) => {
   return useQuery<{ key: string; value: string }[]>({

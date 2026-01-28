@@ -3,7 +3,8 @@ import type {
   AppUserProfile,
   ChangePasswordPayload,
   ProfileResponse,
-  AppUser,
+  AppUsersBasicDataRequest,
+  AppUsersBasicDataResponse,
 } from '../types/user';
 
 export type UpdateAppUserProfilePayload = Partial<AppUserProfile>;
@@ -124,21 +125,19 @@ export async function changePassword(
   }
 }
 /**
- * Fetch app users - returns specific user if ID provided, otherwise all users
+ * Fetch app users basic data with filtering and pagination
  */
-export async function fetchAppUsers(userId?: string): Promise<AppUser[]> {
+export async function fetchAppUsersBasicData(
+  params?: AppUsersBasicDataRequest
+): Promise<AppUsersBasicDataResponse> {
   try {
-    const res = await api.get('/EditUser/AppUsers', {
-      params: userId ? { id: userId } : {},
-    });
-
-    const data = res.data as AppUser[];
-    // console.log('Fetched app users:', data.length, 'users');
-
+    const res = await api.post('/EditUser/AppUsersBasicData', params || {});
+    const data = res.data as AppUsersBasicDataResponse;
+    console.log('Fetched users basic data:', data);
     return data;
   } catch (error: unknown) {
-    console.error('Failed to load users:', error);
-    throw error; // Let React Query handle the error
+    console.error('Failed to load users basic data:', error);
+    throw error;
   }
 }
 

@@ -1,5 +1,9 @@
 import { useState } from 'react';
-import { useAppUsers, useUserClaims, useUserRoles } from '../../hooks/useUsers';
+import {
+  useAppUsersBasicData,
+  useUserClaims,
+  useUserRoles,
+} from '../../hooks/useUsers';
 import { Button } from '../../components/ui/button';
 import {
   Card,
@@ -23,15 +27,21 @@ import {
   TableRow,
 } from '../../components/ui/table';
 import { Loader2, UserCheck, UserX, MoreHorizontal } from 'lucide-react';
-import type { AppUser } from '../../types/user';
-import { UserDetailsModal } from '../../components/dashboard/modals';
+import type { AppUsersBasicDataUser } from '../../types/user';
+import {
+  UserDetailsModal,
+  EditUserModal,
+} from '../../components/dashboard/modals';
 
 export default function Users() {
-  const [selectedUser, setSelectedUser] = useState<AppUser | null>(null);
+  const [selectedUser, setSelectedUser] =
+    useState<AppUsersBasicDataUser | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  // Use React Query for data fetching
-  const { data: users = [], isLoading, error } = useAppUsers();
+  const { data: usersData, isLoading, error } = useAppUsersBasicData();
+  const users = usersData?.users || [];
+
   const { data: userClaims = [], isLoading: claimsLoading } = useUserClaims(
     selectedUser?.id || ''
   );
@@ -101,9 +111,6 @@ export default function Users() {
                       <TableCell>
                         <div>
                           <div className="font-medium">{user.email}</div>
-                          <div className="text-sm text-muted-foreground">
-                            {user.emailConfirmed ? 'Verified' : 'Unverified'}
-                          </div>
                         </div>
                       </TableCell>
                       <TableCell>
@@ -159,9 +166,8 @@ export default function Users() {
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => {
-                                alert(
-                                  `Edit functionality for ${user.firstName || user.userName} coming soon!`
-                                );
+                                setSelectedUser(user);
+                                setIsEditModalOpen(true);
                               }}
                               className="cursor-pointer"
                             >
@@ -193,6 +199,12 @@ export default function Users() {
         roles={userRoles}
         isLoadingClaims={claimsLoading}
         isLoadingRoles={rolesLoading}
+      />
+
+      <EditUserModal
+        user={selectedUser}
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
       />
     </div>
   );
