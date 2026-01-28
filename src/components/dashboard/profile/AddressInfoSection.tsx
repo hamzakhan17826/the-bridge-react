@@ -2,23 +2,26 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Home } from 'lucide-react';
+import type { UseFormRegister } from 'react-hook-form';
+
+type ProfileFormData = {
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  addressLine1: string;
+  addressLine2: string;
+  postalCode: string;
+  dateOfBirth: string;
+  gender: string;
+};
 
 interface AddressInfoSectionProps {
-  addressLine1: string;
-  setAddressLine1: (value: string) => void;
-  addressLine2: string;
-  setAddressLine2: (value: string) => void;
-  postalCode: string;
-  setPostalCode: (value: string) => void;
+  register: UseFormRegister<ProfileFormData>;
 }
 
 export default function AddressInfoSection({
-  addressLine1,
-  setAddressLine1,
-  addressLine2,
-  setAddressLine2,
-  postalCode,
-  setPostalCode,
+  register,
 }: AddressInfoSectionProps) {
   return (
     <Card>
@@ -31,27 +34,15 @@ export default function AddressInfoSection({
       <CardContent className="space-y-4">
         <div>
           <Label htmlFor="addressLine1">Address Line 1</Label>
-          <Input
-            id="addressLine1"
-            value={addressLine1}
-            onChange={(e) => setAddressLine1(e.target.value)}
-          />
+          <Input id="addressLine1" {...register('addressLine1')} />
         </div>
         <div>
           <Label htmlFor="addressLine2">Address Line 2</Label>
-          <Input
-            id="addressLine2"
-            value={addressLine2}
-            onChange={(e) => setAddressLine2(e.target.value)}
-          />
+          <Input id="addressLine2" {...register('addressLine2')} />
         </div>
         <div>
           <Label htmlFor="postalCode">Postal Code</Label>
-          <Input
-            id="postalCode"
-            value={postalCode}
-            onChange={(e) => setPostalCode(e.target.value)}
-          />
+          <Input id="postalCode" {...register('postalCode')} />
         </div>
       </CardContent>
     </Card>

@@ -1,5 +1,7 @@
 import type { City, Country } from './api';
 
+export type { City, Country };
+
 export interface User {
   id: string;
   name: string;

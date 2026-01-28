@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Loader2 } from 'lucide-react';
+import { useForm, useWatch } from 'react-hook-form';
 
 import { deleteCookie, emitAuthChange } from '../../lib/auth';
 import { getUserIdFromToken } from '../../lib/utils';
@@ -24,10 +25,36 @@ import {
 
 type Opt<T = string> = { value: T; label: string };
 
+type ProfileFormData = {
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  addressLine1: string;
+  addressLine2: string;
+  postalCode: string;
+  dateOfBirth: string;
+  gender: string;
+};
+
 export default function UserProfile() {
   const queryClient = useQueryClient();
   const { setUser } = useAuthStore();
   const [userId] = useState<string>(getUserIdFromToken() ?? '');
+
+  const form = useForm<ProfileFormData>({
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      userName: '',
+      email: '',
+      addressLine1: '',
+      addressLine2: '',
+      postalCode: '',
+      dateOfBirth: '',
+      gender: '',
+    },
+  });
 
   const {
     data: profileResponse,
@@ -43,6 +70,13 @@ export default function UserProfile() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const initializedRef = useRef(false);
+  const countryInitializedRef = useRef(false);
+  const cityInitializedRef = useRef(false);
+  const watchedFirstName = useWatch({
+    control: form.control,
+    name: 'firstName',
+  });
+  const watchedLastName = useWatch({ control: form.control, name: 'lastName' });
 
   const [selectedCountry, setSelectedCountry] = useState<Opt<number> | null>(
     null
@@ -61,9 +95,11 @@ export default function UserProfile() {
     mutationFn: updateUserProfile,
     onSuccess: (res) => {
       if (res.success) {
-        const emailChanged = email.trim() !== (initialProfile?.email || '');
+        const formData = form.getValues();
+        const emailChanged =
+          formData.email.trim() !== (initialProfile?.email || '');
         const usernameChanged =
-          userName.trim() !== (initialProfile?.userName || '');
+          formData.userName.trim() !== (initialProfile?.userName || '');
         if (emailChanged || usernameChanged) {
           toast.success('Profile updated successfully! Please log in again.');
           deleteCookie('jwtToken');
@@ -79,15 +115,15 @@ export default function UserProfile() {
           // Since res.data is undefined, construct updated user from form
           const updatedUser: AppUserProfile = {
             ...initialProfile!,
-            firstName: firstName.trim(),
-            lastName: lastName.trim(),
-            userName: userName.trim(),
-            email: email.trim(),
-            addressLine1: addressLine1.trim(),
-            addressLine2: addressLine2.trim(),
-            postalCode: postalCode.trim(),
-            dateOfBirth,
-            gender,
+            firstName: formData.firstName.trim(),
+            lastName: formData.lastName.trim(),
+            userName: formData.userName.trim(),
+            email: formData.email.trim(),
+            addressLine1: formData.addressLine1.trim(),
+            addressLine2: formData.addressLine2.trim(),
+            postalCode: formData.postalCode.trim(),
+            dateOfBirth: formData.dateOfBirth,
+            gender: formData.gender,
             countryId: selectedCountry?.value,
             cityId: selectedCity?.value,
             // profilePictureUrl will be updated after refetch
@@ -114,16 +150,6 @@ export default function UserProfile() {
     string | null
   >(null);
 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [addressLine1, setAddressLine1] = useState('');
-  const [addressLine2, setAddressLine2] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
-  const [gender, setGender] = useState('');
-
   const handleProfilePictureChange = (
     file: File | null,
     preview: string | null
@@ -134,53 +160,51 @@ export default function UserProfile() {
 
   useEffect(() => {
     if (profile && !initializedRef.current) {
-      /* eslint-disable */
-      setFirstName(profile.firstName || '');
-      setLastName(profile.lastName || '');
-      setUserName(profile.userName || '');
-      setEmail(profile.email || '');
-      setAddressLine1(profile.addressLine1 || '');
-      setAddressLine2(profile.addressLine2 || '');
-      setPostalCode(profile.postalCode || '');
-      setDateOfBirth(profile.dateOfBirth || '');
-      setGender(
+      form.setValue('firstName', profile.firstName || '');
+      form.setValue('lastName', profile.lastName || '');
+      form.setValue('userName', profile.userName || '');
+      form.setValue('email', profile.email || '');
+      form.setValue('addressLine1', profile.addressLine1 || '');
+      form.setValue('addressLine2', profile.addressLine2 || '');
+      form.setValue('postalCode', profile.postalCode || '');
+      form.setValue('dateOfBirth', profile.dateOfBirth || '');
+      form.setValue(
+        'gender',
         profile.gender === 'Male'
           ? 'M'
           : profile.gender === 'Female'
             ? 'F'
             : profile.gender || ''
       );
-      /* eslint-enable */
       initializedRef.current = true;
     }
-  }, [profile]);
+  }, [profile, form]);
 
-  // Separate effect for selectedCountry
+  // Separate effect for selectedCountry and selectedCity
   useEffect(() => {
-    if (profile?.countryId && countries.length > 0) {
+    /* eslint-disable */
+    if (
+      profile?.countryId &&
+      countries.length > 0 &&
+      !countryInitializedRef.current
+    ) {
       const country = countries.find((c) => c.id === profile.countryId);
       if (country) {
-        /* eslint-disable */
         setSelectedCountry({ value: country.id, label: country.name });
-        /* eslint-enable */
+        countryInitializedRef.current = true;
       }
     }
-  }, [profile?.countryId, countries]);
-
-  // Separate effect for selectedCity
-  useEffect(() => {
-    if (profile?.cityId && cities.length > 0) {
+    if (profile?.cityId && cities.length > 0 && !cityInitializedRef.current) {
       const city = cities.find((c) => c.id === profile.cityId);
       if (city) {
-        /* eslint-disable */
         setSelectedCity({ value: city.id, label: city.name });
-        /* eslint-enable */
+        cityInitializedRef.current = true;
       }
     }
-  }, [profile?.cityId, cities]);
+    /* eslint-enable */
+  }, [profile, countries, cities]);
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = form.handleSubmit((data) => {
     if (!profile || !initialProfile || updateProfileMutation.isPending) return;
     const pascalFd = new FormData();
 
@@ -194,24 +218,36 @@ export default function UserProfile() {
       }
     };
 
-    pascalFd.append('UserName', userName.trim());
+    pascalFd.append('UserName', data.userName.trim());
 
-    appendIfChanged('FirstName', firstName.trim(), initialProfile.firstName);
-    appendIfChanged('LastName', lastName.trim(), initialProfile.lastName);
-    appendIfChanged('Email', email.trim(), initialProfile.email);
+    appendIfChanged(
+      'FirstName',
+      data.firstName.trim(),
+      initialProfile.firstName
+    );
+    appendIfChanged('LastName', data.lastName.trim(), initialProfile.lastName);
+    appendIfChanged('Email', data.email.trim(), initialProfile.email);
     appendIfChanged(
       'AddressLine1',
-      addressLine1.trim(),
+      data.addressLine1.trim(),
       initialProfile.addressLine1
     );
     appendIfChanged(
       'AddressLine2',
-      addressLine2.trim(),
+      data.addressLine2.trim(),
       initialProfile.addressLine2
     );
-    appendIfChanged('PostalCode', postalCode.trim(), initialProfile.postalCode);
-    appendIfChanged('DateOfBirth', dateOfBirth, initialProfile.dateOfBirth);
-    appendIfChanged('Gender', gender, initialProfile.gender);
+    appendIfChanged(
+      'PostalCode',
+      data.postalCode.trim(),
+      initialProfile.postalCode
+    );
+    appendIfChanged(
+      'DateOfBirth',
+      data.dateOfBirth,
+      initialProfile.dateOfBirth
+    );
+    appendIfChanged('Gender', data.gender, initialProfile.gender);
 
     const currentCountryId = selectedCountry?.value;
     if (currentCountryId !== initialProfile.countryId) {
@@ -234,7 +270,7 @@ export default function UserProfile() {
     }
 
     updateProfileMutation.mutate(pascalFd);
-  };
+  });
 
   const handleProfilePictureUpload = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -289,27 +325,13 @@ export default function UserProfile() {
           profile={profile}
           profilePictureFile={profilePictureFile}
           profilePicturePreview={profilePicturePreview}
-          onProfilePictureChange={handleProfilePictureChange}
           fileInputRef={fileInputRef}
           handleProfilePictureUpload={handleProfilePictureUpload}
-          firstName={firstName}
-          lastName={lastName}
+          firstName={watchedFirstName}
+          lastName={watchedLastName}
         />
 
-        <PersonalInfoSection
-          firstName={firstName}
-          setFirstName={setFirstName}
-          lastName={lastName}
-          setLastName={setLastName}
-          userName={userName}
-          setUserName={setUserName}
-          email={email}
-          setEmail={setEmail}
-          dateOfBirth={dateOfBirth}
-          setDateOfBirth={setDateOfBirth}
-          gender={gender}
-          setGender={setGender}
-        />
+        <PersonalInfoSection register={form.register} />
 
         <LocationInfoSection
           countries={countries}
@@ -323,14 +345,7 @@ export default function UserProfile() {
           onCityChange={(opt) => setSelectedCity(opt ?? null)}
         />
 
-        <AddressInfoSection
-          addressLine1={addressLine1}
-          setAddressLine1={setAddressLine1}
-          addressLine2={addressLine2}
-          setAddressLine2={setAddressLine2}
-          postalCode={postalCode}
-          setPostalCode={setPostalCode}
-        />
+        <AddressInfoSection register={form.register} />
 
         <Separator />
 

@@ -14,7 +14,6 @@ interface ProfilePictureSectionProps {
   profile: AppUserProfile | undefined;
   profilePictureFile: File | null;
   profilePicturePreview: string | null;
-  onProfilePictureChange: (file: File | null, preview: string | null) => void;
   fileInputRef: React.RefObject<HTMLInputElement>;
   handleProfilePictureUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   firstName: string;
@@ -25,7 +24,6 @@ export default function ProfilePictureSection({
   profile,
   profilePictureFile,
   profilePicturePreview,
-  onProfilePictureChange,
   fileInputRef,
   handleProfilePictureUpload,
   firstName,

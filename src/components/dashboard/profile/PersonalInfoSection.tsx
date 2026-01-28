@@ -2,35 +2,26 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { User } from 'lucide-react';
+import type { UseFormRegister } from 'react-hook-form';
+
+type ProfileFormData = {
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  addressLine1: string;
+  addressLine2: string;
+  postalCode: string;
+  dateOfBirth: string;
+  gender: string;
+};
 
 interface PersonalInfoSectionProps {
-  firstName: string;
-  setFirstName: (value: string) => void;
-  lastName: string;
-  setLastName: (value: string) => void;
-  userName: string;
-  setUserName: (value: string) => void;
-  email: string;
-  setEmail: (value: string) => void;
-  dateOfBirth: string;
-  setDateOfBirth: (value: string) => void;
-  gender: string;
-  setGender: (value: string) => void;
+  register: UseFormRegister<ProfileFormData>;
 }
 
 export default function PersonalInfoSection({
-  firstName,
-  setFirstName,
-  lastName,
-  setLastName,
-  userName,
-  setUserName,
-  email,
-  setEmail,
-  dateOfBirth,
-  setDateOfBirth,
-  gender,
-  setGender,
+  register,
 }: PersonalInfoSectionProps) {
   return (
     <Card>
@@ -44,54 +35,31 @@ export default function PersonalInfoSection({
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Label htmlFor="firstName">First Name</Label>
-            <Input
-              id="firstName"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
+            <Input id="firstName" {...register('firstName')} />
           </div>
           <div>
             <Label htmlFor="lastName">Last Name</Label>
-            <Input
-              id="lastName"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
+            <Input id="lastName" {...register('lastName')} />
           </div>
         </div>
         <div>
           <Label htmlFor="userName">Username</Label>
-          <Input
-            id="userName"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-          />
+          <Input id="userName" {...register('userName')} />
         </div>
         <div>
           <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <Input id="email" type="email" {...register('email')} />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Label htmlFor="dateOfBirth">Date of Birth</Label>
-            <Input
-              id="dateOfBirth"
-              type="date"
-              value={dateOfBirth}
-              onChange={(e) => setDateOfBirth(e.target.value)}
-            />
+            <Input id="dateOfBirth" type="date" {...register('dateOfBirth')} />
           </div>
           <div>
             <Label htmlFor="gender">Gender</Label>
             <select
               id="gender"
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
+              {...register('gender')}
               className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
             >
               <option value="">Select gender</option>
