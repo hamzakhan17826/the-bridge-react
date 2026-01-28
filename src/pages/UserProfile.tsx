@@ -5,7 +5,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCountries, useCities } from '../hooks/useRegister';
 import { fetchCities } from '../services/register';
 import type { AppUserProfile } from '../types/user';
-import { useNavigate } from 'react-router-dom';
 import { deleteCookie, emitAuthChange } from '../lib/auth';
 import {
   ProfileHeader,
@@ -24,7 +23,6 @@ type Opt<T = string> = { value: T; label: string };
 
 export default function UserProfile() {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
   const { setUser } = useAuthStore();
   const [userId] = useState<string>(getUserIdFromToken() ?? '');
 
@@ -66,7 +64,7 @@ export default function UserProfile() {
           deleteCookie('auth');
           deleteCookie('sidebar_state');
           emitAuthChange();
-          navigate('/login');
+          window.location.reload();
         } else {
           toast.success(res.message);
           queryClient.invalidateQueries({ queryKey: ['userProfile', userId] });
