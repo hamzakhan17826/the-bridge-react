@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import SubmitButton from '../components/ui/SubmitButton';
-import type { Country, City } from '../types/api';
-import { fetchCountries, fetchCities } from '../services/register';
-import { fetchUserProfile, updateUserProfile } from '../services/user-profile';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useCountries, useCities } from '../hooks/useRegister';
+import { fetchCities } from '../services/register';
 import type { AppUserProfile } from '../types/user';
 import { useNavigate } from 'react-router-dom';
 import { deleteCookie, emitAuthChange } from '../lib/auth';
@@ -17,28 +17,87 @@ import {
   PasswordChangeModal,
 } from '../components/profile';
 import { getUserIdFromToken } from '../lib/utils';
-import { useAuthUser } from '../hooks/useAuthUser';
+import { useAuthStore } from '../stores/authStore';
+import { fetchUserProfile, updateUserProfile } from '../services/user-profile';
 
 type Opt<T = string> = { value: T; label: string };
 
 export default function UserProfile() {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { user: globalUser, setUser } = useAuthUser();
+  const { setUser } = useAuthStore();
   const [userId] = useState<string>(getUserIdFromToken() ?? '');
-  const [loading, setLoading] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
 
-  const [countries, setCountries] = useState<Country[]>([]);
-  const [cities, setCities] = useState<City[]>([]);
+  const { data: countries = [] } = useCountries();
   const [selectedCountry, setSelectedCountry] = useState<Opt<number> | null>(
     null
   );
   const [selectedCity, setSelectedCity] = useState<Opt<number> | null>(null);
+  const { data: cities = [] } = useCities(selectedCountry?.value ?? null);
 
-  const [profile, setProfile] = useState<AppUserProfile | null>(null);
-  const [initialProfile, setInitialProfile] = useState<AppUserProfile | null>(
-    null
+  const {
+    data: profileResponse,
+    isLoading: profileLoading,
+    error: profileError,
+  } = useQuery({
+    queryKey: ['userProfile', userId],
+    queryFn: () => fetchUserProfile(userId || null),
+    enabled: !!userId,
+  });
+
+  const profile: AppUserProfile | null = profileResponse?.data || null;
+  const initialProfile = useMemo(
+    () => (profile ? { ...profile } : null),
+    [profile]
   );
+
+  const updateProfileMutation = useMutation({
+    mutationFn: updateUserProfile,
+    onSuccess: (res) => {
+      if (res.success) {
+        const emailChanged = email.trim() !== (initialProfile?.email || '');
+        const usernameChanged =
+          userName.trim() !== (initialProfile?.userName || '');
+        if (emailChanged || usernameChanged) {
+          toast.success('Profile updated successfully! Please log in again.');
+          deleteCookie('jwtToken');
+          deleteCookie('refreshToken');
+          deleteCookie('userRole');
+          deleteCookie('auth');
+          deleteCookie('sidebar_state');
+          emitAuthChange();
+          navigate('/login');
+        } else {
+          toast.success(res.message);
+          queryClient.invalidateQueries({ queryKey: ['userProfile', userId] });
+          // Since res.data is undefined, construct updated user from form
+          const updatedUser: AppUserProfile = {
+            ...initialProfile!,
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            userName: userName.trim(),
+            email: email.trim(),
+            addressLine1: addressLine1.trim(),
+            addressLine2: addressLine2.trim(),
+            postalCode: postalCode.trim(),
+            dateOfBirth,
+            gender,
+            countryId: selectedCountry?.value,
+            cityId: selectedCity?.value,
+            // profilePictureUrl will be updated after refetch
+          };
+          setUser(updatedUser);
+          setProfilePictureFile(null);
+          setProfilePicturePreview(null);
+        }
+      } else {
+        toast.error(res.errors?.join(', ') || res.message);
+      }
+    },
+    onError: (error) => {
+      toast.error('Update failed: ' + error.message);
+    },
+  });
 
   // Modal state
   // const [emailModalOpen, setEmailModalOpen] = useState(false);
@@ -67,6 +126,8 @@ export default function UserProfile() {
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [gender, setGender] = useState('');
 
+  const initializedRef = useRef(false);
+
   // Profile picture change handler
   const handleProfilePictureChange = (
     file: File | null,
@@ -77,82 +138,51 @@ export default function UserProfile() {
   };
 
   useEffect(() => {
-    const init = async () => {
-      const ctrs = await fetchCountries();
-      setCountries(ctrs);
-    };
-    init();
-  }, []);
+    if (profile && !initializedRef.current) {
+      /* eslint-disable */
+      setFirstName(profile.firstName || '');
+      setLastName(profile.lastName || '');
+      setUserName(profile.userName || '');
+      setEmail(profile.email || '');
+      setAddressLine1(profile.addressLine1 || '');
+      setAddressLine2(profile.addressLine2 || '');
+      setPostalCode(profile.postalCode || '');
+      setDateOfBirth(profile.dateOfBirth || '');
+      setGender(profile.gender || '');
+      /* eslint-enable */
+      initializedRef.current = true;
+    }
+  }, [profile]);
 
+  // Separate effect for selectedCountry
   useEffect(() => {
-    const load = async () => {
-      // First check if we have user data in global store
-      if (globalUser) {
-        console.log('🚀 Using global user profile:', globalUser);
-        setProfile(globalUser);
-        setInitialProfile({ ...globalUser });
-        // Set controlled states
-        setFirstName(globalUser.firstName || '');
-        setLastName(globalUser.lastName || '');
-        setUserName(globalUser.userName || '');
-        setEmail(globalUser.email || '');
-        setAddressLine1(globalUser.addressLine1 || '');
-        setAddressLine2(globalUser.addressLine2 || '');
-        setPostalCode(globalUser.postalCode || '');
-        setDateOfBirth(globalUser.dateOfBirth || '');
-        setGender(globalUser.gender || '');
-        return;
+    if (profile?.countryId && countries.length > 0) {
+      const country = countries.find((c) => c.id === profile.countryId);
+      if (country) {
+        /* eslint-disable */
+        setSelectedCountry({ value: country.id, label: country.name });
+        /* eslint-enable */
       }
+    }
+  }, [profile?.countryId, countries]);
 
-      // Fallback: fetch from API if not in global store
-      setLoading(true);
-      const res = await fetchUserProfile(userId || null);
-      setLoading(false);
-      if (res.success && res.data) {
-        console.log('🚀 User profile loaded from API:', res.data);
-        setProfile(res.data);
-        setInitialProfile({ ...res.data });
-        // Also update global store
-        setUser(res.data);
-        // Set controlled states
-        setFirstName(res.data.firstName || '');
-        setLastName(res.data.lastName || '');
-        setUserName(res.data.userName || '');
-        setEmail(res.data.email || '');
-        setAddressLine1(res.data.addressLine1 || '');
-        setAddressLine2(res.data.addressLine2 || '');
-        setPostalCode(res.data.postalCode || '');
-        setDateOfBirth(res.data.dateOfBirth || '');
-        setGender(res.data.gender || '');
-      } else {
-        toast.error(res.errors?.join(', ') || res.message);
-      }
-    };
-    load();
-  }, [userId, globalUser, setUser]);
-
+  // Separate effect for selectedCity
   useEffect(() => {
-    const initSelections = async () => {
-      if (!profile?.countryId) return;
-      const cid = profile.countryId;
-      const countryLabel = countries.find((c) => c.id === cid)?.name || '';
-      setSelectedCountry({ value: cid, label: countryLabel });
-      const data = await fetchCities(cid);
-      setCities(data);
-      if (profile.cityId) {
-        const cityId = profile.cityId;
-        const cityLabel = data.find((c) => c.id === cityId)?.name || '';
-        setSelectedCity({ value: cityId, label: cityLabel });
+    if (profile?.cityId && cities.length > 0) {
+      const city = cities.find((c) => c.id === profile.cityId);
+      if (city) {
+        /* eslint-disable */
+        setSelectedCity({ value: city.id, label: city.name });
+        /* eslint-enable */
       }
-    };
-    initSelections();
-  }, [profile?.countryId, profile?.cityId, countries]);
+    }
+  }, [profile?.cityId, cities]);
 
   // Select options are handled in LocationInfoSection component
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!profile || !initialProfile || submitting) return;
+    if (!profile || !initialProfile || updateProfileMutation.isPending) return;
     const pascalFd = new FormData();
 
     // Helper to append only if changed
@@ -197,9 +227,6 @@ export default function UserProfile() {
       pascalFd.append('CityId', currentCityId?.toString() || '');
     }
 
-    // Always send email? But since read-only, and not changed, skip
-    // pascalFd.append('Email', profile.email); // Skip if not changed
-
     // Always send this?
     pascalFd.append('ChangeEmailPreferencesKey', 'false');
 
@@ -214,51 +241,7 @@ export default function UserProfile() {
       return;
     }
 
-    setSubmitting(true);
-    const res = await updateUserProfile(pascalFd);
-    setSubmitting(false);
-    if (res.success) {
-      const emailChanged = email.trim() !== (initialProfile?.email || '');
-      const usernameChanged =
-        userName.trim() !== (initialProfile?.userName || '');
-      if (emailChanged || usernameChanged) {
-        toast.success('Profile updated successfully! Please log in again.');
-        // Logout as per backend requirement, but without page refresh
-        deleteCookie('jwtToken');
-        deleteCookie('refreshToken');
-        deleteCookie('userRole');
-        deleteCookie('auth');
-        deleteCookie('sidebar_state');
-        emitAuthChange();
-        // Navigate to login without refresh
-        navigate('/login');
-      } else {
-        toast.success(res.message);
-        // Reload profile to show updated data
-        const reloadRes = await fetchUserProfile(userId || null);
-        if (reloadRes.success && reloadRes.data) {
-          setProfile(reloadRes.data);
-          setInitialProfile({ ...reloadRes.data });
-          // Update global store with new data
-          setUser(reloadRes.data);
-          // Update controlled states if needed
-          setFirstName(reloadRes.data.firstName || '');
-          setLastName(reloadRes.data.lastName || '');
-          setUserName(reloadRes.data.userName || '');
-          setEmail(reloadRes.data.email || '');
-          setAddressLine1(reloadRes.data.addressLine1 || '');
-          setAddressLine2(reloadRes.data.addressLine2 || '');
-          setPostalCode(reloadRes.data.postalCode || '');
-          setDateOfBirth(reloadRes.data.dateOfBirth || '');
-          setGender(reloadRes.data.gender || '');
-          // Reset profile picture states
-          setProfilePictureFile(null);
-          setProfilePicturePreview(null);
-        }
-      }
-    } else {
-      toast.error(res.errors?.join(', ') || res.message);
-    }
+    updateProfileMutation.mutate(pascalFd);
   };
 
   return (
@@ -273,82 +256,89 @@ export default function UserProfile() {
           <ProfileHeader />
 
           <div className="bg-white rounded-3xl shadow-2xl border border-primary-100 p-8 md:p-12">
-            {loading && (
+            {profileLoading && (
               <div className="text-center py-8">
                 <div className="animate-spin w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full mx-auto mb-4"></div>
                 <p className="text-gray-600">Loading your profile…</p>
               </div>
             )}
 
-            <form onSubmit={onSubmit} className="space-y-8">
-              {/* Personal Information */}
-              <div className="space-y-6">
-                <ProfilePictureSection
-                  profile={profile}
-                  profilePictureFile={profilePictureFile}
-                  profilePicturePreview={profilePicturePreview}
-                  onProfilePictureChange={handleProfilePictureChange}
-                />
-
-                <PersonalInfoSection
-                  firstName={firstName}
-                  setFirstName={setFirstName}
-                  lastName={lastName}
-                  setLastName={setLastName}
-                  userName={userName}
-                  setUserName={setUserName}
-                  email={email}
-                  setEmail={setEmail}
-                  dateOfBirth={dateOfBirth}
-                  setDateOfBirth={setDateOfBirth}
-                  gender={gender}
-                  setGender={setGender}
-                />
+            {profileError && (
+              <div className="text-center py-8">
+                <p className="text-red-600">
+                  Error loading profile: {profileError.message}
+                </p>
               </div>
+            )}
 
-              {/* Location Information */}
-              <LocationInfoSection
-                countries={countries}
-                cities={cities}
-                selectedCountry={selectedCountry}
-                selectedCity={selectedCity}
-                onCountryChange={async (opt) => {
-                  setSelectedCountry(opt ?? null);
-                  if (opt?.value) {
-                    const data = await fetchCities(opt.value);
-                    setCities(data);
+            {!profileLoading && !profileError && (
+              <form onSubmit={onSubmit} className="space-y-8">
+                {/* Personal Information */}
+                <div className="space-y-6">
+                  <ProfilePictureSection
+                    profile={profile}
+                    profilePictureFile={profilePictureFile}
+                    profilePicturePreview={profilePicturePreview}
+                    onProfilePictureChange={handleProfilePictureChange}
+                  />
+
+                  <PersonalInfoSection
+                    firstName={firstName}
+                    setFirstName={setFirstName}
+                    lastName={lastName}
+                    setLastName={setLastName}
+                    userName={userName}
+                    setUserName={setUserName}
+                    email={email}
+                    setEmail={setEmail}
+                    dateOfBirth={dateOfBirth}
+                    setDateOfBirth={setDateOfBirth}
+                    gender={gender}
+                    setGender={setGender}
+                  />
+                </div>
+
+                {/* Location Information */}
+                <LocationInfoSection
+                  countries={countries}
+                  cities={cities}
+                  selectedCountry={selectedCountry}
+                  selectedCity={selectedCity}
+                  onCountryChange={(opt) => {
+                    setSelectedCountry(opt ?? null);
                     setSelectedCity(null);
-                  } else {
-                    setCities([]);
-                    setSelectedCity(null);
-                  }
-                }}
-                onCityChange={(opt) => setSelectedCity(opt ?? null)}
-                fetchCities={fetchCities}
-              />
-
-              {/* Address Information */}
-              <AddressInfoSection
-                addressLine1={addressLine1}
-                setAddressLine1={setAddressLine1}
-                addressLine2={addressLine2}
-                setAddressLine2={setAddressLine2}
-                postalCode={postalCode}
-                setPostalCode={setPostalCode}
-              />
-
-              {/* Change Password Section */}
-              <PasswordChangeSection
-                onOpenModal={() => setPasswordModalOpen(true)}
-              />
-
-              <div className="pt-6 border-t border-gray-200">
-                <SubmitButton
-                  text={submitting ? 'Saving Changes...' : 'Save Changes'}
-                  className="w-full py-3 bg-linear-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white font-medium rounded-xl transition-all duration-200 transform hover:scale-105"
+                  }}
+                  onCityChange={(opt) => setSelectedCity(opt ?? null)}
+                  fetchCities={fetchCities}
                 />
-              </div>
-            </form>
+
+                {/* Address Information */}
+                <AddressInfoSection
+                  addressLine1={addressLine1}
+                  setAddressLine1={setAddressLine1}
+                  addressLine2={addressLine2}
+                  setAddressLine2={setAddressLine2}
+                  postalCode={postalCode}
+                  setPostalCode={setPostalCode}
+                />
+
+                {/* Change Password Section */}
+                <PasswordChangeSection
+                  onOpenModal={() => setPasswordModalOpen(true)}
+                />
+
+                <div className="pt-6 border-t border-gray-200">
+                  <SubmitButton
+                    text={
+                      updateProfileMutation.isPending
+                        ? 'Saving Changes...'
+                        : 'Save Changes'
+                    }
+                    className="w-full py-3 bg-linear-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white font-medium rounded-xl transition-all duration-200 transform hover:scale-105"
+                  />
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </div>

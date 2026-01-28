@@ -16,7 +16,6 @@ export const usersQueryKeys = {
   detail: (id: string) => [...usersQueryKeys.details(), id] as const,
 };
 
-// Hook for fetching all users or specific user
 export const useAppUsers = (userId?: string) => {
   return useQuery<AppUser[]>({
     queryKey: usersQueryKeys.list(userId),
@@ -28,7 +27,6 @@ export const useAppUsers = (userId?: string) => {
   });
 };
 
-// Hook for fetching a specific user by ID
 export const useAppUser = (userId: string) => {
   return useQuery<AppUser[]>({
     queryKey: usersQueryKeys.detail(userId),
@@ -41,7 +39,6 @@ export const useAppUser = (userId: string) => {
   });
 };
 
-// Hook for fetching user claims
 export const useUserClaims = (userId: string) => {
   return useQuery<{ key: string; value: string }[]>({
     queryKey: ['userClaims', userId],
@@ -53,7 +50,6 @@ export const useUserClaims = (userId: string) => {
   });
 };
 
-// Hook for fetching user roles
 export const useUserRoles = (userId: string) => {
   return useQuery<{ key: string; value: boolean }[]>({
     queryKey: ['userRoles', userId],

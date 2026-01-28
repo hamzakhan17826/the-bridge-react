@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import {
   Card,
@@ -14,40 +14,101 @@ import Select from 'react-select';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Loader2, Upload, User, MapPin, Home } from 'lucide-react';
-import type { Country, City } from '../../types/api';
-import { fetchCountries, fetchCities } from '../../services/register';
+import { useNavigate } from 'react-router-dom';
+import { deleteCookie, emitAuthChange } from '../../lib/auth';
+import { getUserIdFromToken } from '../../lib/utils';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useCountries, useCities } from '../../hooks/useRegister';
+import { useAuthStore } from '../../stores/authStore';
+import type { AppUserProfile } from '../../types/user';
 import {
   fetchUserProfile,
   updateUserProfile,
 } from '../../services/user-profile';
-import type { AppUserProfile } from '../../types/user';
-import { useNavigate } from 'react-router-dom';
-import { deleteCookie, emitAuthChange } from '../../lib/auth';
-import { getUserIdFromToken } from '../../lib/utils';
-import { useAuthUser } from '../../hooks/useAuthUser';
 
 type Opt<T = string> = { value: T; label: string };
 
 export default function UserProfile() {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { setUser } = useAuthUser();
+  const { setUser } = useAuthStore();
   const [userId] = useState<string>(getUserIdFromToken() ?? '');
-  const [loading, setLoading] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+
+  const {
+    data: profileResponse,
+    isLoading: profileLoading,
+    error: profileError,
+  } = useQuery({
+    queryKey: ['userProfile', userId],
+    queryFn: () => fetchUserProfile(userId || null),
+    enabled: !!userId,
+  });
+
+  const profile = profileResponse?.data;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const initializedRef = useRef(false);
 
-  const [countries, setCountries] = useState<Country[]>([]);
-  const [cities, setCities] = useState<City[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<Opt<number> | null>(
     null
   );
   const [selectedCity, setSelectedCity] = useState<Opt<number> | null>(null);
 
-  const [profile, setProfile] = useState<AppUserProfile | null>(null);
-  const [initialProfile, setInitialProfile] = useState<AppUserProfile | null>(
-    null
+  const { data: countries = [] } = useCountries();
+  const { data: cities = [] } = useCities(selectedCountry?.value ?? null);
+
+  const initialProfile = useMemo(
+    () => (profile ? { ...profile } : null),
+    [profile]
   );
+
+  const updateProfileMutation = useMutation({
+    mutationFn: updateUserProfile,
+    onSuccess: (res) => {
+      if (res.success) {
+        const emailChanged = email.trim() !== (initialProfile?.email || '');
+        const usernameChanged =
+          userName.trim() !== (initialProfile?.userName || '');
+        if (emailChanged || usernameChanged) {
+          toast.success('Profile updated successfully! Please log in again.');
+          deleteCookie('jwtToken');
+          deleteCookie('refreshToken');
+          deleteCookie('userRole');
+          deleteCookie('auth');
+          deleteCookie('sidebar_state');
+          emitAuthChange();
+          navigate('/login');
+        } else {
+          toast.success(res.message);
+          queryClient.invalidateQueries({ queryKey: ['userProfile', userId] });
+          // Since res.data is undefined, construct updated user from form
+          const updatedUser: AppUserProfile = {
+            ...initialProfile!,
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            userName: userName.trim(),
+            email: email.trim(),
+            addressLine1: addressLine1.trim(),
+            addressLine2: addressLine2.trim(),
+            postalCode: postalCode.trim(),
+            dateOfBirth,
+            gender,
+            countryId: selectedCountry?.value,
+            cityId: selectedCity?.value,
+            // profilePictureUrl will be updated after refetch
+          };
+          setUser(updatedUser);
+          setProfilePictureFile(null);
+          setProfilePicturePreview(null);
+        }
+      } else {
+        toast.error(res.errors?.join(', ') || res.message);
+      }
+    },
+    onError: (error) => {
+      toast.error('Update failed: ' + error.message);
+    },
+  });
 
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
 
@@ -77,63 +138,55 @@ export default function UserProfile() {
   };
 
   useEffect(() => {
-    const init = async () => {
-      const ctrs = await fetchCountries();
-      setCountries(ctrs);
-    };
-    init();
-  }, []);
+    if (profile && !initializedRef.current) {
+      /* eslint-disable */
+      setFirstName(profile.firstName || '');
+      setLastName(profile.lastName || '');
+      setUserName(profile.userName || '');
+      setEmail(profile.email || '');
+      setAddressLine1(profile.addressLine1 || '');
+      setAddressLine2(profile.addressLine2 || '');
+      setPostalCode(profile.postalCode || '');
+      setDateOfBirth(profile.dateOfBirth || '');
+      setGender(
+        profile.gender === 'Male'
+          ? 'M'
+          : profile.gender === 'Female'
+            ? 'F'
+            : profile.gender || ''
+      );
+      /* eslint-enable */
+      initializedRef.current = true;
+    }
+  }, [profile]);
 
+  // Separate effect for selectedCountry
   useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      const res = await fetchUserProfile(userId || null);
-      setLoading(false);
-      if (res.success && res.data) {
-        setProfile(res.data);
-        setInitialProfile({ ...res.data });
-        setFirstName(res.data.firstName || '');
-        setLastName(res.data.lastName || '');
-        setUserName(res.data.userName || '');
-        setEmail(res.data.email || '');
-        setAddressLine1(res.data.addressLine1 || '');
-        setAddressLine2(res.data.addressLine2 || '');
-        setPostalCode(res.data.postalCode || '');
-        setDateOfBirth(res.data.dateOfBirth || '');
-        setGender(
-          res.data.gender === 'Male'
-            ? 'M'
-            : res.data.gender === 'Female'
-              ? 'F'
-              : res.data.gender || ''
-        );
-      } else {
-        toast.error(res.errors?.join(', ') || res.message);
+    if (profile?.countryId && countries.length > 0) {
+      const country = countries.find((c) => c.id === profile.countryId);
+      if (country) {
+        /* eslint-disable */
+        setSelectedCountry({ value: country.id, label: country.name });
+        /* eslint-enable */
       }
-    };
-    load();
-  }, [userId]);
+    }
+  }, [profile?.countryId, countries]);
 
+  // Separate effect for selectedCity
   useEffect(() => {
-    const initSelections = async () => {
-      if (!profile?.countryId) return;
-      const cid = profile.countryId;
-      const countryLabel = countries.find((c) => c.id === cid)?.name || '';
-      setSelectedCountry({ value: cid, label: countryLabel });
-      const data = await fetchCities(cid);
-      setCities(data);
-      if (profile.cityId) {
-        const cityId = profile.cityId;
-        const cityLabel = data.find((c) => c.id === cityId)?.name || '';
-        setSelectedCity({ value: cityId, label: cityLabel });
+    if (profile?.cityId && cities.length > 0) {
+      const city = cities.find((c) => c.id === profile.cityId);
+      if (city) {
+        /* eslint-disable */
+        setSelectedCity({ value: city.id, label: city.name });
+        /* eslint-enable */
       }
-    };
-    initSelections();
-  }, [profile?.countryId, profile?.cityId, countries]);
+    }
+  }, [profile?.cityId, cities]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!profile || !initialProfile || submitting) return;
+    if (!profile || !initialProfile || updateProfileMutation.isPending) return;
     const pascalFd = new FormData();
 
     const appendIfChanged = (
@@ -185,51 +238,7 @@ export default function UserProfile() {
       return;
     }
 
-    setSubmitting(true);
-    const res = await updateUserProfile(pascalFd);
-    setSubmitting(false);
-    if (res.success) {
-      const emailChanged = email.trim() !== (initialProfile?.email || '');
-      const usernameChanged =
-        userName.trim() !== (initialProfile?.userName || '');
-      if (emailChanged || usernameChanged) {
-        toast.success('Profile updated successfully! Please log in again.');
-        deleteCookie('jwtToken');
-        deleteCookie('refreshToken');
-        deleteCookie('userRole');
-        deleteCookie('auth');
-        deleteCookie('sidebar_state');
-        emitAuthChange();
-        navigate('/login');
-      } else {
-        toast.success(res.message);
-        const reloadRes = await fetchUserProfile(userId || null);
-        if (reloadRes.success && reloadRes.data) {
-          setProfile(reloadRes.data);
-          setUser(reloadRes.data); // Update global Zustand store
-          setInitialProfile({ ...reloadRes.data });
-          setFirstName(reloadRes.data.firstName || '');
-          setLastName(reloadRes.data.lastName || '');
-          setUserName(reloadRes.data.userName || '');
-          setEmail(reloadRes.data.email || '');
-          setAddressLine1(reloadRes.data.addressLine1 || '');
-          setAddressLine2(reloadRes.data.addressLine2 || '');
-          setPostalCode(reloadRes.data.postalCode || '');
-          setDateOfBirth(reloadRes.data.dateOfBirth || '');
-          setGender(
-            reloadRes.data.gender === 'Male'
-              ? 'M'
-              : reloadRes.data.gender === 'Female'
-                ? 'F'
-                : reloadRes.data.gender || ''
-          );
-          setProfilePictureFile(null);
-          setProfilePicturePreview(null);
-        }
-      }
-    } else {
-      toast.error(res.errors?.join(', ') || res.message);
-    }
+    updateProfileMutation.mutate(pascalFd);
   };
 
   const handleProfilePictureUpload = (
@@ -254,11 +263,19 @@ export default function UserProfile() {
     }
   };
 
-  if (loading) {
+  if (profileLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <Loader2 className="h-8 w-8 animate-spin" />
         <span className="ml-2">Loading profile...</span>
+      </div>
+    );
+  }
+
+  if (profileError) {
+    return (
+      <div className="text-red-500">
+        Error loading profile: {profileError.message}
       </div>
     );
   }
@@ -406,16 +423,9 @@ export default function UserProfile() {
                 <Label>Country</Label>
                 <Select
                   value={selectedCountry}
-                  onChange={async (opt) => {
+                  onChange={(opt) => {
                     setSelectedCountry(opt ?? null);
-                    if (opt?.value) {
-                      const data = await fetchCities(opt.value);
-                      setCities(data);
-                      setSelectedCity(null);
-                    } else {
-                      setCities([]);
-                      setSelectedCity(null);
-                    }
+                    setSelectedCity(null);
                   }}
                   options={countries.map((c) => ({
                     value: c.id,
@@ -512,10 +522,12 @@ export default function UserProfile() {
         <div className="flex justify-end">
           <Button
             type="submit"
-            disabled={submitting}
+            disabled={updateProfileMutation.isPending}
             className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
-            {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {updateProfileMutation.isPending && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
             Save Changes
           </Button>
         </div>
