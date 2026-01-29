@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 import {
@@ -81,6 +81,7 @@ export const useUserRoles = (userId: string) => {
 
 // Edit User Hook
 export const useEditUser = (userId: string) => {
+  const queryClient = useQueryClient();
   // Query to fetch user data for editing
   const {
     data: userData,
@@ -161,6 +162,7 @@ export const useEditUser = (userId: string) => {
       console.log('Update success response:', data);
       if (data.result === true) {
         toast.success(data.message || 'User updated successfully!');
+        queryClient.invalidateQueries({ queryKey: usersQueryKeys.all });
       } else {
         toast.error(data.message || 'Failed to update user');
         if (data.errors && data.errors.length > 0) {

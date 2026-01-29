@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState, startTransition } from 'react';
+import { useEffect, useRef, startTransition } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { toast } from 'react-toastify';
 import {
   Dialog,
   DialogContent,
@@ -19,7 +18,7 @@ import {
   SelectValue,
 } from '../../ui/select';
 import { Checkbox } from '../../ui/checkbox';
-import { Loader2, Upload } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useEditUser } from '../../../hooks/useUsers';
 import { useCountries, useCities } from '../../../hooks/useLocation';
 import type {
@@ -41,14 +40,14 @@ export default function EditUserModal({
   onClose,
 }: EditUserModalProps) {
   console.log('EditUserModal rendered with user:', user);
-  const [profilePictureState, setProfilePictureState] = useState<{
-    file: File | null;
-    preview: string | null;
-  }>({
-    file: null,
-    preview: null,
-  });
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  // const [profilePictureState, setProfilePictureState] = useState<{
+  //   file: File | null;
+  //   preview: string | null;
+  // }>({
+  //   file: null,
+  //   preview: null,
+  // });
+  // const fileInputRef = useRef<HTMLInputElement>(null);
   const hasPopulatedForm = useRef(false);
   const cityInitializedRef = useRef(false);
   const previousCountryId = useRef<number | undefined>(undefined);
@@ -126,34 +125,34 @@ export default function EditUserModal({
   const { data: cities = [] } = useCities(countryIdValue);
 
   // Profile picture upload handler
-  const handleProfilePictureUpload = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        toast.error('Please select a valid image file.');
-        return;
-      }
-      // Validate file size (max 5MB)
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      if (file.size > maxSize) {
-        toast.error('Image size must be less than 5MB.');
-        return;
-      }
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setProfilePictureState({
-          file,
-          preview: e.target?.result as string,
-        });
-        form.setValue('ProfilePicture', file);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  // const handleProfilePictureUpload = (
+  //   e: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     // Validate file type
+  //     if (!file.type.startsWith('image/')) {
+  //       toast.error('Please select a valid image file.');
+  //       return;
+  //     }
+  //     // Validate file size (max 5MB)
+  //     const maxSize = 5 * 1024 * 1024; // 5MB
+  //     if (file.size > maxSize) {
+  //       toast.error('Image size must be less than 5MB.');
+  //       return;
+  //     }
+  //     // Create preview
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       setProfilePictureState({
+  //         file,
+  //         preview: e.target?.result as string,
+  //       });
+  //       form.setValue('ProfilePicture', file);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   // Reset form when user changes
   useEffect(() => {
@@ -182,12 +181,12 @@ export default function EditUserModal({
       previousCountryId.current = undefined;
 
       // Reset profile picture state
-      startTransition(() => {
-        setProfilePictureState({
-          file: null,
-          preview: null,
-        });
-      });
+      // startTransition(() => {
+      //   setProfilePictureState({
+      //     file: null,
+      //     preview: null,
+      //   });
+      // });
     }
   }, [user?.id, form]);
 
@@ -286,14 +285,16 @@ export default function EditUserModal({
         {!isLoadingUser && userData && (
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Profile Picture */}
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               <h3 className="text-lg font-medium">Profile Picture</h3>
 
               <div className="flex items-center gap-4">
                 <div className="relative">
                   <img
                     src={
-                      profilePictureState.preview || '/placeholder-avatar.png'
+                      profilePictureState.preview ||
+                      userData?.users[0]?.profilePictureUrl ||
+                      '/placeholder-avatar.png'
                     }
                     alt="Profile Picture"
                     className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
@@ -328,7 +329,7 @@ export default function EditUserModal({
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Basic Information */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

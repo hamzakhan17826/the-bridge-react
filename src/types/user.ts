@@ -76,6 +76,7 @@ export interface AppUsersBasicDataUser {
   postalCode: string;
   dateOfBirth: string;
   gender: string;
+  profilePictureUrl?: string;
 }
 
 // Response type for AppUsersBasicData API
