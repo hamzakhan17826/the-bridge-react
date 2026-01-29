@@ -99,6 +99,27 @@ export type ProfileResponse<T = unknown> = {
   errors?: string[];
 };
 
+// Edit User Form Data
+export interface EditUserFormData {
+  userID: string;
+  FirstName: string;
+  LastName: string;
+  UserName: string;
+  CountryId: number;
+  CityId: number;
+  AddressLine1: string;
+  AddressLine2: string;
+  PostalCode: string;
+  DateOfBirth: string; // YYYY-MM-DD format
+  Gender: string;
+  IsDeleted: boolean;
+  IsBlocked: boolean;
+  ProfilePicture?: File | null; // File upload for profile picture
+}
+
+// Edit User API Response (from POST /EditUser/AppUsersBasicData)
+export type EditUserResponse = AppUsersBasicDataResponse;
+
 export interface AddressInfoSectionProps {
   addressLine1: string;
   setAddressLine1: (value: string) => void;

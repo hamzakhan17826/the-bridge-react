@@ -7,8 +7,6 @@ import type {
   AppUsersBasicDataResponse,
 } from '../types/user';
 
-export type UpdateAppUserProfilePayload = Partial<AppUserProfile>;
-
 export async function fetchUserProfile(
   userId?: string | null
 ): Promise<ProfileResponse<AppUserProfile>> {
@@ -18,7 +16,7 @@ export async function fetchUserProfile(
     });
 
     const data = res.data as AppUserProfile;
-    // console.log('Fetched user profile:', data);
+    console.log('Fetched user profile:', data);
 
     return {
       success: true,

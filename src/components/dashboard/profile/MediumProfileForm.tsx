@@ -170,7 +170,7 @@ export default function MediumProfileForm() {
                     )
                   }
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select availability status" />
                   </SelectTrigger>
                   <SelectContent>
