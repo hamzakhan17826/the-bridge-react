@@ -1,4 +1,6 @@
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
+import { useEffect, useRef } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,182 +18,242 @@ import {
   useMediumProfile,
   type MediumProfileFormData,
   AvailabilityStatus,
+  type AvailabilityStatusType,
 } from '../../../hooks/useMediumProfile';
 
-interface MediumProfileFormProps {
-  // userId can be added later if needed
-}
-
-export default function MediumProfileForm({}: MediumProfileFormProps) {
+export default function MediumProfileForm() {
   const form = useForm<MediumProfileFormData>({
     defaultValues: {
-      specialty: '',
-      tagline: '',
-      focus: '',
-      slug: '',
-      availabilityStatus: AvailabilityStatus.Available,
-      bio: '',
-      philosophy: '',
-      experienceInYears: undefined,
+      Specialty: '',
+      Tagline: '',
+      Focus: '',
+      Slug: '',
+      AvailabilityStatus: AvailabilityStatus.Available,
+      Bio: '',
+      Philosophy: '',
+      ExperienceInYears: undefined,
     },
   });
 
-  const { registerMediumMutation, onSubmit } = useMediumProfile();
+  const availabilityStatus = useWatch({
+    control: form.control,
+    name: 'AvailabilityStatus',
+  });
 
-  const handleSubmit = form.handleSubmit((data) => {
-    onSubmit(data);
+  const hasPopulatedForm = useRef(false);
+
+  const {
+    registerMediumMutation,
+    onSubmit,
+    error,
+    isError,
+    existingProfile,
+    isLoadingProfile,
+    convertToFormData,
+  } = useMediumProfile();
+  const queryClient = useQueryClient();
+  // Populate form with existing profile data when available (only once)
+  useEffect(() => {
+    if (existingProfile && !hasPopulatedForm.current) {
+      const formData = convertToFormData(existingProfile);
+      form.reset(formData);
+      hasPopulatedForm.current = true;
+    }
+  }, [existingProfile, convertToFormData, form]);
+
+  // Reset population flag when profile data changes (after update)
+  useEffect(() => {
+    if (existingProfile) {
+      hasPopulatedForm.current = false;
+    }
+  }, [existingProfile?.id, existingProfile]); // Only reset when the profile ID changes
+
+  const handleSubmit = form.handleSubmit(async (data) => {
+    await onSubmit(data);
+    // Invalidate and refetch the medium profile query after successful submission
+    queryClient.invalidateQueries({ queryKey: ['mediumProfile'] });
   });
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Medium Profile Information</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="specialty">Specialty *</Label>
-              <Input
-                id="specialty"
-                {...form.register('specialty', {
-                  required: 'Specialty is required',
-                })}
-                placeholder="e.g., Evidential Mediumship"
-              />
-              {form.formState.errors.specialty && (
-                <p className="text-sm text-red-500">
-                  {form.formState.errors.specialty.message}
-                </p>
-              )}
-            </div>
+    <>
+      {isLoadingProfile && (
+        <div className="flex items-center justify-center p-8">
+          <Loader2 className="h-8 w-8 animate-spin" />
+          <span className="ml-2">Loading your profile...</span>
+        </div>
+      )}
 
-            <div>
-              <Label htmlFor="tagline">Tagline *</Label>
-              <Input
-                id="tagline"
-                {...form.register('tagline', {
-                  required: 'Tagline is required',
-                })}
-                placeholder="Short professional tagline"
-              />
-              {form.formState.errors.tagline && (
-                <p className="text-sm text-red-500">
-                  {form.formState.errors.tagline.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="focus">Focus *</Label>
-              <Input
-                id="focus"
-                {...form.register('focus', { required: 'Focus is required' })}
-                placeholder="e.g., Spirit Communication"
-              />
-              {form.formState.errors.focus && (
-                <p className="text-sm text-red-500">
-                  {form.formState.errors.focus.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="slug">Slug (Optional)</Label>
-              <Input
-                id="slug"
-                {...form.register('slug')}
-                placeholder="URL-friendly identifier"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="availabilityStatus">Availability Status *</Label>
-              <Select
-                value={form.watch('availabilityStatus')?.toString()}
-                onValueChange={(value) =>
-                  form.setValue('availabilityStatus', parseInt(value) as any)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select availability status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={AvailabilityStatus.Available.toString()}>
-                    Available
-                  </SelectItem>
-                  <SelectItem
-                    value={AvailabilityStatus.Upcoming_Events.toString()}
-                  >
-                    Upcoming Events
-                  </SelectItem>
-                  <SelectItem
-                    value={AvailabilityStatus.Book_Reading.toString()}
-                  >
-                    Book Reading
-                  </SelectItem>
-                  <SelectItem
-                    value={AvailabilityStatus.Private_Sessions_Only.toString()}
-                  >
-                    Private Sessions Only
-                  </SelectItem>
-                  <SelectItem value={AvailabilityStatus.Unavailable.toString()}>
-                    Unavailable
-                  </SelectItem>
-                  <SelectItem
-                    value={AvailabilityStatus.Public_Sessions_Only.toString()}
-                  >
-                    Public Sessions Only
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="experienceInYears">Experience (Years)</Label>
-              <Input
-                id="experienceInYears"
-                type="number"
-                {...form.register('experienceInYears', { valueAsNumber: true })}
-                placeholder="e.g., 5"
-              />
-            </div>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {isError && error && (
+          <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
+            <h3 className="text-sm font-medium text-destructive mb-2">
+              Registration Failed
+            </h3>
+            <p className="text-sm text-destructive/80">
+              {error?.message ||
+                'An unexpected error occurred. Please try again.'}
+            </p>
           </div>
+        )}
 
-          <div>
-            <Label htmlFor="bio">Bio</Label>
-            <Textarea
-              id="bio"
-              {...form.register('bio')}
-              placeholder="Tell clients about your background and approach"
-              rows={4}
-            />
-          </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Medium Profile Information</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="Specialty">Specialty *</Label>
+                <Input
+                  id="Specialty"
+                  {...form.register('Specialty', {
+                    required: 'Specialty is required',
+                  })}
+                  placeholder="e.g., Evidential Mediumship"
+                />
+                {form.formState.errors.Specialty && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.Specialty.message}
+                  </p>
+                )}
+              </div>
 
-          <div>
-            <Label htmlFor="philosophy">Philosophy</Label>
-            <Textarea
-              id="philosophy"
-              {...form.register('philosophy')}
-              placeholder="Share your spiritual philosophy or approach"
-              rows={4}
-            />
-          </div>
-        </CardContent>
-      </Card>
+              <div>
+                <Label htmlFor="Tagline">Tagline *</Label>
+                <Input
+                  id="Tagline"
+                  {...form.register('Tagline', {
+                    required: 'Tagline is required',
+                  })}
+                  placeholder="Short professional tagline"
+                />
+                {form.formState.errors.Tagline && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.Tagline.message}
+                  </p>
+                )}
+              </div>
 
-      <div className="flex justify-end">
-        <Button
-          type="submit"
-          disabled={registerMediumMutation.isPending}
-          className="bg-primary text-primary-foreground hover:bg-primary/90"
-        >
-          {registerMediumMutation.isPending && (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          )}
-          Register as Medium
-        </Button>
-      </div>
-    </form>
+              <div>
+                <Label htmlFor="Focus">Focus *</Label>
+                <Input
+                  id="Focus"
+                  {...form.register('Focus', { required: 'Focus is required' })}
+                  placeholder="e.g., Spirit Communication"
+                />
+                {form.formState.errors.Focus && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.Focus.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="Slug">Slug (Optional)</Label>
+                <Input
+                  id="Slug"
+                  {...form.register('Slug')}
+                  placeholder="URL-friendly identifier"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="AvailabilityStatus">
+                  Availability Status *
+                </Label>
+                <Select
+                  value={availabilityStatus?.toString()}
+                  onValueChange={(value) =>
+                    form.setValue(
+                      'AvailabilityStatus',
+                      parseInt(value, 10) as AvailabilityStatusType
+                    )
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select availability status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={AvailabilityStatus.Available.toString()}>
+                      Available
+                    </SelectItem>
+                    <SelectItem
+                      value={AvailabilityStatus.Upcoming_Events.toString()}
+                    >
+                      Upcoming Events
+                    </SelectItem>
+                    <SelectItem
+                      value={AvailabilityStatus.Book_Reading.toString()}
+                    >
+                      Book Reading
+                    </SelectItem>
+                    <SelectItem
+                      value={AvailabilityStatus.Private_Sessions_Only.toString()}
+                    >
+                      Private Sessions Only
+                    </SelectItem>
+                    <SelectItem
+                      value={AvailabilityStatus.Unavailable.toString()}
+                    >
+                      Unavailable
+                    </SelectItem>
+                    <SelectItem
+                      value={AvailabilityStatus.Public_Sessions_Only.toString()}
+                    >
+                      Public Sessions Only
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="ExperienceInYears">Experience (Years)</Label>
+                <Input
+                  id="ExperienceInYears"
+                  type="number"
+                  {...form.register('ExperienceInYears', {
+                    valueAsNumber: true,
+                  })}
+                  placeholder="e.g., 5"
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="Bio">Bio</Label>
+              <Textarea
+                id="Bio"
+                {...form.register('Bio')}
+                placeholder="Tell clients about your background and approach"
+                rows={4}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="Philosophy">Philosophy</Label>
+              <Textarea
+                id="Philosophy"
+                {...form.register('Philosophy')}
+                placeholder="Share your spiritual philosophy or approach"
+                rows={4}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="flex justify-end">
+          <Button
+            type="submit"
+            disabled={registerMediumMutation.isPending}
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+          >
+            {registerMediumMutation.isPending && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            {existingProfile ? 'Update Profile' : 'Register as Medium'}
+          </Button>
+        </div>
+      </form>
+    </>
   );
 }
