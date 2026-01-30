@@ -32,7 +32,15 @@ export const useAppUsersBasicData = (params?: AppUsersBasicDataRequest) => {
     pageSize: number;
   }>({
     queryKey: usersQueryKeys.list(params?.userId),
-    queryFn: () => fetchAppUsersBasicData(params),
+    queryFn: async () => {
+      const data = await fetchAppUsersBasicData(params);
+      return {
+        users: data.users,
+        totalRecords: data.totalRecords,
+        pageNumber: data.pageNumber,
+        pageSize: data.pageSize,
+      };
+    },
     staleTime: 2 * 60 * 1000, // 2 minutes - user data changes frequently
     gcTime: 10 * 60 * 1000, // 10 minutes cache
     retry: 2,

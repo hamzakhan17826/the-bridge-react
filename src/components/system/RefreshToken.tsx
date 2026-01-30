@@ -61,9 +61,9 @@ export default function RefreshToken() {
       // console.log('🚀 [RefreshToken] Starting initial refresh...');
       runRefresh();
     } else {
-      console.log(
-        '⏸️ [RefreshToken] Skipping initial refresh - not logged in or remember me disabled'
-      );
+      // console.log(
+      //   '⏸️ [RefreshToken] Skipping initial refresh - not logged in or remember me disabled'
+      // );
     }
 
     const interval = setInterval(

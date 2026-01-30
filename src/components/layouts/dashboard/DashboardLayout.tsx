@@ -70,9 +70,9 @@ function DashboardContent() {
                   )}
                   <BreadcrumbItem className="hidden md:block">
                     {item.href ? (
-                      <Link to={item.href}>
-                        <BreadcrumbLink>{item.label}</BreadcrumbLink>
-                      </Link>
+                      <BreadcrumbLink asChild>
+                        <Link to={item.href}>{item.label}</Link>
+                      </BreadcrumbLink>
                     ) : (
                       <BreadcrumbPage>{item.label}</BreadcrumbPage>
                     )}

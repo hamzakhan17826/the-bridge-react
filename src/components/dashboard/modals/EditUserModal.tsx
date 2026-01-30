@@ -39,7 +39,6 @@ export default function EditUserModal({
   isOpen,
   onClose,
 }: EditUserModalProps) {
-  console.log('EditUserModal rendered with user:', user);
   // const [profilePictureState, setProfilePictureState] = useState<{
   //   file: File | null;
   //   preview: string | null;
@@ -190,34 +189,22 @@ export default function EditUserModal({
     }
   }, [user?.id, form]);
 
-  // Populate form when user data is loaded (only once per user)
-  useEffect(() => {
-    if (userData && user?.id && !hasPopulatedForm.current) {
-      const formData = convertToFormData(userData);
-      console.log('Converting userData to formData:', { userData, formData });
-      // Set country first to trigger cities loading
-      form.setValue('CountryId', formData.CountryId);
-      previousCountryId.current = formData.CountryId;
-      hasPopulatedForm.current = true;
-    }
-  }, [userData, user?.id, form]);
-
-  // Set city after cities are loaded
+  // Populate form when user data and cities are loaded (only once per user)
   useEffect(() => {
     if (
       userData &&
       user?.id &&
-      hasPopulatedForm.current &&
       cities.length > 0 &&
-      !cityInitializedRef.current
+      !hasPopulatedForm.current
     ) {
       const formData = convertToFormData(userData);
-      console.log('Setting complete form data after cities loaded:', formData);
-      // Now set the rest of the form including city
-      form.reset({
-        ...formData,
-        CountryId: formData.CountryId, // Keep the country we set
+      console.log('Converting userData to formData:', { userData, formData });
+      // Populate the entire form at once
+      startTransition(() => {
+        form.reset(formData);
       });
+      previousCountryId.current = formData.CountryId;
+      hasPopulatedForm.current = true;
       cityInitializedRef.current = true;
     }
   }, [userData, user?.id, cities.length, form]);

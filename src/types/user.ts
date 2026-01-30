@@ -167,3 +167,15 @@ export interface ProfilePictureSectionProps {
   profilePicturePreview: string | null;
   onProfilePictureChange: (file: File | null, preview: string | null) => void;
 }
+
+export const MembershipForUserType = {
+  AllUsers: 0,
+  ProfessionalMedium: 1,
+  DeveloperMedium: 2,
+  ProfessionalNDeveloperMedium: 3,
+  Sitter: 4,
+} as const;
+
+export type MembershipForUserTypeKey = keyof typeof MembershipForUserType;
+export type MembershipForUserTypeValue =
+  (typeof MembershipForUserType)[MembershipForUserTypeKey];

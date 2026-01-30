@@ -131,7 +131,6 @@ export async function fetchAppUsersBasicData(
   try {
     const res = await api.post('/EditUser/AppUsersBasicData', params || {});
     const data = res.data as AppUsersBasicDataResponse;
-    console.log('Fetched users basic data:', data);
     return data;
   } catch (error: unknown) {
     console.error('Failed to load users basic data:', error);
