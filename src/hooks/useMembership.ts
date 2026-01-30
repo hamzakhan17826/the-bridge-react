@@ -7,6 +7,7 @@ import {
   fetchMyOrdersHistory,
   fetchAllOrdersHistory,
   fetchMyActiveMemberships,
+  fetchMyTotalAndRemainingCredits,
   fetchUserMemberships,
 } from '../services/membership';
 import {
@@ -101,6 +102,14 @@ export const useMyActiveMemberships = () => {
     queryFn: fetchMyActiveMemberships,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes
+  });
+};
+
+export const useMyTotalAndRemainingCredits = () => {
+  return useQuery<{ key: number; value: number }>({
+    queryKey: ['membership', 'myTotalAndRemainingCredits'],
+    queryFn: fetchMyTotalAndRemainingCredits,
+    staleTime: 1000 * 60,
   });
 };
 

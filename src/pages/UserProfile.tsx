@@ -23,7 +23,7 @@ type Opt<T = string> = { value: T; label: string };
 
 export default function UserProfile() {
   const queryClient = useQueryClient();
-  const { user: authUser, setUser } = useAuthStore();
+  const setUser = useAuthStore((s) => s.setUser);
   const [userId] = useState<string>(getUserIdFromToken() ?? '');
 
   const { data: countries = [] } = useCountries();
@@ -48,26 +48,21 @@ export default function UserProfile() {
   // Keep auth-store user avatar in sync with latest profile.
   useEffect(() => {
     if (!profile) return;
+    const currentUser = useAuthStore.getState().user;
     if (
-      authUser?.userId &&
+      currentUser?.userId &&
       profile.userId &&
-      authUser.userId !== profile.userId
+      currentUser.userId !== profile.userId
     ) {
       return;
     }
-    if (profile.profilePictureUrl !== authUser?.profilePictureUrl) {
+    if (profile.profilePictureUrl !== currentUser?.profilePictureUrl) {
       setUser({
-        ...(authUser ?? profile),
+        ...(currentUser ?? profile),
         profilePictureUrl: profile.profilePictureUrl,
       });
     }
-  }, [
-    profile?.userId,
-    profile?.profilePictureUrl,
-    authUser?.userId,
-    authUser?.profilePictureUrl,
-    setUser,
-  ]);
+  }, [profile, setUser]);
   const initialProfile = useMemo(
     () => (profile ? { ...profile } : null),
     [profile]

@@ -51,7 +51,6 @@ export function useProfile(
     queryKey: ['userProfile', userId],
     queryFn: async () => {
       const response = await fetchUserProfile(userId || null);
-      console.log('useProfile fetched profile:', response);
       return response;
     },
     enabled: !!userId,

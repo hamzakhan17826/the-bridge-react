@@ -143,6 +143,21 @@ export async function fetchMyActiveMemberships(): Promise<ActiveMembership[]> {
   }
 }
 
+export type TotalAndRemainingCreditsResponse = {
+  key: number; // total credits
+  value: number; // remaining credits
+};
+
+export async function fetchMyTotalAndRemainingCredits(): Promise<TotalAndRemainingCreditsResponse> {
+  try {
+    const res = await api.get('/Member/MyTotalAndRemainingCredits');
+    return res.data as TotalAndRemainingCreditsResponse;
+  } catch (error: unknown) {
+    console.error('Failed to fetch MyTotalAndRemainingCredits', error);
+    throw new Error('Failed to fetch credits.');
+  }
+}
+
 export async function fetchUserMemberships(
   filters: UserMembershipsFilters
 ): Promise<UserMembershipsResponse> {

@@ -1,6 +1,9 @@
 import MembershipStatusCard from '@/components/dashboard/MembershipStatusCard';
 import { useNavigate } from 'react-router-dom';
-import { useMyActiveMemberships } from '@/hooks/useMembership';
+import {
+  useMyActiveMemberships,
+  useMyTotalAndRemainingCredits,
+} from '@/hooks/useMembership';
 import {
   Button,
   Card,
@@ -14,8 +17,9 @@ export default function Overview() {
   const navigate = useNavigate();
   const { data: activeMemberships, isLoading } = useMyActiveMemberships();
 
-  const totalRemainingCredits = 9; // 6 + 2 + 1 from dummy data
-  const totalCredits = 20; // Example total credits
+  const { data: creditsData } = useMyTotalAndRemainingCredits();
+  const totalCredits = creditsData?.key ?? 0;
+  const totalRemainingCredits = creditsData?.value ?? 0;
 
   return (
     <div className="space-y-6">

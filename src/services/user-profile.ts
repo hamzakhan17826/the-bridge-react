@@ -16,7 +16,6 @@ export async function fetchUserProfile(
     });
 
     const data = res.data as AppUserProfile;
-    console.log('Fetched user profile:', data);
 
     return {
       success: true,
