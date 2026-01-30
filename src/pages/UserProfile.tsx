@@ -48,13 +48,26 @@ export default function UserProfile() {
   // Keep auth-store user avatar in sync with latest profile.
   useEffect(() => {
     if (!profile) return;
-    if (authUser?.userId && profile.userId && authUser.userId !== profile.userId) {
+    if (
+      authUser?.userId &&
+      profile.userId &&
+      authUser.userId !== profile.userId
+    ) {
       return;
     }
     if (profile.profilePictureUrl !== authUser?.profilePictureUrl) {
-      setUser({ ...(authUser ?? profile), profilePictureUrl: profile.profilePictureUrl });
+      setUser({
+        ...(authUser ?? profile),
+        profilePictureUrl: profile.profilePictureUrl,
+      });
     }
-  }, [profile?.userId, profile?.profilePictureUrl, authUser?.userId, authUser?.profilePictureUrl, setUser]);
+  }, [
+    profile?.userId,
+    profile?.profilePictureUrl,
+    authUser?.userId,
+    authUser?.profilePictureUrl,
+    setUser,
+  ]);
   const initialProfile = useMemo(
     () => (profile ? { ...profile } : null),
     [profile]

@@ -64,9 +64,17 @@ export function useProfile(
   useEffect(() => {
     if (!profile) return;
     const currentUser = useAuthStore.getState().user;
-    if (currentUser?.userId && profile.userId && currentUser.userId !== profile.userId) return;
+    if (
+      currentUser?.userId &&
+      profile.userId &&
+      currentUser.userId !== profile.userId
+    )
+      return;
     if (profile.profilePictureUrl !== currentUser?.profilePictureUrl) {
-      setUser({ ...(currentUser ?? profile), profilePictureUrl: profile.profilePictureUrl });
+      setUser({
+        ...(currentUser ?? profile),
+        profilePictureUrl: profile.profilePictureUrl,
+      });
     }
   }, [profile, setUser]);
 
