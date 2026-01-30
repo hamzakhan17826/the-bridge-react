@@ -8,7 +8,7 @@ const api = axios.create({
   withCredentials: false,
 });
 
-// Request Interceptor (JWT add karo)
+// Request Interceptor (add JWT )
 api.interceptors.request.use((config) => {
   const token = getCookie('jwtToken');
   if (token) {

@@ -1,7 +1,8 @@
 import { useAuthStore } from '../stores/authStore';
 
 export function useAuthUser() {
-  const { user, roles, isLoggedIn, setUser, setRoles } = useAuthStore();
+  const { user, roles, isLoggedIn, isInitialized, setUser, setRoles } =
+    useAuthStore();
 
   const normalizedRoles = roles.map((r) => r.toLowerCase());
   const isAdmin = normalizedRoles.includes('admin');
@@ -12,6 +13,7 @@ export function useAuthUser() {
     user,
     roles,
     isLoggedIn,
+    isInitialized,
     isAdmin,
     hasRole,
     setUser,

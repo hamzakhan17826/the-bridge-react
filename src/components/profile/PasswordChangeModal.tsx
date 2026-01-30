@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
 import { changePassword } from '../../services/user-profile';
-import { deleteCookie, emitAuthChange } from '../../lib/auth';
+import { logout } from '../../lib/auth';
 import type { PasswordChangeModalProps } from '../../types/user';
 
 const PasswordChangeModal = ({ isOpen, onClose }: PasswordChangeModalProps) => {
-  const navigate = useNavigate();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -29,14 +27,7 @@ const PasswordChangeModal = ({ isOpen, onClose }: PasswordChangeModalProps) => {
     if (res.success) {
       toast.success('Password changed successfully! Please log in again.');
       handleClose();
-      // Logout
-      deleteCookie('jwtToken');
-      deleteCookie('refreshToken');
-      deleteCookie('userRole');
-      deleteCookie('auth');
-      deleteCookie('sidebar_state');
-      emitAuthChange();
-      navigate('/login');
+      logout();
     } else {
       toast.error(res.errors?.join(', ') || res.message);
     }

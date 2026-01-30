@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCountries, useCities } from '../hooks/useRegister';
 import { fetchCities } from '../services/register';
 import type { AppUserProfile } from '../types/user';
-import { deleteCookie, emitAuthChange } from '../lib/auth';
+import { logout } from '../lib/auth';
 import {
   ProfileHeader,
   ProfilePictureSection,
@@ -58,13 +58,7 @@ export default function UserProfile() {
           userName.trim() !== (initialProfile?.userName || '');
         if (emailChanged || usernameChanged) {
           toast.success('Profile updated successfully! Please log in again.');
-          deleteCookie('jwtToken');
-          deleteCookie('refreshToken');
-          deleteCookie('userRole');
-          deleteCookie('auth');
-          deleteCookie('sidebar_state');
-          emitAuthChange();
-          window.location.reload();
+          logout();
         } else {
           toast.success(res.message);
           queryClient.invalidateQueries({ queryKey: ['userProfile', userId] });

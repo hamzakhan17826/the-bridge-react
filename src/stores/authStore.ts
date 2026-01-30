@@ -8,11 +8,15 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       roles: [],
       isLoggedIn: false,
+      isInitialized: false,
       setUser: (user) => set({ user }),
       setRoles: (roles) => set({ roles }),
       setLoggedIn: (loggedIn) => set({ isLoggedIn: loggedIn }),
-      login: (user, roles) => set({ user, roles, isLoggedIn: true }),
-      logout: () => set({ user: null, roles: [], isLoggedIn: false }),
+      setInitialized: (initialized) => set({ isInitialized: initialized }),
+      login: (user, roles) =>
+        set({ user, roles, isLoggedIn: true, isInitialized: true }),
+      logout: () =>
+        set({ user: null, roles: [], isLoggedIn: false, isInitialized: true }),
     }),
     {
       name: 'auth-storage',

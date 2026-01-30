@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type { UseFormReturn } from 'react-hook-form';
 
-import { deleteCookie, emitAuthChange } from '../lib/auth';
+import { logout } from '../lib/auth';
 import { useCountries, useCities } from './useRegister';
 import { useAuthStore } from '../stores/authStore';
 import type { AppUserProfile } from '../types/user';
@@ -80,13 +80,7 @@ export function useProfile(
           formData.userName.trim() !== (initialProfile?.userName || '');
         if (emailChanged || usernameChanged) {
           toast.success('Profile updated successfully! Please log in again.');
-          deleteCookie('jwtToken');
-          deleteCookie('refreshToken');
-          deleteCookie('userRole');
-          deleteCookie('auth');
-          deleteCookie('sidebar_state');
-          emitAuthChange();
-          window.location.reload();
+          logout();
         } else {
           toast.success(res.message);
           queryClient.invalidateQueries({ queryKey: ['userProfile', userId] });

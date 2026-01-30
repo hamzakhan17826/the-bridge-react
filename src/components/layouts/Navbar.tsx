@@ -1,19 +1,14 @@
 import { Link, NavLink } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Menu, X, UserCircle2, Heart, Sparkles } from 'lucide-react';
-import { useEffect, useRef } from 'react';
-import {
-  getAuthFlag,
-  getUserRoles,
-  logout as clientLogout,
-} from '../../lib/auth';
+import { logout as clientLogout } from '../../lib/auth';
+import { useAuthUser } from '../../hooks/useAuthUser';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(getAuthFlag());
-  const [userRoles, setUserRoles] = useState<string[]>(getUserRoles() ?? []);
+  const { isLoggedIn, hasRole } = useAuthUser();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -38,26 +33,6 @@ export default function Navbar() {
       document.removeEventListener('mousedown', onClick);
     };
   }, [accountOpen]);
-
-  useEffect(() => {
-    const update = () => {
-      setIsLoggedIn(getAuthFlag());
-      setUserRoles(getUserRoles() ?? []);
-    };
-    const onAuthChange = () => update();
-    const onStorage = (e: StorageEvent) => {
-      if (['auth', 'userRole'].includes(e.key || '')) update();
-    };
-    const onFocus = () => update();
-    window.addEventListener('authchange', onAuthChange as EventListener);
-    window.addEventListener('storage', onStorage);
-    window.addEventListener('focus', onFocus);
-    return () => {
-      window.removeEventListener('authchange', onAuthChange as EventListener);
-      window.removeEventListener('storage', onStorage);
-      window.removeEventListener('focus', onFocus);
-    };
-  }, []);
 
   return (
     <>
@@ -158,7 +133,7 @@ export default function Navbar() {
               >
                 Contact
               </NavLink>
-              {isLoggedIn && userRoles.includes('user') && (
+              {isLoggedIn && hasRole('user') && (
                 <NavLink
                   to="/dashboard"
                   className={({ isActive }) =>
@@ -202,16 +177,6 @@ export default function Navbar() {
                           <UserCircle2 className="w-4 h-4" />
                           Profile
                         </Link>
-                        {/* {userRoles.includes('user') && (
-                          <Link
-                            to="/dashboard"
-                            className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-xl transition-all duration-200"
-                            onClick={() => setAccountOpen(false)}
-                          >
-                            <Sparkles className="w-4 h-4" />
-                            Dashboard
-                          </Link>
-                        )} */}
                         <div className="my-2 h-px bg-linear-to-r from-transparent via-primary-200 to-transparent"></div>
                         <button
                           className="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all duration-200"
@@ -355,7 +320,7 @@ export default function Navbar() {
                 >
                   Contact
                 </NavLink>
-                {isLoggedIn && userRoles.includes('user') && (
+                {isLoggedIn && hasRole('user') && (
                   <NavLink
                     to="/dashboard"
                     className={({ isActive }) =>

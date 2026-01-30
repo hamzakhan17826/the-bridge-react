@@ -56,11 +56,13 @@ export interface AuthState {
   user: AppUserProfile | null;
   roles: string[];
   isLoggedIn: boolean;
+  isInitialized: boolean;
   login: (user: AppUserProfile, roles: string[]) => void;
   logout: () => void;
   setUser: (user: AppUserProfile) => void;
   setRoles: (roles: string[]) => void;
   setLoggedIn: (loggedIn: boolean) => void;
+  setInitialized: (initialized: boolean) => void;
 }
 
 export interface CookieOptions {

@@ -1,38 +1,32 @@
 import { isRememberMeEnabled, getCookie, setAuthCookies } from './auth';
 import api from './api';
+import { useAuthStore } from '../stores/authStore';
 
 export async function refreshToken(): Promise<boolean> {
-  // console.log('🔄 [REFRESH] Attempting token refresh...');
-
   try {
     const rt = getCookie('refreshToken');
-    // console.log('🔍 [REFRESH] Current refresh token exists:', !!rt);
-
     const payload = rt ? { refreshToken: rt } : {};
-    // console.log('📤 [REFRESH] Sending payload:', payload);
-
     const res = await api.post('/Account/RefreshToken', payload);
     const data = res.data ?? {};
 
-    // console.log('✅ [REFRESH] API Response received:', {
-    //   status: res.status,
-    //   hasJwtToken: !!data.jwtToken,
-    //   hasRefreshToken: !!data.refreshToken,
-    //   roles: data.roles,
-    //   fullResponse: data,
-    // });
-
     const isPersistent = isRememberMeEnabled();
-    // console.log('💾 [REFRESH] Setting cookies with persistence:', isPersistent);
 
     setAuthCookies({
       jwtToken: data.jwtToken,
       refreshToken: data.refreshToken,
-      roles: Array.isArray(data.roles) ? (data.roles as string[]) : undefined,
       persistent: isPersistent,
     });
 
-    // console.log('🎉 [REFRESH] Cookies set successfully');
+    // Keep Zustand in sync with the latest refresh response
+    if (Array.isArray(data.roles)) {
+      const roles = (data.roles as string[])
+        .map((r) => r.toLowerCase())
+        .filter(Boolean);
+      useAuthStore.getState().setRoles(roles);
+    }
+    useAuthStore.getState().setLoggedIn(!!data.jwtToken);
+    useAuthStore.getState().setInitialized(true);
+
     return true;
   } catch (error: unknown) {
     // Axios throws for non-2xx; log safely without using any

@@ -61,6 +61,33 @@ export function isJwtExpired(
   }
 }
 
+// Attempt to extract roles from JWT payload claims
+export function getRolesFromJwtToken(token: string | undefined): string[] {
+  const payload = decodeJwtPayload<Record<string, unknown>>(token);
+  if (!payload) return [];
+
+  const candidates = [
+    payload.role,
+    payload.roles,
+    payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
+    payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/roles'],
+  ];
+
+  const roles: string[] = [];
+  for (const c of candidates) {
+    if (!c) continue;
+    if (typeof c === 'string') {
+      roles.push(c);
+    } else if (Array.isArray(c)) {
+      for (const item of c) {
+        if (typeof item === 'string') roles.push(item);
+      }
+    }
+  }
+
+  return Array.from(new Set(roles.map((r) => r.toLowerCase()).filter(Boolean)));
+}
+
 export function truncateText(
   text: string,
   maxLength: number
