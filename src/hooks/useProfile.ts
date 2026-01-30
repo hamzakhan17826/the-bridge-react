@@ -28,7 +28,7 @@ export function useProfile(
   form: UseFormReturn<ProfileFormData>
 ) {
   const queryClient = useQueryClient();
-  const { setUser } = useAuthStore();
+  const setUser = useAuthStore((s) => s.setUser);
 
   const [selectedCountry, setSelectedCountry] = useState<Opt<number> | null>(
     null
@@ -42,8 +42,6 @@ export function useProfile(
   >(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const countryInitializedRef = useRef(false);
-  const cityInitializedRef = useRef(false);
 
   const {
     data: profileResponse,
@@ -61,8 +59,39 @@ export function useProfile(
 
   const profile = profileResponse?.data;
 
+  // Keep auth-store user in sync with server profile for fields like profilePictureUrl.
+  // This ensures AppSidebar updates after a successful profile-picture upload.
+  useEffect(() => {
+    if (!profile) return;
+    const currentUser = useAuthStore.getState().user;
+    if (currentUser?.userId && profile.userId && currentUser.userId !== profile.userId) return;
+    if (profile.profilePictureUrl !== currentUser?.profilePictureUrl) {
+      setUser({ ...(currentUser ?? profile), profilePictureUrl: profile.profilePictureUrl });
+    }
+  }, [profile, setUser]);
+
   const { data: countries = [] } = useCountries();
-  const { data: cities = [] } = useCities(selectedCountry?.value ?? null);
+  const derivedCountry = (() => {
+    if (!profile?.countryId) return null;
+    const country = countries.find((c) => c.id === profile.countryId);
+    return country
+      ? ({ value: country.id, label: country.name } as Opt<number>)
+      : null;
+  })();
+
+  const effectiveSelectedCountry = selectedCountry ?? derivedCountry;
+
+  const { data: cities = [] } = useCities(
+    effectiveSelectedCountry?.value ?? null
+  );
+
+  const derivedCity = (() => {
+    if (!profile?.cityId) return null;
+    const city = cities.find((c) => c.id === profile.cityId);
+    return city ? ({ value: city.id, label: city.name } as Opt<number>) : null;
+  })();
+
+  const effectiveSelectedCity = selectedCity ?? derivedCity;
 
   const initialProfile = useMemo(
     () => (profile ? { ...profile } : null),
@@ -143,27 +172,6 @@ export function useProfile(
     }
   };
 
-  useEffect(() => {
-    if (
-      profile?.countryId &&
-      countries.length > 0 &&
-      !countryInitializedRef.current
-    ) {
-      const country = countries.find((c) => c.id === profile.countryId);
-      if (country) {
-        setSelectedCountry({ value: country.id, label: country.name });
-        countryInitializedRef.current = true;
-      }
-    }
-    if (profile?.cityId && cities.length > 0 && !cityInitializedRef.current) {
-      const city = cities.find((c) => c.id === profile.cityId);
-      if (city) {
-        setSelectedCity({ value: city.id, label: city.name });
-        cityInitializedRef.current = true;
-      }
-    }
-  }, [profile, countries, cities]);
-
   const onSubmit = form.handleSubmit((data) => {
     if (!profile || !initialProfile || updateProfileMutation.isPending) return;
     const pascalFd = new FormData();
@@ -237,9 +245,9 @@ export function useProfile(
     profileLoading,
     profileError,
     updateProfileMutation,
-    selectedCountry,
+    selectedCountry: effectiveSelectedCountry,
     setSelectedCountry,
-    selectedCity,
+    selectedCity: effectiveSelectedCity,
     setSelectedCity,
     profilePictureFile,
     setProfilePictureFile,

@@ -23,7 +23,7 @@ type Opt<T = string> = { value: T; label: string };
 
 export default function UserProfile() {
   const queryClient = useQueryClient();
-  const { setUser } = useAuthStore();
+  const { user: authUser, setUser } = useAuthStore();
   const [userId] = useState<string>(getUserIdFromToken() ?? '');
 
   const { data: countries = [] } = useCountries();
@@ -44,6 +44,17 @@ export default function UserProfile() {
   });
 
   const profile: AppUserProfile | null = profileResponse?.data || null;
+
+  // Keep auth-store user avatar in sync with latest profile.
+  useEffect(() => {
+    if (!profile) return;
+    if (authUser?.userId && profile.userId && authUser.userId !== profile.userId) {
+      return;
+    }
+    if (profile.profilePictureUrl !== authUser?.profilePictureUrl) {
+      setUser({ ...(authUser ?? profile), profilePictureUrl: profile.profilePictureUrl });
+    }
+  }, [profile?.userId, profile?.profilePictureUrl, authUser?.userId, authUser?.profilePictureUrl, setUser]);
   const initialProfile = useMemo(
     () => (profile ? { ...profile } : null),
     [profile]
