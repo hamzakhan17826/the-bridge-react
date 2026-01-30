@@ -20,26 +20,10 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { getCookie } from '@/lib/auth';
-import { useAuthStore } from '@/stores/authStore';
+import { useAuthUser } from '@/hooks/useAuthUser';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user: authUser } = useAuthStore();
-  const userRoleCookie = getCookie('userRole');
-  let userRoles: string[] = [];
-
-  if (userRoleCookie) {
-    try {
-      // Try to parse as JSON array
-      const parsed = JSON.parse(userRoleCookie);
-      userRoles = Array.isArray(parsed) ? parsed : [userRoleCookie];
-    } catch {
-      // If not JSON, treat as single role string
-      userRoles = [userRoleCookie];
-    }
-  }
-
-  const isAdmin = userRoles.includes('admin');
+  const { user: authUser, isAdmin } = useAuthUser();
 
   // Create user object from auth store
   const user = authUser
