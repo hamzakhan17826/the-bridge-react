@@ -1,4 +1,4 @@
-import { useEffect, useRef, startTransition } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import {
   Dialog,
@@ -48,8 +48,6 @@ export default function EditUserModal({
   // });
   // const fileInputRef = useRef<HTMLInputElement>(null);
   const hasPopulatedForm = useRef(false);
-  const cityInitializedRef = useRef(false);
-  const previousCountryId = useRef<number | undefined>(undefined);
   const { userData, isLoadingUser, updateUserMutation } = useEditUser(
     user?.id || ''
   );
@@ -62,8 +60,8 @@ export default function EditUserModal({
       FirstName: user.firstName,
       LastName: user.lastName,
       UserName: user.userName,
-      CountryId: user.countryId,
-      CityId: user.cityId,
+      CountryId: parseInt(user.countryId?.toString() || '0', 10),
+      CityId: parseInt(user.cityId?.toString() || '0', 10),
       AddressLine1: user.addressLine1,
       AddressLine2: user.addressLine2,
       PostalCode: user.postalCode,
@@ -71,7 +69,7 @@ export default function EditUserModal({
       Gender: user.gender,
       IsDeleted: user.isDeleted,
       IsBlocked: user.isBlocked,
-      ProfilePicture: null, // Initialize as null, user can upload new picture
+      // ProfilePicture: null, // Initialize as null, user can upload new picture
     };
   };
 
@@ -90,7 +88,7 @@ export default function EditUserModal({
       Gender: '',
       IsDeleted: false,
       IsBlocked: false,
-      ProfilePicture: null,
+      // ProfilePicture: null,
     },
   });
 
@@ -121,7 +119,7 @@ export default function EditUserModal({
   });
 
   const { data: countries = [] } = useCountries();
-  const { data: cities = [] } = useCities(countryIdValue);
+  const { data: cities = [] } = useCities(countryIdValue ?? 0);
 
   // Profile picture upload handler
   // const handleProfilePictureUpload = (
@@ -157,27 +155,23 @@ export default function EditUserModal({
   useEffect(() => {
     if (user?.id) {
       // Reset form to default values when user changes
-      startTransition(() => {
-        form.reset({
-          userID: '',
-          FirstName: '',
-          LastName: '',
-          UserName: '',
-          CountryId: 0,
-          CityId: 0,
-          AddressLine1: '',
-          AddressLine2: '',
-          PostalCode: '',
-          DateOfBirth: '',
-          Gender: '',
-          IsDeleted: false,
-          IsBlocked: false,
-          ProfilePicture: null,
-        });
+      form.reset({
+        userID: '',
+        FirstName: '',
+        LastName: '',
+        UserName: '',
+        CountryId: 0,
+        CityId: 0,
+        AddressLine1: '',
+        AddressLine2: '',
+        PostalCode: '',
+        DateOfBirth: '',
+        Gender: '',
+        IsDeleted: false,
+        IsBlocked: false,
+        // ProfilePicture: null,
       });
       hasPopulatedForm.current = false;
-      cityInitializedRef.current = false;
-      previousCountryId.current = undefined;
 
       // Reset profile picture state
       // startTransition(() => {
@@ -189,33 +183,16 @@ export default function EditUserModal({
     }
   }, [user?.id, form]);
 
-  // Populate form when user data and cities are loaded (only once per user)
+  // Populate form when user data is loaded (only once per user)
   useEffect(() => {
-    if (
-      userData &&
-      user?.id &&
-      cities.length > 0 &&
-      !hasPopulatedForm.current
-    ) {
+    if (userData && user?.id && !hasPopulatedForm.current) {
       const formData = convertToFormData(userData);
       console.log('Converting userData to formData:', { userData, formData });
       // Populate the entire form at once
-      startTransition(() => {
-        form.reset(formData);
-      });
-      previousCountryId.current = formData.CountryId;
+      form.reset(formData);
       hasPopulatedForm.current = true;
-      cityInitializedRef.current = true;
     }
-  }, [userData, user?.id, cities.length, form]);
-
-  // Update cities when country changes
-  useEffect(() => {
-    if (countryIdValue !== previousCountryId.current) {
-      previousCountryId.current = countryIdValue;
-      form.setValue('CityId', 0); // Reset city when country changes
-    }
-  }, [countryIdValue, form]);
+  }, [userData, user?.id, countries, form]);
 
   const handleSubmit = form.handleSubmit(async (data) => {
     console.log('Form data being submitted:', data);
@@ -403,10 +380,12 @@ export default function EditUserModal({
                 <div>
                   <Label htmlFor="CountryId">Country</Label>
                   <Select
-                    value={(countryIdValue || 0).toString()}
-                    onValueChange={(value) =>
-                      form.setValue('CountryId', parseInt(value, 10))
-                    }
+                    value={countryIdValue ? countryIdValue.toString() : ''}
+                    onValueChange={(value) => {
+                      const countryId = parseInt(value, 10);
+                      form.setValue('CountryId', countryId);
+                      form.setValue('CityId', 0); // Reset city when country changes
+                    }}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select country" />
@@ -427,10 +406,12 @@ export default function EditUserModal({
                 <div>
                   <Label htmlFor="CityId">City</Label>
                   <Select
-                    value={(cityIdValue || 0).toString()}
-                    onValueChange={(value) =>
-                      form.setValue('CityId', parseInt(value, 10))
-                    }
+                    key={`${countryIdValue ?? 0}-${cities.length}`}
+                    value={cityIdValue ? cityIdValue.toString() : ''}
+                    onValueChange={(value) => {
+                      const cityId = parseInt(value, 10);
+                      form.setValue('CityId', cityId);
+                    }}
                     disabled={!countryIdValue}
                   >
                     <SelectTrigger className="w-full">

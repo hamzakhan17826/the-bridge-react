@@ -13,6 +13,7 @@ import {
   AddressInfoSection,
   PasswordChangeModal,
   MediumProfileForm,
+  PasswordChangeSection,
 } from '../../components/dashboard/profile';
 import { useProfile, type ProfileFormData } from '../../hooks/useProfile';
 
@@ -147,6 +148,10 @@ export default function UserProfile() {
             />
 
             <AddressInfoSection register={form.register} />
+
+            <PasswordChangeSection
+              onOpenModal={() => setPasswordModalOpen(true)}
+            />
 
             <Separator />
 
