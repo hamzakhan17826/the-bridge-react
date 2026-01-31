@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/select';
 import { useAllOrdersHistory } from '@/hooks/useMembership';
 import type { AllOrdersFilters } from '@/types/membership';
+import { PaymentProcessor } from '@/constants/enums';
 import { CreditCard, Wallet, Search } from 'lucide-react';
 
 export default function AdminOrdersHistory() {
@@ -111,8 +112,12 @@ export default function AdminOrdersHistory() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All</SelectItem>
-                    <SelectItem value="1">PayPal</SelectItem>
-                    <SelectItem value="2">Stripe</SelectItem>
+                    <SelectItem value={String(PaymentProcessor.PayPal)}>
+                      PayPal
+                    </SelectItem>
+                    <SelectItem value={String(PaymentProcessor.Stripe)}>
+                      Stripe
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -230,12 +235,14 @@ export default function AdminOrdersHistory() {
                         </TableCell>
                         <TableCell>${o.amount.toFixed(2)}</TableCell>
                         <TableCell className="flex items-center gap-2">
-                          {o.processorId === 1 ? (
+                          {o.processorId === PaymentProcessor.PayPal ? (
                             <Wallet className="h-4 w-4" />
                           ) : (
                             <CreditCard className="h-4 w-4" />
                           )}
-                          {o.processorId === 1 ? 'PayPal' : 'Stripe'}
+                          {o.processorId === PaymentProcessor.PayPal
+                            ? 'PayPal'
+                            : 'Stripe'}
                         </TableCell>
                         <TableCell>
                           <Badge

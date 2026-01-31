@@ -13,6 +13,7 @@ import { CalendarDays, CreditCard, Wallet } from 'lucide-react';
 import { format } from 'date-fns';
 import { useMyOrdersHistory } from '@/hooks/useMembership';
 import type { MyOrderHistoryItem } from '@/types/membership';
+import { PaymentProcessor } from '@/constants/enums';
 
 const asText = (v: unknown) => (v == null ? '' : String(v));
 
@@ -31,7 +32,11 @@ export default function MembershipOrders() {
   const orders = apiOrders as MyOrderHistoryItem[];
 
   const processorLabel = (id: number) =>
-    id === 1 ? 'PayPal' : id === 2 ? 'Stripe' : 'Other';
+    id === PaymentProcessor.PayPal
+      ? 'PayPal'
+      : id === PaymentProcessor.Stripe
+        ? 'Stripe'
+        : 'Other';
 
   return (
     <div className="space-y-6">
@@ -84,7 +89,7 @@ export default function MembershipOrders() {
                     ${o.amount.toFixed(2)}
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                    {o.processorId === 1 ? (
+                    {o.processorId === PaymentProcessor.PayPal ? (
                       <Wallet className="h-4 w-4" />
                     ) : (
                       <CreditCard className="h-4 w-4" />

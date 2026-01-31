@@ -27,6 +27,7 @@ import { Button } from '../../components/ui';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
 import { Checkbox } from '../../components/ui/checkbox';
+import { PaymentProcessor, PaymentStatus } from '@/constants/enums';
 
 export default function MembershipUpgrade() {
   const { plan } = useParams<{ plan: string }>();
@@ -171,15 +172,18 @@ export default function MembershipUpgrade() {
               if (!response.pubTrackId) return;
               orderStatusMutation.mutate(response.pubTrackId, {
                 onSuccess: (res) => {
-                  const statusNum = res.paymentStatus; // 1 pending, 2 completed, 3 failed, 4 cancelled
-                  if (res.isPaid && statusNum === 2) {
+                  const statusNum = res.paymentStatus; // backend numeric status
+                  if (res.isPaid && statusNum === PaymentStatus.Completed) {
                     setPaymentState('success');
                     setShowPaymentWaiting(false);
                     if (id) {
                       clearInterval(id);
                     }
                     setPollTimer(null);
-                  } else if (statusNum === 3 || statusNum === 4) {
+                  } else if (
+                    statusNum === PaymentStatus.Failed ||
+                    statusNum === PaymentStatus.Cancelled
+                  ) {
                     setPaymentState('failed');
                     setShowPaymentWaiting(false);
                     if (id) {
@@ -333,7 +337,7 @@ export default function MembershipUpgrade() {
                 <Button
                   className="w-full bg-[#0070ba] hover:bg-[#0070ba]/90 text-white"
                   size="lg"
-                  onClick={() => handlePayment(1)}
+                  onClick={() => handlePayment(PaymentProcessor.PayPal)}
                   disabled={placeOrderMutation.isPending || showPaymentWaiting}
                 >
                   <Wallet className="w-5 h-5 mr-2" />
@@ -346,7 +350,7 @@ export default function MembershipUpgrade() {
                   variant="outline"
                   className="w-full border-[#635bff] text-[#635bff] hover:bg-[#635bff] hover:text-white"
                   size="lg"
-                  onClick={() => handlePayment(2)}
+                  onClick={() => handlePayment(PaymentProcessor.Stripe)}
                   disabled={placeOrderMutation.isPending || showPaymentWaiting}
                 >
                   <CreditCard className="w-5 h-5 mr-2" />
