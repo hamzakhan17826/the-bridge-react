@@ -97,6 +97,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: 'Upgrade Account',
             url: '/dashboard/membership',
           },
+          {
+            title: 'Order History',
+            url: '/dashboard/membership/orders',
+          },
         ],
       },
       {

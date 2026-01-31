@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect } from 'react';
 import { useBreadcrumb } from '@/components/ui/breadcrumb';
 import {
   Card,
@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { CalendarDays, CreditCard, Wallet } from 'lucide-react';
 import { format } from 'date-fns';
 import { useMyOrdersHistory } from '@/hooks/useMembership';
@@ -19,10 +18,6 @@ const asText = (v: unknown) => (v == null ? '' : String(v));
 
 export default function MembershipOrders() {
   const { setItems } = useBreadcrumb();
-  const [query, setQuery] = useState('');
-  const [filterPaid, setFilterPaid] = useState<'all' | 'paid' | 'unpaid'>(
-    'all'
-  );
   const { data: apiOrders = [], isLoading, error } = useMyOrdersHistory();
 
   useEffect(() => {
@@ -33,20 +28,7 @@ export default function MembershipOrders() {
     ]);
   }, [setItems]);
 
-  const filtered = useMemo(() => {
-    return (apiOrders as MyOrderHistoryItem[]).filter((o) => {
-      const matchesPaid =
-        filterPaid === 'all'
-          ? true
-          : filterPaid === 'paid'
-            ? o.isPaid
-            : !o.isPaid;
-      const text =
-        `${o.id} ${o.paymentTransactionId} ${o.pubTrackId} ${o.membershipTierName} ${o.membershipTierCode}`.toLowerCase();
-      const matchesQuery = text.includes(query.toLowerCase());
-      return matchesPaid && matchesQuery;
-    });
-  }, [filterPaid, query, apiOrders]);
+  const orders = apiOrders as MyOrderHistoryItem[];
 
   const processorLabel = (id: number) =>
     id === 1 ? 'PayPal' : id === 2 ? 'Stripe' : 'Other';
@@ -78,45 +60,8 @@ export default function MembershipOrders() {
               Failed to load orders.
             </div>
           )}
-          <div className="flex flex-col md:flex-row md:items-center gap-3 mb-4">
-            <div className="flex gap-2">
-              <Button
-                variant={filterPaid === 'all' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setFilterPaid('all')}
-                className={filterPaid === 'all' ? 'btn' : ''}
-              >
-                All
-              </Button>
-              <Button
-                variant={filterPaid === 'paid' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setFilterPaid('paid')}
-                className={filterPaid === 'paid' ? 'btn' : ''}
-              >
-                Paid
-              </Button>
-              <Button
-                variant={filterPaid === 'unpaid' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setFilterPaid('unpaid')}
-                className={filterPaid === 'unpaid' ? 'btn' : ''}
-              >
-                Unpaid
-              </Button>
-            </div>
-            <div className="md:ml-auto w-full md:w-72">
-              <Input
-                placeholder="Search transaction or tracking id"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="bg-primary-foreground"
-              />
-            </div>
-          </div>
-
           <div className="space-y-3">
-            {filtered.map((o) => (
+            {orders.map((o) => (
               <div
                 key={o.id}
                 className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 rounded-lg border hover:border-gray-300 transition"
@@ -187,7 +132,7 @@ export default function MembershipOrders() {
                 </div>
               </div>
             ))}
-            {filtered.length === 0 && (
+            {orders.length === 0 && (
               <div className="text-sm text-muted-foreground">
                 No orders match your filters.
               </div>
