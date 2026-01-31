@@ -303,22 +303,6 @@ export default function AdminUserMemberships() {
                                                     {f.description}
                                                   </div>
                                                 )}
-                                                <div className="text-xs">
-                                                  Remaining:{' '}
-                                                  {f.remainingCredits}
-                                                </div>
-                                                <div className="text-xs">
-                                                  Start:{' '}
-                                                  {new Date(
-                                                    f.startDate + 'Z'
-                                                  ).toLocaleString()}
-                                                </div>
-                                                <div className="text-xs">
-                                                  End:{' '}
-                                                  {new Date(
-                                                    f.endDate + 'Z'
-                                                  ).toLocaleString()}
-                                                </div>
                                               </div>
                                             ))}
                                           </div>

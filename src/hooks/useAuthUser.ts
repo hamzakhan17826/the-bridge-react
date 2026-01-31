@@ -1,13 +1,33 @@
 import { useAuthStore } from '../stores/authStore';
+import type { ActiveMembership } from '@/types/membership';
 
 export function useAuthUser() {
-  const { user, roles, isLoggedIn, isInitialized, setUser, setRoles } =
-    useAuthStore();
+  const {
+    user,
+    roles,
+    isLoggedIn,
+    isInitialized,
+    activeMemberships = [],
+    setUser,
+    setRoles,
+  } = useAuthStore();
 
   const normalizedRoles = roles.map((r) => r.toLowerCase());
   const isAdmin = normalizedRoles.includes('admin');
   const hasRole = (role: string) =>
     normalizedRoles.includes(role.toLowerCase());
+
+  const hasMembershipTier = (tierCode: string) =>
+    (activeMemberships as ActiveMembership[]).some(
+      (m) => m.tierCode?.toLowerCase() === tierCode.toLowerCase()
+    );
+
+  const hasFeature = (featureName: string) =>
+    (activeMemberships as ActiveMembership[]).some((m) =>
+      m.features?.some(
+        (f) => f.name?.toLowerCase() === featureName.toLowerCase()
+      )
+    );
 
   return {
     user,
@@ -16,6 +36,9 @@ export function useAuthUser() {
     isInitialized,
     isAdmin,
     hasRole,
+    activeMemberships,
+    hasMembershipTier,
+    hasFeature,
     setUser,
     setRoles,
   };

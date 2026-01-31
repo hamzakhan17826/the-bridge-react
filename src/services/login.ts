@@ -1,8 +1,7 @@
 import api from '../lib/api';
 import { setAuthCookies } from '../lib/auth';
 import { useAuthStore } from '../stores/authStore';
-import { fetchUserProfile } from './user-profile';
-import { getUserIdFromToken } from '../lib/utils';
+import { loadUserAndMemberships } from '@/lib/bootstrap';
 import type { LoginFormState, LoginPayload } from '../types/auth';
 
 export async function loginUser(
@@ -33,21 +32,8 @@ export async function loginUser(
 
       // rememberMe + refreshToken are handled via setAuthCookies above
 
-      // Fetch and store user profile in Zustand
-      try {
-        const userId = getUserIdFromToken();
-        if (userId) {
-          const profileResponse = await fetchUserProfile(userId);
-          if (profileResponse.success && profileResponse.data) {
-            useAuthStore
-              .getState()
-              .login(profileResponse.data, result.roles || []);
-          }
-        }
-      } catch (profileError) {
-        console.warn('Failed to load user profile after login:', profileError);
-        // Still proceed with login even if profile fetch fails
-      }
+      // Load user profile and active memberships in store
+      await loadUserAndMemberships();
 
       return {
         success: true,

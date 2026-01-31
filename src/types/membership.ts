@@ -130,9 +130,7 @@ export interface ActiveMembershipFeature {
   id: number;
   name: string;
   description: string;
-  remainingCredits: number;
-  startDate: string;
-  endDate: string;
+  displayOrder?: number;
 }
 
 // Admin: User Memberships listing

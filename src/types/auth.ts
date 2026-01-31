@@ -1,4 +1,5 @@
 import type { AppUserProfile } from './user';
+import type { ActiveMembership } from './membership';
 
 export type LoginFormState = {
   success: boolean;
@@ -57,12 +58,14 @@ export interface AuthState {
   roles: string[];
   isLoggedIn: boolean;
   isInitialized: boolean;
+  activeMemberships?: ActiveMembership[];
   login: (user: AppUserProfile, roles: string[]) => void;
   logout: () => void;
   setUser: (user: AppUserProfile) => void;
   setRoles: (roles: string[]) => void;
   setLoggedIn: (loggedIn: boolean) => void;
   setInitialized: (initialized: boolean) => void;
+  setActiveMemberships?: (memberships: ActiveMembership[]) => void;
 }
 
 export interface CookieOptions {

@@ -46,3 +46,45 @@ export function RequireAdmin({ children }: { children: ReactNode }) {
 
   return <>{children}</>;
 }
+
+export function RequireMembershipTier({
+  children,
+  tierCode,
+}: {
+  children: ReactNode;
+  tierCode: string;
+}) {
+  const location = useLocation();
+  const { isInitialized, isLoggedIn, hasMembershipTier } = useAuthUser();
+  if (!isInitialized) return null;
+  const allowed = isLoggedIn && hasMembershipTier(tierCode);
+  if (!allowed) {
+    const isInDashboard = location.pathname.startsWith('/dashboard');
+    const accessDeniedPath = isInDashboard
+      ? '/dashboard/access-denied'
+      : '/access-denied';
+    return <Navigate to={accessDeniedPath} replace />;
+  }
+  return <>{children}</>;
+}
+
+export function RequireFeature({
+  children,
+  featureName,
+}: {
+  children: ReactNode;
+  featureName: string;
+}) {
+  const location = useLocation();
+  const { isInitialized, isLoggedIn, hasFeature } = useAuthUser();
+  if (!isInitialized) return null;
+  const allowed = isLoggedIn && hasFeature(featureName);
+  if (!allowed) {
+    const isInDashboard = location.pathname.startsWith('/dashboard');
+    const accessDeniedPath = isInDashboard
+      ? '/dashboard/access-denied'
+      : '/access-denied';
+    return <Navigate to={accessDeniedPath} replace />;
+  }
+  return <>{children}</>;
+}
