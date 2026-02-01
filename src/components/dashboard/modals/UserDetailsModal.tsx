@@ -6,6 +6,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '../../ui/dialog';
+import { useCities, useCountries } from '../../../hooks/useLocation';
 import type { AppUsersBasicDataUser } from '../../../types/user';
 
 interface UserDetailsModalProps {
@@ -27,9 +28,18 @@ export default function UserDetailsModal({
   isLoadingClaims = false,
   isLoadingRoles = false,
 }: UserDetailsModalProps) {
+  const { data: countries = [] } = useCountries();
+  const { data: cities = [] } = useCities(user?.countryId ?? undefined);
+
+  const countryName = user?.countryId
+    ? countries.find((country) => country.id === user.countryId)?.name
+    : 'Unknown';
+  const cityName = user?.cityId
+    ? cities.find((city) => city.id === user.cityId)?.name
+    : 'Unknown';
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="max-h-[80vh] overflow-y-auto pr-2">
         <DialogHeader>
           <DialogTitle>User Details</DialogTitle>
           <DialogDescription>
@@ -39,6 +49,10 @@ export default function UserDetailsModal({
         </DialogHeader>
         {user && (
           <div className="space-y-4">
+            <div>
+              <label className="font-medium">User ID:</label>
+              <p>{user.id}</p>
+            </div>
             <div>
               <label className="font-medium">Name:</label>
               <p>
@@ -54,6 +68,12 @@ export default function UserDetailsModal({
             <div>
               <label className="font-medium">Username:</label>
               <p>{user.userName}</p>
+            </div>
+            <div>
+              <label className="font-medium">Security:</label>
+              <p>
+                {user.isLockoutEnabled ? 'Lockout enabled' : 'Lockout disabled'}
+              </p>
             </div>
             <div>
               <label className="font-medium">Status:</label>
@@ -77,6 +97,13 @@ export default function UserDetailsModal({
               </div>
             </div>
             <div>
+              <label className="font-medium">Date of Birth & Gender:</label>
+              <p>
+                {user.dateOfBirth || 'Not provided'} •{' '}
+                {user.gender || 'Not set'}
+              </p>
+            </div>
+            <div>
               <label className="font-medium">Registration Date:</label>
               <p>{new Date(user.registerDateTime + 'Z').toLocaleString()}</p>
             </div>
@@ -87,6 +114,21 @@ export default function UserDetailsModal({
                   ? new Date(user.lastLoginDateTime + 'Z').toLocaleString()
                   : 'Never'}
               </p>
+            </div>
+            <div>
+              <label className="font-medium">Location:</label>
+              <p>
+                {countryName !== 'Unknown' ? countryName : 'Country not set'} ·{' '}
+                {cityName !== 'Unknown' ? cityName : 'City not set'}
+              </p>
+            </div>
+            <div>
+              <label className="font-medium">Address:</label>
+              <p>
+                {user.addressLine1 || 'Address not provided'}
+                {user.addressLine2 ? `, ${user.addressLine2}` : ''}
+              </p>
+              <p>{user.postalCode || 'Postal code missing'}</p>
             </div>
             <div>
               <label className="font-medium">Claims:</label>

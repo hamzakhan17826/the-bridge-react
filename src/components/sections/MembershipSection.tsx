@@ -10,9 +10,14 @@ import {
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSubscriptionTiers } from '../../hooks/useMembership';
+import BillingToggle from '../BillingToggle';
+import { useState } from 'react';
 
 const MembershipSection = () => {
   const navigate = useNavigate();
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>(
+    'monthly'
+  );
   const { data: tiers, isLoading, error } = useSubscriptionTiers();
 
   // Sort tiers by displayOrder (service already provides fallback data)
@@ -108,11 +113,22 @@ const MembershipSection = () => {
             carefully crafted membership tiers.
           </p>
         </div>
+
+        <BillingToggle
+          billingCycle={billingCycle}
+          onChange={setBillingCycle}
+          className="pt-5!"
+        />
+
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {paidTiers.map((tier, index) => {
             const IconComponent = getTierIcon(tier.tierCode);
             const isPopular = isMostPopular(tier.tierCode);
             const previousTier = paidTiers[index - 1];
+            const monthlyPrice = Math.round(tier.basePrice);
+            const yearlyListPrice = Math.round(tier.basePrice * 12);
+            const yearlyDiscountPrice = Math.round(tier.basePrice * 12 * 0.83);
+            const yearlySavings = Math.round(tier.basePrice * 12 * 0.17);
 
             return (
               <div
@@ -165,12 +181,26 @@ const MembershipSection = () => {
 
                   {/* Pricing */}
                   <div className="flex items-baseline gap-2 mb-8">
+                    {billingCycle === 'yearly' && (
+                      <span className="relative text-2xl text-gray-400 font-lato inline-block">
+                        ${yearlyListPrice}
+                        <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-400 transform -rotate-12 origin-center"></div>
+                      </span>
+                    )}
                     <span className="text-4xl font-poppins font-bold text-gray-900">
-                      ${Math.floor(tier.basePrice)}
+                      $
+                      {billingCycle === 'monthly'
+                        ? monthlyPrice
+                        : yearlyDiscountPrice}
                     </span>
                     <span className="text-lg text-gray-500 font-lato">
-                      /month
+                      /{billingCycle === 'monthly' ? 'month' : 'year'}
                     </span>
+                    {billingCycle === 'yearly' && (
+                      <span className="text-sm text-green-600 font-medium">
+                        Save ${yearlySavings}
+                      </span>
+                    )}
                   </div>
 
                   {/* CTA Button */}

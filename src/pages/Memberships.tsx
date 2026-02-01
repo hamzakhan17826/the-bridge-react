@@ -12,6 +12,7 @@ import {
   Crown,
 } from 'lucide-react';
 import { useSubscriptionTiers } from '../hooks/useMembership';
+import BillingToggle from '../components/BillingToggle';
 
 const Memberships = () => {
   const navigate = useNavigate();
@@ -100,36 +101,7 @@ const Memberships = () => {
           </div>
         </section>
 
-        {/* Billing Toggle Section */}
-        <section className="pt-28 pb-20 bg-gray-50">
-          <div className="container mx-auto px-6 text-center">
-            <div className="inline-flex items-center gap-4 p-1 bg-white rounded-2xl border border-gray-200 shadow-sm">
-              <button
-                onClick={() => setBillingCycle('monthly')}
-                className={`px-6 py-3 rounded-xl font-poppins font-medium transition-all duration-200 ${
-                  billingCycle === 'monthly'
-                    ? 'bg-primary-500 text-white shadow-lg'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                Monthly
-              </button>
-              <button
-                onClick={() => setBillingCycle('yearly')}
-                className={`px-6 py-3 rounded-xl font-poppins font-medium transition-all duration-200 ${
-                  billingCycle === 'yearly'
-                    ? 'bg-primary-500 text-white shadow-lg'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                Yearly
-                <span className="ml-2 text-xs bg-green-500 text-white px-2 py-1 rounded-full">
-                  Save 17%
-                </span>
-              </button>
-            </div>
-          </div>
-        </section>
+        <BillingToggle billingCycle={billingCycle} onChange={setBillingCycle} />
 
         {/* Plans Section */}
         <section className="bg-gray-50">
