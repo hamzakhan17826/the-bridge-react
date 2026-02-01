@@ -23,8 +23,16 @@ export type MediumProfileFormData = {
   Slug?: string;
   AvailabilityStatus: AvailabilityStatusType;
   Bio?: string;
-  Philosophy?: string;
   ExperienceInYears?: number;
+  IsBookingEnabled?: boolean;
+  FocusAreaTitle1?: string;
+  FocusAreaDetails1?: string;
+  FocusAreaTitle2?: string;
+  FocusAreaDetails2?: string;
+  FocusAreaTitle3?: string;
+  FocusAreaDetails3?: string;
+  FocusAreaTitle4?: string;
+  FocusAreaDetails4?: string;
 };
 
 export type MediumProfileResponse = {
@@ -38,12 +46,14 @@ export type MediumProfileResponse = {
   bio: string;
   photoUrl: string;
   experienceInYears: number;
-  mediumFocusAreas: {
-    id: number;
-    mediumId: string;
-    title: string;
-    details: string;
-  }[];
+  focusAreaTitle1?: string;
+  focusAreaDetails1?: string;
+  focusAreaTitle2?: string;
+  focusAreaDetails2?: string;
+  focusAreaTitle3?: string;
+  focusAreaDetails3?: string;
+  focusAreaTitle4?: string;
+  focusAreaDetails4?: string;
 };
 
 export function useMediumProfile() {
@@ -78,7 +88,8 @@ export function useMediumProfile() {
 
       // Determine if this is an update (PUT) or create (POST)
       const isUpdate = !!existingProfile;
-      const method = isUpdate ? 'put' : 'post';
+      // Backend currently supports POST for create/update (PUT returns 405)
+      const method = 'post';
 
       // For updates, include the ID
       if (isUpdate && existingProfile) {
@@ -98,6 +109,13 @@ export function useMediumProfile() {
     },
     onError: (error: AxiosError) => {
       console.error('Medium profile operation error:', error);
+      if (error?.response) {
+        console.error('Medium profile error response:', {
+          status: error.response.status,
+          data: error.response.data,
+          headers: error.response.headers,
+        });
+      }
       const isUpdate = !!existingProfile;
       const operation = isUpdate ? 'update' : 'register';
       let errorMessage = `Failed to ${operation} medium profile`;
@@ -145,8 +163,16 @@ export function useMediumProfile() {
         AvailabilityStatus:
           profile.availabilityStatus as AvailabilityStatusType,
         Bio: profile.bio,
-        Philosophy: '', // Not available in GET response
         ExperienceInYears: profile.experienceInYears,
+        IsBookingEnabled: profile.isBookingEnabled,
+        FocusAreaTitle1: profile.focusAreaTitle1,
+        FocusAreaDetails1: profile.focusAreaDetails1,
+        FocusAreaTitle2: profile.focusAreaTitle2,
+        FocusAreaDetails2: profile.focusAreaDetails2,
+        FocusAreaTitle3: profile.focusAreaTitle3,
+        FocusAreaDetails3: profile.focusAreaDetails3,
+        FocusAreaTitle4: profile.focusAreaTitle4,
+        FocusAreaDetails4: profile.focusAreaDetails4,
       };
     },
     []

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
   SelectContent,
@@ -30,14 +31,27 @@ export default function MediumProfileForm() {
       Slug: '',
       AvailabilityStatus: AvailabilityStatus.Available,
       Bio: '',
-      Philosophy: '',
       ExperienceInYears: undefined,
+      IsBookingEnabled: false,
+      FocusAreaTitle1: '',
+      FocusAreaDetails1: '',
+      FocusAreaTitle2: '',
+      FocusAreaDetails2: '',
+      FocusAreaTitle3: '',
+      FocusAreaDetails3: '',
+      FocusAreaTitle4: '',
+      FocusAreaDetails4: '',
     },
   });
 
   const availabilityStatus = useWatch({
     control: form.control,
     name: 'AvailabilityStatus',
+  });
+
+  const isBookingEnabled = useWatch({
+    control: form.control,
+    name: 'IsBookingEnabled',
   });
 
   const hasPopulatedForm = useRef(false);
@@ -229,14 +243,41 @@ export default function MediumProfileForm() {
               />
             </div>
 
-            <div>
-              <Label htmlFor="Philosophy">Philosophy</Label>
-              <Textarea
-                id="Philosophy"
-                {...form.register('Philosophy')}
-                placeholder="Share your spiritual philosophy or approach"
-                rows={4}
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="IsBookingEnabled"
+                checked={!!isBookingEnabled}
+                onCheckedChange={(checked) =>
+                  form.setValue('IsBookingEnabled', checked === true)
+                }
               />
+              <Label htmlFor="IsBookingEnabled">Enable bookings</Label>
+            </div>
+
+            <div>
+              <Label>Focus Areas (Optional)</Label>
+              <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                {(
+                  [
+                    { title: 'FocusAreaTitle1', details: 'FocusAreaDetails1' },
+                    { title: 'FocusAreaTitle2', details: 'FocusAreaDetails2' },
+                    { title: 'FocusAreaTitle3', details: 'FocusAreaDetails3' },
+                    { title: 'FocusAreaTitle4', details: 'FocusAreaDetails4' },
+                  ] as const
+                ).map((field, index) => (
+                  <div key={field.title} className="space-y-2">
+                    <Input
+                      {...form.register(field.title)}
+                      placeholder={`Focus Area ${index + 1} Title`}
+                    />
+                    <Textarea
+                      {...form.register(field.details)}
+                      placeholder={`Focus Area ${index + 1} Details`}
+                      rows={3}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </CardContent>
         </Card>
