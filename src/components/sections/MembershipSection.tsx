@@ -166,7 +166,7 @@ const MembershipSection = () => {
                   {/* Pricing */}
                   <div className="flex items-baseline gap-2 mb-8">
                     <span className="text-4xl font-poppins font-bold text-gray-900">
-                      ${tier.basePrice}
+                      ${Math.floor(tier.basePrice)}
                     </span>
                     <span className="text-lg text-gray-500 font-lato">
                       /month

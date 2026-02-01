@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet-async';
 import { Search, Filter, Users, Sparkles } from 'lucide-react';
 import { MediumCard } from '../components/sections';
 import { Button, Input } from '../components/ui';
-import type { Medium } from '../types/medium';
 
 const Mediums = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -11,7 +10,7 @@ const Mediums = () => {
   const [selectedAvailability, setSelectedAvailability] = useState('all');
 
   // Expanded mock data with more mediums
-  const mediums: Medium[] = [
+  const mediums = [
     {
       id: '1',
       name: 'Sarah Johnson',
@@ -20,18 +19,13 @@ const Mediums = () => {
       specialty: 'Evidential Medium',
       tagline: 'Bridging hearts through spirit evidence',
       focus: ['Spirit Communication', 'Healing', 'Evidence'],
-      ratingAverage: 4.8,
-      ratingCount: 127,
-      bookingEnabled: true,
+      averageRating: 4.8,
+      totalReviews: 127,
+      isBookingEnabled: true,
       slug: 'sarah-johnson',
       availabilityStatus: 'available',
-      nextEvent: {
-        title: 'Platform Demonstration',
-        date: 'Jan 15, 2025',
-        time: '7:00 PM EST',
-      },
-      videoCount: 24,
-      experience: '12+ years',
+      totalVideos: 24,
+      experienceInYears: '12+ years',
     },
     {
       id: '2',
@@ -41,18 +35,13 @@ const Mediums = () => {
       specialty: 'Trance Medium',
       tagline: 'Direct voice communication with spirit',
       focus: ['Trance Work', 'Direct Voice', 'Spirit Guides'],
-      ratingAverage: 4.9,
-      ratingCount: 89,
-      bookingEnabled: true,
+      averageRating: 4.9,
+      totalReviews: 89,
+      isBookingEnabled: true,
       slug: 'michael-chen',
       availabilityStatus: 'upcoming-events',
-      nextEvent: {
-        title: 'Trance Workshop',
-        date: 'Jan 20, 2025',
-        time: '2:00 PM EST',
-      },
-      videoCount: 18,
-      experience: '15+ years',
+      totalVideos: 18,
+      experienceInYears: '15+ years',
     },
     {
       id: '3',
@@ -62,18 +51,13 @@ const Mediums = () => {
       specialty: 'Spiritual Medium',
       tagline: 'Healing through spiritual connection',
       focus: ['Spiritual Healing', 'Energy Work', 'Guidance'],
-      ratingAverage: 4.7,
-      ratingCount: 156,
-      bookingEnabled: true,
+      averageRating: 4.7,
+      totalReviews: 156,
+      isBookingEnabled: true,
       slug: 'elena-rodriguez',
       availabilityStatus: 'guest-medium',
-      nextEvent: {
-        title: 'Mental Mediumship Circle',
-        date: 'Jan 25, 2025',
-        time: '6:30 PM EST',
-      },
-      videoCount: 31,
-      experience: '10+ years',
+      totalVideos: 31,
+      experienceInYears: '10+ years',
     },
     {
       id: '4',
@@ -83,18 +67,13 @@ const Mediums = () => {
       specialty: 'Physical Medium',
       tagline: 'Manifesting spirit through physical phenomena',
       focus: ['Physical Mediumship', 'Materialization', 'Energy'],
-      ratingAverage: 4.6,
-      ratingCount: 98,
-      bookingEnabled: true,
+      averageRating: 4.6,
+      totalReviews: 98,
+      isBookingEnabled: true,
       slug: 'david-thompson',
       availabilityStatus: 'busy',
-      nextEvent: {
-        title: 'Physical Mediumship Demo',
-        date: 'Feb 5, 2025',
-        time: '8:00 PM EST',
-      },
-      videoCount: 15,
-      experience: '18+ years',
+      totalVideos: 15,
+      experienceInYears: '18+ years',
     },
     {
       id: '5',
@@ -104,18 +83,13 @@ const Mediums = () => {
       specialty: 'Mental Medium',
       tagline: 'Clear mental mediumship with precision',
       focus: ['Mental Mediumship', 'Clairvoyance', 'Clairaudience'],
-      ratingAverage: 4.9,
-      ratingCount: 203,
-      bookingEnabled: true,
+      averageRating: 4.9,
+      totalReviews: 203,
+      isBookingEnabled: true,
       slug: 'lisa-park',
       availabilityStatus: 'available',
-      nextEvent: {
-        title: 'Mental Mediumship Circle',
-        date: 'Jan 25, 2025',
-        time: '6:30 PM EST',
-      },
-      videoCount: 42,
-      experience: '8+ years',
+      totalVideos: 42,
+      experienceInYears: '8+ years',
     },
     {
       id: '6',
@@ -125,18 +99,13 @@ const Mediums = () => {
       specialty: 'Healing Medium',
       tagline: 'Restoring balance through spiritual healing',
       focus: ['Spiritual Healing', 'Energy Healing', 'Therapy'],
-      ratingAverage: 4.8,
-      ratingCount: 145,
-      bookingEnabled: true,
+      averageRating: 4.8,
+      totalReviews: 145,
+      isBookingEnabled: true,
       slug: 'james-wilson',
       availabilityStatus: 'available',
-      nextEvent: {
-        title: 'Healing Workshop',
-        date: 'Feb 10, 2025',
-        time: '3:00 PM EST',
-      },
-      videoCount: 28,
-      experience: '14+ years',
+      totalVideos: 28,
+      experienceInYears: '14+ years',
     },
     {
       id: '7',
@@ -146,18 +115,13 @@ const Mediums = () => {
       specialty: 'Intuitive Medium',
       tagline: 'Connecting souls through intuition and love',
       focus: ['Intuition', 'Soul Connection', 'Love & Light'],
-      ratingAverage: 4.7,
-      ratingCount: 112,
-      bookingEnabled: true,
+      averageRating: 4.7,
+      totalReviews: 112,
+      isBookingEnabled: true,
       slug: 'maria-santos',
       availabilityStatus: 'upcoming-events',
-      nextEvent: {
-        title: 'Intuition Development',
-        date: 'Feb 15, 2025',
-        time: '5:00 PM EST',
-      },
-      videoCount: 19,
-      experience: '11+ years',
+      totalVideos: 19,
+      experienceInYears: '11+ years',
     },
     {
       id: '8',
@@ -167,18 +131,13 @@ const Mediums = () => {
       specialty: 'Channeling Medium',
       tagline: 'Bringing forth wisdom from higher realms',
       focus: ['Channeling', 'Higher Wisdom', 'Spiritual Guidance'],
-      ratingAverage: 4.5,
-      ratingCount: 87,
-      bookingEnabled: true,
+      averageRating: 4.5,
+      totalReviews: 87,
+      isBookingEnabled: true,
       slug: 'robert-kim',
       availabilityStatus: 'guest-medium',
-      nextEvent: {
-        title: 'Channeling Session',
-        date: 'Feb 20, 2025',
-        time: '7:30 PM EST',
-      },
-      videoCount: 22,
-      experience: '16+ years',
+      totalVideos: 22,
+      experienceInYears: '16+ years',
     },
     {
       id: '9',
@@ -188,18 +147,13 @@ const Mediums = () => {
       specialty: 'Animal Medium',
       tagline: 'Communicating with our animal companions',
       focus: ['Animal Communication', 'Pet Mediumship', 'Animal Healing'],
-      ratingAverage: 4.9,
-      ratingCount: 178,
-      bookingEnabled: true,
+      averageRating: 4.9,
+      totalReviews: 178,
+      isBookingEnabled: true,
       slug: 'amanda-foster',
       availabilityStatus: 'available',
-      nextEvent: {
-        title: 'Animal Mediumship Workshop',
-        date: 'Feb 25, 2025',
-        time: '2:00 PM EST',
-      },
-      videoCount: 35,
-      experience: '9+ years',
+      totalVideos: 35,
+      experienceInYears: '9+ years',
     },
     {
       id: '10',
@@ -209,18 +163,13 @@ const Mediums = () => {
       specialty: 'Medical Medium',
       tagline: 'Healing insights from the spirit world',
       focus: ['Medical Intuition', 'Health Guidance', 'Healing Energy'],
-      ratingAverage: 4.6,
-      ratingCount: 134,
-      bookingEnabled: true,
+      averageRating: 4.6,
+      totalReviews: 134,
+      isBookingEnabled: true,
       slug: 'thomas-brown',
       availabilityStatus: 'busy',
-      nextEvent: {
-        title: 'Medical Mediumship Seminar',
-        date: 'Mar 1, 2025',
-        time: '6:00 PM EST',
-      },
-      videoCount: 27,
-      experience: '13+ years',
+      totalVideos: 27,
+      experienceInYears: '13+ years',
     },
     {
       id: '11',
@@ -230,18 +179,13 @@ const Mediums = () => {
       specialty: 'Crystal Medium',
       tagline: 'Crystal energy and spiritual connection',
       focus: ['Crystal Healing', 'Energy Work', 'Crystal Readings'],
-      ratingAverage: 4.8,
-      ratingCount: 156,
-      bookingEnabled: true,
+      averageRating: 4.8,
+      totalReviews: 156,
+      isBookingEnabled: true,
       slug: 'sophia-patel',
       availabilityStatus: 'available',
-      nextEvent: {
-        title: 'Crystal Healing Circle',
-        date: 'Mar 5, 2025',
-        time: '4:00 PM EST',
-      },
-      videoCount: 31,
-      experience: '10+ years',
+      totalVideos: 31,
+      experienceInYears: '10+ years',
     },
     {
       id: '12',
@@ -251,18 +195,13 @@ const Mediums = () => {
       specialty: 'Shamanic Medium',
       tagline: 'Ancient wisdom for modern healing',
       focus: ['Shamanic Practices', 'Ancestral Wisdom', 'Ritual Work'],
-      ratingAverage: 4.7,
-      ratingCount: 92,
-      bookingEnabled: true,
+      averageRating: 4.7,
+      totalReviews: 92,
+      isBookingEnabled: true,
       slug: 'marcus-johnson',
       availabilityStatus: 'upcoming-events',
-      nextEvent: {
-        title: 'Shamanic Journey Workshop',
-        date: 'Mar 10, 2025',
-        time: '1:00 PM EST',
-      },
-      videoCount: 18,
-      experience: '17+ years',
+      totalVideos: 18,
+      experienceInYears: '17+ years',
     },
   ];
 
@@ -303,7 +242,7 @@ const Mediums = () => {
         <title>Our Mediums - The Bridge</title>
         <meta
           name="description"
-          content="Connect with experienced spiritual mediums. Browse profiles, read reviews, and book sessions with our community of gifted practitioners."
+          content="Connect with experienceInYearsd spiritual mediums. Browse profiles, read reviews, and book sessions with our community of gifted practitioners."
         />
       </Helmet>
 
@@ -322,8 +261,8 @@ const Mediums = () => {
               Guides
             </h1>
             <p className="text-lg md:text-xl text-gray-300 font-lato max-w-3xl mx-auto">
-              Connect with experienced mediums dedicated to clarity, compassion,
-              and spiritual connection.
+              Connect with experienceInYearsd mediums dedicated to clarity,
+              compassion, and spiritual connection.
             </p>
           </div>
         </section>
@@ -415,8 +354,8 @@ const Mediums = () => {
                   Ready to Connect?
                 </h2>
                 <p className="text-lg text-gray-600 font-lato mb-8">
-                  Book a session with one of our experienced mediums and begin
-                  your journey of spiritual discovery.
+                  Book a session with one of our experienceInYearsd mediums and
+                  begin your journey of spiritual discovery.
                 </p>
                 <Button
                   size="lg"

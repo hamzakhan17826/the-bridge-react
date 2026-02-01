@@ -15,12 +15,12 @@ import {
 } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
-import {
-  useMediumProfile,
-  type MediumProfileFormData,
-  AvailabilityStatus,
-  type AvailabilityStatusType,
-} from '../../../hooks/useMediumProfile';
+import type {
+  AvailabilityStatusType,
+  MediumProfileFormData,
+} from '../../../types/medium';
+import { AvailabilityStatus } from '../../../constants/enums';
+import { useMediumProfile } from '../../../hooks/useMediumProfile';
 
 export default function MediumProfileForm() {
   const form = useForm<MediumProfileFormData>({
@@ -117,7 +117,7 @@ export default function MediumProfileForm() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="Specialty">Specialty *</Label>
+                <Label htmlFor="Specialty">Speciality *</Label>
                 <Input
                   id="Specialty"
                   {...form.register('Specialty', {

@@ -1,9 +1,8 @@
 import { Star, Video, Award, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage, Button, Badge } from '../ui';
-import type { Medium } from '../../types/medium';
 
-function MediumCard({ medium }: { medium: Medium }) {
+function MediumCard({ medium }: { medium: any }) {
   const renderStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -32,7 +31,7 @@ function MediumCard({ medium }: { medium: Medium }) {
     return stars;
   };
 
-  const getAvailabilityBadge = (status: Medium['availabilityStatus']) => {
+  const getAvailabilityBadge = (status: any) => {
     switch (status) {
       case 'available':
         return (
@@ -92,7 +91,7 @@ function MediumCard({ medium }: { medium: Medium }) {
             <AvatarFallback className="text-xl font-semibold bg-linear-to-r from-primary-100 to-secondary-100">
               {medium.name
                 .split(' ')
-                .map((n) => n[0])
+                .map((any) => any[0])
                 .join('')}
             </AvatarFallback>
           </Avatar>
@@ -112,20 +111,20 @@ function MediumCard({ medium }: { medium: Medium }) {
       <div className="flex items-center justify-center gap-4 mb-4">
         <div className="flex items-center gap-1 text-sm text-gray-600">
           <Award className="w-4 h-4 text-primary-500" />
-          <span>{medium.experience}</span>
+          <span>{medium.experienceInYears}</span>
         </div>
         <div className="flex items-center gap-1 text-sm text-gray-600">
           <Video className="w-4 h-4 text-secondary-500" />
-          <span>{medium.videoCount} videos</span>
+          <span>{medium.totalVideos} videos</span>
         </div>
       </div>
 
       {/* Focus Areas */}
       <div className="mb-4">
         <div className="flex flex-wrap gap-1 justify-center">
-          {medium.focus.slice(0, 3).map((focus, index) => (
+          {medium.focus.slice(0, 3).map((any, index) => (
             <Badge key={index} variant="outline" className="text-xs px-2 py-1">
-              {focus}
+              {any}
             </Badge>
           ))}
         </div>
@@ -153,10 +152,10 @@ function MediumCard({ medium }: { medium: Medium }) {
       {/* Star Rating */}
       <div className="flex items-center justify-center gap-2 mb-6">
         <div className="flex items-center gap-0.5">
-          {renderStars(medium.ratingAverage)}
+          {renderStars(medium.averageRating)}
         </div>
         <span className="text-sm text-gray-600 font-medium">
-          {medium.ratingAverage} ({medium.ratingCount} reviews)
+          {medium.averageRating} ({medium.totalReviews} reviews)
         </span>
       </div>
 
@@ -177,7 +176,7 @@ function MediumCard({ medium }: { medium: Medium }) {
           </Link>
         </Button>
 
-        {medium.bookingEnabled && (
+        {medium.isBookingEnabled && (
           <Button
             asChild
             size="sm"

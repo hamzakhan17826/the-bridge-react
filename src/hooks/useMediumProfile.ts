@@ -3,58 +3,11 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 import api from '../lib/api';
-
-export const AvailabilityStatus = {
-  Available: 0,
-  Upcoming_Events: 1,
-  Book_Reading: 2,
-  Private_Sessions_Only: 3,
-  Unavailable: 4,
-  Public_Sessions_Only: 5,
-} as const;
-
-export type AvailabilityStatusType =
-  (typeof AvailabilityStatus)[keyof typeof AvailabilityStatus];
-
-export type MediumProfileFormData = {
-  Specialty: string;
-  Tagline: string;
-  Focus: string;
-  Slug?: string;
-  AvailabilityStatus: AvailabilityStatusType;
-  Bio?: string;
-  ExperienceInYears?: number;
-  IsBookingEnabled?: boolean;
-  FocusAreaTitle1?: string;
-  FocusAreaDetails1?: string;
-  FocusAreaTitle2?: string;
-  FocusAreaDetails2?: string;
-  FocusAreaTitle3?: string;
-  FocusAreaDetails3?: string;
-  FocusAreaTitle4?: string;
-  FocusAreaDetails4?: string;
-};
-
-export type MediumProfileResponse = {
-  id: string;
-  isBookingEnabled: boolean;
-  specialty: string;
-  tagline: string;
-  focus: string;
-  slug: string;
-  availabilityStatus: number;
-  bio: string;
-  photoUrl: string;
-  experienceInYears: number;
-  focusAreaTitle1?: string;
-  focusAreaDetails1?: string;
-  focusAreaTitle2?: string;
-  focusAreaDetails2?: string;
-  focusAreaTitle3?: string;
-  focusAreaDetails3?: string;
-  focusAreaTitle4?: string;
-  focusAreaDetails4?: string;
-};
+import type {
+  AvailabilityStatusType,
+  MediumProfileFormData,
+  MediumProfileResponse,
+} from '../types/medium';
 
 export function useMediumProfile() {
   const [mediumProfile, setMediumProfile] =

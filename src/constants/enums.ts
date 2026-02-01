@@ -31,3 +31,15 @@ export const PaymentProcessor = {
 export type PaymentProcessorKey = keyof typeof PaymentProcessor;
 export type PaymentProcessorValue =
   (typeof PaymentProcessor)[PaymentProcessorKey];
+
+export const AvailabilityStatus = {
+  Available: 0,
+  Upcoming_Events: 1,
+  Book_Reading: 2,
+  Private_Sessions_Only: 3,
+  Unavailable: 4,
+  Public_Sessions_Only: 5,
+} as const;
+export type AvailabilityStatusKey = keyof typeof AvailabilityStatus;
+export type AvailabilityStatusValue =
+  (typeof AvailabilityStatus)[AvailabilityStatusKey];
