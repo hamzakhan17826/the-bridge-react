@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Select from 'react-select';
 import type { StylesConfig } from 'react-select';
 import SubmitButton from '../components/ui/SubmitButton';
@@ -84,6 +84,19 @@ export default function RegisterPage() {
     value: pref.emailPreferencesID,
     label: pref.displayName,
   }));
+  const [selectedPreferences, setSelectedPreferences] = useState<Opt<string>[]>(
+    []
+  );
+
+  // initialize selected preferences once when options first arrive
+  const didInitPrefs = useRef(false);
+  useEffect(() => {
+    if (!didInitPrefs.current && preferenceOptions.length) {
+      setSelectedPreferences(preferenceOptions);
+      didInitPrefs.current = true;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preferenceOptions]);
   const countryOptions: Opt<number>[] = countries.map((c) => ({
     value: c.id,
     label: c.name,
@@ -118,7 +131,7 @@ export default function RegisterPage() {
       isUserAgeedToTerms: fd.get('isUserAgeedToTerms') === 'on',
       countryId: selectedCountry?.value ?? 0,
       cityId: selectedCity?.value ?? 0,
-      selectedEmailPreferences: preferenceOptions.map((p) => p.value),
+      selectedEmailPreferences: selectedPreferences.map((p) => p.value),
     };
     registerMutation.mutate(payload, {
       onSuccess: () => {
@@ -347,7 +360,10 @@ export default function RegisterPage() {
               <Select<Opt<string>, true>
                 isMulti
                 options={preferenceOptions}
-                value={preferenceOptions} // Pre-select all preferences
+                value={selectedPreferences}
+                onChange={(opts) =>
+                  setSelectedPreferences(opts as Opt<string>[])
+                }
                 placeholder="Select email preferences..."
                 classNamePrefix="select"
                 isLoading={prefsLoading}
