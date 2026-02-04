@@ -1,6 +1,8 @@
-export interface ApiResponse<T> {
-  data: T;
+export interface ApiResponse<T = any> {
+  result: boolean;
   message: string;
+  errors: string[] | null;
+  data?: T;
 }
 
 export interface FormState {

@@ -20,6 +20,7 @@ export { default as Books } from './Books';
 export { default as Memberships } from './Memberships';
 export { default as AboutUs } from './AboutUs';
 export { default as Events } from './Events';
+export { default as CreateEvent } from './CreateEvent';
 export { default as AccessDenied } from './AccessDenied';
 
 // Dashboard pages

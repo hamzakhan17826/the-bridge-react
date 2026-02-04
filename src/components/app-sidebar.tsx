@@ -4,6 +4,7 @@ import * as React from 'react';
 import {
   AudioWaveform,
   Bot,
+  Calendar,
   Command,
   GalleryVerticalEnd,
   Settings2,
@@ -23,7 +24,9 @@ import {
 import { useAuthUser } from '@/hooks/useAuthUser';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user: authUser, isAdmin } = useAuthUser();
+  const { user: authUser, isAdmin, hasRole } = useAuthUser();
+  const isPM = hasRole('ProfessionalMedium');
+  const canCreateEvent = isAdmin || isPM;
 
   // Create user object from auth store
   const user = authUser
@@ -116,6 +119,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           { title: 'Payout', url: '/dashboard/pm/payout' },
         ],
       },
+      ...(canCreateEvent
+        ? [
+            {
+              title: 'Events',
+              url: '/dashboard/events/create',
+              icon: Calendar,
+              items: [
+                {
+                  title: 'Create Event',
+                  url: '/dashboard/events/create',
+                },
+              ],
+            },
+          ]
+        : []),
       ...(isAdmin
         ? [
             {
