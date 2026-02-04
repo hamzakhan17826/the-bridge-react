@@ -9,7 +9,7 @@ import {
 } from '../services/medium';
 import type {
   AvailabilityStatusType,
-  Mediums,
+  Medium,
   MediumProfileFormData,
   MediumProfileResponse,
 } from '../types/medium';
@@ -119,7 +119,7 @@ export function useMediumProfile() {
 }
 
 export function useMediums(mediumId?: string) {
-  return useQuery<Mediums[]>({
+  return useQuery<Medium[]>({
     queryKey: ['mediums', mediumId ?? 'all'],
     queryFn: () => fetchMediums(mediumId),
     retry: 1,

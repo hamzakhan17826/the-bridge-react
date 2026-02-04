@@ -2,7 +2,7 @@ import api from '../lib/api';
 import type {
   MediumProfileFormData,
   MediumProfileResponse,
-  Mediums,
+  Medium,
 } from '../types/medium';
 
 export const fetchMediumProfile = async (): Promise<MediumProfileResponse> => {
@@ -30,7 +30,7 @@ export const upsertMediumProfile = async (
   return response.data;
 };
 
-export const fetchMediums = async (mediumId?: string): Promise<Mediums[]> => {
+export const fetchMediums = async (mediumId?: string): Promise<Medium[]> => {
   const response = await api.get('/Medium/Mediums', {
     params: mediumId ? { mediumId } : undefined,
   });

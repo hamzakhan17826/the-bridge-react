@@ -1,9 +1,8 @@
 import type { AvailabilityStatus } from '../constants/enums';
 
-export interface Mediums {
+export interface Medium {
   id: string;
   userId: string;
-  // New backend-provided user display fields
   firstName?: string;
   lastName?: string;
   userName?: string;

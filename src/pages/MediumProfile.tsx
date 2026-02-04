@@ -21,208 +21,118 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
+import { AvailabilityStatus } from '../constants/enums';
+import type { Medium } from '../types/medium';
+import { useMediums } from '../hooks/useMedium';
 
-// Extended Medium Profile interface
-interface MediumProfile {
-  id: string;
-  name: string;
-  photoUrl: string;
-  specialty: string;
-  tagline: string;
-  bio: string;
-  experience: string;
-  experienceYears: number;
-  sessionCount: number;
-  ratingAverage: number;
-  ratingCount: number;
-  videoCount: number;
-  focus: Array<{
-    name: string;
-    description: string;
-  }>;
-  availabilityStatus: 'available' | 'upcoming-events' | 'guest-medium' | 'busy';
-  upcomingEvents: Array<{
-    id: string;
-    title: string;
-    date: string;
-    time: string;
-    location: string;
-    type: 'live' | 'virtual' | 'workshop';
-  }>;
-  videos: Array<{
-    id: string;
-    title: string;
-    thumbnail: string;
-    duration: string;
-    views: number;
-    uploadDate: string;
-  }>;
-  reviews: Array<{
-    id: string;
-    userName: string;
-    userAvatar: string;
-    rating: number;
-    comment: string;
-    date: string;
-  }>;
-  pricing: {
-    singleSession: number;
-    package3: number;
-    package5: number;
-  };
-  contact: {
-    email: string;
-    phone?: string;
-  };
-  socialLinks: {
-    website?: string;
-    instagram?: string;
-    youtube?: string;
-  };
-}
+// Static placeholder content (non-dynamic for now)
+const staticUpcomingEvents = [
+  {
+    id: '1',
+    title: 'Live Demonstration - Spirit Communication',
+    date: '2024-01-15',
+    time: '7:00 PM EST',
+    location: 'Online',
+    type: 'live' as const,
+  },
+  {
+    id: '2',
+    title: 'Mediumship Workshop - Developing Your Gifts',
+    date: '2024-01-22',
+    time: '10:00 AM EST',
+    location: 'New York, NY',
+    type: 'workshop' as const,
+  },
+  {
+    id: '3',
+    title: 'Private Reading Session',
+    date: '2024-01-18',
+    time: '2:00 PM EST',
+    location: 'Virtual',
+    type: 'virtual' as const,
+  },
+];
 
-// Mock data for demonstration
-const mockMediumProfile: MediumProfile = {
-  id: '1',
-  name: 'Sarah Mitchell',
-  photoUrl: '/images/team/11.jpg',
-  specialty: 'Evidential Medium',
-  tagline: 'Bridging hearts through spirit communication',
-  bio: 'Sarah Mitchell is a renowned evidential medium with over 15 years of experience connecting people with their loved ones in spirit. Her compassionate approach and dedication to providing clear, specific evidence have touched thousands of lives worldwide.',
-  experience: '15+ years',
-  experienceYears: 15,
-  sessionCount: 2500,
-  ratingAverage: 4.9,
-  ratingCount: 487,
-  videoCount: 45,
-  focus: [
-    {
-      name: 'Spirit Communication',
-      description:
-        'Connecting with loved ones who have passed, providing specific evidence of their continued presence.',
-    },
-    {
-      name: 'Grief Healing',
-      description:
-        'Supporting individuals through the grieving process with compassionate spiritual guidance.',
-    },
-    {
-      name: 'Evidence-Based Mediumship',
-      description:
-        'Delivering clear, verifiable information from spirit to validate the connection.',
-    },
-    {
-      name: 'Spiritual Development',
-      description:
-        'Mentoring developing mediums and helping others strengthen their own spiritual awareness.',
-    },
-  ],
-  availabilityStatus: 'available',
-  upcomingEvents: [
-    {
-      id: '1',
-      title: 'Live Demonstration - Spirit Communication',
-      date: '2024-01-15',
-      time: '7:00 PM EST',
-      location: 'Online',
-      type: 'live',
-    },
-    {
-      id: '2',
-      title: 'Mediumship Workshop - Developing Your Gifts',
-      date: '2024-01-22',
-      time: '10:00 AM EST',
-      location: 'New York, NY',
-      type: 'workshop',
-    },
-    {
-      id: '3',
-      title: 'Private Reading Session',
-      date: '2024-01-18',
-      time: '2:00 PM EST',
-      location: 'Virtual',
-      type: 'virtual',
-    },
-  ],
-  videos: [
-    {
-      id: '1',
-      title: 'Understanding Spirit Communication',
-      thumbnail: '/images/podcasts/carousel/1.jpg',
-      duration: '24:35',
-      views: 12500,
-      uploadDate: '2023-12-01',
-    },
-    {
-      id: '2',
-      title: 'Evidence in Mediumship Readings',
-      thumbnail: '/images/podcasts/carousel/2.jpg',
-      duration: '31:42',
-      views: 8900,
-      uploadDate: '2023-11-15',
-    },
-    {
-      id: '3',
-      title: 'Healing Through Spirit Connection',
-      thumbnail: '/images/podcasts/carousel/3.jpg',
-      duration: '28:17',
-      views: 15600,
-      uploadDate: '2023-10-28',
-    },
-  ],
-  reviews: [
-    {
-      id: '1',
-      userName: 'Maria Rodriguez',
-      userAvatar: '/images/team/2.jpg',
-      rating: 5,
-      comment:
-        'Sarah provided incredible evidence from my grandmother. Details only she would know. Life-changing experience.',
-      date: '2023-12-10',
-    },
-    {
-      id: '2',
-      userName: 'James Wilson',
-      userAvatar: '/images/team/3.jpg',
-      rating: 5,
-      comment:
-        "Compassionate and professional. The reading brought me peace I've been seeking for years.",
-      date: '2023-11-28',
-    },
-    {
-      id: '3',
-      userName: 'Lisa Chen',
-      userAvatar: '/images/team/4.jpg',
-      rating: 5,
-      comment:
-        "Sarah's accuracy is remarkable. She connected me with my father and provided specific memories we shared.",
-      date: '2023-11-15',
-    },
-  ],
-  pricing: {
-    singleSession: 150,
-    package3: 400,
-    package5: 650,
+const staticVideos = [
+  {
+    id: '1',
+    title: 'Understanding Spirit Communication',
+    thumbnail: '/images/podcasts/carousel/1.jpg',
+    duration: '24:35',
+    views: 12500,
+    uploadDate: '2023-12-01',
   },
-  contact: {
-    email: 'sarah@thebridge.com',
-    phone: '+1 (555) 123-4567',
+  {
+    id: '2',
+    title: 'Evidence in Mediumship Readings',
+    thumbnail: '/images/podcasts/carousel/2.jpg',
+    duration: '31:42',
+    views: 8900,
+    uploadDate: '2023-11-15',
   },
-  socialLinks: {
-    website: 'https://sarahmitchellmedium.com',
-    instagram: '@sarahmitchellmedium',
-    youtube: '@SarahMitchellMedium',
+  {
+    id: '3',
+    title: 'Healing Through Spirit Connection',
+    thumbnail: '/images/podcasts/carousel/3.jpg',
+    duration: '28:17',
+    views: 15600,
+    uploadDate: '2023-10-28',
   },
+];
+
+const staticReviews = [
+  {
+    id: '1',
+    userName: 'Maria Rodriguez',
+    userAvatar: '/images/team/2.jpg',
+    rating: 5,
+    comment:
+      'Amazing session and very comforting. I received real clarity and peace.',
+    date: '2023-12-10',
+  },
+  {
+    id: '2',
+    userName: 'James Wilson',
+    userAvatar: '/images/team/3.jpg',
+    rating: 5,
+    comment:
+      "Compassionate and professional. The reading brought me peace I've been seeking.",
+    date: '2023-11-28',
+  },
+  {
+    id: '3',
+    userName: 'Lisa Chen',
+    userAvatar: '/images/team/4.jpg',
+    rating: 5,
+    comment:
+      'Highly accurate and heartfelt. I appreciated the care and detail.',
+    date: '2023-11-15',
+  },
+];
+
+const staticPricing = {
+  singleSession: 150,
+  package3: 400,
+  package5: 650,
+};
+
+const staticContact = {
+  email: 'support@thebridge.com',
+  phone: '+1 (555) 000-0000',
+};
+
+const staticSocialLinks = {
+  website: 'https://thebridge.com',
+  instagram: '@thebridge',
+  youtube: '@TheBridge',
 };
 
 const MediumProfile = () => {
-  const { slug } = useParams<{ slug: string }>();
+  const { mediumId } = useParams<{ mediumId: string }>();
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
-  // In a real app, this would fetch data based on slug
-  // For now, we'll use mock data - TODO: Implement API call with slug
-  console.log('Loading profile for:', slug);
-  const profile = mockMediumProfile;
+  const { data: mediums = [], isLoading, isError } = useMediums(mediumId);
+  const medium: Medium | undefined = mediums[0];
 
   const renderStars = (rating: number) => {
     const stars = [];
@@ -252,11 +162,9 @@ const MediumProfile = () => {
     return stars;
   };
 
-  const getAvailabilityBadge = (
-    status: MediumProfile['availabilityStatus']
-  ) => {
+  const getAvailabilityBadge = (status: number) => {
     switch (status) {
-      case 'available':
+      case AvailabilityStatus.Available:
         return (
           <Badge
             variant="default"
@@ -265,7 +173,7 @@ const MediumProfile = () => {
             Available Now
           </Badge>
         );
-      case 'upcoming-events':
+      case AvailabilityStatus.Upcoming_Events:
         return (
           <Badge
             variant="default"
@@ -274,22 +182,40 @@ const MediumProfile = () => {
             Upcoming Events
           </Badge>
         );
-      case 'guest-medium':
+      case AvailabilityStatus.Book_Reading:
         return (
           <Badge
             variant="default"
             className="bg-primary-100 text-primary-800 border-primary-200"
           >
-            Guest Medium
+            Book Reading
           </Badge>
         );
-      case 'busy':
+      case AvailabilityStatus.Private_Sessions_Only:
+        return (
+          <Badge
+            variant="default"
+            className="bg-indigo-100 text-indigo-800 border-indigo-200"
+          >
+            Private Sessions Only
+          </Badge>
+        );
+      case AvailabilityStatus.Public_Sessions_Only:
+        return (
+          <Badge
+            variant="default"
+            className="bg-amber-100 text-amber-800 border-amber-200"
+          >
+            Public Sessions Only
+          </Badge>
+        );
+      case AvailabilityStatus.Unavailable:
         return (
           <Badge
             variant="secondary"
             className="bg-gray-100 text-gray-800 border-gray-200"
           >
-            Currently Busy
+            Unavailable
           </Badge>
         );
       default:
@@ -297,15 +223,64 @@ const MediumProfile = () => {
     }
   };
 
+  const displayName = medium
+    ? medium.firstName || medium.lastName
+      ? `${medium.firstName ?? ''} ${medium.lastName ?? ''}`.trim()
+      : medium.userName || medium.slug || 'Medium'
+    : 'Medium';
+
+  const avatarSrc = medium?.profilePictureUrl || medium?.photoUrl || undefined;
+
+  const focusItems = medium
+    ? [
+        {
+          name: medium.focusAreaTitle1,
+          description: medium.focusAreaDetails1,
+        },
+        {
+          name: medium.focusAreaTitle2,
+          description: medium.focusAreaDetails2,
+        },
+        {
+          name: medium.focusAreaTitle3,
+          description: medium.focusAreaDetails3,
+        },
+        {
+          name: medium.focusAreaTitle4,
+          description: medium.focusAreaDetails4,
+        },
+      ].filter((item) => item.name)
+    : [];
+
+  const fallbackFocusItems = medium?.focus
+    ? [{ name: medium.focus, description: 'Primary area of focus.' }]
+    : [];
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center text-gray-600">
+        Loading medium profile...
+      </div>
+    );
+  }
+
+  if (isError || !medium) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center text-red-500">
+        Failed to load medium profile.
+      </div>
+    );
+  }
+
   return (
     <>
       <Helmet>
         <title>
-          {profile.name} - {profile.specialty} | The Bridge
+          {displayName} - {medium.specialty} | The Bridge
         </title>
         <meta
           name="description"
-          content={`${profile.tagline} - ${profile.specialty} with ${profile.experienceYears} years of experience.`}
+          content={`${medium.tagline} - ${medium.specialty} with ${medium.experienceInYears} years of experience.`}
         />
       </Helmet>
       <div className="min-h-screen bg-gray-50">
@@ -319,16 +294,16 @@ const MediumProfile = () => {
                 <div className="relative">
                   <div className="absolute inset-0 rounded-full bg-white/10 blur-2xl scale-125"></div>
                   <Avatar className="w-48 h-48 border-8 border-white/20 shadow-2xl relative z-10">
-                    <AvatarImage src={profile.photoUrl} alt={profile.name} />
+                    <AvatarImage src={avatarSrc} alt={displayName} />
                     <AvatarFallback className="text-4xl font-bold bg-linear-to-br from-primary-100 to-secondary-100">
-                      {profile.name
+                      {displayName
                         .split(' ')
                         .map((n) => n[0])
                         .join('')}
                     </AvatarFallback>
                   </Avatar>
                   <div className="absolute -bottom-2 -right-2 z-20">
-                    {getAvailabilityBadge(profile.availabilityStatus)}
+                    {getAvailabilityBadge(medium.availabilityStatus)}
                   </div>
                 </div>
               </div>
@@ -336,20 +311,20 @@ const MediumProfile = () => {
               {/* Profile Info */}
               <div className="flex-1 text-center lg:text-left">
                 <h1 className="text-4xl text-white lg:text-6xl font-bold mb-4">
-                  {profile.name}
+                  {displayName}
                 </h1>
                 <p className="text-xl lg:text-2xl text-primary-200 mb-2">
-                  {profile.specialty}
+                  {medium.specialty}
                 </p>
                 <p className="text-lg text-secondary-200 italic mb-6">
-                  "{profile.tagline}"
+                  "{medium.tagline}"
                 </p>
 
                 {/* Stats */}
                 <div className="flex flex-wrap justify-center lg:justify-start gap-6 mb-8 items-center">
                   <div className="text-center">
                     <div className="text-2xl font-bold">
-                      {profile.experienceYears}+
+                      {medium.experienceInYears}+
                     </div>
                     <div className="text-sm text-primary-200">
                       Years Experience
@@ -357,21 +332,21 @@ const MediumProfile = () => {
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold">
-                      {profile.sessionCount.toLocaleString()}
+                      {medium.totalSessions.toLocaleString()}
                     </div>
                     <div className="text-sm text-primary-200">Sessions</div>
                   </div>
                   <div className="text-center">
                     <div className="flex items-center justify-center gap-1 mb-1">
-                      {renderStars(profile.ratingAverage)}
+                      {renderStars(medium.averageRating)}
                     </div>
                     <div className="text-sm text-primary-200">
-                      {profile.ratingAverage} ({profile.ratingCount})
+                      {medium.averageRating} ({medium.totalReviews})
                     </div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold">
-                      {profile.videoCount}
+                      {medium.totalVideos}
                     </div>
                     <div className="text-sm text-primary-200">Videos</div>
                   </div>
@@ -383,7 +358,7 @@ const MediumProfile = () => {
                     size="lg"
                     className="bg:white text-primary-900 hover:bg-gray-100 cursor-pointer"
                     onClick={() =>
-                      window.location.assign(`/book/${slug ?? profile.id}`)
+                      window.location.assign(`/book/${mediumId ?? medium.id}`)
                     }
                   >
                     <Calendar className="w-5 h-5 mr-2" />
@@ -418,7 +393,7 @@ const MediumProfile = () => {
               {/* About Section */}
               <section className="bg-white rounded-2xl shadow-lg p-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                  About {profile.name}
+                  About {displayName}
                 </h2>
                 <div className="space-y-6">
                   <div>
@@ -426,7 +401,7 @@ const MediumProfile = () => {
                       Biography
                     </h3>
                     <p className="text-gray-700 leading-relaxed">
-                      {profile.bio}
+                      {medium.bio}
                     </p>
                   </div>
                 </div>
@@ -444,7 +419,7 @@ const MediumProfile = () => {
                     </div>
                     <div>
                       <div className="font-semibold text-gray-900">
-                        {profile.experience}
+                        {medium.experienceInYears}+ years
                       </div>
                       <div className="text-sm text-gray-600">
                         Professional Experience
@@ -457,7 +432,7 @@ const MediumProfile = () => {
                     </div>
                     <div>
                       <div className="font-semibold text-gray-900">
-                        {profile.sessionCount.toLocaleString()}
+                        {medium.totalSessions.toLocaleString()}
                       </div>
                       <div className="text-sm text-gray-600">
                         Sessions Completed
@@ -470,10 +445,10 @@ const MediumProfile = () => {
                     </div>
                     <div>
                       <div className="font-semibold text-gray-900">
-                        {profile.ratingAverage}/5
+                        {medium.averageRating}/5
                       </div>
                       <div className="text-sm text-gray-600">
-                        {profile.ratingCount} Reviews
+                        {medium.totalReviews} Reviews
                       </div>
                     </div>
                   </div>
@@ -483,7 +458,7 @@ const MediumProfile = () => {
                     </div>
                     <div>
                       <div className="font-semibold text-gray-900">
-                        {profile.videoCount}
+                        {medium.totalVideos}
                       </div>
                       <div className="text-sm text-gray-600">
                         Educational Videos
@@ -499,17 +474,22 @@ const MediumProfile = () => {
                   Areas of Focus
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {profile.focus.map((focus, index) => (
-                    <div
-                      key={index}
-                      className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
-                    >
-                      <h3 className="text-lg font-semibold text-primary-600 mb-3">
-                        {focus.name}
-                      </h3>
-                      <p className="text-gray-700">{focus.description}</p>
-                    </div>
-                  ))}
+                  {(focusItems.length ? focusItems : fallbackFocusItems).map(
+                    (focus, index) => (
+                      <div
+                        key={index}
+                        className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+                      >
+                        <h3 className="text-lg font-semibold text-primary-600 mb-3">
+                          {focus.name}
+                        </h3>
+                        <p className="text-gray-700">
+                          {focus.description ??
+                            'Focus area details coming soon.'}
+                        </p>
+                      </div>
+                    )
+                  )}
                 </div>
               </section>
 
@@ -539,7 +519,7 @@ const MediumProfile = () => {
                   </div>
                 </div>
                 <div className="space-y-4">
-                  {profile.upcomingEvents.slice(0, 3).map((event) => (
+                  {staticUpcomingEvents.slice(0, 3).map((event) => (
                     <div
                       key={event.id}
                       className="flex flex-col md:flex-row relative text-center md:text-left items-center gap-4 p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
@@ -601,7 +581,7 @@ const MediumProfile = () => {
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {profile.videos.map((video) => (
+                  {staticVideos.map((video) => (
                     <div
                       key={video.id}
                       className="group cursor-pointer"
@@ -658,7 +638,7 @@ const MediumProfile = () => {
                   </div>
                 </div>
                 <div className="space-y-6">
-                  {profile.reviews.map((review) => (
+                  {staticReviews.map((review) => (
                     <div
                       key={review.id}
                       className="border-b border-gray-200 pb-6 last:border-b-0 last:pb-0"
@@ -706,7 +686,7 @@ const MediumProfile = () => {
                         Single Session
                       </span>
                       <span className="text-lg font-bold text-primary-600">
-                        ${profile.pricing.singleSession}
+                        ${staticPricing.singleSession}
                       </span>
                     </div>
                     <p className="text-sm text-gray-600">
@@ -715,7 +695,7 @@ const MediumProfile = () => {
                     <Button
                       className="w-full mt-3 bg-primary-600 hover:bg-primary-700 text:white"
                       onClick={() =>
-                        window.location.assign(`/book/${slug ?? profile.id}`)
+                        window.location.assign(`/book/${mediumId ?? medium.id}`)
                       }
                     >
                       Book Now
@@ -727,7 +707,7 @@ const MediumProfile = () => {
                         3-Session Package
                       </span>
                       <span className="text-lg font-bold text-primary-600">
-                        ${profile.pricing.package3}
+                        ${staticPricing.package3}
                       </span>
                     </div>
                     <p className="text-sm text-gray-600">
@@ -746,7 +726,7 @@ const MediumProfile = () => {
                         5-Session Package
                       </span>
                       <span className="text-lg font-bold text-primary-600">
-                        ${profile.pricing.package5}
+                        ${staticPricing.package5}
                       </span>
                     </div>
                     <p className="text-sm text-gray-600">
@@ -771,20 +751,20 @@ const MediumProfile = () => {
                   <div className="flex items-center gap-3">
                     <Mail className="w-5 h-5 text-primary-600" />
                     <Link
-                      to={`mailto:${profile.contact.email}`}
+                      to={`mailto:${staticContact.email}`}
                       className="text-gray-700 hover:text-primary-600"
                     >
-                      {profile.contact.email}
+                      {staticContact.email}
                     </Link>
                   </div>
-                  {profile.contact.phone && (
+                  {staticContact.phone && (
                     <div className="flex items-center gap-3">
                       <Phone className="w-5 h-5 text-primary-600" />
                       <Link
-                        to={`tel:${profile.contact.phone}`}
+                        to={`tel:${staticContact.phone}`}
                         className="text-gray-700 hover:text-primary-600"
                       >
-                        {profile.contact.phone}
+                        {staticContact.phone}
                       </Link>
                     </div>
                   )}
@@ -797,9 +777,9 @@ const MediumProfile = () => {
                   Connect
                 </h3>
                 <div className="space-y-3">
-                  {profile.socialLinks.website && (
+                  {staticSocialLinks.website && (
                     <Link
-                      to={profile.socialLinks.website}
+                      to={staticSocialLinks.website}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 text-gray-700 hover:text-primary-600"
@@ -808,9 +788,9 @@ const MediumProfile = () => {
                       Personal Website
                     </Link>
                   )}
-                  {profile.socialLinks.instagram && (
+                  {staticSocialLinks.instagram && (
                     <Link
-                      to={`https://instagram.com/${profile.socialLinks.instagram.replace('@', '')}`}
+                      to={`https://instagram.com/${staticSocialLinks.instagram.replace('@', '')}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 text-gray-700 hover:text-primary-600"
@@ -818,9 +798,9 @@ const MediumProfile = () => {
                       📷 Instagram
                     </Link>
                   )}
-                  {profile.socialLinks.youtube && (
+                  {staticSocialLinks.youtube && (
                     <Link
-                      to={`https://youtube.com/${profile.socialLinks.youtube}`}
+                      to={`https://youtube.com/${staticSocialLinks.youtube}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 text-gray-700 hover:text-primary-600"

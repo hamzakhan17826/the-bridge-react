@@ -76,7 +76,7 @@ function App() {
         { path: '/membership', element: <Memberships /> },
         { path: '/about', element: <AboutUs /> },
         { path: '/reviews', element: <Reviews /> },
-        { path: '/mediums/:slug', element: <MediumProfile /> },
+        { path: '/mediums/:mediumId', element: <MediumProfile /> },
         { path: '/book/:slug', element: <BookMedium /> },
         { path: '/access-denied', element: <AccessDenied /> },
         {

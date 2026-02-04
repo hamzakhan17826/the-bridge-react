@@ -1,7 +1,7 @@
 import { Star, Video, Award, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { AvailabilityStatus } from '../../constants/enums';
-import type { Mediums } from '../../types/medium';
+import type { Medium } from '../../types/medium';
 import { Avatar, AvatarFallback, AvatarImage, Button, Badge } from '../ui';
 
 const formatNameFromSlug = (slug?: string) => {
@@ -73,7 +73,7 @@ const getAvailabilityBadge = (status: number) => {
   }
 };
 
-function MediumCard({ medium }: { medium: Mediums }) {
+function MediumCard({ medium }: { medium: Medium }) {
   const renderStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -220,7 +220,7 @@ function MediumCard({ medium }: { medium: Mediums }) {
           className=" border-primary-200 hover:bg-primary-50 hover:border-primary-300"
         >
           <Link
-            to={`/mediums/${medium.slug}`}
+            to={`/mediums/${medium.id}`}
             className="flex items-center gap-2"
           >
             <MapPin className="w-4 h-4" />
