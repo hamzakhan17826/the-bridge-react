@@ -3,107 +3,10 @@ import { MediumCard } from '../sections';
 import { Link } from 'react-router-dom';
 import { Users, Sparkles, ArrowRight } from 'lucide-react';
 import { BackgroundDecorations } from '../ui';
+import { useMediums } from '../../hooks/useMedium';
 
 const MeetTheMediums: FC = () => {
-  // Mock data - replace with API call later
-  const mediums = [
-    {
-      id: '1',
-      name: 'Sarah Johnson',
-      photoUrl:
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Evidential Medium',
-      tagline: 'Bridging hearts through spirit evidence',
-      focus: ['Spirit Communication', 'Healing', 'Evidence'],
-      averageRating: 4.8,
-      totalReviews: 127,
-      isBookingEnabled: true,
-      slug: 'sarah-johnson',
-      availabilityStatus: 'available',
-      totalVideos: 24,
-      experienceInYears: '12+ years',
-    },
-    {
-      id: '2',
-      name: 'Michael Chen',
-      photoUrl:
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Trance Medium',
-      tagline: 'Direct voice communication with spirit',
-      focus: ['Trance Work', 'Direct Voice', 'Spirit Guides'],
-      averageRating: 4.9,
-      totalReviews: 89,
-      isBookingEnabled: true,
-      slug: 'michael-chen',
-      availabilityStatus: 'upcoming-events',
-      totalVideos: 18,
-      experienceInYears: '15+ years',
-    },
-    {
-      id: '3',
-      name: 'Elena Rodriguez',
-      photoUrl:
-        'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Spiritual Medium',
-      tagline: 'Healing through spiritual connection',
-      focus: ['Spiritual Healing', 'Energy Work', 'Guidance'],
-      averageRating: 4.7,
-      totalReviews: 156,
-      isBookingEnabled: true,
-      slug: 'elena-rodriguez',
-      availabilityStatus: 'guest-medium',
-      totalVideos: 31,
-      experienceInYears: '10+ years',
-    },
-    {
-      id: '4',
-      name: 'David Thompson',
-      photoUrl:
-        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Physical Medium',
-      tagline: 'Manifesting spirit through physical phenomena',
-      focus: ['Physical Mediumship', 'Materialization', 'Energy'],
-      averageRating: 4.6,
-      totalReviews: 98,
-      isBookingEnabled: true,
-      slug: 'david-thompson',
-      availabilityStatus: 'busy',
-      totalVideos: 15,
-      experienceInYears: '18+ years',
-    },
-    // {
-    //   id: '5',
-    //   name: 'Lisa Park',
-    //   photoUrl:
-    //     'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&crop=face',
-    //   specialty: 'Mental Medium',
-    //   tagline: 'Clear mental mediumship with precision',
-    //   focus: ['Mental Mediumship', 'Clairvoyance', 'Clairaudience'],
-    //   averageRating: 4.9,
-    //   totalReviews: 203,
-    //   isBookingEnabled: true,
-    //   slug: 'lisa-park',
-    //   availabilityStatus: 'available',
-    //   totalVideos: 42,
-    //   experienceInYears: '8+ years',
-    // },
-    // {
-    //   id: '6',
-    //   name: 'James Wilson',
-    //   photoUrl:
-    //     'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face',
-    //   specialty: 'Healing Medium',
-    //   tagline: 'Restoring balance through spiritual healing',
-    //   focus: ['Spiritual Healing', 'Energy Healing', 'Therapy'],
-    //   averageRating: 4.8,
-    //   totalReviews: 145,
-    //   isBookingEnabled: true,
-    //   slug: 'james-wilson',
-    //   availabilityStatus: 'available',
-    //   totalVideos: 28,
-    //   experienceInYears: '14+ years',
-    // },
-  ];
+  const { data: mediums = [], isLoading, isError } = useMediums();
 
   const backgroundDecorations = [
     {
@@ -145,11 +48,28 @@ const MeetTheMediums: FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {mediums.map((medium) => (
-            <MediumCard key={medium.id} medium={medium} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="text-center py-12">
+            <div className="inline-flex items-center gap-2 text-gray-600">
+              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-primary-400 border-t-transparent"></span>
+              Loading mediums...
+            </div>
+          </div>
+        ) : isError ? (
+          <div className="text-center py-12 text-red-500">
+            Failed to load mediums.
+          </div>
+        ) : mediums.length === 0 ? (
+          <div className="text-center py-12 text-gray-500">
+            No mediums available right now.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {mediums.map((medium) => (
+              <MediumCard key={medium.id} medium={medium} />
+            ))}
+          </div>
+        )}
 
         <div className="text-center mt-16">
           <Link

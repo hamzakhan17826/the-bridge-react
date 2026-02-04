@@ -3,207 +3,15 @@ import { Helmet } from 'react-helmet-async';
 import { Search, Filter, Users, Sparkles } from 'lucide-react';
 import { MediumCard } from '../components/sections';
 import { Button, Input } from '../components/ui';
+import { AvailabilityStatus } from '../constants/enums';
+import { useMediums } from '../hooks/useMedium';
 
 const Mediums = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSpecialty, setSelectedSpecialty] = useState('all');
   const [selectedAvailability, setSelectedAvailability] = useState('all');
 
-  // Expanded mock data with more mediums
-  const mediums = [
-    {
-      id: '1',
-      name: 'Sarah Johnson',
-      photoUrl:
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Evidential Medium',
-      tagline: 'Bridging hearts through spirit evidence',
-      focus: ['Spirit Communication', 'Healing', 'Evidence'],
-      averageRating: 4.8,
-      totalReviews: 127,
-      isBookingEnabled: true,
-      slug: 'sarah-johnson',
-      availabilityStatus: 'available',
-      totalVideos: 24,
-      experienceInYears: '12+ years',
-    },
-    {
-      id: '2',
-      name: 'Michael Chen',
-      photoUrl:
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Trance Medium',
-      tagline: 'Direct voice communication with spirit',
-      focus: ['Trance Work', 'Direct Voice', 'Spirit Guides'],
-      averageRating: 4.9,
-      totalReviews: 89,
-      isBookingEnabled: true,
-      slug: 'michael-chen',
-      availabilityStatus: 'upcoming-events',
-      totalVideos: 18,
-      experienceInYears: '15+ years',
-    },
-    {
-      id: '3',
-      name: 'Elena Rodriguez',
-      photoUrl:
-        'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Spiritual Medium',
-      tagline: 'Healing through spiritual connection',
-      focus: ['Spiritual Healing', 'Energy Work', 'Guidance'],
-      averageRating: 4.7,
-      totalReviews: 156,
-      isBookingEnabled: true,
-      slug: 'elena-rodriguez',
-      availabilityStatus: 'guest-medium',
-      totalVideos: 31,
-      experienceInYears: '10+ years',
-    },
-    {
-      id: '4',
-      name: 'David Thompson',
-      photoUrl:
-        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Physical Medium',
-      tagline: 'Manifesting spirit through physical phenomena',
-      focus: ['Physical Mediumship', 'Materialization', 'Energy'],
-      averageRating: 4.6,
-      totalReviews: 98,
-      isBookingEnabled: true,
-      slug: 'david-thompson',
-      availabilityStatus: 'busy',
-      totalVideos: 15,
-      experienceInYears: '18+ years',
-    },
-    {
-      id: '5',
-      name: 'Lisa Park',
-      photoUrl:
-        'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Mental Medium',
-      tagline: 'Clear mental mediumship with precision',
-      focus: ['Mental Mediumship', 'Clairvoyance', 'Clairaudience'],
-      averageRating: 4.9,
-      totalReviews: 203,
-      isBookingEnabled: true,
-      slug: 'lisa-park',
-      availabilityStatus: 'available',
-      totalVideos: 42,
-      experienceInYears: '8+ years',
-    },
-    {
-      id: '6',
-      name: 'James Wilson',
-      photoUrl:
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Healing Medium',
-      tagline: 'Restoring balance through spiritual healing',
-      focus: ['Spiritual Healing', 'Energy Healing', 'Therapy'],
-      averageRating: 4.8,
-      totalReviews: 145,
-      isBookingEnabled: true,
-      slug: 'james-wilson',
-      availabilityStatus: 'available',
-      totalVideos: 28,
-      experienceInYears: '14+ years',
-    },
-    {
-      id: '7',
-      name: 'Maria Santos',
-      photoUrl:
-        'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Intuitive Medium',
-      tagline: 'Connecting souls through intuition and love',
-      focus: ['Intuition', 'Soul Connection', 'Love & Light'],
-      averageRating: 4.7,
-      totalReviews: 112,
-      isBookingEnabled: true,
-      slug: 'maria-santos',
-      availabilityStatus: 'upcoming-events',
-      totalVideos: 19,
-      experienceInYears: '11+ years',
-    },
-    {
-      id: '8',
-      name: 'Robert Kim',
-      photoUrl:
-        'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Channeling Medium',
-      tagline: 'Bringing forth wisdom from higher realms',
-      focus: ['Channeling', 'Higher Wisdom', 'Spiritual Guidance'],
-      averageRating: 4.5,
-      totalReviews: 87,
-      isBookingEnabled: true,
-      slug: 'robert-kim',
-      availabilityStatus: 'guest-medium',
-      totalVideos: 22,
-      experienceInYears: '16+ years',
-    },
-    {
-      id: '9',
-      name: 'Amanda Foster',
-      photoUrl:
-        'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Animal Medium',
-      tagline: 'Communicating with our animal companions',
-      focus: ['Animal Communication', 'Pet Mediumship', 'Animal Healing'],
-      averageRating: 4.9,
-      totalReviews: 178,
-      isBookingEnabled: true,
-      slug: 'amanda-foster',
-      availabilityStatus: 'available',
-      totalVideos: 35,
-      experienceInYears: '9+ years',
-    },
-    {
-      id: '10',
-      name: 'Thomas Brown',
-      photoUrl:
-        'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Medical Medium',
-      tagline: 'Healing insights from the spirit world',
-      focus: ['Medical Intuition', 'Health Guidance', 'Healing Energy'],
-      averageRating: 4.6,
-      totalReviews: 134,
-      isBookingEnabled: true,
-      slug: 'thomas-brown',
-      availabilityStatus: 'busy',
-      totalVideos: 27,
-      experienceInYears: '13+ years',
-    },
-    {
-      id: '11',
-      name: 'Sophia Patel',
-      photoUrl:
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Crystal Medium',
-      tagline: 'Crystal energy and spiritual connection',
-      focus: ['Crystal Healing', 'Energy Work', 'Crystal Readings'],
-      averageRating: 4.8,
-      totalReviews: 156,
-      isBookingEnabled: true,
-      slug: 'sophia-patel',
-      availabilityStatus: 'available',
-      totalVideos: 31,
-      experienceInYears: '10+ years',
-    },
-    {
-      id: '12',
-      name: 'Marcus Johnson',
-      photoUrl:
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
-      specialty: 'Shamanic Medium',
-      tagline: 'Ancient wisdom for modern healing',
-      focus: ['Shamanic Practices', 'Ancestral Wisdom', 'Ritual Work'],
-      averageRating: 4.7,
-      totalReviews: 92,
-      isBookingEnabled: true,
-      slug: 'marcus-johnson',
-      availabilityStatus: 'upcoming-events',
-      totalVideos: 18,
-      experienceInYears: '17+ years',
-    },
-  ];
+  const { data: mediums = [], isLoading, isError } = useMediums();
 
   // Get unique specialties for filter
   const specialties = [
@@ -212,26 +20,46 @@ const Mediums = () => {
   ];
   const availabilityOptions = [
     { value: 'all', label: 'All Status' },
-    { value: 'available', label: 'Available Now' },
-    { value: 'upcoming-events', label: 'Upcoming Events' },
-    { value: 'guest-medium', label: 'Guest Medium' },
-    { value: 'busy', label: 'Currently Busy' },
+    { value: String(AvailabilityStatus.Available), label: 'Available Now' },
+    {
+      value: String(AvailabilityStatus.Upcoming_Events),
+      label: 'Upcoming Events',
+    },
+    { value: String(AvailabilityStatus.Book_Reading), label: 'Book Reading' },
+    {
+      value: String(AvailabilityStatus.Private_Sessions_Only),
+      label: 'Private Sessions Only',
+    },
+    {
+      value: String(AvailabilityStatus.Public_Sessions_Only),
+      label: 'Public Sessions Only',
+    },
+    { value: String(AvailabilityStatus.Unavailable), label: 'Unavailable' },
   ];
 
   // Filter mediums based on search and filters
   const filteredMediums = mediums.filter((medium) => {
+    const focusFields = [
+      medium.focus,
+      medium.focusAreaTitle1,
+      medium.focusAreaTitle2,
+      medium.focusAreaTitle3,
+      medium.focusAreaTitle4,
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+
     const matchesSearch =
-      medium.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (medium.slug || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       medium.specialty.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      medium.focus.some((focus) =>
-        focus.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      focusFields.includes(searchTerm.toLowerCase());
 
     const matchesSpecialty =
       selectedSpecialty === 'all' || medium.specialty === selectedSpecialty;
     const matchesAvailability =
       selectedAvailability === 'all' ||
-      medium.availabilityStatus === selectedAvailability;
+      medium.availabilityStatus === Number(selectedAvailability);
 
     return matchesSearch && matchesSpecialty && matchesAvailability;
   });
@@ -316,7 +144,9 @@ const Mediums = () => {
 
             {/* Results Count */}
             <div className="mt-4 text-sm text-gray-600">
-              Showing {filteredMediums.length} of {mediums.length} mediums
+              {isLoading
+                ? 'Loading mediums...'
+                : `Showing ${filteredMediums.length} of ${mediums.length} mediums`}
             </div>
           </div>
         </section>
@@ -324,7 +154,15 @@ const Mediums = () => {
         {/* Mediums Grid */}
         <section className="py-12">
           <div className="container mx-auto px-6">
-            {filteredMediums.length > 0 ? (
+            {isLoading ? (
+              <div className="text-center py-16 text-gray-500">
+                Loading mediums...
+              </div>
+            ) : isError ? (
+              <div className="text-center py-16 text-red-500">
+                Failed to load mediums.
+              </div>
+            ) : filteredMediums.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredMediums.map((medium) => (
                   <MediumCard key={medium.id} medium={medium} />

@@ -1,8 +1,79 @@
 import { Star, Video, Award, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { AvailabilityStatus } from '../../constants/enums';
+import type { Mediums } from '../../types/medium';
 import { Avatar, AvatarFallback, AvatarImage, Button, Badge } from '../ui';
 
-function MediumCard({ medium }: { medium: any }) {
+const formatNameFromSlug = (slug?: string) => {
+  if (!slug) return 'Medium';
+  return slug
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+};
+
+const getAvailabilityBadge = (status: number) => {
+  switch (status) {
+    case AvailabilityStatus.Available:
+      return (
+        <Badge
+          variant="default"
+          className="bg-green-100 text-green-800 border-green-200"
+        >
+          Available
+        </Badge>
+      );
+    case AvailabilityStatus.Upcoming_Events:
+      return (
+        <Badge
+          variant="default"
+          className="bg-secondary-100 text-secondary-800 border-secondary-200"
+        >
+          Upcoming Events
+        </Badge>
+      );
+    case AvailabilityStatus.Book_Reading:
+      return (
+        <Badge
+          variant="default"
+          className="bg-primary-100 text-primary-800 border-primary-200"
+        >
+          Book Reading
+        </Badge>
+      );
+    case AvailabilityStatus.Private_Sessions_Only:
+      return (
+        <Badge
+          variant="default"
+          className="bg-indigo-100 text-indigo-800 border-indigo-200"
+        >
+          Private Sessions Only
+        </Badge>
+      );
+    case AvailabilityStatus.Unavailable:
+      return (
+        <Badge
+          variant="secondary"
+          className="bg-gray-100 text-gray-800 border-gray-200"
+        >
+          Unavailable
+        </Badge>
+      );
+    case AvailabilityStatus.Public_Sessions_Only:
+      return (
+        <Badge
+          variant="default"
+          className="bg-amber-100 text-amber-800 border-amber-200"
+        >
+          Public Sessions Only
+        </Badge>
+      );
+    default:
+      return null;
+  }
+};
+
+function MediumCard({ medium }: { medium: Mediums }) {
   const renderStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -31,48 +102,20 @@ function MediumCard({ medium }: { medium: any }) {
     return stars;
   };
 
-  const getAvailabilityBadge = (status: any) => {
-    switch (status) {
-      case 'available':
-        return (
-          <Badge
-            variant="default"
-            className="bg-green-100 text-green-800 border-green-200"
-          >
-            Available
-          </Badge>
-        );
-      case 'upcoming-events':
-        return (
-          <Badge
-            variant="default"
-            className="bg-secondary-100 text-secondary-800 border-secondary-200"
-          >
-            Upcoming Events
-          </Badge>
-        );
-      case 'guest-medium':
-        return (
-          <Badge
-            variant="default"
-            className="bg-primary-100 text-primary-800 border-primary-200"
-          >
-            Guest Medium
-          </Badge>
-        );
-      case 'busy':
-        return (
-          <Badge
-            variant="secondary"
-            className="bg-gray-100 text-gray-800 border-gray-200"
-          >
-            Busy
-          </Badge>
-        );
-      default:
-        return null;
-    }
-  };
+  const focusTitles = [
+    medium.focusAreaTitle1,
+    medium.focusAreaTitle2,
+    medium.focusAreaTitle3,
+    medium.focusAreaTitle4,
+  ].filter(Boolean) as string[];
+
+  // Prefer backend-provided display fields when available
+  const displayName =
+    medium.firstName || medium.lastName
+      ? `${medium.firstName ?? ''} ${medium.lastName ?? ''}`.trim()
+      : medium.userName || formatNameFromSlug(medium.slug);
+
+  const avatarSrc = medium.profilePictureUrl || medium.photoUrl || undefined;
 
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 relative overflow-hidden ">
@@ -87,11 +130,11 @@ function MediumCard({ medium }: { medium: any }) {
           <div className="absolute inset-0 rounded-full bg-linear-to-r from-primary-400/20 to-secondary-400/20 blur-lg scale-125"></div>
           <div className="absolute inset-0 rounded-full bg-linear-to-r from-primary-500/10 to-secondary-500/10 blur-md scale-110"></div>
           <Avatar className="w-24 h-24 border-4 border-white shadow-lg relative z-10">
-            <AvatarImage src={medium.photoUrl} alt={medium.name} />
+            <AvatarImage src={avatarSrc} alt={displayName} />
             <AvatarFallback className="text-xl font-semibold bg-linear-to-r from-primary-100 to-secondary-100">
-              {medium.name
+              {displayName
                 .split(' ')
-                .map((any) => any[0])
+                .map((part: string) => part[0])
                 .join('')}
             </AvatarFallback>
           </Avatar>
@@ -100,18 +143,20 @@ function MediumCard({ medium }: { medium: any }) {
 
       {/* Name and Specialty */}
       <div className="text-center mb-4">
-        <h3 className="text-xl font-bold text-gray-900 mb-1">{medium.name}</h3>
+        <h3 className="text-xl font-bold text-gray-900 mb-1">{displayName}</h3>
         <p className="text-sm font-medium text-primary-600 mb-2">
           {medium.specialty}
         </p>
-        <p className="text-sm text-gray-600 italic">"{medium.tagline}"</p>
+        {medium.tagline && (
+          <p className="text-sm text-gray-600 italic">"{medium.tagline}"</p>
+        )}
       </div>
 
       {/* Experience and Video Count */}
       <div className="flex items-center justify-center gap-4 mb-4">
         <div className="flex items-center gap-1 text-sm text-gray-600">
           <Award className="w-4 h-4 text-primary-500" />
-          <span>{medium.experienceInYears}</span>
+          <span>{medium.experienceInYears} yrs</span>
         </div>
         <div className="flex items-center gap-1 text-sm text-gray-600">
           <Video className="w-4 h-4 text-secondary-500" />
@@ -122,11 +167,18 @@ function MediumCard({ medium }: { medium: any }) {
       {/* Focus Areas */}
       <div className="mb-4">
         <div className="flex flex-wrap gap-1 justify-center">
-          {medium.focus.slice(0, 3).map((any, index) => (
-            <Badge key={index} variant="outline" className="text-xs px-2 py-1">
-              {any}
-            </Badge>
-          ))}
+          {(focusTitles.length ? focusTitles : [medium.focus])
+            .filter(Boolean)
+            .slice(0, 4)
+            .map((focusItem: string, index: number) => (
+              <Badge
+                key={`${focusItem}-${index}`}
+                variant="outline"
+                className="text-xs px-2 py-1"
+              >
+                {focusItem}
+              </Badge>
+            ))}
         </div>
       </div>
 

@@ -20,7 +20,7 @@ import type {
   MediumProfileFormData,
 } from '../../../types/medium';
 import { AvailabilityStatus } from '../../../constants/enums';
-import { useMediumProfile } from '../../../hooks/useMediumProfile';
+import { useMediumProfile } from '../../../hooks/useMedium';
 
 export default function MediumProfileForm() {
   const form = useForm<MediumProfileFormData>({

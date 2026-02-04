@@ -2,9 +2,14 @@ import { useState, useCallback } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
-import api from '../lib/api';
+import {
+  fetchMediumProfile,
+  fetchMediums,
+  upsertMediumProfile,
+} from '../services/medium';
 import type {
   AvailabilityStatusType,
+  Mediums,
   MediumProfileFormData,
   MediumProfileResponse,
 } from '../types/medium';
@@ -20,37 +25,13 @@ export function useMediumProfile() {
     error: profileError,
   } = useQuery<MediumProfileResponse>({
     queryKey: ['mediumProfile'],
-    queryFn: async () => {
-      const response = await api.get('/Register/Medium');
-      return response.data;
-    },
+    queryFn: fetchMediumProfile,
     retry: 1,
   });
 
   const registerMediumMutation = useMutation({
     mutationFn: async (data: MediumProfileFormData) => {
-      // Convert to FormData as the backend expects it
-      const formData = new FormData();
-
-      // Add all fields to FormData
-      Object.entries(data).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          formData.append(key, value.toString());
-        }
-      });
-
-      // Determine if this is an update (PUT) or create (POST)
-      const isUpdate = !!existingProfile;
-      // Backend currently supports POST for create/update (PUT returns 405)
-      const method = 'post';
-
-      // For updates, include the ID
-      if (isUpdate && existingProfile) {
-        formData.append('Id', existingProfile.id);
-      }
-
-      const response = await api[method]('/Register/Medium', formData);
-      return response.data;
+      return upsertMediumProfile(data, existingProfile);
     },
     onSuccess: (data) => {
       const isUpdate = !!existingProfile;
@@ -58,45 +39,37 @@ export function useMediumProfile() {
         ? 'Medium profile updated successfully!'
         : 'Medium profile registered successfully!';
       toast.success(message);
-      setMediumProfile(data);
+      setMediumProfile(convertToFormData(data));
     },
     onError: (error: AxiosError) => {
-      console.error('Medium profile operation error:', error);
-      if (error?.response) {
-        console.error('Medium profile error response:', {
-          status: error.response.status,
-          data: error.response.data,
-          headers: error.response.headers,
-        });
-      }
+      // Log minimal info for debugging
+      console.error(
+        'Medium profile operation error:',
+        (error as any)?.response ?? error
+      );
+
       const isUpdate = !!existingProfile;
       const operation = isUpdate ? 'update' : 'register';
-      let errorMessage = `Failed to ${operation} medium profile`;
 
-      if (error?.response?.data) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const errorData: any = error.response.data;
+      // Extract a concise, user-friendly message from common API shapes
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const respData: any = (error as any)?.response?.data;
+      let message = 'An unexpected error occurred.';
 
-        // Handle different error response formats
-        if (typeof errorData === 'string') {
-          errorMessage = errorData;
-        } else if (errorData.message) {
-          errorMessage = errorData.message;
-        } else if (errorData.errors && Array.isArray(errorData.errors)) {
-          errorMessage = errorData.errors.join(', ');
-        } else if (errorData.errors && typeof errorData.errors === 'object') {
-          // Handle validation errors object
-          const errorMessages = Object.values(errorData.errors).flat();
-          errorMessage = errorMessages.join(', ');
-        } else if (errorData.title) {
-          errorMessage = errorData.title;
-        }
-      } else if (error?.message) {
-        errorMessage = error.message;
+      if (respData) {
+        if (typeof respData === 'string') message = respData;
+        else if (respData.message) message = respData.message;
+        else if (Array.isArray(respData.errors))
+          message = respData.errors.join(', ');
+        else if (respData.errors && typeof respData.errors === 'object')
+          message = Object.values(respData.errors).flat().join(', ');
+        else if (respData.title) message = respData.title;
+      } else if ((error as any)?.message) {
+        message = (error as any).message;
       }
 
       toast.error(
-        `${operation.charAt(0).toUpperCase() + operation.slice(1)} failed: ${errorMessage}`
+        `${operation.charAt(0).toUpperCase() + operation.slice(1)} failed: ${message}`
       );
     },
   });
@@ -143,4 +116,12 @@ export function useMediumProfile() {
     profileError,
     convertToFormData,
   };
+}
+
+export function useMediums(mediumId?: string) {
+  return useQuery<Mediums[]>({
+    queryKey: ['mediums', mediumId ?? 'all'],
+    queryFn: () => fetchMediums(mediumId),
+    retry: 1,
+  });
 }

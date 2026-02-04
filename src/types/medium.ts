@@ -3,6 +3,11 @@ import type { AvailabilityStatus } from '../constants/enums';
 export interface Mediums {
   id: string;
   userId: string;
+  // New backend-provided user display fields
+  firstName?: string;
+  lastName?: string;
+  userName?: string;
+  profilePictureUrl?: string;
   isBookingEnabled: boolean;
   specialty: string;
   tagline: string;
@@ -16,8 +21,8 @@ export interface Mediums {
   totalReviews: number;
   averageRating: number;
   totalVideos: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   focusAreaTitle1: string;
   focusAreaDetails1: string;
   focusAreaTitle2: string;
@@ -52,6 +57,11 @@ export type MediumProfileFormData = {
 
 export type MediumProfileResponse = {
   id: string;
+  // Backend may include user display fields on single profile too
+  firstName?: string;
+  lastName?: string;
+  userName?: string;
+  profilePictureUrl?: string;
   isBookingEnabled: boolean;
   specialty: string;
   tagline: string;
