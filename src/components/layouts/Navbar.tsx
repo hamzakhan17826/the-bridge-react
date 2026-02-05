@@ -8,7 +8,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const { isLoggedIn, hasRole } = useAuthUser();
+  const { user, isLoggedIn, hasRole } = useAuthUser();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -160,10 +160,22 @@ export default function Navbar() {
                     aria-expanded={accountOpen}
                     onClick={() => setAccountOpen((v) => !v)}
                   >
-                    <div className="w-6 h-6 rounded-full bg-linear-to-r from-primary-500 to-secondary-500 flex items-center justify-center">
-                      <UserCircle2 className="w-4 h-4 text-white" />
+                    <div className="w-8 h-8 rounded-full bg-linear-to-r from-primary-500 to-secondary-500 flex items-center justify-center overflow-hidden border-2 border-primary-100 shadow-sm">
+                      {user?.profilePictureUrl ? (
+                        <img
+                          src={user.profilePictureUrl}
+                          alt={user.userName || 'Profile'}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <UserCircle2 className="w-5 h-5 text-white" />
+                      )}
                     </div>
-                    <span>Account</span>
+                    <span>
+                      {user?.firstName && user?.lastName
+                        ? `${user.firstName} ${user.lastName}`
+                        : user?.userName || 'Account'}
+                    </span>
                     <Sparkles className="w-4 h-4" />
                   </button>
                   {accountOpen && (
@@ -174,7 +186,15 @@ export default function Navbar() {
                           className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-xl transition-all duration-200"
                           onClick={() => setAccountOpen(false)}
                         >
-                          <UserCircle2 className="w-4 h-4" />
+                          {user?.profilePictureUrl ? (
+                            <img
+                              src={user.profilePictureUrl}
+                              alt={user.userName || 'Profile'}
+                              className="w-5 h-5 rounded-full object-cover"
+                            />
+                          ) : (
+                            <UserCircle2 className="w-5 h-5" />
+                          )}
                           Profile
                         </Link>
                         <div className="my-2 h-px bg-linear-to-r from-transparent via-primary-200 to-transparent"></div>
@@ -345,7 +365,15 @@ export default function Navbar() {
                       className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-xl transition-all duration-200"
                       onClick={() => setIsOpen(false)}
                     >
-                      <UserCircle2 className="w-4 h-4" />
+                      {user?.profilePictureUrl ? (
+                        <img
+                          src={user.profilePictureUrl}
+                          alt={user.userName || 'Profile'}
+                          className="w-5 h-5 rounded-full object-cover"
+                        />
+                      ) : (
+                        <UserCircle2 className="w-5 h-5" />
+                      )}
                       Profile
                     </Link>
                     <button
