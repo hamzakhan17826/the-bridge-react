@@ -1,8 +1,14 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import type { AxiosError } from 'axios';
-import { createEvent } from '../services/event';
+import { createEvent, fetchEvents } from '../services/event';
 import type { ApiResponse } from '../types/api';
+import type { EventListItem } from '../types/event';
+
+export const eventQueryKeys = {
+  all: ['events'] as const,
+  list: () => [...eventQueryKeys.all, 'list'] as const,
+};
 
 export function useCreateEvent() {
   return useMutation<ApiResponse, AxiosError, FormData>({
@@ -39,5 +45,13 @@ export function useCreateEvent() {
 
       toast.error(`Event creation failed: ${message}`);
     },
+  });
+}
+
+export function useEvents() {
+  return useQuery<EventListItem[]>({
+    queryKey: eventQueryKeys.list(),
+    queryFn: fetchEvents,
+    staleTime: 5 * 60 * 1000,
   });
 }

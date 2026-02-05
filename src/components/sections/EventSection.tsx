@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { useMemo, type FC } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -7,50 +7,23 @@ import { Link } from 'react-router-dom';
 import { Calendar, Users, ArrowRight } from 'lucide-react';
 import { BackgroundDecorations } from '../ui';
 import { EventCard } from '../sections';
+import { useEvents } from '../../hooks/useEvent';
 
 const Events: FC = () => {
-  const events = [
-    {
-      image: '/images/podcasts/carousel/6.jpg',
-      badge: 'Live Podcast Recording',
-      date: 'Mon, Feb 12 @ 3:00PM',
-      title: 'Bridging Cultures Podcast Live',
-      description:
-        'Join us for a live recording of our latest episode on cultural bridges in modern society.',
-      location: 'Chiang Mai, Thailand',
-      type: 'live',
-    },
-    {
-      image: '/images/podcasts/carousel/7.jpg',
-      badge: 'Virtual Event',
-      date: 'Fri, Mar 5 @ 11:00AM',
-      title: 'Podcast Q&A Session',
-      description:
-        'Interactive Q&A with our podcast hosts about bridging gaps in technology and humanity.',
-      location: 'Online',
-      type: 'virtual',
-    },
-    {
-      image: '/images/podcasts/carousel/8.jpg',
-      badge: 'In-Person Meetup',
-      date: 'Fri, Jan 23 @ 5:30PM',
-      title: 'The Bridge Fan Meetup',
-      description:
-        'Meet fellow listeners and discuss your favorite episodes in person.',
-      location: 'New York, USA',
-      type: 'in-person',
-    },
-    {
-      image: '/images/podcasts/carousel/9.jpg',
-      badge: 'Online Webinar',
-      date: 'Sat, Apr 10 @ 2:00PM',
-      title: 'Podcast Behind the Scenes',
-      description:
-        'Get insights into how we create content that bridges worlds.',
-      location: 'Online',
-      type: 'webinar',
-    },
-  ];
+  const { data: events = [], isLoading, isError } = useEvents();
+
+  const publicUpcomingEvents = useMemo(
+    () =>
+      events
+        .filter((event) => event.isPublic)
+        .sort(
+          (a, b) =>
+            new Date(a.startDateTime).getTime() -
+            new Date(b.startDateTime).getTime()
+        )
+        .slice(0, 6),
+    [events]
+  );
 
   const backgroundDecorations = [
     {
@@ -110,8 +83,29 @@ const Events: FC = () => {
               'swiper-pagination-bullet-active tb-bullet-active',
           }}
         >
-          {events.map((event, index) => (
-            <SwiperSlide key={index}>
+          {isLoading && (
+            <SwiperSlide>
+              <div className="h-full flex items-center justify-center rounded-3xl border border-dashed border-primary-200 bg-white/70 p-10 text-center text-sm text-gray-600">
+                Loading events...
+              </div>
+            </SwiperSlide>
+          )}
+          {isError && (
+            <SwiperSlide>
+              <div className="h-full flex items-center justify-center rounded-3xl border border-dashed border-red-200 bg-white/70 p-10 text-center text-sm text-red-600">
+                Unable to load events right now.
+              </div>
+            </SwiperSlide>
+          )}
+          {!isLoading && !isError && publicUpcomingEvents.length === 0 && (
+            <SwiperSlide>
+              <div className="h-full flex items-center justify-center rounded-3xl border border-dashed border-primary-200 bg-white/70 p-10 text-center text-sm text-gray-600">
+                No public events yet.
+              </div>
+            </SwiperSlide>
+          )}
+          {publicUpcomingEvents.map((event) => (
+            <SwiperSlide key={event.id}>
               <EventCard event={event} />
             </SwiperSlide>
           ))}
