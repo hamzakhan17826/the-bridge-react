@@ -6,7 +6,7 @@ import type {
 } from '../types/medium';
 
 export const fetchMediumProfile = async (): Promise<MediumProfileResponse> => {
-  const response = await api.get('/Register/Medium');
+  const response = await api.get('/Register/ProfessionalMedium');
   return response.data;
 };
 
@@ -26,12 +26,12 @@ export const upsertMediumProfile = async (
     formData.append('Id', existingProfile.id);
   }
 
-  const response = await api.post('/Register/Medium', formData);
+  const response = await api.post('/Register/ProfessionalMedium', formData);
   return response.data;
 };
 
 export const fetchMediums = async (mediumId?: string): Promise<Medium[]> => {
-  const response = await api.get('/Medium/Mediums', {
+  const response = await api.get('/Medium/ProfessionalMediums', {
     params: mediumId ? { mediumId } : undefined,
   });
   return response.data;
