@@ -31,6 +31,7 @@ const MembershipSection = () => {
   const freeTier = sortedTiers.find(
     (tier) => tier.tierCode === 'FREETIERMEMBERSHIP'
   );
+  const displayTiers = freeTier ? [freeTier, ...paidTiers] : paidTiers;
 
   // Helper function to get tier icon
   const getTierIcon = (tierCode: string) => {
@@ -57,6 +58,8 @@ const MembershipSection = () => {
         return 'Growth Plan';
       case 'PROFESSIONALMEDIUM':
         return 'Professional Plan';
+      case 'FREETIERMEMBERSHIP':
+        return 'Free Plan';
       default:
         return 'Plan';
     }
@@ -121,10 +124,12 @@ const MembershipSection = () => {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {paidTiers.map((tier, index) => {
+          {displayTiers.map((tier, index) => {
             const IconComponent = getTierIcon(tier.tierCode);
             const isPopular = isMostPopular(tier.tierCode);
-            const previousTier = paidTiers[index - 1];
+            const previousTier = displayTiers[index - 1];
+            const isFree =
+              tier.tierCode === 'FREETIERMEMBERSHIP' || tier.basePrice <= 0;
             const monthlyPrice = Math.round(tier.basePrice);
             const yearlyListPrice = Math.round(tier.basePrice * 12);
             const yearlyDiscountPrice = Math.round(tier.basePrice * 12 * 0.83);
@@ -181,22 +186,30 @@ const MembershipSection = () => {
 
                   {/* Pricing */}
                   <div className="flex items-baseline gap-2 mb-8">
-                    {billingCycle === 'yearly' && (
+                    {!isFree && billingCycle === 'yearly' && (
                       <span className="relative text-2xl text-gray-400 font-lato inline-block">
                         ${yearlyListPrice}
                         <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-400 transform -rotate-12 origin-center"></div>
                       </span>
                     )}
-                    <span className="text-4xl font-poppins font-bold text-gray-900">
-                      $
-                      {billingCycle === 'monthly'
-                        ? monthlyPrice
-                        : yearlyDiscountPrice}
-                    </span>
-                    <span className="text-lg text-gray-500 font-lato">
-                      /{billingCycle === 'monthly' ? 'month' : 'year'}
-                    </span>
-                    {billingCycle === 'yearly' && (
+                    {isFree ? (
+                      <span className="text-4xl font-poppins font-bold text-gray-900">
+                        Free
+                      </span>
+                    ) : (
+                      <>
+                        <span className="text-4xl font-poppins font-bold text-gray-900">
+                          $
+                          {billingCycle === 'monthly'
+                            ? monthlyPrice
+                            : yearlyDiscountPrice}
+                        </span>
+                        <span className="text-lg text-gray-500 font-lato">
+                          /{billingCycle === 'monthly' ? 'month' : 'year'}
+                        </span>
+                      </>
+                    )}
+                    {!isFree && billingCycle === 'yearly' && (
                       <span className="text-sm text-green-600 font-medium">
                         Save ${yearlySavings}
                       </span>
@@ -207,17 +220,21 @@ const MembershipSection = () => {
                   <button
                     onClick={() => navigate('/dashboard/membership')}
                     className={`w-full group mb-8 inline-flex items-center justify-center gap-3 px-6 py-4 font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                      isPopular
-                        ? 'bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white focus:ring-primary-400'
-                        : 'bg-gray-800 hover:bg-gray-900 text-white focus:ring-gray-400'
+                      isFree
+                        ? 'bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white focus:ring-emerald-400'
+                        : isPopular
+                          ? 'bg-linear-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white focus:ring-primary-400'
+                          : 'bg-gray-800 hover:bg-gray-900 text-white focus:ring-gray-400'
                     }`}
                   >
                     <span>
-                      {tier.tierCode === 'GENERALMEMBERSHIP'
-                        ? 'Join Now'
-                        : tier.tierCode === 'DEVELOPMENTMEDIUM'
-                          ? 'Start Growing'
-                          : 'Join Now'}
+                      {tier.tierCode === 'FREETIERMEMBERSHIP'
+                        ? 'Get Started Free'
+                        : tier.tierCode === 'GENERALMEMBERSHIP'
+                          ? 'Join Now'
+                          : tier.tierCode === 'DEVELOPMENTMEDIUM'
+                            ? 'Start Growing'
+                            : 'Join Now'}
                     </span>
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </button>
@@ -249,12 +266,11 @@ const MembershipSection = () => {
           })}
         </div>
 
-        {/* Free Tier Section */}
-        {freeTier && (
+        {/* Free Tier Section and don't remove this freeTier section as I will show it later */}
+        {/* {freeTier && (
           <div className="mt-16 max-w-7xl mx-auto">
             <div className="bg-linear-to-r from-emerald-50 via-teal-50 to-cyan-50 rounded-3xl p-8 md:p-12 border border-emerald-200 shadow-xl">
               <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
-                {/* Free Badge */}
                 <div className="shrink-0">
                   <div className="relative">
                     <div className="bg-linear-to-r from-emerald-500 to-teal-500 text-white px-6 py-3 rounded-full font-poppins font-bold text-lg shadow-lg">
@@ -267,7 +283,6 @@ const MembershipSection = () => {
                   </div>
                 </div>
 
-                {/* Content */}
                 <div className="flex-1 text-center lg:text-left">
                   <div className="flex flex-col md:flex-row items-center justify-center md:justify-start gap-4 mb-4">
                     <div className="w-16 h-16 bg-linear-to-r from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg">
@@ -288,7 +303,6 @@ const MembershipSection = () => {
                     commitment required.
                   </p>
 
-                  {/* Features */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                     {freeTier.features
                       .sort((a, b) => a.displayOrder - b.displayOrder)
@@ -304,7 +318,6 @@ const MembershipSection = () => {
                       ))}
                   </div>
 
-                  {/* CTA Button */}
                   <button
                     onClick={() => navigate('/dashboard/membership')}
                     className="inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-poppins font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"
@@ -314,7 +327,6 @@ const MembershipSection = () => {
                   </button>
                 </div>
 
-                {/* Decorative Elements */}
                 <div className="shrink-0 hidden lg:block">
                   <div className="relative">
                     <div className="w-32 h-32 bg-linear-to-r from-emerald-200 to-teal-200 rounded-full opacity-30 animate-pulse"></div>
@@ -331,10 +343,10 @@ const MembershipSection = () => {
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
-        {/* Bottom CTA */}
-        <div className="text-center mt-16">
+        {/* Bottom CTA and don't remove this freeTier section as I will show it later */}
+        {/* <div className="text-center mt-16">
           <p className="text-gray-600 font-lato mb-6">
             Not sure which plan is right for you?{' '}
             <Link to="/contact" className="text-primary-600 font-semibold">
@@ -358,7 +370,7 @@ const MembershipSection = () => {
               Start Free Trial
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

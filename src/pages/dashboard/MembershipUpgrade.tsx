@@ -333,9 +333,9 @@ export default function MembershipUpgrade() {
               </div>
 
               {/* Payment Buttons */}
-              <div className="space-y-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Button
-                  className="w-full bg-[#0070ba] hover:bg-[#0070ba]/90 text-white"
+                  className="w-full sm:flex-1 bg-[#0070ba] hover:bg-[#0070ba]/90 text-white"
                   size="lg"
                   onClick={() => handlePayment(PaymentProcessor.PayPal)}
                   disabled={placeOrderMutation.isPending || showPaymentWaiting}
@@ -348,7 +348,7 @@ export default function MembershipUpgrade() {
 
                 <Button
                   variant="outline"
-                  className="w-full border-[#635bff] text-[#635bff] hover:bg-[#635bff] hover:text-white"
+                  className="w-full sm:flex-1 border-[#635bff] text-[#635bff] hover:bg-[#635bff] hover:text-white"
                   size="lg"
                   onClick={() => handlePayment(PaymentProcessor.Stripe)}
                   disabled={placeOrderMutation.isPending || showPaymentWaiting}
