@@ -129,6 +129,7 @@ export interface ActiveMembership {
 export interface ActiveMembershipFeature {
   id: number;
   name: string;
+  code: string;
   description: string;
   displayOrder?: number;
 }

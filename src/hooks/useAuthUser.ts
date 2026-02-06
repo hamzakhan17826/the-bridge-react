@@ -22,10 +22,10 @@ export function useAuthUser() {
       (m) => m.tierCode?.toLowerCase() === tierCode.toLowerCase()
     );
 
-  const hasFeature = (featureName: string) =>
+  const hasFeature = (featureCode: string) =>
     (activeMemberships as ActiveMembership[]).some((m) =>
       m.features?.some(
-        (f) => f.name?.toLowerCase() === featureName.toLowerCase()
+        (f) => f.code?.toLowerCase() === featureCode.toLowerCase()
       )
     );
 

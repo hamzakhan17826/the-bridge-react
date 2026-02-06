@@ -4,11 +4,10 @@ import {
   Sparkles,
   Users,
   BookOpen,
-  Award,
   Star,
   Crown,
 } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSubscriptionTiers } from '../../hooks/useMembership';
 import BillingToggle from '../BillingToggle';
 import { useState } from 'react';
