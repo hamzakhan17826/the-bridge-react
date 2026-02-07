@@ -23,6 +23,7 @@ export { default as Events } from './events/Events';
 export { default as EventConfirmation } from './events/EventConfirmation';
 export { default as EventConfirmed } from './events/EventConfirmed';
 export { default as CreateEvent } from './events/CreateEvent';
+export { default as EditEvent } from './events/EditEvent';
 export { default as AccessDenied } from './AccessDenied';
 
 // Dashboard pages
