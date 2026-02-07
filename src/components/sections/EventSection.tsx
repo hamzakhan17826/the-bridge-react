@@ -4,7 +4,7 @@ import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Link } from 'react-router-dom';
-import { Calendar, Users, ArrowRight } from 'lucide-react';
+import { Calendar, Users, ArrowRight, AlertTriangle } from 'lucide-react';
 import { BackgroundDecorations } from '../ui';
 import { EventCard } from '../sections';
 import { useEvents } from '../../hooks/useEvent';
@@ -24,6 +24,8 @@ const Events: FC = () => {
         .slice(0, 6),
     [events]
   );
+
+  const isEmptyState = isLoading || isError || publicUpcomingEvents.length === 0;
 
   const backgroundDecorations = [
     {
@@ -67,7 +69,7 @@ const Events: FC = () => {
         </div>
 
         <Swiper
-          className="events-swiper"
+          className={`events-swiper${isEmptyState ? ' events-swiper--center' : ''}`}
           modules={[Pagination]}
           spaceBetween={10}
           grabCursor
@@ -92,15 +94,37 @@ const Events: FC = () => {
           )}
           {isError && (
             <SwiperSlide>
-              <div className="h-full flex items-center justify-center rounded-3xl border border-dashed border-red-200 bg-white/70 p-10 text-center text-sm text-red-600">
-                Unable to load events right now.
+              <div className="relative mx-auto w-full overflow-hidden rounded-3xl border border-primary-100 bg-white/90 p-10 text-center shadow-sm">
+                <div className="pointer-events-none absolute -top-10 -left-10 h-36 w-36 rounded-full bg-primary-100/60 blur-2xl" />
+                <div className="pointer-events-none absolute -bottom-10 -right-10 h-36 w-36 rounded-full bg-secondary-100/60 blur-2xl" />
+                <div className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary-100 text-primary-700">
+                  <AlertTriangle className="h-6 w-6" />
+                </div>
+                <h3 className="text-2xl font-poppins font-semibold text-gray-800 mb-2">
+                  Events Temporarily Unavailable
+                </h3>
+                <p className="text-base text-gray-600 font-lato">
+                  We are having trouble loading upcoming events. Please check
+                  back soon.
+                </p>
               </div>
             </SwiperSlide>
           )}
           {!isLoading && !isError && publicUpcomingEvents.length === 0 && (
             <SwiperSlide>
-              <div className="h-full flex items-center justify-center rounded-3xl border border-dashed border-primary-200 bg-white/70 p-10 text-center text-sm text-gray-600">
-                No public events yet.
+              <div className="relative mx-auto w-full overflow-hidden rounded-3xl border border-primary-100 bg-white/90 p-10 text-center shadow-sm">
+                <div className="pointer-events-none absolute -top-10 -left-10 h-36 w-36 rounded-full bg-primary-100/60 blur-2xl" />
+                <div className="pointer-events-none absolute -bottom-10 -right-10 h-36 w-36 rounded-full bg-secondary-100/60 blur-2xl" />
+                <div className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary-100 text-primary-700">
+                  <Calendar className="h-6 w-6" />
+                </div>
+                <h3 className="text-2xl font-poppins font-semibold text-gray-800 mb-2">
+                  No Public Events Yet
+                </h3>
+                <p className="text-base text-gray-600 font-lato">
+                  We are preparing new community sessions. Check back soon for
+                  fresh dates.
+                </p>
               </div>
             </SwiperSlide>
           )}

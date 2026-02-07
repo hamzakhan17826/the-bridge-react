@@ -99,6 +99,9 @@
 .events-swiper .swiper-wrapper {
   align-items: stretch;
 }
+.events-swiper--center .swiper-wrapper {
+  justify-content: center;
+}
 .events-swiper .swiper-slide {
   height: auto;
   padding: 0 10px; /* Add padding to prevent overflow when scaling */
