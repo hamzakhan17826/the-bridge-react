@@ -40,6 +40,7 @@ import {
   DashboardAccessDenied,
   AdminOrdersHistory,
   AdminUserMemberships,
+  AdminSendEmails,
   PMOnboarding,
   PMBookings,
   PMSchedule,
@@ -168,18 +169,26 @@ function App() {
             </RequireAdmin>
           ),
         },
-        {
-          path: 'orders-history',
-          element: (
-            <RequireAdmin>
-              <AdminOrdersHistory />
-            </RequireAdmin>
-          ),
-        },
-        {
-          path: 'user-memberships',
-          element: (
-            <RequireAdmin>
+          {
+            path: 'orders-history',
+            element: (
+              <RequireAdmin>
+                <AdminOrdersHistory />
+              </RequireAdmin>
+            ),
+          },
+          {
+            path: 'send-emails',
+            element: (
+              <RequireAdmin>
+                <AdminSendEmails />
+              </RequireAdmin>
+            ),
+          },
+          {
+            path: 'user-memberships',
+            element: (
+              <RequireAdmin>
               <AdminUserMemberships />
             </RequireAdmin>
           ),

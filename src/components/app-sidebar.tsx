@@ -161,6 +161,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   url: '/dashboard/orders-history',
                 },
                 {
+                  title: 'Send Emails',
+                  url: '/dashboard/send-emails',
+                },
+                {
                   title: 'User Memberships',
                   url: '/dashboard/user-memberships',
                 },

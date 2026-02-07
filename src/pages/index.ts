@@ -49,4 +49,5 @@ export { default as PMPayout } from './dashboard/pm/Payout';
 // Admin pages
 export { default as AdminOrdersHistory } from './dashboard/OrdersHistory';
 export { default as AdminUserMemberships } from './dashboard/admin/UserMemberships';
+export { default as AdminSendEmails } from './dashboard/admin/SendEmails';
 export { default as AddPodcast } from './dashboard/AddPodcast';

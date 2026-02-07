@@ -1,12 +1,12 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import {
-  fetchEmailPreferences,
   fetchCountries,
   fetchCities,
   resendVerificationEmail,
   registerUser,
 } from '../services/register';
+import { fetchEmailPreferences } from '../services/email';
 import type { EmailPreference, Country, City } from '../types/api';
 
 // Query Keys for consistent caching and invalidation

@@ -1,16 +1,6 @@
 import api from '../lib/api';
 import type { RegisterFormState, RegisterPayload } from '../types/auth';
-import type { EmailPreference, Country, City } from '../types/api';
-
-export async function fetchEmailPreferences(): Promise<EmailPreference[]> {
-  try {
-    const res = await api.get('/EmailSubscription/GetEmailPreferences');
-    return res.data as EmailPreference[];
-  } catch (error) {
-    console.error('Error fetching email preferences', error);
-    return [];
-  }
-}
+import type { Country, City } from '../types/api';
 
 export async function fetchCountries(): Promise<Country[]> {
   try {
