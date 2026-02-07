@@ -1,5 +1,5 @@
 import CountUp from 'react-countup';
-import { Users, BookOpen, Award, Heart, Sparkles } from 'lucide-react';
+import { Users, Award, Heart, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useCommunityStats } from '../../hooks/useUsers';
 

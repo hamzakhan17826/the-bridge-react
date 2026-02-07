@@ -1,13 +1,13 @@
 import { useState, useMemo } from 'react';
 import { Search, Calendar } from 'lucide-react';
-import { useEvents } from '../hooks/useEvent';
+import { useEvents } from '../../hooks/useEvent';
 import {
   EventStatus,
   Tags,
   getEventStatusKey,
   getTagKey,
-} from '../constants/enums';
-import { EventCard } from '../components/sections';
+} from '../../constants/enums';
+import { EventCard } from '../../components/sections';
 
 const Events = () => {
   const [searchTerm, setSearchTerm] = useState('');

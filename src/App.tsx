@@ -24,6 +24,8 @@ import {
   Memberships,
   AboutUs,
   Events,
+  EventConfirmation,
+  EventConfirmed,
   CreateEvent,
   Overview,
   DashboardUserProfile,
@@ -69,6 +71,8 @@ function App() {
       children: [
         { path: '/', element: <Home /> },
         { path: '/events', element: <Events /> },
+        { path: '/events/confirmation', element: <EventConfirmation /> },
+        { path: '/events/confirmed', element: <EventConfirmed /> },
         { path: '/podcasts', element: <Podcasts /> },
         { path: '/mediums', element: <Mediums /> },
         { path: '/blogs', element: <Blogs /> },

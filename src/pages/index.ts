@@ -19,8 +19,10 @@ export { default as BookDetail } from './BookDetail';
 export { default as Books } from './Books';
 export { default as Memberships } from './Memberships';
 export { default as AboutUs } from './AboutUs';
-export { default as Events } from './Events';
-export { default as CreateEvent } from './CreateEvent';
+export { default as Events } from './events/Events';
+export { default as EventConfirmation } from './events/EventConfirmation';
+export { default as EventConfirmed } from './events/EventConfirmed';
+export { default as CreateEvent } from './events/CreateEvent';
 export { default as AccessDenied } from './AccessDenied';
 
 // Dashboard pages
