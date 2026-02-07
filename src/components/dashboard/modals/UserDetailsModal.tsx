@@ -7,6 +7,7 @@ import {
   DialogDescription,
 } from '../../ui/dialog';
 import { useCities, useCountries } from '../../../hooks/useLocation';
+import { useUserCredits } from '../../../hooks/useMembership';
 import type { AppUsersBasicDataUser } from '../../../types/user';
 
 interface UserDetailsModalProps {
@@ -30,6 +31,9 @@ export default function UserDetailsModal({
 }: UserDetailsModalProps) {
   const { data: countries = [] } = useCountries();
   const { data: cities = [] } = useCities(user?.countryId ?? undefined);
+  const { data: creditsData } = useUserCredits(user?.id);
+  const totalCredits = creditsData?.key;
+  const remainingCredits = creditsData?.value;
 
   const countryName = user?.countryId
     ? countries.find((country) => country.id === user.countryId)?.name
@@ -115,6 +119,14 @@ export default function UserDetailsModal({
                   : 'Never'}
               </p>
             </div>
+            {typeof totalCredits === 'number' &&
+              typeof remainingCredits === 'number' && (
+                <div>
+                  <label className="font-medium">Credits:</label>
+                  <div>Total: {totalCredits}</div>
+                  <div>Remaining: {remainingCredits}</div>
+                </div>
+              )}
             <div>
               <label className="font-medium">Location:</label>
               <p>

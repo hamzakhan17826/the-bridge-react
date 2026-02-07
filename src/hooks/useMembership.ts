@@ -9,6 +9,8 @@ import {
   fetchMyActiveMemberships,
   fetchMyTotalAndRemainingCredits,
   fetchUserMemberships,
+  fetchUserTotalAndRemainingCredits,
+  type UserTotalAndRemainingCreditsResponse,
 } from '../services/membership';
 import {
   type SubscriptionTier,
@@ -129,5 +131,15 @@ export const useUserMemberships = (
     staleTime: 60 * 1000,
     gcTime: 10 * 60 * 1000,
     enabled: true,
+  });
+};
+
+export const useUserCredits = (userId?: string) => {
+  return useQuery<UserTotalAndRemainingCreditsResponse>({
+    queryKey: ['membership', 'userTotalAndRemainingCredits', userId],
+    queryFn: () => fetchUserTotalAndRemainingCredits(userId ?? ''),
+    staleTime: 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    enabled: !!userId,
   });
 };

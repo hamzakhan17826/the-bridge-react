@@ -171,3 +171,22 @@ export async function fetchUserMemberships(
     throw new Error('Failed to fetch user memberships.');
   }
 }
+
+export type UserTotalAndRemainingCreditsResponse = {
+  key: number; // total credits
+  value: number; // remaining credits
+};
+
+export async function fetchUserTotalAndRemainingCredits(
+  userId: string
+): Promise<UserTotalAndRemainingCreditsResponse> {
+  try {
+    const res = await api.get('/Member/UserTotalAndRemainingCredits', {
+      params: { userId },
+    });
+    return res.data as UserTotalAndRemainingCreditsResponse;
+  } catch (error: unknown) {
+    console.error('Failed to fetch UserTotalAndRemainingCredits', error);
+    throw new Error('Failed to fetch user credits.');
+  }
+}
