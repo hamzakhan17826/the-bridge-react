@@ -1,8 +1,14 @@
 import { Link } from 'react-router-dom';
-import { Users, Heart, Sparkles, ArrowRight } from 'lucide-react';
+import { Users, Crown, Sparkles, ArrowRight, Heart } from 'lucide-react';
 import { BackgroundDecorations, StatCard } from '../ui';
+import { useCommunityStats } from '../../hooks/useUsers';
 
 export default function HeroSection() {
+  const { data: community } = useCommunityStats();
+  const totalUsers = community?.totalUsers ?? 0;
+  const sitterCount = community?.sitterCount ?? 0;
+  const professionalCount = community?.professionalCount ?? 0;
+  const avatars = community?.avatars ?? [];
   const backgroundDecorations = [
     {
       top: 'top-20',
@@ -88,8 +94,16 @@ export default function HeroSection() {
 
             {/* Stats */}
             <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-200">
-              <StatCard icon={Users} number="137K" label="Active Listeners" />
-              <StatCard icon={Heart} number="2.1M" label="Community Members" />
+              <StatCard
+                icon={Users}
+                number={sitterCount.toLocaleString()}
+                label="Sitter Listeners"
+              />
+              <StatCard
+                icon={Crown}
+                number={professionalCount.toLocaleString()}
+                label="Professional Mediums"
+              />
             </div>
           </div>
 
@@ -125,18 +139,24 @@ export default function HeroSection() {
             {/* Trust Indicators */}
             <div className="flex items-center gap-4 mt-8 justify-center lg:justify-start">
               <div className="flex -space-x-2">
-                <div className="w-10 h-10 rounded-full bg-linear-to-r from-primary-400 to-secondary-400 border-2 border-white flex items-center justify-center">
-                  <span className="text-xs font-bold text-white">A</span>
-                </div>
-                <div className="w-10 h-10 rounded-full bg-linear-to-r from-secondary-400 to-primary-400 border-2 border-white flex items-center justify-center">
-                  <span className="text-xs font-bold text-white">B</span>
-                </div>
-                <div className="w-10 h-10 rounded-full bg-linear-to-r from-primary-400 to-pink-400 border-2 border-white flex items-center justify-center">
-                  <span className="text-xs font-bold text-white">C</span>
-                </div>
+                {avatars.slice(0, 3).map((url, idx) => (
+                  <div
+                    key={`${url}-${idx}`}
+                    className="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-gray-200"
+                  >
+                    <img
+                      src={url}
+                      alt="Member"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
               </div>
               <div className="text-sm text-gray-600 font-lato">
-                <span className="font-semibold text-gray-900">500+</span> active
+                <span className="font-semibold text-gray-900">
+                  {totalUsers.toLocaleString()}
+                </span>{' '}
                 members
               </div>
             </div>

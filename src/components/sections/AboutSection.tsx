@@ -1,9 +1,16 @@
 import CountUp from 'react-countup';
 import { Users, BookOpen, Award, Heart, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useCommunityStats } from '../../hooks/useUsers';
 
 const AboutSection = () => {
   const navigate = useNavigate();
+  const { data: community } = useCommunityStats();
+  const sitterCount = community?.sitterCount ?? 0;
+  const professionalCount = community?.professionalCount ?? 0;
+  const totalEvents = community?.totalEvents ?? 0;
+  const recordedEvents = community?.recordedEvents ?? 0;
+  const totalUsers = community?.totalUsers ?? 0;
   return (
     <div className="bg-linear-to-br from-primary-50 via-white to-secondary-50 m-0 relative py-24 lg:pb-44">
       <div className="container mx-auto px-6 relative z-10">
@@ -50,7 +57,7 @@ const AboutSection = () => {
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 p-4 rounded-2xl bg-white shadow-sm border border-secondary-100 hover:shadow-md transition-shadow">
+              {/* <div className="flex items-start gap-4 p-4 rounded-2xl bg-white shadow-sm border border-secondary-100 hover:shadow-md transition-shadow">
                 <div className="shrink-0 w-12 h-12 bg-linear-to-r from-secondary-500 to-primary-500 rounded-xl flex items-center justify-center">
                   <BookOpen className="w-6 h-6 text-white" />
                 </div>
@@ -63,7 +70,7 @@ const AboutSection = () => {
                     supportive community.
                   </p>
                 </div>
-              </div>
+              </div> */}
 
               <div className="flex items-start gap-4 p-4 rounded-2xl bg-white shadow-sm border border-pink-100 hover:shadow-md transition-shadow">
                 <div className="shrink-0 w-12 h-12 bg-linear-to-r from-primary-500 to-pink-500 rounded-xl flex items-center justify-center">
@@ -105,7 +112,11 @@ const AboutSection = () => {
                       <div className="rounded-2xl min-w-24 min-h-24 lg:min-w-32 lg:min-h-32 p-3 lg:p-4 bg-linear-to-r from-primary-500 to-secondary-500 shadow-lg flex items-center justify-center transform hover:scale-105 transition-transform">
                         <div className="text-center">
                           <div className="text-white lg:text-3xl font-bold font-poppins">
-                            <CountUp start={1} end={500} duration={2} />
+                            <CountUp
+                              start={0}
+                              end={professionalCount}
+                              duration={1.5}
+                            />
                           </div>
                           <p className="font-semibold text-primary-100 mb-0 text-sm">
                             Mediums
@@ -117,7 +128,11 @@ const AboutSection = () => {
                       <div className="rounded-2xl min-w-24 min-h-24 lg:min-w-32 lg:min-h-32 p-3 lg:p-4 bg-linear-to-r from-secondary-500 to-primary-500 shadow-lg flex items-center justify-center transform hover:scale-105 transition-transform">
                         <div className="text-center">
                           <div className="text-white lg:text-3xl font-bold font-poppins">
-                            <CountUp start={1} end={2000} duration={1.4} />
+                            <CountUp
+                              start={0}
+                              end={sitterCount}
+                              duration={1.6}
+                            />
                           </div>
                           <p className="font-semibold text-secondary-100 mb-0 text-sm">
                             Sitters
@@ -127,7 +142,11 @@ const AboutSection = () => {
                       <div className="rounded-2xl min-w-24 min-h-24 lg:min-w-32 lg:min-h-32 p-3 lg:p-4 bg-linear-to-r from-red-500 to-pink-500 shadow-lg flex items-center justify-center transform hover:scale-105 transition-transform">
                         <div className="text-center">
                           <div className="text-white lg:text-3xl font-bold font-poppins">
-                            <CountUp start={1} end={150} duration={2.1} />
+                            <CountUp
+                              start={0}
+                              end={totalEvents}
+                              duration={1.8}
+                            />
                           </div>
                           <p className="font-semibold text-red-100 mb-0 text-sm">
                             Events
@@ -137,7 +156,11 @@ const AboutSection = () => {
                       <div className="rounded-2xl min-w-24 min-h-24 lg:min-w-32 lg:min-h-32 p-3 lg:p-4 bg-linear-to-r from-amber-500 to-orange-500 shadow-lg flex items-center justify-center transform hover:scale-105 transition-transform">
                         <div className="text-center">
                           <div className="text-white lg:text-3xl font-bold font-poppins">
-                            <CountUp start={1} end={5000} duration={2.4} />
+                            <CountUp
+                              start={1}
+                              end={totalUsers}
+                              duration={2.4}
+                            />
                           </div>
                           <p className="font-semibold text-amber-100 mb-0 text-sm">
                             Members
@@ -149,7 +172,11 @@ const AboutSection = () => {
                       <div className="rounded-2xl min-w-24 min-h-24 lg:min-w-32 lg:min-h-32 p-3 lg:p-4 bg-linear-to-r from-primary-500 to-secondary-500 shadow-lg flex items-center justify-center transform hover:scale-105 transition-transform">
                         <div className="text-center">
                           <div className="text-white lg:text-3xl font-bold font-poppins">
-                            <CountUp start={1} end={1000} duration={2.4} />
+                            <CountUp
+                              start={0}
+                              end={recordedEvents}
+                              duration={1.9}
+                            />
                           </div>
                           <p className="font-semibold text-primary-100 mb-0 text-sm">
                             Replays

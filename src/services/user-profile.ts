@@ -5,6 +5,7 @@ import type {
   ProfileResponse,
   AppUsersBasicDataRequest,
   AppUsersBasicDataResponse,
+  CommunityStatsResponse,
 } from '../types/user';
 
 export async function fetchUserProfile(
@@ -171,6 +172,19 @@ export async function fetchUserRoles(
     return data;
   } catch (error: unknown) {
     console.error('Failed to load user roles:', error);
+    throw error;
+  }
+}
+
+/**
+ * Fetch all users for public counts and avatars
+ */
+export async function fetchCommunityStats(): Promise<CommunityStatsResponse> {
+  try {
+    const res = await api.get('/Account/CommunityStats');
+    return res.data as CommunityStatsResponse;
+  } catch (error: unknown) {
+    console.error('Failed to load community stats:', error);
     throw error;
   }
 }

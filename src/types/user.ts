@@ -79,6 +79,15 @@ export interface AppUsersBasicDataUser {
   profilePictureUrl?: string;
 }
 
+export interface CommunityStatsResponse {
+  totalUsers: number;
+  sitterCount: number;
+  professionalCount: number;
+  avatars: string[];
+  totalEvents: number;
+  recordedEvents: number;
+}
+
 // Response type for AppUsersBasicData API
 export interface AppUsersBasicDataResponse {
   pageNumber: number;

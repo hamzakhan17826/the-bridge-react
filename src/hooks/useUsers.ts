@@ -5,6 +5,7 @@ import {
   fetchAppUsersBasicData,
   fetchUserClaims,
   fetchUserRoles,
+  fetchCommunityStats,
 } from '../services/user-profile';
 import api from '../lib/api';
 import type {
@@ -22,6 +23,7 @@ export const usersQueryKeys = {
     [...usersQueryKeys.lists(), userId || 'all'] as const,
   details: () => [...usersQueryKeys.all, 'detail'] as const,
   detail: (id: string) => [...usersQueryKeys.details(), id] as const,
+  community: () => [...usersQueryKeys.all, 'community'] as const,
 };
 
 export const useAppUsersBasicData = (params?: AppUsersBasicDataRequest) => {
@@ -84,6 +86,16 @@ export const useUserRoles = (userId: string) => {
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     retry: 2,
+  });
+};
+
+export const useCommunityStats = () => {
+  return useQuery({
+    queryKey: usersQueryKeys.community(),
+    queryFn: fetchCommunityStats,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    retry: 1,
   });
 };
 
