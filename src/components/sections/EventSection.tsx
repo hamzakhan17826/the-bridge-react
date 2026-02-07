@@ -25,7 +25,8 @@ const Events: FC = () => {
     [events]
   );
 
-  const isEmptyState = isLoading || isError || publicUpcomingEvents.length === 0;
+  const isEmptyState =
+    isLoading || isError || publicUpcomingEvents.length === 0;
 
   const backgroundDecorations = [
     {
