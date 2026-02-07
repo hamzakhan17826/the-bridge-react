@@ -63,7 +63,7 @@ export default function EventCard({ event }: { event: EventListItem }) {
         </div>
       </div>
 
-      <div className="p-6">
+      <div className="border border-gray-200 p-6 rounded-b-2xl">
         <div className="flex items-center gap-2 mb-3">
           <Calendar className="w-4 h-4 text-primary-600" />
           <span className="text-sm text-gray-600 ">

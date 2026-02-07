@@ -123,16 +123,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           ]
         : []),
       ...(isAdmin || isProfessionalMedium
-        ? [
-            {
-              title: 'Events',
-              url: '/dashboard/events/create',
-              icon: Calendar,
-              items: [
-                {
-                  title: 'Create Event',
-                  url: '/dashboard/events/create',
-                },
+          ? [
+              {
+                title: 'Events',
+                url: '/dashboard/events/create',
+                icon: Calendar,
+                items: [
+                  {
+                    title: 'Event List',
+                    url: '/dashboard/events',
+                  },
+                  {
+                    title: 'Create Event',
+                    url: '/dashboard/events/create',
+                  },
               ],
             },
           ]

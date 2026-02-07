@@ -47,6 +47,7 @@ import {
   MembershipOverview,
   AddPodcast,
   CreditsHistory,
+  MyEvents,
 } from './pages';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
@@ -141,6 +142,7 @@ function App() {
         { path: 'pm/earnings', element: <PMEarnings /> },
         { path: 'pm/payout', element: <PMPayout /> },
         { path: 'events/create', element: <CreateEvent /> },
+        { path: 'events', element: <MyEvents /> },
         { path: 'profile', element: <DashboardUserProfile /> },
         { path: 'membership', element: <DashboardMembership /> },
         { path: 'membership/orders', element: <MembershipOrders /> },

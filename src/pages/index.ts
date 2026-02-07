@@ -36,6 +36,7 @@ export { default as PaymentReturn } from './dashboard/PaymentReturn';
 export { default as ActivityLogs } from './dashboard/ActivityLogs';
 export { default as DashboardAccessDenied } from './dashboard/AccessDenied';
 export { default as CreditsHistory } from './dashboard/CreditsHistory';
+export { default as MyEvents } from './dashboard/MyEvents';
 // Professional Medium (PM) dashboard pages
 export { default as PMOnboarding } from './dashboard/pm/Onboarding';
 export { default as PMBookings } from './dashboard/pm/Bookings';

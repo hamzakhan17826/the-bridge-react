@@ -15,3 +15,8 @@ export const fetchEvents = async (): Promise<EventListItem[]> => {
   const response = await api.get('/Event/Events');
   return response.data as EventListItem[];
 };
+
+export const fetchMyEvents = async (): Promise<EventListItem[]> => {
+  const response = await api.get('/Event/MyEvents');
+  return response.data as EventListItem[];
+};

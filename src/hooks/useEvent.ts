@@ -1,13 +1,14 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import type { AxiosError } from 'axios';
-import { createEvent, fetchEvents } from '../services/event';
+import { createEvent, fetchEvents, fetchMyEvents } from '../services/event';
 import type { ApiResponse } from '../types/api';
 import type { EventListItem } from '../types/event';
 
 export const eventQueryKeys = {
   all: ['events'] as const,
   list: () => [...eventQueryKeys.all, 'list'] as const,
+  myList: () => [...eventQueryKeys.all, 'my-list'] as const,
 };
 
 export function useCreateEvent() {
@@ -53,5 +54,13 @@ export function useEvents() {
     queryKey: eventQueryKeys.list(),
     queryFn: fetchEvents,
     staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useMyEvents() {
+  return useQuery<EventListItem[]>({
+    queryKey: eventQueryKeys.myList(),
+    queryFn: fetchMyEvents,
+    staleTime: 60 * 1000,
   });
 }
