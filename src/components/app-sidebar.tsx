@@ -122,21 +122,36 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             },
           ]
         : []),
-      ...(isAdmin || isProfessionalMedium
-          ? [
-              {
-                title: 'Events',
-                url: '/dashboard/events/create',
-                icon: Calendar,
-                items: [
-                  {
-                    title: 'Event List',
-                    url: '/dashboard/events',
-                  },
-                  {
-                    title: 'Create Event',
-                    url: '/dashboard/events/create',
-                  },
+      ...(isProfessionalMedium
+        ? [
+            {
+              title: 'Events',
+              url: '/dashboard/events/create',
+              icon: Calendar,
+              items: [
+                {
+                  title: 'Event List',
+                  url: '/dashboard/events',
+                },
+                {
+                  title: 'Create Event',
+                  url: '/dashboard/events/create',
+                },
+              ],
+            },
+          ]
+        : []),
+      ...(isProfessionalMedium
+        ? [
+            {
+              title: 'Podcasts',
+              url: '/dashboard/podcasts',
+              icon: Calendar,
+              items: [
+                {
+                  title: 'Create Podcast',
+                  url: '/dashboard/add-podcast',
+                },
               ],
             },
           ]
@@ -167,10 +182,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {
                   title: 'User Memberships',
                   url: '/dashboard/user-memberships',
-                },
-                {
-                  title: 'Add Podcast',
-                  url: '/dashboard/add-podcast',
                 },
               ],
             },

@@ -60,6 +60,7 @@ import {
   RequireAuth,
   RedirectIfAuth,
   RequireAdmin,
+  RequireMembershipTier,
 } from './components/system/RouteGuards';
 import DashboardLayout from './components/layouts/dashboard/DashboardLayout';
 import { BreadcrumbProvider } from '@/components/ui/breadcrumb';
@@ -120,11 +121,7 @@ function App() {
         },
         {
           path: '/contact',
-          element: (
-            <RequireAuth>
-              <ContactUsPage />
-            </RequireAuth>
-          ),
+          element: <ContactUsPage />,
         },
         { path: '/payment-return', element: <PaymentReturn /> },
       ],
@@ -171,26 +168,26 @@ function App() {
             </RequireAdmin>
           ),
         },
-          {
-            path: 'orders-history',
-            element: (
-              <RequireAdmin>
-                <AdminOrdersHistory />
-              </RequireAdmin>
-            ),
-          },
-          {
-            path: 'send-emails',
-            element: (
-              <RequireAdmin>
-                <AdminSendEmails />
-              </RequireAdmin>
-            ),
-          },
-          {
-            path: 'user-memberships',
-            element: (
-              <RequireAdmin>
+        {
+          path: 'orders-history',
+          element: (
+            <RequireAdmin>
+              <AdminOrdersHistory />
+            </RequireAdmin>
+          ),
+        },
+        {
+          path: 'send-emails',
+          element: (
+            <RequireAdmin>
+              <AdminSendEmails />
+            </RequireAdmin>
+          ),
+        },
+        {
+          path: 'user-memberships',
+          element: (
+            <RequireAdmin>
               <AdminUserMemberships />
             </RequireAdmin>
           ),
@@ -198,9 +195,9 @@ function App() {
         {
           path: 'add-podcast',
           element: (
-            <RequireAdmin>
+            <RequireMembershipTier tierCode="PROFESSIONALMEDIUM">
               <AddPodcast />
-            </RequireAdmin>
+            </RequireMembershipTier>
           ),
         },
         { path: 'settings', element: <Settings /> },
