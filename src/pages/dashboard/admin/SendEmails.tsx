@@ -3,10 +3,10 @@ import { Helmet } from 'react-helmet-async';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useEmailPreferences, useSendEmailsToUsers } from '@/hooks/useEmail';
+import RichTextEditor from '@/components/ui/RichTextEditor';
 
 export default function SendEmails() {
   const { data: preferences = [], isLoading } = useEmailPreferences();
@@ -116,12 +116,11 @@ export default function SendEmails() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="body">Body</Label>
-                <Textarea
-                  id="body"
-                  rows={8}
-                  placeholder="Write your message..."
+                <RichTextEditor
                   value={body}
-                  onChange={(e) => setBody(e.target.value)}
+                  onChange={setBody}
+                  placeholder="Write your message..."
+                  className="email-editor"
                 />
               </div>
               <div className="flex items-center justify-between">

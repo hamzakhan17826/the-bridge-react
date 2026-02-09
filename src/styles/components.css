@@ -115,6 +115,22 @@
 }
 /* Testimonial section end */
 
+/* Email editor (React Quill) */
+.email-editor .ql-container {
+  min-height: 320px;
+}
+.email-editor .ql-editor {
+  min-height: 280px;
+}
+.email-editor .ql-toolbar.ql-snow {
+  border-color: #d1d5db;
+  border-radius: 12px 12px 0 0;
+}
+.email-editor .ql-container.ql-snow {
+  border-color: #d1d5db;
+  border-radius: 0 0 12px 12px;
+}
+
 /* Testimonial section start */
 .testimonial-swiper .swiper-slide {
   width: 400px;
