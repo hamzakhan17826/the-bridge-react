@@ -8,6 +8,7 @@ import {
   Calendar,
   Clock,
   ExternalLink,
+  X,
 } from 'lucide-react';
 import { Button, Input } from '../components/ui';
 import type { PodcastItem } from '../types/content';
@@ -15,10 +16,20 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { MediaPlayer, MediaProvider } from '@vidstack/react';
+import {
+  DefaultAudioLayout,
+  defaultLayoutIcons,
+} from '@vidstack/react/player/layouts/default';
+import '@vidstack/react/player/styles/default/theme.css';
+import '@vidstack/react/player/styles/default/layouts/audio.css';
+import sampleAudio from '../assets/children-tune.mp3';
 
 const Podcasts = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSort, setSelectedSort] = useState('newest');
+  const [activePodcast, setActivePodcast] = useState<PodcastItem | null>(null);
+  const [isPlayerOpen, setIsPlayerOpen] = useState(false);
 
   // Expanded mock data with more podcasts
   const podcasts: PodcastItem[] = [
@@ -160,6 +171,11 @@ const Podcasts = () => {
   //     }
   //   });
 
+  const handlePlay = (podcast: PodcastItem) => {
+    setActivePodcast(podcast);
+    setIsPlayerOpen(true);
+  };
+
   const PodcastCard = ({ podcast }: { podcast: PodcastItem }) => (
     <div className="group bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex flex-col">
       {/* Image */}
@@ -173,7 +189,10 @@ const Podcasts = () => {
 
         {/* Play button overlay */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button className="bg-white/90 hover:bg-white text-primary-600 rounded-full p-4 shadow-lg transform hover:scale-110 transition-all duration-300">
+          <button
+            onClick={() => handlePlay(podcast)}
+            className="bg-white/90 hover:bg-white text-primary-600 rounded-full p-4 shadow-lg transform hover:scale-110 transition-all duration-300"
+          >
             <Play className="w-6 h-6 ml-1" />
           </button>
         </div>
@@ -208,6 +227,7 @@ const Podcasts = () => {
           <Button
             size="sm"
             className="flex-1 border border-primary-600 bg-white hover:bg-primary-600 hover:text-white text-primary-600"
+            onClick={() => handlePlay(podcast)}
           >
             <Play className="w-4 h-4 mr-2" />
             Listen Now
@@ -322,6 +342,38 @@ const Podcasts = () => {
           </div>
         </section>
 
+        {/* Featured Audio Player Trigger */}
+        <section className="py-10 bg-white border-b border-gray-200">
+          <div className="container mx-auto px-6">
+            <div className="max-w-3xl flex items-center justify-between gap-4">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-1">
+                  Featured Episode
+                </h2>
+                <p className="text-sm text-gray-600">
+                  Click play to open the player at the bottom.
+                </p>
+              </div>
+              <button
+                onClick={() =>
+                  handlePlay({
+                    id: 0,
+                    episode: 'featured',
+                    duration: '05:35 Mins',
+                    date: 'Dec 15th, 2024',
+                    title: 'Children Tune',
+                    image: '/images/podcasts/carousel/1.jpg',
+                  })
+                }
+                className="h-12 w-12 rounded-full border border-primary-200 bg-primary-50 text-primary-600 hover:bg-primary-600 hover:text-white transition-colors flex items-center justify-center"
+                aria-label="Open player"
+              >
+                <Play className="w-5 h-5 ml-0.5" />
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* Podcasts Sections */}
         <section className="py-12">
           <div className="container mx-auto px-6">
@@ -410,6 +462,30 @@ const Podcasts = () => {
           </section>
         )}
       </div>
+
+      {isPlayerOpen && activePodcast && (
+        <div className="fixed bottom-6 left-1/2 z-50 w-[min(960px,95vw)] -translate-x-1/2 rounded-2xl border border-gray-200 bg-white shadow-2xl">
+          <button
+            onClick={() => setIsPlayerOpen(false)}
+            className="absolute right-1 top-1 z-10 rounded-full border border-red-500 bg-red-500 p-0.5 text-red-100 hover:text-white hover:border-red-600 hover:bg-red-600 transition-colors"
+            aria-label="Close player"
+          >
+            <X className="h-4 w-4" />
+          </button>
+          <div className="px-2 py-2">
+            <MediaPlayer
+              key={activePodcast.id}
+              title={activePodcast.title}
+              src={sampleAudio}
+              autoPlay
+              className="w-full"
+            >
+              <MediaProvider />
+              <DefaultAudioLayout icons={defaultLayoutIcons} />
+            </MediaPlayer>
+          </div>
+        </div>
+      )}
     </>
   );
 };
