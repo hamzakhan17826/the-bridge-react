@@ -139,6 +139,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 },
               ],
             },
+            {
+              title: 'Blogs',
+              url: '/dashboard/blogs/create',
+              icon: SquareTerminal,
+              items: [
+                {
+                  title: 'My Articles',
+                  url: '/dashboard/blogs',
+                },
+                {
+                  title: 'Create Blog',
+                  url: '/dashboard/blogs/create',
+                },
+              ],
+            },
           ]
         : []),
       ...(isProfessionalMedium
@@ -182,6 +197,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {
                   title: 'User Memberships',
                   url: '/dashboard/user-memberships',
+                },
+                {
+                  title: 'Tags Management',
+                  url: '/dashboard/tags',
+                },
+                {
+                  title: 'Blog Management',
+                  url: '/dashboard/blogs',
                 },
               ],
             },

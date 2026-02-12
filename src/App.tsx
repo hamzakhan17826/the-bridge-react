@@ -42,6 +42,7 @@ import {
   AdminOrdersHistory,
   AdminUserMemberships,
   AdminSendEmails,
+  AdminTags,
   PMOnboarding,
   PMBookings,
   PMSchedule,
@@ -52,6 +53,9 @@ import {
   AddPodcast,
   CreditsHistory,
   MyEvents,
+  MyBlogs,
+  CreateBlog,
+  EditBlog,
 } from './pages';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
@@ -147,6 +151,9 @@ function App() {
         { path: 'events/create', element: <CreateEvent /> },
         { path: 'events', element: <MyEvents /> },
         { path: 'events/:eventId/edit', element: <EditEvent /> },
+        { path: 'blogs', element: <MyBlogs /> },
+        { path: 'blogs/create', element: <CreateBlog /> },
+        { path: 'blogs/:slug/edit', element: <EditBlog /> },
         { path: 'profile', element: <DashboardUserProfile /> },
         { path: 'membership', element: <DashboardMembership /> },
         { path: 'membership/orders', element: <MembershipOrders /> },
@@ -181,6 +188,14 @@ function App() {
           element: (
             <RequireAdmin>
               <AdminSendEmails />
+            </RequireAdmin>
+          ),
+        },
+        {
+          path: 'tags',
+          element: (
+            <RequireAdmin>
+              <AdminTags />
             </RequireAdmin>
           ),
         },

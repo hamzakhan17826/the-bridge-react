@@ -40,6 +40,9 @@ export { default as ActivityLogs } from './dashboard/ActivityLogs';
 export { default as DashboardAccessDenied } from './dashboard/AccessDenied';
 export { default as CreditsHistory } from './dashboard/CreditsHistory';
 export { default as MyEvents } from './dashboard/MyEvents';
+export { default as MyBlogs } from './dashboard/blogs/MyBlogs';
+export { default as CreateBlog } from './dashboard/blogs/CreateBlog';
+export { default as EditBlog } from './dashboard/blogs/EditBlog';
 // Professional Medium (PM) dashboard pages
 export { default as PMOnboarding } from './dashboard/pm/Onboarding';
 export { default as PMBookings } from './dashboard/pm/Bookings';
@@ -51,4 +54,5 @@ export { default as PMPayout } from './dashboard/pm/Payout';
 export { default as AdminOrdersHistory } from './dashboard/OrdersHistory';
 export { default as AdminUserMemberships } from './dashboard/admin/UserMemberships';
 export { default as AdminSendEmails } from './dashboard/admin/SendEmails';
+export { default as AdminTags } from './dashboard/admin/Tags';
 export { default as AddPodcast } from './dashboard/AddPodcast';
