@@ -21,6 +21,7 @@ import {
   useSubscriptionTiers,
   usePlaceMembershipOrder,
   useOrderStatus,
+  useMyActiveMemberships,
 } from '../../hooks/useMembership';
 import { paypalWebhookMock } from '../../services/membership';
 import { Button } from '../../components/ui';
@@ -49,6 +50,7 @@ export default function MembershipUpgrade() {
     isLoading: tiersLoading,
     isError: tiersError,
   } = useSubscriptionTiers();
+  const { data: activeMemberships = [] } = useMyActiveMemberships();
   const placeOrderMutation = usePlaceMembershipOrder();
   const orderStatusMutation = useOrderStatus();
 
@@ -56,6 +58,10 @@ export default function MembershipUpgrade() {
   const selectedTier = tiers.find(
     (tier) => tier.tierCode.toLowerCase() === plan
   );
+
+  const isAlreadyPurchased =
+    selectedTier &&
+    activeMemberships.some((m) => m.tierCode === selectedTier.tierCode);
 
   // Get the icon component for rendering
   const renderTierIcon = (tierCode: string) => {
@@ -299,66 +305,96 @@ export default function MembershipUpgrade() {
                 </div>
               </div>
 
-              {/* Payment Options */}
-              <div className="space-y-4">
-                {error && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-md">
-                    <p className="text-sm text-red-600">{error}</p>
+              {isAlreadyPurchased ? (
+                <div className="p-6 bg-green-50 border-2 border-green-200 rounded-lg text-center space-y-4">
+                  <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
+                    <CheckCircle className="h-10 w-10 text-green-600" />
                   </div>
-                )}
-
-                <div className="space-y-2">
-                  <Label htmlFor="discountCode">Discount Code (Optional)</Label>
-                  <Input
-                    id="discountCode"
-                    placeholder="Enter discount code"
-                    value={discountCode}
-                    onChange={(e) => setDiscountCode(e.target.value)}
-                    className="bg-primary-foreground"
-                  />
+                  <div>
+                    <h3 className="text-xl font-bold text-green-900">
+                      Already Active
+                    </h3>
+                    <p className="text-green-700">
+                      You are already a member of the {selectedTier.tierName}.
+                    </p>
+                  </div>
+                  <Button
+                    onClick={() => navigate('/dashboard/membership')}
+                    className="w-full bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    Back to Plans
+                  </Button>
                 </div>
+              ) : (
+                <>
+                  {/* Payment Options */}
+                  <div className="space-y-4">
+                    {error && (
+                      <div className="p-3 bg-red-50 border border-red-200 rounded-md">
+                        <p className="text-sm text-red-600">{error}</p>
+                      </div>
+                    )}
 
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="autoRenew"
-                    checked={autoRenew}
-                    onCheckedChange={(checked: boolean | 'indeterminate') =>
-                      setAutoRenew(checked === true)
-                    }
-                  />
-                  <Label htmlFor="autoRenew" className="text-sm">
-                    Auto-renew my membership
-                  </Label>
-                </div>
-              </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="discountCode">
+                        Discount Code (Optional)
+                      </Label>
+                      <Input
+                        id="discountCode"
+                        placeholder="Enter discount code"
+                        value={discountCode}
+                        onChange={(e) => setDiscountCode(e.target.value)}
+                        className="bg-primary-foreground"
+                      />
+                    </div>
 
-              {/* Payment Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Button
-                  className="w-full sm:flex-1 bg-[#0070ba] hover:bg-[#0070ba]/90 text-white"
-                  size="lg"
-                  onClick={() => handlePayment(PaymentProcessor.PayPal)}
-                  disabled={placeOrderMutation.isPending || showPaymentWaiting}
-                >
-                  <Wallet className="w-5 h-5 mr-2" />
-                  {placeOrderMutation.isPending
-                    ? 'Processing...'
-                    : 'Pay with PayPal'}
-                </Button>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="autoRenew"
+                        checked={autoRenew}
+                        onCheckedChange={(checked: boolean | 'indeterminate') =>
+                          setAutoRenew(checked === true)
+                        }
+                      />
+                      <Label htmlFor="autoRenew" className="text-sm">
+                        Auto-renew my membership
+                      </Label>
+                    </div>
+                  </div>
 
-                <Button
-                  variant="outline"
-                  className="w-full sm:flex-1 border-[#635bff] text-[#635bff] hover:bg-[#635bff] hover:text-white"
-                  size="lg"
-                  onClick={() => handlePayment(PaymentProcessor.Stripe)}
-                  disabled={placeOrderMutation.isPending || showPaymentWaiting}
-                >
-                  <CreditCard className="w-5 h-5 mr-2" />
-                  {placeOrderMutation.isPending
-                    ? 'Processing...'
-                    : 'Pay with Stripe'}
-                </Button>
-              </div>
+                  {/* Payment Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Button
+                      className="w-full sm:flex-1 bg-[#0070ba] hover:bg-[#0070ba]/90 text-white"
+                      size="lg"
+                      onClick={() => handlePayment(PaymentProcessor.PayPal)}
+                      disabled={
+                        placeOrderMutation.isPending || showPaymentWaiting
+                      }
+                    >
+                      <Wallet className="w-5 h-5 mr-2" />
+                      {placeOrderMutation.isPending
+                        ? 'Processing...'
+                        : 'Pay with PayPal'}
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      className="w-full sm:flex-1 border-[#635bff] text-[#635bff] hover:bg-[#635bff] hover:text-white"
+                      size="lg"
+                      onClick={() => handlePayment(PaymentProcessor.Stripe)}
+                      disabled={
+                        placeOrderMutation.isPending || showPaymentWaiting
+                      }
+                    >
+                      <CreditCard className="w-5 h-5 mr-2" />
+                      {placeOrderMutation.isPending
+                        ? 'Processing...'
+                        : 'Pay with Stripe'}
+                    </Button>
+                  </div>
+                </>
+              )}
 
               {/* Payment Status */}
               {showPaymentWaiting && (

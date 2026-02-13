@@ -210,14 +210,6 @@ export default function BookForm({
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="format">Format</Label>
-                  <Input
-                    id="format"
-                    {...register('format')}
-                    placeholder="e.g. PDF, Digital, E-pub"
-                  />
-                </div>
-                <div className="space-y-2">
                   <Label htmlFor="readingTime">Estimated Reading Time</Label>
                   <Input
                     id="readingTime"
