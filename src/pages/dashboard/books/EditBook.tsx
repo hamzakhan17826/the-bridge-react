@@ -117,6 +117,7 @@ const EditBook = () => {
         </div>
 
         <BookForm
+          key={`${book.id}-${book.imageUrl}`}
           defaultValues={defaultValues}
           initialImageUrl={book.imageUrl}
           isSubmitting={updateBookMutation.isPending}

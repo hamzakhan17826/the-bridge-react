@@ -78,6 +78,7 @@ const CreateBook = () => {
         </div>
 
         <BookForm
+          key={resetKey}
           defaultValues={defaultValues}
           requireImage
           resetKey={resetKey}

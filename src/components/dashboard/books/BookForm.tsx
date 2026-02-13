@@ -42,13 +42,12 @@ export default function BookForm({
   requireImage = false,
   isSubmitting = false,
   submitLabel,
-  resetKey,
   onSubmit,
 }: BookFormProps) {
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const [selectedImagePreview, setSelectedImagePreview] = useState<
     string | null
-  >(initialImageUrl ?? null);
+  >(() => initialImageUrl ?? null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: availableTags = [] } = useTags();
@@ -58,7 +57,6 @@ export default function BookForm({
     handleSubmit,
     setValue,
     control,
-    reset,
     formState: { errors },
   } = useForm<BookFormValues>({ defaultValues });
 
@@ -72,12 +70,6 @@ export default function BookForm({
 
   const selectedTagIds = useWatch({ control, name: 'tagIds' }) || [];
   const contentValue = useWatch({ control, name: 'content' }) || '';
-
-  useEffect(() => {
-    reset(defaultValues);
-    setSelectedImageFile(null);
-    setSelectedImagePreview(initialImageUrl ?? null);
-  }, [defaultValues, initialImageUrl, reset, resetKey]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

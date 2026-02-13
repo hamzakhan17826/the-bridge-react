@@ -41,7 +41,7 @@ export function useCreateBook() {
     onSuccess: (data) => {
       if (data.result) {
         toast.success(data.message || 'Book created successfully.');
-        queryClient.invalidateQueries({ queryKey: bookQueryKeys.list() });
+        queryClient.invalidateQueries({ queryKey: bookQueryKeys.all });
       } else {
         toast.error(data.message || 'Failed to create book.');
       }
@@ -64,7 +64,7 @@ export function useUpdateBook() {
     onSuccess: (data) => {
       if (data.result) {
         toast.success(data.message || 'Book updated successfully.');
-        queryClient.invalidateQueries({ queryKey: bookQueryKeys.list() });
+        queryClient.invalidateQueries({ queryKey: bookQueryKeys.all });
       } else {
         toast.error(data.message || 'Failed to update book.');
       }
@@ -83,7 +83,7 @@ export function useDeleteBook() {
     onSuccess: (data) => {
       if (data.result) {
         toast.success(data.message || 'Book deleted successfully.');
-        queryClient.invalidateQueries({ queryKey: bookQueryKeys.list() });
+        queryClient.invalidateQueries({ queryKey: bookQueryKeys.all });
       } else {
         toast.error(data.message || 'Failed to delete book.');
       }

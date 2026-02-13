@@ -41,7 +41,7 @@ export function useCreateBlogPost() {
     onSuccess: (data) => {
       if (data.result) {
         toast.success(data.message || 'Blog post created successfully.');
-        queryClient.invalidateQueries({ queryKey: blogQueryKeys.list() });
+        queryClient.invalidateQueries({ queryKey: blogQueryKeys.all });
       } else {
         toast.error(data.message || 'Failed to create blog post.');
       }
@@ -64,7 +64,7 @@ export function useUpdateBlogPost() {
     onSuccess: (data) => {
       if (data.result) {
         toast.success(data.message || 'Blog post updated successfully.');
-        queryClient.invalidateQueries({ queryKey: blogQueryKeys.list() });
+        queryClient.invalidateQueries({ queryKey: blogQueryKeys.all });
       } else {
         toast.error(data.message || 'Failed to update blog post.');
       }
@@ -83,7 +83,7 @@ export function useDeleteBlogPost() {
     onSuccess: (data) => {
       if (data.result) {
         toast.success(data.message || 'Blog post deleted successfully.');
-        queryClient.invalidateQueries({ queryKey: blogQueryKeys.list() });
+        queryClient.invalidateQueries({ queryKey: blogQueryKeys.all });
       } else {
         toast.error(data.message || 'Failed to delete blog post.');
       }
