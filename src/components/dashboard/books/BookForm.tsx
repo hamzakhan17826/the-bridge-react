@@ -17,6 +17,13 @@ export type BookFormValues = {
   content: string;
   slug: string;
   tagIds: number[];
+  language?: string;
+  edition?: string;
+  publisher?: string;
+  pagesCount?: number;
+  format?: string;
+  fileUrl?: string;
+  readingTime?: string;
 };
 
 type BookFormProps = {
@@ -170,6 +177,65 @@ export default function BookForm({
               </div>
             </CardContent>
           </Card>
+
+          <Card>
+            <CardContent className="pt-6">
+              <h3 className="text-lg font-semibold mb-4">
+                Book/Library Details
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="language">Language</Label>
+                  <Input
+                    id="language"
+                    {...register('language')}
+                    placeholder="e.g. English, Urdu"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edition">Edition</Label>
+                  <Input
+                    id="edition"
+                    {...register('edition')}
+                    placeholder="e.g. 1st Edition"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="publisher">Publisher</Label>
+                  <Input
+                    id="publisher"
+                    {...register('publisher')}
+                    placeholder="e.g. Oxford University Press"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="pagesCount">Pages Count</Label>
+                  <Input
+                    id="pagesCount"
+                    type="number"
+                    {...register('pagesCount', { valueAsNumber: true })}
+                    placeholder="e.g. 350"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="format">Format</Label>
+                  <Input
+                    id="format"
+                    {...register('format')}
+                    placeholder="e.g. PDF, Digital, E-pub"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="readingTime">Estimated Reading Time</Label>
+                  <Input
+                    id="readingTime"
+                    {...register('readingTime')}
+                    placeholder="e.g. 5 hours"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="space-y-6">
@@ -206,7 +272,19 @@ export default function BookForm({
                 )}
               </div>
 
-              <div className="space-y-2">
+              <div className="pt-4 border-t space-y-4">
+                <h3 className="font-semibold">Library Material</h3>
+                <div className="space-y-2">
+                  <Label htmlFor="fileUrl">E-Book File Link / PDF URL</Label>
+                  <Input
+                    id="fileUrl"
+                    {...register('fileUrl')}
+                    placeholder="Link to PDF, EPUB or Digital resource"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-4 border-t space-y-2">
                 <Label>Tags</Label>
                 <div className="flex flex-wrap gap-2">
                   {availableTags.map((tag) => (

@@ -15,13 +15,33 @@ const EditBook = () => {
 
   const defaultValues = useMemo<BookFormValues>(() => {
     if (!book)
-      return { title: '', description: '', content: '', slug: '', tagIds: [] };
+      return {
+        title: '',
+        description: '',
+        content: '',
+        slug: '',
+        tagIds: [],
+        language: 'English',
+        edition: '',
+        publisher: '',
+        pagesCount: undefined,
+        format: 'PDF',
+        fileUrl: '',
+        readingTime: '',
+      };
     return {
       title: book.title,
       description: book.description,
       content: book.content,
       slug: book.slug,
       tagIds: book.tags.map((t) => t.id),
+      language: book.language || 'English',
+      edition: book.edition || '',
+      publisher: book.publisher || '',
+      pagesCount: book.pagesCount,
+      format: book.format || 'PDF',
+      fileUrl: book.fileUrl || '',
+      readingTime: book.readingTime || '',
     };
   }, [book]);
 
@@ -33,6 +53,15 @@ const EditBook = () => {
     formData.append('Description', values.description.trim());
     formData.append('Content', values.content.trim());
     formData.append('Slug', values.slug.trim());
+
+    if (values.language) formData.append('Language', values.language);
+    if (values.edition) formData.append('Edition', values.edition);
+    if (values.publisher) formData.append('Publisher', values.publisher);
+    if (values.pagesCount)
+      formData.append('PagesCount', String(values.pagesCount));
+    if (values.format) formData.append('Format', values.format);
+    if (values.fileUrl) formData.append('FileUrl', values.fileUrl);
+    if (values.readingTime) formData.append('ReadingTime', values.readingTime);
 
     if (imageFile) {
       formData.append('Image', imageFile);

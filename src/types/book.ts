@@ -12,6 +12,13 @@ export interface BookResponse {
   authorProfilePic?: string;
   tags: TagResponse[];
   createdAt: string;
+  language?: string;
+  edition?: string;
+  publisher?: string;
+  pagesCount?: number;
+  format?: string;
+  fileUrl?: string;
+  readingTime?: string;
 }
 
 export interface BookRequest {
@@ -21,4 +28,11 @@ export interface BookRequest {
   slug: string;
   image?: File;
   tagIds: number[];
+  language?: string;
+  edition?: string;
+  publisher?: string;
+  pagesCount?: number;
+  format?: string;
+  fileUrl?: string;
+  readingTime?: string;
 }
