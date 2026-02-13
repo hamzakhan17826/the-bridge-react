@@ -60,7 +60,7 @@ const BlogPreview = () => {
         </div>
 
         {/* Feature Image Header */}
-        <div className="relative h-[60vh] min-h-[400px] w-full overflow-hidden">
+        <div className="relative h-[60vh] min-h-100 w-full overflow-hidden">
           <img
             src={post.imageUrl || '/images/podcasts/carousel/1.jpg'}
             alt={post.title}
@@ -90,7 +90,7 @@ const BlogPreview = () => {
                 ))}
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-poppins font-bold leading-tight mb-6">
+              <h1 className="text-4xl text-white md:text-5xl lg:text-6xl font-poppins font-bold leading-tight mb-6">
                 {post.title}
               </h1>
 
@@ -150,10 +150,18 @@ const BlogPreview = () => {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon" className="text-gray-400 hover:text-primary-600">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-gray-400 hover:text-primary-600"
+                    >
                       <Share2 className="w-5 h-5" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="text-gray-400 hover:text-primary-600">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-gray-400 hover:text-primary-600"
+                    >
                       <Bookmark className="w-5 h-5" />
                     </Button>
                   </div>
@@ -177,8 +185,8 @@ const BlogPreview = () => {
                   </div>
                 </div>
                 <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                  Exploring spirituality and building bridges between worlds through
-                  insightful writing and mediumship.
+                  Exploring spirituality and building bridges between worlds
+                  through insightful writing and mediumship.
                 </p>
                 <Button variant="outline" className="w-full">
                   View Profile
@@ -190,7 +198,7 @@ const BlogPreview = () => {
                 <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center mb-6">
                   <MessageSquare className="w-6 h-6 text-white" />
                 </div>
-                <h4 className="text-xl font-poppins font-bold mb-4">
+                <h4 className="text-xl text-white font-poppins font-bold mb-4">
                   Join the Discussion
                 </h4>
                 <p className="text-primary-100 text-sm mb-8 leading-relaxed">
