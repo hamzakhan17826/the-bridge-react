@@ -216,7 +216,9 @@ const BookDetail = () => {
                           </h3>
                           <div
                             className="text-gray-600 text-sm mb-3 line-clamp-2"
-                            dangerouslySetInnerHTML={{ __html: relatedBook.description }}
+                            dangerouslySetInnerHTML={{
+                              __html: relatedBook.description,
+                            }}
                           />
                           <div className="flex items-center gap-2 text-xs text-gray-500">
                             <User className="w-3 h-3" />
