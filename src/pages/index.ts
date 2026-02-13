@@ -20,8 +20,8 @@ export { default as AboutUs } from './AboutUs';
 export { default as Events } from './events/Events';
 export { default as EventConfirmation } from './events/EventConfirmation';
 export { default as EventConfirmed } from './events/EventConfirmed';
-export { default as CreateEvent } from './events/CreateEvent';
-export { default as EditEvent } from './events/EditEvent';
+export { default as CreateEvent } from './dashboard/events/CreateEvent';
+export { default as EditEvent } from './dashboard/events/EditEvent';
 export { default as AccessDenied } from './AccessDenied';
 
 // Dashboard pages
@@ -37,7 +37,7 @@ export { default as PaymentReturn } from './dashboard/PaymentReturn';
 export { default as ActivityLogs } from './dashboard/ActivityLogs';
 export { default as DashboardAccessDenied } from './dashboard/AccessDenied';
 export { default as CreditsHistory } from './dashboard/CreditsHistory';
-export { default as MyEvents } from './dashboard/MyEvents';
+export { default as MyEvents } from './dashboard/events/MyEvents';
 export { default as MyBooks } from './dashboard/books/MyBooks';
 export { default as CreateBook } from './dashboard/books/CreateBook';
 export { default as EditBook } from './dashboard/books/EditBook';

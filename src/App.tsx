@@ -151,15 +151,78 @@ function App() {
         { path: 'pm/services', element: <PMServices /> },
         { path: 'pm/earnings', element: <PMEarnings /> },
         { path: 'pm/payout', element: <PMPayout /> },
-        { path: 'events/create', element: <CreateEvent /> },
-        { path: 'events', element: <MyEvents /> },
-        { path: 'events/:eventId/edit', element: <EditEvent /> },
-        { path: 'books', element: <MyBooks /> },
-        { path: 'books/create', element: <CreateBook /> },
-        { path: 'books/:slug/edit', element: <EditBook /> },
-        { path: 'blogs', element: <MyBlogs /> },
-        { path: 'blogs/create', element: <CreateBlog /> },
-        { path: 'blogs/:slug/edit', element: <EditBlog /> },
+        {
+          path: 'events',
+          element: (
+            <RequireMembershipTier tierCode="PROFESSIONALMEDIUM">
+              <MyEvents />
+            </RequireMembershipTier>
+          ),
+        },
+        {
+          path: 'events/create',
+          element: (
+            <RequireMembershipTier tierCode="PROFESSIONALMEDIUM">
+              <CreateEvent />
+            </RequireMembershipTier>
+          ),
+        },
+        {
+          path: 'events/:eventId/edit',
+          element: (
+            <RequireMembershipTier tierCode="PROFESSIONALMEDIUM">
+              <EditEvent />
+            </RequireMembershipTier>
+          ),
+        },
+        {
+          path: 'books',
+          element: (
+            <RequireMembershipTier tierCode="PROFESSIONALMEDIUM">
+              <MyBooks />
+            </RequireMembershipTier>
+          ),
+        },
+        {
+          path: 'books/create',
+          element: (
+            <RequireMembershipTier tierCode="PROFESSIONALMEDIUM">
+              <CreateBook />
+            </RequireMembershipTier>
+          ),
+        },
+        {
+          path: 'books/:slug/edit',
+          element: (
+            <RequireMembershipTier tierCode="PROFESSIONALMEDIUM">
+              <EditBook />
+            </RequireMembershipTier>
+          ),
+        },
+        {
+          path: 'blogs',
+          element: (
+            <RequireMembershipTier tierCode="PROFESSIONALMEDIUM">
+              <MyBlogs />
+            </RequireMembershipTier>
+          ),
+        },
+        {
+          path: 'blogs/create',
+          element: (
+            <RequireMembershipTier tierCode="PROFESSIONALMEDIUM">
+              <CreateBlog />
+            </RequireMembershipTier>
+          ),
+        },
+        {
+          path: 'blogs/:slug/edit',
+          element: (
+            <RequireMembershipTier tierCode="PROFESSIONALMEDIUM">
+              <EditBlog />
+            </RequireMembershipTier>
+          ),
+        },
         { path: 'profile', element: <DashboardUserProfile /> },
         { path: 'membership', element: <DashboardMembership /> },
         { path: 'membership/orders', element: <MembershipOrders /> },

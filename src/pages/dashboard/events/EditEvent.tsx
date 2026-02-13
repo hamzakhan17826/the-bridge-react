@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useParams } from 'react-router-dom';
-import { EventStatus } from '../../constants/enums';
-import { useEditEvent, useMyEvent } from '../../hooks/useEvent';
+import { EventStatus } from '../../../constants/enums';
+import { useEditEvent, useMyEvent } from '../../../hooks/useEvent';
 import EventForm, {
   type EventFormValues,
-} from '../../components/events/EventForm';
-import { Button } from '../../components/ui/button';
+} from '../../../components/events/EventForm';
+import { Button } from '../../../components/ui/button';
 
 const toLocalDateTimeInput = (value?: string | null) => {
   if (!value) return '';

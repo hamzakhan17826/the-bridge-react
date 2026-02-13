@@ -68,6 +68,23 @@ export function RequireMembershipTier({
   return <>{children}</>;
 }
 
+export function RequireAdminOrMedium({ children }: { children: ReactNode }) {
+  const location = useLocation();
+  const { isInitialized, isLoggedIn, isAdmin, hasMembershipTier } =
+    useAuthUser();
+  if (!isInitialized) return null;
+  const allowed =
+    isLoggedIn && (isAdmin || hasMembershipTier('PROFESSIONALMEDIUM'));
+  if (!allowed) {
+    const isInDashboard = location.pathname.startsWith('/dashboard');
+    const accessDeniedPath = isInDashboard
+      ? '/dashboard/access-denied'
+      : '/access-denied';
+    return <Navigate to={accessDeniedPath} replace />;
+  }
+  return <>{children}</>;
+}
+
 export function RequireFeature({
   children,
   featureName,

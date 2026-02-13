@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { EventStatus } from '../../constants/enums';
-import { useCreateEvent } from '../../hooks/useEvent';
+import { EventStatus } from '../../../constants/enums';
+import { useCreateEvent } from '../../../hooks/useEvent';
 import EventForm, {
   type EventFormValues,
-} from '../../components/events/EventForm';
+} from '../../../components/events/EventForm';
 
 const CreateEvent = () => {
   const createEventMutation = useCreateEvent();

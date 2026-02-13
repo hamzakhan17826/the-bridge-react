@@ -26,6 +26,7 @@ import { useAuthUser } from '@/hooks/useAuthUser';
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user: authUser, isAdmin, hasMembershipTier } = useAuthUser();
   const isProfessionalMedium = hasMembershipTier('PROFESSIONALMEDIUM');
+  const canManageContent = isAdmin || isProfessionalMedium;
 
   // Create user object from auth store
   const user = authUser
@@ -122,7 +123,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             },
           ]
         : []),
-      ...(isProfessionalMedium
+      ...(canManageContent
         ? [
             {
               title: 'Events',
@@ -171,7 +172,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             },
           ]
         : []),
-      ...(isProfessionalMedium
+      ...(canManageContent
         ? [
             {
               title: 'Podcasts',

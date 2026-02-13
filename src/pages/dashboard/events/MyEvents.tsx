@@ -20,19 +20,17 @@ export default function MyEvents() {
   return (
     <>
       <Helmet>
-        <title>My Events - Dashboard</title>
+        <title>Events Management - Dashboard</title>
       </Helmet>
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold">Event List</h1>
-          <p className="text-muted-foreground">
-            Events created by your professional medium profile.
-          </p>
+          <p className="text-muted-foreground">Manage all platform events.</p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Results ({events.length})</CardTitle>
+            <CardTitle>Total Events ({events.length})</CardTitle>
           </CardHeader>
           <CardContent>
             {isLoading && (
