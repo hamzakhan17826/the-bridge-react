@@ -54,6 +54,11 @@ import {
   MyBooks,
   CreateBook,
   EditBook,
+  MyBlogs,
+  CreateBlog,
+  EditBlog,
+  Blogs,
+  BlogPreview,
 } from './pages';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
@@ -79,6 +84,8 @@ function App() {
         { path: '/events/confirmation', element: <EventConfirmation /> },
         { path: '/events/confirmed', element: <EventConfirmed /> },
         { path: '/podcasts', element: <Podcasts /> },
+        { path: '/blogs', element: <Blogs /> },
+        { path: '/blogs/:slug', element: <BlogPreview /> },
         { path: '/mediums', element: <Mediums /> },
         { path: '/books', element: <Books /> },
         { path: '/books/:slug', element: <BookDetail /> },
@@ -150,6 +157,9 @@ function App() {
         { path: 'books', element: <MyBooks /> },
         { path: 'books/create', element: <CreateBook /> },
         { path: 'books/:slug/edit', element: <EditBook /> },
+        { path: 'blogs', element: <MyBlogs /> },
+        { path: 'blogs/create', element: <CreateBlog /> },
+        { path: 'blogs/:slug/edit', element: <EditBlog /> },
         { path: 'profile', element: <DashboardUserProfile /> },
         { path: 'membership', element: <DashboardMembership /> },
         { path: 'membership/orders', element: <MembershipOrders /> },

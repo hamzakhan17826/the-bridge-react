@@ -154,6 +154,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 },
               ],
             },
+            {
+              title: 'Blogs',
+              url: '/dashboard/blogs/create',
+              icon: Command,
+              items: [
+                {
+                  title: 'My Blogs',
+                  url: '/dashboard/blogs',
+                },
+                {
+                  title: 'Create Blog',
+                  url: '/dashboard/blogs/create',
+                },
+              ],
+            },
           ]
         : []),
       ...(isProfessionalMedium

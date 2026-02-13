@@ -41,6 +41,11 @@ export { default as MyEvents } from './dashboard/MyEvents';
 export { default as MyBooks } from './dashboard/books/MyBooks';
 export { default as CreateBook } from './dashboard/books/CreateBook';
 export { default as EditBook } from './dashboard/books/EditBook';
+export { default as MyBlogs } from './dashboard/blogs/MyBlogs';
+export { default as CreateBlog } from './dashboard/blogs/CreateBlog';
+export { default as EditBlog } from './dashboard/blogs/EditBlog';
+export { default as Blogs } from './Blogs';
+export { default as BlogPreview } from './BlogPreview';
 // Professional Medium (PM) dashboard pages
 export { default as PMOnboarding } from './dashboard/pm/Onboarding';
 export { default as PMBookings } from './dashboard/pm/Bookings';
