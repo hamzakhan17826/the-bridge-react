@@ -38,6 +38,8 @@ type SidebarContextProps = {
   setOpenMobile: (open: boolean) => void;
   isMobile: boolean;
   toggleSidebar: () => void;
+  isMenuOpen: boolean;
+  setIsMenuOpen: (open: boolean) => void;
 };
 
 const SidebarContext = React.createContext<SidebarContextProps | null>(null);
@@ -66,6 +68,7 @@ function SidebarProvider({
 }) {
   const isMobile = useIsMobile();
   const [openMobile, setOpenMobile] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
@@ -120,8 +123,20 @@ function SidebarProvider({
       openMobile,
       setOpenMobile,
       toggleSidebar,
+      isMenuOpen,
+      setIsMenuOpen,
     }),
-    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
+    [
+      state,
+      open,
+      setOpen,
+      isMobile,
+      openMobile,
+      setOpenMobile,
+      toggleSidebar,
+      isMenuOpen,
+      setIsMenuOpen,
+    ]
   );
 
   return (
@@ -161,8 +176,16 @@ function Sidebar({
   variant?: 'sidebar' | 'floating' | 'inset';
   collapsible?: 'offcanvas' | 'icon' | 'none';
 }) {
-  const { isMobile, openMobile, setOpenMobile, open, setOpen, toggleSidebar } =
-    useSidebar();
+  const {
+    isMobile,
+    openMobile,
+    setOpenMobile,
+    open,
+    setOpen,
+    toggleSidebar,
+    isMenuOpen,
+    setIsMenuOpen,
+  } = useSidebar();
   const [isHovered, setIsHovered] = React.useState(false);
 
   if (collapsible === 'none') {
@@ -205,7 +228,8 @@ function Sidebar({
     );
   }
 
-  const effectiveOpen = open || (isHovered && collapsible === 'icon');
+  const effectiveOpen =
+    open || (isHovered && collapsible === 'icon') || isMenuOpen;
   const effectiveState = effectiveOpen ? 'expanded' : 'collapsed';
 
   return (
@@ -218,6 +242,8 @@ function Sidebar({
         openMobile,
         setOpenMobile,
         toggleSidebar,
+        isMenuOpen,
+        setIsMenuOpen,
       }}
     >
       <div
