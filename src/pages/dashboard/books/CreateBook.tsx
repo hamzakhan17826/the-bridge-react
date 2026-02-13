@@ -1,17 +1,17 @@
 import { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useCreateBlog } from '../../../hooks/useBlog';
-import BlogForm, {
-  type BlogFormValues,
-} from '../../../components/dashboard/blogs/BlogForm';
+import { useCreateBook } from '../../../hooks/useBook';
+import BookForm, {
+  type BookFormValues,
+} from '../../../components/dashboard/books/BookForm';
 import { useNavigate } from 'react-router-dom';
 
-const CreateBlog = () => {
+const CreateBook = () => {
   const navigate = useNavigate();
-  const createBlogMutation = useCreateBlog();
+  const createBookMutation = useCreateBook();
   const [resetKey, setResetKey] = useState(0);
 
-  const defaultValues = useMemo<BlogFormValues>(
+  const defaultValues = useMemo<BookFormValues>(
     () => ({
       title: '',
       description: '',
@@ -22,7 +22,7 @@ const CreateBlog = () => {
     []
   );
 
-  const onSubmit = async (values: BlogFormValues, imageFile: File | null) => {
+  const onSubmit = async (values: BookFormValues, imageFile: File | null) => {
     const formData = new FormData();
     formData.append('Title', values.title.trim());
     formData.append('Description', values.description.trim());
@@ -37,11 +37,11 @@ const CreateBlog = () => {
       formData.append('TagIds', String(tagId));
     });
 
-    await createBlogMutation.mutateAsync(formData, {
+    await createBookMutation.mutateAsync(formData, {
       onSuccess: (data) => {
         if (data.result) {
           setResetKey((prev) => prev + 1);
-          navigate('/dashboard/blogs');
+          navigate('/dashboard/books');
         }
       },
     });
@@ -50,24 +50,24 @@ const CreateBlog = () => {
   return (
     <>
       <Helmet>
-        <title>Create Blog Post | The Bridge</title>
+        <title>Create Book | The Bridge</title>
       </Helmet>
 
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">Create Blog Post</h1>
+          <h1 className="text-3xl font-bold">Create Book</h1>
           <p className="text-muted-foreground">
-            Write a new article to share with the community.
+            Write a new book to share with the community.
           </p>
         </div>
 
-        <BlogForm
+        <BookForm
           defaultValues={defaultValues}
           requireImage
           resetKey={resetKey}
-          isSubmitting={createBlogMutation.isPending}
+          isSubmitting={createBookMutation.isPending}
           submitLabel={
-            createBlogMutation.isPending ? 'Publishing...' : 'Publish Blog Post'
+            createBookMutation.isPending ? 'Publishing...' : 'Publish Book'
           }
           onSubmit={onSubmit}
         />
@@ -76,4 +76,4 @@ const CreateBlog = () => {
   );
 };
 
-export default CreateBlog;
+export default CreateBook;

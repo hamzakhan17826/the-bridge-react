@@ -140,17 +140,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               ],
             },
             {
-              title: 'Blogs',
-              url: '/dashboard/blogs/create',
+              title: 'Books',
+              url: '/dashboard/books/create',
               icon: SquareTerminal,
               items: [
                 {
-                  title: 'My Articles',
-                  url: '/dashboard/blogs',
+                  title: 'My Books',
+                  url: '/dashboard/books',
                 },
                 {
-                  title: 'Create Blog',
-                  url: '/dashboard/blogs/create',
+                  title: 'Create Book',
+                  url: '/dashboard/books/create',
                 },
               ],
             },
@@ -203,8 +203,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   url: '/dashboard/tags',
                 },
                 {
-                  title: 'Blog Management',
-                  url: '/dashboard/blogs',
+                  title: 'Book Management',
+                  url: '/dashboard/books',
                 },
               ],
             },

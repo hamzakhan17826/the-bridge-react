@@ -1,32 +1,32 @@
 import { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useBlog, useUpdateBlog } from '../../../hooks/useBlog';
-import BlogForm, {
-  type BlogFormValues,
-} from '../../../components/dashboard/blogs/BlogForm';
+import { useBook, useUpdateBook } from '../../../hooks/useBook';
+import BookForm, {
+  type BookFormValues,
+} from '../../../components/dashboard/books/BookForm';
 import { Loader2 } from 'lucide-react';
 
-const EditBlog = () => {
+const EditBook = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { data: blog, isLoading, error } = useBlog(slug || '');
-  const updateBlogMutation = useUpdateBlog();
+  const { data: book, isLoading, error } = useBook(slug || '');
+  const updateBookMutation = useUpdateBook();
 
-  const defaultValues = useMemo<BlogFormValues>(() => {
-    if (!blog)
+  const defaultValues = useMemo<BookFormValues>(() => {
+    if (!book)
       return { title: '', description: '', content: '', slug: '', tagIds: [] };
     return {
-      title: blog.title,
-      description: blog.description,
-      content: blog.content,
-      slug: blog.slug,
-      tagIds: blog.tags.map((t) => t.id),
+      title: book.title,
+      description: book.description,
+      content: book.content,
+      slug: book.slug,
+      tagIds: book.tags.map((t) => t.id),
     };
-  }, [blog]);
+  }, [book]);
 
-  const onSubmit = async (values: BlogFormValues, imageFile: File | null) => {
-    if (!blog) return;
+  const onSubmit = async (values: BookFormValues, imageFile: File | null) => {
+    if (!book) return;
 
     const formData = new FormData();
     formData.append('Title', values.title.trim());
@@ -42,12 +42,12 @@ const EditBlog = () => {
       formData.append('TagIds', String(tagId));
     });
 
-    await updateBlogMutation.mutateAsync(
-      { id: blog.id, formData },
+    await updateBookMutation.mutateAsync(
+      { id: book.id, formData },
       {
         onSuccess: (data) => {
           if (data.result) {
-            navigate('/dashboard/blogs');
+            navigate('/dashboard/books');
           }
         },
       }
@@ -62,12 +62,12 @@ const EditBlog = () => {
     );
   }
 
-  if (error || !blog) {
+  if (error || !book) {
     return (
       <div className="text-center py-20">
-        <h2 className="text-2xl font-bold">Blog post not found</h2>
+        <h2 className="text-2xl font-bold">Book not found</h2>
         <p className="text-muted-foreground">
-          The post you're trying to edit doesn't exist.
+          The book you're trying to edit doesn't exist.
         </p>
       </div>
     );
@@ -76,23 +76,23 @@ const EditBlog = () => {
   return (
     <>
       <Helmet>
-        <title>Edit Blog Post | The Bridge</title>
+        <title>Edit Book | The Bridge</title>
       </Helmet>
 
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">Edit Blog Post</h1>
+          <h1 className="text-3xl font-bold">Edit Book</h1>
           <p className="text-muted-foreground">
-            Update your article details and content.
+            Update your book details and content.
           </p>
         </div>
 
-        <BlogForm
+        <BookForm
           defaultValues={defaultValues}
-          initialImageUrl={blog.imageUrl}
-          isSubmitting={updateBlogMutation.isPending}
+          initialImageUrl={book.imageUrl}
+          isSubmitting={updateBookMutation.isPending}
           submitLabel={
-            updateBlogMutation.isPending ? 'Updating...' : 'Update Blog Post'
+            updateBookMutation.isPending ? 'Updating...' : 'Update Book'
           }
           onSubmit={onSubmit}
         />
@@ -101,4 +101,4 @@ const EditBlog = () => {
   );
 };
 
-export default EditBlog;
+export default EditBook;

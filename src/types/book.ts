@@ -1,6 +1,6 @@
 import type { TagResponse } from './tag';
 
-export interface BlogPostResponse {
+export interface BookResponse {
   id: number;
   title: string;
   description: string;
@@ -14,7 +14,7 @@ export interface BlogPostResponse {
   createdAt: string;
 }
 
-export interface BlogPostRequest {
+export interface BookRequest {
   title: string;
   description: string;
   content: string;

@@ -10,7 +10,7 @@ import RichTextEditor from '@/components/ui/RichTextEditor';
 import { useTags } from '@/hooks/useTag';
 import { Loader2, Image as ImageIcon } from 'lucide-react';
 
-export type BlogFormValues = {
+export type BookFormValues = {
   title: string;
   description: string;
   content: string;
@@ -18,17 +18,17 @@ export type BlogFormValues = {
   tagIds: number[];
 };
 
-type BlogFormProps = {
-  defaultValues: BlogFormValues;
+type BookFormProps = {
+  defaultValues: BookFormValues;
   initialImageUrl?: string | null;
   requireImage?: boolean;
   isSubmitting?: boolean;
   submitLabel: string;
   resetKey?: number;
-  onSubmit: (values: BlogFormValues, imageFile: File | null) => Promise<void>;
+  onSubmit: (values: BookFormValues, imageFile: File | null) => Promise<void>;
 };
 
-export default function BlogForm({
+export default function BookForm({
   defaultValues,
   initialImageUrl,
   requireImage = false,
@@ -36,7 +36,7 @@ export default function BlogForm({
   submitLabel,
   resetKey,
   onSubmit,
-}: BlogFormProps) {
+}: BookFormProps) {
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const [selectedImagePreview, setSelectedImagePreview] = useState<
     string | null
@@ -52,7 +52,7 @@ export default function BlogForm({
     control,
     reset,
     formState: { errors },
-  } = useForm<BlogFormValues>({ defaultValues });
+  } = useForm<BookFormValues>({ defaultValues });
 
   const selectedTagIds = useWatch({ control, name: 'tagIds' }) || [];
   const contentValue = useWatch({ control, name: 'content' }) || '';
@@ -86,7 +86,7 @@ export default function BlogForm({
     setValue('tagIds', current);
   };
 
-  const onFormSubmit = (values: BlogFormValues) => {
+  const onFormSubmit = (values: BookFormValues) => {
     onSubmit(values, selectedImageFile);
   };
 
@@ -101,7 +101,7 @@ export default function BlogForm({
                 <Input
                   id="title"
                   {...register('title', { required: 'Title is required' })}
-                  placeholder="Enter blog title"
+                  placeholder="Enter book title"
                 />
                 {errors.title && (
                   <p className="text-sm text-destructive">
@@ -115,7 +115,7 @@ export default function BlogForm({
                 <Input
                   id="slug"
                   {...register('slug', { required: 'Slug is required' })}
-                  placeholder="e.g. my-awesome-blog"
+                  placeholder="e.g. my-awesome-book"
                 />
                 {errors.slug && (
                   <p className="text-sm text-destructive">
@@ -131,7 +131,7 @@ export default function BlogForm({
                   {...register('description', {
                     required: 'Description is required',
                   })}
-                  placeholder="Briefly describe what this blog is about"
+                  placeholder="Briefly describe what this book is about"
                   rows={3}
                 />
                 {errors.description && (

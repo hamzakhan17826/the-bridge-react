@@ -48,7 +48,7 @@ const Footer: FC = () => {
   };
 
   const quickLinks = [
-    { label: 'Blogs', href: '/blogs' },
+    { label: 'Books', href: '/books' },
     { label: 'Reviews', href: '/reviews' },
     { label: 'Mediums', href: '/mediums' },
     { label: 'Events', href: '/events' },

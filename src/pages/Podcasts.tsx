@@ -23,7 +23,6 @@ import {
 } from '@vidstack/react/player/layouts/default';
 import '@vidstack/react/player/styles/default/theme.css';
 import '@vidstack/react/player/styles/default/layouts/audio.css';
-import sampleAudio from '../assets/children-tune.mp3';
 
 const Podcasts = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -476,7 +475,7 @@ const Podcasts = () => {
             <MediaPlayer
               key={activePodcast.id}
               title={activePodcast.title}
-              src={sampleAudio}
+              src={''}
               autoPlay
               className="w-full"
             >
