@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { submitContactForm } from '../services/contact-us';
 import { toast } from 'react-toastify';
+import { validateSecurity } from '@/lib/security';
 import SubmitButton from '../components/ui/SubmitButton';
 import {
   MapPin,
@@ -35,6 +36,19 @@ const ContactUsPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Security check
+    const securityCheck =
+      validateSecurity(formData.name) ||
+      validateSecurity(formData.email) ||
+      validateSecurity(formData.subject) ||
+      validateSecurity(formData.message);
+
+    if (securityCheck !== true) {
+      toast.error(securityCheck as string);
+      return;
+    }
+
     setIsSubmitting(true);
 
     const data = new FormData();

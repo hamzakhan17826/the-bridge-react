@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import RichTextEditor from '@/components/ui/RichTextEditor';
 import { useTags } from '@/hooks/useTag';
 import { Loader2, Image as ImageIcon } from 'lucide-react';
+import { validateSecurity } from '@/lib/security';
 
 export type BookFormValues = {
   title: string;
@@ -53,6 +54,14 @@ export default function BookForm({
     reset,
     formState: { errors },
   } = useForm<BookFormValues>({ defaultValues });
+
+  // Register content manually for validation since it's controlled by RichTextEditor
+  useEffect(() => {
+    register('content', {
+      required: 'Content is required',
+      validate: validateSecurity,
+    });
+  }, [register]);
 
   const selectedTagIds = useWatch({ control, name: 'tagIds' }) || [];
   const contentValue = useWatch({ control, name: 'content' }) || '';
@@ -130,6 +139,7 @@ export default function BookForm({
                   id="description"
                   {...register('description', {
                     required: 'Description is required',
+                    validate: validateSecurity,
                   })}
                   placeholder="Briefly describe what this book is about"
                   rows={3}

@@ -1,6 +1,7 @@
 import { useForm, useWatch } from 'react-hook-form';
 import { useEffect, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { validateSecurity } from '@/lib/security';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -122,6 +123,7 @@ export default function MediumProfileForm() {
                   id="Specialty"
                   {...form.register('Specialty', {
                     required: 'Specialty is required',
+                    validate: validateSecurity,
                   })}
                   placeholder="e.g., Evidential Mediumship"
                 />
@@ -138,6 +140,7 @@ export default function MediumProfileForm() {
                   id="Tagline"
                   {...form.register('Tagline', {
                     required: 'Tagline is required',
+                    validate: validateSecurity,
                   })}
                   placeholder="Short professional tagline"
                 />
@@ -152,7 +155,10 @@ export default function MediumProfileForm() {
                 <Label htmlFor="Focus">Focus *</Label>
                 <Input
                   id="Focus"
-                  {...form.register('Focus', { required: 'Focus is required' })}
+                  {...form.register('Focus', {
+                    required: 'Focus is required',
+                    validate: validateSecurity,
+                  })}
                   placeholder="e.g., Spirit Communication"
                 />
                 {form.formState.errors.Focus && (
@@ -237,10 +243,17 @@ export default function MediumProfileForm() {
               <Label htmlFor="Bio">Bio</Label>
               <Textarea
                 id="Bio"
-                {...form.register('Bio')}
+                {...form.register('Bio', {
+                  validate: validateSecurity,
+                })}
                 placeholder="Tell clients about your background and approach"
                 rows={4}
               />
+              {form.formState.errors.Bio && (
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.Bio.message}
+                </p>
+              )}
             </div>
 
             <div className="flex items-center gap-2">
@@ -267,14 +280,28 @@ export default function MediumProfileForm() {
                 ).map((field, index) => (
                   <div key={field.title} className="space-y-2">
                     <Input
-                      {...form.register(field.title)}
+                      {...form.register(field.title, {
+                        validate: validateSecurity,
+                      })}
                       placeholder={`Focus Area ${index + 1} Title`}
                     />
+                    {form.formState.errors[field.title] && (
+                      <p className="text-sm text-red-500">
+                        {form.formState.errors[field.title]?.message}
+                      </p>
+                    )}
                     <Textarea
-                      {...form.register(field.details)}
+                      {...form.register(field.details, {
+                        validate: validateSecurity,
+                      })}
                       placeholder={`Focus Area ${index + 1} Details`}
                       rows={3}
                     />
+                    {form.formState.errors[field.details] && (
+                      <p className="text-sm text-red-500">
+                        {form.formState.errors[field.details]?.message}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>

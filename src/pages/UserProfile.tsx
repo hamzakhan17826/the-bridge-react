@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { toast } from 'react-toastify';
+import { validateSecurity } from '@/lib/security';
 import SubmitButton from '../components/ui/SubmitButton';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCountries, useCities } from '../hooks/useRegister';
@@ -194,6 +195,22 @@ export default function UserProfile() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!profile || !initialProfile || updateProfileMutation.isPending) return;
+
+    // Security check
+    const securityCheck =
+      validateSecurity(userName) ||
+      validateSecurity(firstName) ||
+      validateSecurity(lastName) ||
+      validateSecurity(email) ||
+      validateSecurity(addressLine1) ||
+      validateSecurity(addressLine2) ||
+      validateSecurity(postalCode);
+
+    if (securityCheck !== true) {
+      toast.error(securityCheck as string);
+      return;
+    }
+
     const pascalFd = new FormData();
 
     // Helper to append only if changed

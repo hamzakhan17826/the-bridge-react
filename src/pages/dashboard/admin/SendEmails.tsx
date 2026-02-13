@@ -7,6 +7,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useEmailPreferences, useSendEmailsToUsers } from '@/hooks/useEmail';
 import RichTextEditor from '@/components/ui/RichTextEditor';
+import { validateSecurity } from '@/lib/security';
+import { toast } from 'react-toastify';
 
 export default function SendEmails() {
   const { data: preferences = [], isLoading } = useEmailPreferences();
@@ -30,6 +32,14 @@ export default function SendEmails() {
 
   const handleSubmit = () => {
     if (!canSubmit) return;
+
+    // Security check for body content
+    const securityCheck = validateSecurity(body);
+    if (securityCheck !== true) {
+      toast.error(securityCheck as string);
+      return;
+    }
+
     sendEmailsMutation.mutate({
       toUsersWithEmailPreferenceID: selectedIds,
       subject: subject.trim(),

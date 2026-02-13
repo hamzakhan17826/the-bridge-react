@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
+import { validateSecurity } from '@/lib/security';
 import { Upload, X, Play, Image as ImageIcon } from 'lucide-react';
 import {
   Button,
@@ -131,7 +132,10 @@ const AddPodcast = () => {
                 <Label htmlFor="title">Title *</Label>
                 <Input
                   id="title"
-                  {...register('title', { required: 'Title is required' })}
+                  {...register('title', {
+                    required: 'Title is required',
+                    validate: validateSecurity,
+                  })}
                   placeholder="Enter podcast title"
                   className="mt-1"
                 />
@@ -153,6 +157,7 @@ const AddPodcast = () => {
                       value: 10,
                       message: 'Description must be at least 10 characters',
                     },
+                    validate: validateSecurity,
                   })}
                   placeholder="Enter podcast description"
                   rows={4}

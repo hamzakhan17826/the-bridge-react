@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { toast } from 'react-toastify';
+import { validateSecurity } from '@/lib/security';
 import { Sparkles, ArrowRight, Calendar, Users, Heart } from 'lucide-react';
 import { BackgroundDecorations } from '../ui';
 import { submitContactFormObject } from '../../services/contact-us';
@@ -18,6 +19,17 @@ const CallToAction = () => {
 
     if (!name || !email || !interest) {
       toast.error('Please fill in all fields.');
+      return;
+    }
+
+    // Security check
+    const securityCheck =
+      validateSecurity(name) ||
+      validateSecurity(email) ||
+      validateSecurity(interest);
+
+    if (securityCheck !== true) {
+      toast.error(securityCheck as string);
       return;
     }
 

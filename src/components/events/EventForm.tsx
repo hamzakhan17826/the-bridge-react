@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/select';
 import { EventStatus, Tags } from '@/constants/enums';
 import type { EventStatusValue, TagsValue } from '@/constants/enums';
+import { validateSecurity } from '@/lib/security';
 
 export type EventFormValues = {
   title: string;
@@ -159,7 +160,10 @@ export default function EventForm({
               <Input
                 id="title"
                 placeholder="Event title"
-                {...register('title', { required: 'Title is required' })}
+                {...register('title', {
+                  required: 'Title is required',
+                  validate: validateSecurity,
+                })}
               />
               {errors.title && (
                 <p className="text-sm text-red-500">{errors.title.message}</p>
@@ -191,6 +195,7 @@ export default function EventForm({
               placeholder="Event description"
               {...register('description', {
                 required: 'Description is required',
+                validate: validateSecurity,
               })}
             />
             {errors.description && (
