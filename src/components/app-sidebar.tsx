@@ -68,7 +68,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         title: 'Home',
         url: '/',
         icon: SquareTerminal,
-        isActive: true,
         items: [
           {
             title: 'Dashboard',
@@ -217,10 +216,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {
                   title: 'Tags Management',
                   url: '/dashboard/tags',
-                },
-                {
-                  title: 'Book Management',
-                  url: '/dashboard/books',
                 },
               ],
             },
