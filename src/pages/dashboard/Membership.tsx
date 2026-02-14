@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Users, BookOpen, Crown, User } from 'lucide-react';
+import { Users, BookOpen, Crown, User, CheckCircle } from 'lucide-react';
 import { useBreadcrumb } from '@/components/ui/breadcrumb';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -38,6 +38,23 @@ export default function Membership() {
   const handleUpgrade = (tierCode: string) => {
     // Navigate to upgrade page with tier code
     navigate(`/dashboard/membership/upgrade/${tierCode.toLowerCase()}`);
+  };
+
+  // Define inclusion rules: which higher tiers include which lower tiers
+  const INCLUDES: Record<string, string[]> = {
+    PROFESSIONALMEDIUM: [
+      'PROFESSIONALMEDIUM',
+      'DEVELOPMENTMEDIUM',
+      'GENERALMEMBERSHIP',
+      'FREETIERMEMBERSHIP',
+    ],
+    DEVELOPMENTMEDIUM: [
+      'DEVELOPMENTMEDIUM',
+      'GENERALMEMBERSHIP',
+      'FREETIERMEMBERSHIP',
+    ],
+    GENERALMEMBERSHIP: ['GENERALMEMBERSHIP', 'FREETIERMEMBERSHIP'],
+    FREETIERMEMBERSHIP: ['FREETIERMEMBERSHIP'],
   };
 
   // Helper function to get tier icon
@@ -116,6 +133,18 @@ export default function Membership() {
                     const IconComponent = getTierIcon(tier.tierCode);
                     const isPopular = tier.tierCode === 'DEVELOPMENTMEDIUM';
                     const isFree = tier.tierCode === 'FREETIERMEMBERSHIP';
+
+                    // Determine membership status relative to user's active memberships
+                    const hasExact = activeMemberships.some(
+                      (membership) => membership.tierCode === tier.tierCode
+                    );
+                    const isIncluded =
+                      !hasExact &&
+                      activeMemberships.some((membership) =>
+                        (INCLUDES[membership.tierCode] || []).includes(
+                          tier.tierCode
+                        )
+                      );
 
                     return (
                       <div
@@ -196,42 +225,75 @@ export default function Membership() {
                         </div>
                         <div className="md:col-span-2 flex justify-start md:justify-end mt-4 md:mt-0">
                           {(() => {
-                            const isAlreadyPurchased = activeMemberships.some(
-                              (membership) =>
-                                membership.tierCode === tier.tierCode
-                            );
+                            if (hasExact) {
+                              return (
+                                <Button
+                                  size="sm"
+                                  variant="secondary"
+                                  className="w-full md:w-auto bg-green-500 hover:bg-green-600 text-white cursor-not-allowed opacity-80"
+                                  disabled
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <CheckCircle className="w-4 h-4" />
+                                    Already Purchased
+                                  </div>
+                                </Button>
+                              );
+                            }
+
+                            if (isIncluded) {
+                              // find which active tier includes this feature
+                              const provider = activeMemberships.find(
+                                (membership) =>
+                                  (
+                                    INCLUDES[membership.tierCode] || []
+                                  ).includes(tier.tierCode)
+                              );
+                              return (
+                                <div className="w-full md:w-auto">
+                                  <Button
+                                    size="sm"
+                                    variant="secondary"
+                                    className="w-full md:w-auto bg-emerald-50 text-emerald-700 border-emerald-200 cursor-not-allowed"
+                                    disabled
+                                    title={`Included via ${provider?.tierName || 'your plan'}`}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <CheckCircle className="w-4 h-4 text-emerald-600" />
+                                      Included in your plan
+                                    </div>
+                                  </Button>
+                                  <div className="mt-2 text-xs text-muted-foreground text-right">
+                                    Included via{' '}
+                                    <span className="font-medium">
+                                      {provider?.tierName}
+                                    </span>
+                                  </div>
+                                </div>
+                              );
+                            }
+
+                            // Not included — render normal CTA
                             return (
                               <Button
                                 size="sm"
                                 variant={
-                                  isAlreadyPurchased
-                                    ? 'secondary'
-                                    : isPopular
-                                      ? 'default'
-                                      : isFree
-                                        ? 'outline'
-                                        : 'outline'
+                                  isPopular
+                                    ? 'default'
+                                    : isFree
+                                      ? 'outline'
+                                      : 'outline'
                                 }
                                 className={`w-full md:w-auto ${
-                                  isAlreadyPurchased
-                                    ? 'bg-green-500 hover:bg-green-600 text-white cursor-not-allowed opacity-75'
-                                    : isPopular
-                                      ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                                      : isFree
-                                        ? 'border-emerald-300 text-emerald-700 hover:bg-emerald-50'
-                                        : ''
+                                  isPopular
+                                    ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                                    : isFree
+                                      ? 'border-emerald-300 text-emerald-700 hover:bg-emerald-50'
+                                      : ''
                                 }`}
-                                onClick={() =>
-                                  !isAlreadyPurchased &&
-                                  handleUpgrade(tier.tierCode)
-                                }
-                                disabled={isAlreadyPurchased}
+                                onClick={() => handleUpgrade(tier.tierCode)}
                               >
-                                {isAlreadyPurchased
-                                  ? 'Already Purchased'
-                                  : isFree
-                                    ? 'Get Started'
-                                    : 'Upgrade'}
+                                {isFree ? 'Get Started' : 'Upgrade'}
                               </Button>
                             );
                           })()}

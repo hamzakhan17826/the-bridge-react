@@ -59,9 +59,42 @@ export default function MembershipUpgrade() {
     (tier) => tier.tierCode.toLowerCase() === plan
   );
 
-  const isAlreadyPurchased =
-    selectedTier &&
-    activeMemberships.some((m) => m.tierCode === selectedTier.tierCode);
+  // Inclusion rules: higher-tier includes lower-tier features
+  const INCLUDES: Record<string, string[]> = {
+    PROFESSIONALMEDIUM: [
+      'PROFESSIONALMEDIUM',
+      'DEVELOPMENTMEDIUM',
+      'GENERALMEMBERSHIP',
+      'FREETIERMEMBERSHIP',
+    ],
+    DEVELOPMENTMEDIUM: [
+      'DEVELOPMENTMEDIUM',
+      'GENERALMEMBERSHIP',
+      'FREETIERMEMBERSHIP',
+    ],
+    GENERALMEMBERSHIP: ['GENERALMEMBERSHIP', 'FREETIERMEMBERSHIP'],
+    FREETIERMEMBERSHIP: ['FREETIERMEMBERSHIP'],
+  };
+
+  // Determine membership status for selected tier: 'exact' | 'included' | 'none'
+  const membershipStatus = (() => {
+    if (!selectedTier) return 'none';
+    const hasExact = activeMemberships.some(
+      (m) => m.tierCode === selectedTier.tierCode
+    );
+    if (hasExact) return 'exact';
+    const included = activeMemberships.some((m) =>
+      (INCLUDES[m.tierCode] || []).includes(selectedTier.tierCode)
+    );
+    return included ? 'included' : 'none';
+  })();
+
+  const includedProvider =
+    membershipStatus === 'included'
+      ? activeMemberships.find((m) =>
+          (INCLUDES[m.tierCode] || []).includes(selectedTier!.tierCode)
+        )
+      : null;
 
   // Get the icon component for rendering
   const renderTierIcon = (tierCode: string) => {
@@ -305,7 +338,7 @@ export default function MembershipUpgrade() {
                 </div>
               </div>
 
-              {isAlreadyPurchased ? (
+              {membershipStatus === 'exact' ? (
                 <div className="p-6 bg-green-50 border-2 border-green-200 rounded-lg text-center space-y-4">
                   <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
                     <CheckCircle className="h-10 w-10 text-green-600" />
@@ -324,6 +357,42 @@ export default function MembershipUpgrade() {
                   >
                     Back to Plans
                   </Button>
+                </div>
+              ) : membershipStatus === 'included' ? (
+                <div className="p-6 bg-emerald-50 border-2 border-emerald-200 rounded-lg text-center space-y-4">
+                  <div className="bg-emerald-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
+                    <CheckCircle className="h-10 w-10 text-emerald-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-emerald-900">
+                      Included in your plan
+                    </h3>
+                    <p className="text-emerald-700">
+                      The features of{' '}
+                      <span className="font-medium">
+                        {selectedTier.tierName}
+                      </span>{' '}
+                      are included with your{' '}
+                      <span className="font-medium">
+                        {includedProvider?.tierName}
+                      </span>{' '}
+                      membership.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 gap-2">
+                    <Button
+                      onClick={() => navigate('/dashboard/membership')}
+                      className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                    >
+                      Manage Membership
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => navigate('/dashboard/membership/overview')}
+                    >
+                      View Benefits
+                    </Button>
+                  </div>
                 </div>
               ) : (
                 <>
