@@ -8,6 +8,12 @@ import {
   Heart,
   MessageCircle,
   Loader2,
+  Globe,
+  BookOpen,
+  Building2,
+  Layers,
+  Clock,
+  Download,
 } from 'lucide-react';
 import { Button } from '../components/ui';
 import { useBook, useBooks } from '../hooks/useBook';
@@ -115,43 +121,138 @@ const BookDetail = () => {
         {/* Book Content */}
         <section className="py-16">
           <div className="container mx-auto px-6">
-            <article className="max-w-4xl mx-auto">
-              {/* Featured Image */}
-              {book.imageUrl && (
-                <div className="mb-12">
-                  <img
-                    src={book.imageUrl}
-                    alt={book.title}
-                    className="w-full h-auto max-h-150 object-cover rounded-2xl shadow-lg"
-                  />
-                </div>
-              )}
-
-              {/* Content */}
-              <div
-                className="prose prose-lg max-w-none font-lato text-gray-700 leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: book.content }}
-              />
-
-              {/* Book Footer */}
-              <div className="mt-12 pt-8 border-t border-gray-200">
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <Button variant="outline" size="sm">
-                      <Heart className="w-4 h-4 mr-2" />
-                      Like
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Share
-                    </Button>
+            <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-12">
+              <article className="lg:w-2/3">
+                {/* Featured Image */}
+                {book.imageUrl && (
+                  <div className="mb-12">
+                    <img
+                      src={book.imageUrl}
+                      alt={book.title}
+                      className="w-full h-auto max-h-150 object-cover rounded-2xl shadow-lg"
+                    />
                   </div>
-                  <div className="text-sm text-gray-500">
-                    Published on {new Date(book.createdAt).toLocaleDateString()}
+                )}
+
+                {/* Content */}
+                <div
+                  className="prose prose-lg max-w-none font-lato text-gray-700 leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: book.content }}
+                />
+
+                {/* Book Footer */}
+                <div className="mt-12 pt-8 border-t border-gray-200">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <Button variant="outline" size="sm">
+                        <Heart className="w-4 h-4 mr-2" />
+                        Like
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Share2 className="w-4 h-4 mr-2" />
+                        Share
+                      </Button>
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      Published on{' '}
+                      {new Date(book.createdAt).toLocaleDateString()}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </article>
+              </article>
+
+              {/* Sidebar / Specs */}
+              <aside className="lg:w-1/3 space-y-8">
+                {/* Download/Read Button */}
+                {book.fileUrl && (
+                  <div className="bg-primary-900 rounded-2xl p-6 text-white shadow-lg sticky top-24">
+                    <h3 className="text-xl text-white font-poppins font-semibold mb-4 flex items-center gap-2">
+                      <BookOpen className="w-5 h-5 text-secondary-400" />
+                      Read Document
+                    </h3>
+                    <p className="text-primary-100 text-sm mb-6">
+                      This book is available in digital format for our library
+                      members.
+                    </p>
+                    <a
+                      href={book.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block"
+                    >
+                      <Button className="w-full text-white bg-secondary-500 hover:bg-secondary-600 border-none">
+                        <Download className="w-4 h-4 mr-2" />
+                        Access File
+                      </Button>
+                    </a>
+                  </div>
+                )}
+
+                {/* Book Details Card */}
+                <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
+                  <h3 className="text-lg font-poppins font-semibold text-gray-900 mb-6 border-b pb-4">
+                    Book Specifications
+                  </h3>
+                  <div className="space-y-4">
+                    {book.language && (
+                      <div className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+                        <div className="flex items-center gap-3 text-gray-500">
+                          <Globe className="w-4 h-4" />
+                          <span className="text-sm">Language</span>
+                        </div>
+                        <span className="text-sm font-medium text-gray-900">
+                          {book.language}
+                        </span>
+                      </div>
+                    )}
+                    {book.edition && (
+                      <div className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+                        <div className="flex items-center gap-3 text-gray-500">
+                          <Layers className="w-4 h-4" />
+                          <span className="text-sm">Edition</span>
+                        </div>
+                        <span className="text-sm font-medium text-gray-900">
+                          {book.edition}
+                        </span>
+                      </div>
+                    )}
+                    {book.publisher && (
+                      <div className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+                        <div className="flex items-center gap-3 text-gray-500">
+                          <Building2 className="w-4 h-4" />
+                          <span className="text-sm">Publisher</span>
+                        </div>
+                        <span className="text-sm font-medium text-gray-900 text-right">
+                          {book.publisher}
+                        </span>
+                      </div>
+                    )}
+                    {book.pagesCount && book.pagesCount > 0 && (
+                      <div className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+                        <div className="flex items-center gap-3 text-gray-500">
+                          <BookOpen className="w-4 h-4" />
+                          <span className="text-sm">Pages</span>
+                        </div>
+                        <span className="text-sm font-medium text-gray-900">
+                          {book.pagesCount}
+                        </span>
+                      </div>
+                    )}
+                    {book.readingTime && (
+                      <div className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+                        <div className="flex items-center gap-3 text-gray-500">
+                          <Clock className="w-4 h-4" />
+                          <span className="text-sm">Read Time</span>
+                        </div>
+                        <span className="text-sm font-medium text-gray-900">
+                          {book.readingTime}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </aside>
+            </div>
           </div>
         </section>
 
