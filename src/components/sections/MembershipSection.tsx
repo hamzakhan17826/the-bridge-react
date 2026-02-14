@@ -9,14 +9,11 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useSubscriptionTiers } from '../../hooks/useMembership';
-import BillingToggle from '../BillingToggle';
-import { useState } from 'react';
+import daysToText from '@/lib/daysToText';
 
 const MembershipSection = () => {
   const navigate = useNavigate();
-  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>(
-    'monthly'
-  );
+  // billing toggle is intentionally disabled for now; show monthly price only
   const { data: tiers, isLoading, error } = useSubscriptionTiers();
 
   // Sort tiers by displayOrder (service already provides fallback data)
@@ -116,11 +113,12 @@ const MembershipSection = () => {
           </p>
         </div>
 
-        <BillingToggle
+        {/* Don't remove this BillingToggle as I will show it later */}
+        {/* <BillingToggle
           billingCycle={billingCycle}
           onChange={setBillingCycle}
           className="pt-5!"
-        />
+        /> */}
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {displayTiers.map((tier, index) => {
@@ -130,9 +128,6 @@ const MembershipSection = () => {
             const isFree =
               tier.tierCode === 'FREETIERMEMBERSHIP' || tier.basePrice <= 0;
             const monthlyPrice = Math.round(tier.basePrice);
-            const yearlyListPrice = Math.round(tier.basePrice * 12);
-            const yearlyDiscountPrice = Math.round(tier.basePrice * 12 * 0.83);
-            const yearlySavings = Math.round(tier.basePrice * 12 * 0.17);
 
             return (
               <div
@@ -183,36 +178,38 @@ const MembershipSection = () => {
                     {tier.description}
                   </p>
 
-                  {/* Pricing */}
+                  {/* Pricing (simplified - monthly view) */}
                   <div className="flex items-baseline gap-2 mb-8">
-                    {!isFree && billingCycle === 'yearly' && (
-                      <span className="relative text-2xl text-gray-400 font-lato inline-block">
-                        ${yearlyListPrice}
-                        <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-400 transform -rotate-12 origin-center"></div>
-                      </span>
-                    )}
-                    {isFree ? (
-                      <span className="text-4xl font-poppins font-bold text-gray-900">
-                        Free
-                      </span>
-                    ) : (
-                      <>
-                        <span className="text-4xl font-poppins font-bold text-gray-900">
-                          $
-                          {billingCycle === 'monthly'
-                            ? monthlyPrice
-                            : yearlyDiscountPrice}
-                        </span>
-                        <span className="text-lg text-gray-500 font-lato">
-                          /{billingCycle === 'monthly' ? 'month' : 'year'}
-                        </span>
-                      </>
-                    )}
-                    {!isFree && billingCycle === 'yearly' && (
-                      <span className="text-sm text-green-600 font-medium">
-                        Save ${yearlySavings}
-                      </span>
-                    )}
+                    {(() => {
+                      const period =
+                        tier.validityDurationInDays != null
+                          ? daysToText(tier.validityDurationInDays)
+                          : '';
+
+                      if (isFree) {
+                        return (
+                          <>
+                            <span className="text-4xl font-poppins font-bold text-gray-900">
+                              Free
+                            </span>
+                            <span className="text-lg text-gray-500 font-lato">
+                              /{period}
+                            </span>
+                          </>
+                        );
+                      }
+
+                      return (
+                        <>
+                          <span className="text-4xl font-poppins font-bold text-gray-900">
+                            ${monthlyPrice}
+                          </span>
+                          <span className="text-lg text-gray-500 font-lato">
+                            /{period}
+                          </span>
+                        </>
+                      );
+                    })()}
                   </div>
 
                   {/* CTA Button */}

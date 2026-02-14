@@ -15,6 +15,7 @@ import {
   useSubscriptionTiers,
   useMyActiveMemberships,
 } from '../../hooks/useMembership';
+import daysToText from '@/lib/daysToText';
 
 export default function Membership() {
   const { setItems } = useBreadcrumb();
@@ -187,9 +188,6 @@ export default function Membership() {
                             </div>
                             <div className="text-2xl font-bold">
                               ${Math.round(tier.basePrice ?? 0)}
-                              <span className="text-sm font-normal text-muted-foreground">
-                                {(tier.basePrice ?? 0) === 0 ? '' : '/month'}
-                              </span>
                             </div>
                             <div className="text-xs text-muted-foreground">
                               {tier.tierCode === 'GENERALMEMBERSHIP'
@@ -200,6 +198,12 @@ export default function Membership() {
                                     ? 'Professional Plan'
                                     : 'Free Plan'}
                             </div>
+                            {tier.validityDurationInDays != null && (
+                              <div className="text-xs text-muted-foreground mt-1">
+                                Valid for{' '}
+                                {daysToText(tier.validityDurationInDays)}
+                              </div>
+                            )}
                           </div>
                         </div>
                         <div className="md:col-span-7 mt-4 md:mt-0">
