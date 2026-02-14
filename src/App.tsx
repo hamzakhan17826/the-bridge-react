@@ -59,6 +59,7 @@ import {
   EditBlog,
   Blogs,
   BlogPreview,
+  NotFound,
 } from './pages';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
@@ -78,6 +79,7 @@ function App() {
   const router = createBrowserRouter([
     {
       element: <AppLayout />,
+      errorElement: <NotFound />,
       children: [
         { path: '/', element: <Home /> },
         { path: '/events', element: <Events /> },
@@ -142,6 +144,7 @@ function App() {
           </BreadcrumbProvider>
         </RequireAuth>
       ),
+      errorElement: <NotFound />,
       children: [
         { index: true, element: <Overview /> },
         { path: 'credits-history', element: <CreditsHistory /> },

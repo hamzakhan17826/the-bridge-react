@@ -46,6 +46,7 @@ export { default as CreateBlog } from './dashboard/blogs/CreateBlog';
 export { default as EditBlog } from './dashboard/blogs/EditBlog';
 export { default as Blogs } from './Blogs';
 export { default as BlogPreview } from './BlogPreview';
+export { default as NotFound } from './NotFound';
 // Professional Medium (PM) dashboard pages
 export { default as PMOnboarding } from './dashboard/pm/Onboarding';
 export { default as PMBookings } from './dashboard/pm/Bookings';
