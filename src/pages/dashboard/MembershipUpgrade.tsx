@@ -390,7 +390,7 @@ export default function MembershipUpgrade() {
                       variant="outline"
                       onClick={() => navigate('/dashboard/membership/overview')}
                     >
-                      View Benefits
+                      View Remaining Credits
                     </Button>
                   </div>
                 </div>

@@ -1,5 +1,7 @@
 import type { CookieOptions } from '../types/auth';
 import { useAuthStore } from '../stores/authStore';
+import { queryClient } from './queryClient';
+import { navigateTo } from './router';
 
 export function clearAuthCookies() {
   deleteCookie('jwtToken');
@@ -98,9 +100,18 @@ export function logout() {
     void e;
   }
   useAuthStore.getState().logout();
+  try {
+    queryClient.removeQueries({ queryKey: ['userProfile'] });
+    queryClient.removeQueries({ queryKey: ['membership'] });
+  } catch (e) {
+    void e;
+  }
   setTimeout(() => {
     try {
-      window.location.href = '/login';
+      const navigated = navigateTo('/login', { replace: true });
+      if (!navigated && typeof window !== 'undefined') {
+        window.location.href = '/login';
+      }
     } catch (err) {
       void err;
     }

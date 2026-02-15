@@ -73,6 +73,7 @@ import {
 import DashboardLayout from './components/layouts/dashboard/DashboardLayout';
 import { BreadcrumbProvider } from '@/components/ui/breadcrumb';
 import { AuthInitializer } from './components/system/AuthInitializer';
+import { setRouter } from './lib/router';
 // import { ThemeProvider } from '@/components/theme-provider';
 
 function App() {
@@ -292,6 +293,7 @@ function App() {
       ],
     },
   ]);
+  setRouter(router);
   return (
     <HelmetProvider>
       <QueryErrorResetBoundary>

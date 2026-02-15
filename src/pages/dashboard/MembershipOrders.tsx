@@ -10,7 +10,6 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { CalendarDays, CreditCard, Wallet } from 'lucide-react';
-import { format } from 'date-fns';
 import { useMyOrdersHistory } from '@/hooks/useMembership';
 import type { MyOrderHistoryItem } from '@/types/membership';
 import { PaymentProcessor } from '@/constants/enums';
@@ -75,7 +74,7 @@ export default function MembershipOrders() {
                   <div className="font-semibold">Order #{o.id}</div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <CalendarDays className="h-4 w-4" />
-                    {format(new Date(o.orderPlacedAt), 'MMM dd, yyyy HH:mm')}
+                    {new Date(o.orderPlacedAt + 'Z').toLocaleString()}
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
                     {asText(o.membershipTierName)} (
@@ -84,7 +83,7 @@ export default function MembershipOrders() {
                 </div>
 
                 <div className="md:col-span-3">
-                  <div className="text-sm">Amount</div>
+                  <div className="text-sm font-semibold">Amount</div>
                   <div className="text-lg font-bold">
                     ${o.amount.toFixed(2)}
                   </div>
@@ -99,11 +98,11 @@ export default function MembershipOrders() {
                 </div>
 
                 <div className="md:col-span-4">
-                  <div className="text-sm">Transaction</div>
+                  <div className="text-sm font-semibold">Transaction</div>
                   <div className="font-mono text-sm break-all">
                     {o.paymentTransactionId}
                   </div>
-                  <div className="text-sm mt-2">Tracking</div>
+                  <div className="text-sm mt-2 font-semibold">Tracking</div>
                   <div className="font-mono text-sm break-all">
                     {o.pubTrackId}
                   </div>
@@ -123,7 +122,7 @@ export default function MembershipOrders() {
                   </Badge>
                   {o.isPaid && o.paidAt && (
                     <div className="text-xs text-muted-foreground">
-                      Paid at {format(new Date(o.paidAt), 'MMM dd, yyyy HH:mm')}
+                      Paid at {new Date(o.paidAt + 'Z').toLocaleString()}
                     </div>
                   )}
                   <div className="flex gap-2">
