@@ -71,6 +71,29 @@ export async function paypalWebhook(token: string): Promise<string> {
   }
 }
 
+export async function consumeFeature(
+  featureCode: string
+): Promise<{ success: boolean; message: string }> {
+  try {
+    const res = await api.post('/Member/ConsumeFeature', `"${featureCode}"`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return res.data;
+  } catch (error: unknown) {
+    const err = error as {
+      response?: {
+        data?: { message?: string };
+      };
+    };
+
+    throw new Error(
+      err.response?.data?.message || 'Failed to consume credits.'
+    );
+  }
+}
+
 export async function paypalWebhookMock(token: string): Promise<string> {
   try {
     const res = await api.post('/Member/PayPalWebhookMock', token, {

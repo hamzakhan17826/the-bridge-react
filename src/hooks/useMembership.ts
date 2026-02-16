@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   fetchSubscriptionTiers,
   placeMembershipOrder,
@@ -10,6 +10,7 @@ import {
   fetchMyTotalAndRemainingCredits,
   fetchUserMemberships,
   fetchUserTotalAndRemainingCredits,
+  consumeFeature,
   type UserTotalAndRemainingCreditsResponse,
 } from '../services/membership';
 import {
@@ -141,5 +142,26 @@ export const useUserCredits = (userId?: string) => {
     staleTime: 60 * 1000,
     gcTime: 10 * 60 * 1000,
     enabled: !!userId,
+  });
+};
+
+export const useConsumeFeature = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (featureCode: string) => consumeFeature(featureCode),
+    onSuccess: (data) => {
+      console.log('Feature credits consumed:', data);
+      // Invalidate credits to reflect change in UI
+      queryClient.invalidateQueries({
+        queryKey: ['membership', 'myTotalAndRemainingCredits'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['membership', 'userTotalAndRemainingCredits'],
+      });
+    },
+    onError: (error: Error) => {
+      console.error('Consumption failed:', error.message);
+    },
   });
 };
