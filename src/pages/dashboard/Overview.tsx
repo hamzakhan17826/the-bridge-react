@@ -39,8 +39,8 @@ export default function Overview() {
           credits={{
             remainingCredits: totalRemainingCredits,
             totalCredits: totalCredits,
-            onTopUp: () => console.log('Top-up clicked'),
-            onViewHistory: () => console.log('View history clicked'),
+            onTopUp: () => navigate('/dashboard/membership/topup'),
+            onViewHistory: () => navigate('/dashboard/credits-history'),
           }}
           onManageClick={() => navigate('/dashboard/membership')}
           onViewOrdersClick={() => navigate('/dashboard/membership/orders')}

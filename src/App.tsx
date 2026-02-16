@@ -60,6 +60,7 @@ import {
   Blogs,
   BlogPreview,
   NotFound,
+  CreditTopUp,
 } from './pages';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
@@ -231,6 +232,7 @@ function App() {
         { path: 'membership', element: <DashboardMembership /> },
         { path: 'membership/orders', element: <MembershipOrders /> },
         { path: 'membership/overview', element: <MembershipOverview /> },
+        { path: 'membership/topup', element: <CreditTopUp /> },
         { path: 'membership/upgrade/:plan', element: <MembershipUpgrade /> },
         {
           path: 'users',

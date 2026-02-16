@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Users, BookOpen, Crown, User, CheckCircle } from 'lucide-react';
+import { Users, BookOpen, Crown, User, CheckCircle, Plus } from 'lucide-react';
 import { useBreadcrumb } from '@/components/ui/breadcrumb';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -75,13 +75,22 @@ export default function Membership() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Membership Plans</h1>
-        <p className="text-muted-foreground">
-          Choose the perfect membership plan for your spiritual journey. All
-          plans include access to our community and basic features.
-        </p>
+    <div className="space-y-6 pb-10">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Membership Plans</h1>
+          <p className="text-muted-foreground">
+            Choose the perfect membership plan for your spiritual journey.
+          </p>
+        </div>
+        <Button
+          onClick={() => navigate('/dashboard/membership/topup')}
+          variant="default"
+          className="flex items-center gap-2 btn"
+        >
+          <Plus className="h-4 w-4" />
+          Top-up Credits
+        </Button>
       </div>
 
       {/* Plans Listing */}

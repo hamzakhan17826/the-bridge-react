@@ -147,9 +147,9 @@ export function MembershipStatusCard(props: {
               </div>
               <div className="flex gap-2 mt-2">
                 <Button
+                  onClick={() => navigate('/dashboard/membership/topup')}
                   variant="outline"
                   size="sm"
-                  onClick={props.credits.onTopUp}
                 >
                   Top-up
                 </Button>
