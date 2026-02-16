@@ -16,6 +16,14 @@ export interface SubscriptionTier {
   features: SubscriptionFeature[];
 }
 
+export const FeatureType = {
+  Unlimited: 0,
+  Wallet: 1,
+  Quota: 2,
+} as const;
+
+export type FeatureType = (typeof FeatureType)[keyof typeof FeatureType];
+
 export interface SubscriptionFeature {
   id: number;
   slug: string;
@@ -24,6 +32,7 @@ export interface SubscriptionFeature {
   description: string;
   isOnlyDiscount: boolean;
   price: number;
+  type: FeatureType;
   discountPercentage: number;
   isDiscountEnabled: boolean;
   validityDurationInDays: number;
