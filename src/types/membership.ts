@@ -27,7 +27,7 @@ export interface SubscriptionFeature {
   discountPercentage: number;
   isDiscountEnabled: boolean;
   validityDurationInDays: number;
-  totalCredits: number;
+  creditCost: number;
   isAutoRenewEnabled: boolean;
   autoRenewsEvernNDays: number;
   displayOrder: number;
