@@ -78,3 +78,19 @@ export const getEventStatusKey = (
 
 export const getTagKey = (value: TagsValue): TagsKey | undefined =>
   (Object.keys(Tags) as TagsKey[]).find((k) => Tags[k] === value);
+
+export const FeatureType = {
+  Unlimited: 0,
+  Wallet: 1, // Scenario 1: Deducts from global UserCredit
+  Quota: 2, // Scenario 2: Deducts from UserFeature.RemainingCredits (specific item limits)
+} as const;
+
+export type FeatureTypeKey = keyof typeof FeatureType;
+export type FeatureTypeValue = (typeof FeatureType)[FeatureTypeKey];
+
+export const getFeatureTypeKey = (
+  value: FeatureTypeValue
+): FeatureTypeKey | undefined =>
+  (Object.keys(FeatureType) as FeatureTypeKey[]).find(
+    (k) => FeatureType[k] === value
+  );
