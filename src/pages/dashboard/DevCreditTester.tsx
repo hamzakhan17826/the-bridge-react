@@ -108,7 +108,7 @@ export default function DevCreditTester() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="container mx-auto p-6">
       <h2 className="text-2xl font-semibold mb-4">
         Dev: Credit & Membership tester (temporary)
       </h2>
@@ -148,7 +148,7 @@ export default function DevCreditTester() {
         <div className="p-4 border rounded">
           <div className="text-sm text-muted-foreground">Wallet</div>
           <div className="mt-2 text-xl font-semibold">{walletCredits}</div>
-          <div className="mt-3 flex gap-2">
+          <div className="mt-3 flex flex-wrap gap-2">
             <button
               className="px-3 py-1 bg-blue-600 text-white rounded"
               onClick={() => topUpWalletAdd(10)}
@@ -173,48 +173,69 @@ export default function DevCreditTester() {
         <div className="p-4 border rounded">
           <div className="text-sm text-muted-foreground">Quick actions</div>
           <div className="mt-3 grid gap-2">
-            <div className="flex gap-2">
-              <input
-                className="w-20 px-2 border rounded"
-                type="number"
-                value={renewDays}
-                onChange={(e) => setRenewDays(Number(e.target.value))}
-              />
-              <select
-                className="px-2 border rounded"
-                value={renewMode}
-                onChange={(e) => setRenewMode(e.target.value as any)}
-              >
-                <option value="reset">Renew: Reset</option>
-                <option value="extend">Renew: Extend</option>
-              </select>
-              <input
-                className="w-24 px-2 border rounded"
-                type="number"
-                value={renewCreditAmount}
-                onChange={(e) => setRenewCreditAmount(Number(e.target.value))}
-              />
-            </div>
-            <div className="flex gap-2 items-center">
-              <label className="text-sm">On renew credits:</label>
-              <label className="ml-2">
+            <div className="grid grid-cols-1 sm:grid-cols-1 gap-2">
+              <div>
+                <div className="text-xs text-gray-500 mb-1">Renew days</div>
                 <input
-                  type="radio"
-                  checked={creditAssignMode === 'overwrite'}
-                  onChange={() => setCreditAssignMode('overwrite')}
-                />{' '}
-                Overwrite
-              </label>
-              <label className="ml-2">
+                  className="w-full sm:w-20 px-2 border rounded"
+                  type="number"
+                  value={renewDays}
+                  onChange={(e) => setRenewDays(Number(e.target.value))}
+                />
+              </div>
+              <div>
+                <div className="text-xs text-gray-500 mb-1">Renew mode</div>
+                <select
+                  className="w-full sm:w-auto px-2 border rounded"
+                  value={renewMode}
+                  onChange={(e) => setRenewMode(e.target.value as any)}
+                >
+                  <option value="reset">
+                    Reset — set EndDate = now + days
+                  </option>
+                  <option value="extend">
+                    Extend — add days to current EndDate
+                  </option>
+                </select>
+              </div>
+              <div>
+                <div className="text-xs text-gray-500 mb-1">
+                  Credits on renew
+                </div>
                 <input
-                  type="radio"
-                  checked={creditAssignMode === 'add'}
-                  onChange={() => setCreditAssignMode('add')}
-                />{' '}
-                Add
-              </label>
+                  className="w-full sm:w-24 px-2 border rounded"
+                  type="number"
+                  value={renewCreditAmount}
+                  onChange={(e) => setRenewCreditAmount(Number(e.target.value))}
+                />
+              </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-2 items-center">
+                <label className="text-sm">On renew credits:</label>
+                <label className="ml-2">
+                  <input
+                    type="radio"
+                    checked={creditAssignMode === 'overwrite'}
+                    onChange={() => setCreditAssignMode('overwrite')}
+                  />{' '}
+                  Overwrite
+                </label>
+                <label className="ml-2">
+                  <input
+                    type="radio"
+                    checked={creditAssignMode === 'add'}
+                    onChange={() => setCreditAssignMode('add')}
+                  />{' '}
+                  Add
+                </label>
+              </div>
+              <div className="text-xs text-gray-500">
+                Overwrite: replace the user's wallet with this value. Add:
+                increase the user's existing wallet by this value.
+              </div>
+            </div>
+            <div className="flex gap-2 flex-wrap">
               <button
                 className="px-3 py-1 bg-indigo-600 text-white rounded"
                 onClick={renewMembership}
