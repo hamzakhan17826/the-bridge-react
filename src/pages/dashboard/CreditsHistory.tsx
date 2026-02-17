@@ -18,6 +18,7 @@ type UsageEntry = {
   change: number; // negative for usage, positive for top-up
   note: string;
   featureName: string;
+  type: 'wallet' | 'quota';
 };
 
 const FEATURES = [
@@ -30,6 +31,11 @@ function getDummyHistory(name: string): UsageEntry[] {
   const now = new Date();
   const day = (d: number) =>
     new Date(now.getFullYear(), now.getMonth(), d).toISOString();
+
+  const entryType: 'wallet' | 'quota' = name.toLowerCase().includes('replay')
+    ? 'quota'
+    : 'wallet';
+
   if (name.toLowerCase().includes('event')) {
     return [
       {
@@ -37,21 +43,25 @@ function getDummyHistory(name: string): UsageEntry[] {
         change: -1,
         note: 'Joined Community Event #102',
         featureName: name,
+        type: entryType,
       },
       {
         date: day(7),
         change: -2,
         note: 'Accessed VIP Webinar Replay',
         featureName: name,
+        type: entryType,
       },
       {
         date: day(12),
         change: +3,
         note: 'Top-up applied (promo bundle)',
         featureName: name,
+        type: entryType,
       },
     ];
   }
+
   if (name.toLowerCase().includes('replay')) {
     return [
       {
@@ -59,35 +69,47 @@ function getDummyHistory(name: string): UsageEntry[] {
         change: -1,
         note: 'Watched “Clairvoyance Basics” replay',
         featureName: name,
+        type: entryType,
       },
       {
         date: day(9),
         change: -1,
         note: 'Watched “Spirit Guides Q&A” replay',
         featureName: name,
+        type: entryType,
       },
       {
         date: day(14),
         change: +2,
         note: 'Monthly refresh credit pack',
         featureName: name,
+        type: entryType,
       },
     ];
   }
+
   return [
     {
       date: day(2),
       change: -1,
       note: 'Booked 1:1 with Medium A',
       featureName: name,
+      type: entryType,
     },
     {
       date: day(10),
       change: -1,
       note: 'Rescheduled session (credit retained)',
       featureName: name,
+      type: entryType,
     },
-    { date: day(15), change: +1, note: 'Top-up applied', featureName: name },
+    {
+      date: day(15),
+      change: +1,
+      note: 'Top-up applied',
+      featureName: name,
+      type: entryType,
+    },
   ];
 }
 
@@ -95,6 +117,9 @@ export default function CreditsHistory() {
   const { setItems } = useBreadcrumb();
   const navigate = useNavigate();
   const [filter, setFilter] = useState<string>('All');
+  const [filterType, setFilterType] = useState<'All' | 'Wallet' | 'Quota'>(
+    'All'
+  );
 
   useEffect(() => {
     setItems([
@@ -112,9 +137,13 @@ export default function CreditsHistory() {
   }, []);
 
   const filtered = useMemo(() => {
-    if (filter === 'All') return allEntries;
-    return allEntries.filter((e) => e.featureName === filter);
-  }, [allEntries, filter]);
+    return allEntries.filter((e) => {
+      const featureMatch = filter === 'All' ? true : e.featureName === filter;
+      const typeMatch =
+        filterType === 'All' ? true : e.type === filterType.toLowerCase();
+      return featureMatch && typeMatch;
+    });
+  }, [allEntries, filter, filterType]);
 
   const totals = useMemo(() => {
     const used = allEntries
@@ -123,7 +152,21 @@ export default function CreditsHistory() {
     const topped = allEntries
       .filter((e) => e.change > 0)
       .reduce((sum, e) => sum + e.change, 0);
-    return { used, topped };
+
+    const usedWallet = allEntries
+      .filter((e) => e.type === 'wallet' && e.change < 0)
+      .reduce((s, e) => s + Math.abs(e.change), 0);
+    const usedQuota = allEntries
+      .filter((e) => e.type === 'quota' && e.change < 0)
+      .reduce((s, e) => s + Math.abs(e.change), 0);
+    const toppedWallet = allEntries
+      .filter((e) => e.type === 'wallet' && e.change > 0)
+      .reduce((s, e) => s + e.change, 0);
+    const toppedQuota = allEntries
+      .filter((e) => e.type === 'quota' && e.change > 0)
+      .reduce((s, e) => s + e.change, 0);
+
+    return { used, topped, usedWallet, usedQuota, toppedWallet, toppedQuota };
   }, [allEntries]);
 
   return (
@@ -169,13 +212,32 @@ export default function CreditsHistory() {
                   <option key={f}>{f}</option>
                 ))}
               </select>
+
+              <select
+                aria-label="Filter by type"
+                className="border rounded px-2 py-1 text-sm bg-background"
+                value={filterType}
+                onChange={(e) =>
+                  setFilterType(e.target.value as 'All' | 'Wallet' | 'Quota')
+                }
+              >
+                <option>All</option>
+                <option>Wallet</option>
+                <option>Quota</option>
+              </select>
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3 items-center">
             <Badge variant="secondary" className="bg-amber-100 text-amber-700">
               Used: {totals.used}
+            </Badge>
+            <Badge variant="secondary" className="bg-blue-50 text-blue-700">
+              Used (quota): {totals.usedQuota}
+            </Badge>
+            <Badge variant="secondary" className="bg-amber-50 text-amber-700">
+              Used (wallet): {totals.usedWallet}
             </Badge>
             <Badge
               variant="secondary"
@@ -189,53 +251,71 @@ export default function CreditsHistory() {
       </Card>
 
       <div className="space-y-3">
-        {filtered.map((e, idx) => {
-          const isUsage = e.change < 0;
-          const changeText = `${e.change > 0 ? '+' : ''}${e.change}`;
-          return (
-            <div
-              key={idx}
-              className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 rounded-lg border hover:border-gray-300 transition"
-            >
-              <div className="md:col-span-4">
-                <div className="text-sm text-muted-foreground">Feature</div>
-                <div className="font-medium">{e.featureName}</div>
-              </div>
-              <div className="md:col-span-4">
-                <div className="text-sm text-muted-foreground">Date</div>
-                <div className="font-medium">
-                  {format(new Date(e.date), 'MMM dd, yyyy')}
-                  <span className="ml-2 text-xs text-muted-foreground">
-                    {format(new Date(e.date), 'h:mm a')}
-                  </span>
+        {filtered.length === 0 ? (
+          <div className="p-6 text-center text-muted-foreground border rounded">
+            No entries match the selected filters.
+          </div>
+        ) : (
+          filtered.map((e, idx) => {
+            const isUsage = e.change < 0;
+            const changeText = `${e.change > 0 ? '+' : ''}${e.change}`;
+            return (
+              <div
+                key={idx}
+                className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 rounded-lg border hover:border-gray-300 transition"
+              >
+                <div className="md:col-span-4">
+                  <div className="text-sm text-muted-foreground">Feature</div>
+                  <div className="flex items-center gap-2">
+                    <div className="font-medium">{e.featureName}</div>
+                    <Badge
+                      variant={e.type === 'wallet' ? 'outline' : 'secondary'}
+                      className={
+                        e.type === 'wallet'
+                          ? 'border-amber-300 text-amber-700'
+                          : 'bg-blue-50 text-blue-700'
+                      }
+                    >
+                      {e.type === 'wallet' ? 'Wallet' : 'Quota'}
+                    </Badge>
+                  </div>
                 </div>
-                <div className="text-sm text-muted-foreground mt-1">
-                  {e.note}
+                <div className="md:col-span-4">
+                  <div className="text-sm text-muted-foreground">Date</div>
+                  <div className="font-medium">
+                    {format(new Date(e.date), 'MMM dd, yyyy')}
+                    <span className="ml-2 text-xs text-muted-foreground">
+                      {format(new Date(e.date), 'h:mm a')}
+                    </span>
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    {e.note}
+                  </div>
+                </div>
+                <div className="md:col-span-4 md:text-right">
+                  <div
+                    className={
+                      'text-sm font-semibold ' +
+                      (isUsage ? 'text-amber-700' : 'text-emerald-700')
+                    }
+                  >
+                    {changeText} credit{Math.abs(e.change) !== 1 ? 's' : ''}
+                  </div>
+                  <Badge
+                    variant={isUsage ? 'outline' : 'secondary'}
+                    className={
+                      isUsage
+                        ? 'border-amber-300 text-amber-700 mt-2'
+                        : 'bg-emerald-100 text-emerald-700 mt-2'
+                    }
+                  >
+                    {isUsage ? 'Deducted' : 'Top-up'}
+                  </Badge>
                 </div>
               </div>
-              <div className="md:col-span-4 md:text-right">
-                <div
-                  className={
-                    'text-sm font-semibold ' +
-                    (isUsage ? 'text-amber-700' : 'text-emerald-700')
-                  }
-                >
-                  {changeText} credit{Math.abs(e.change) !== 1 ? 's' : ''}
-                </div>
-                <Badge
-                  variant={isUsage ? 'outline' : 'secondary'}
-                  className={
-                    isUsage
-                      ? 'border-amber-300 text-amber-700 mt-2'
-                      : 'bg-emerald-100 text-emerald-700 mt-2'
-                  }
-                >
-                  {isUsage ? 'Deducted' : 'Top-up'}
-                </Badge>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
     </div>
   );
