@@ -54,7 +54,6 @@ export default function Membership() {
           credits={{
             remainingCredits: totalRemainingCredits,
             totalCredits: totalCredits,
-            onTopUp: () => console.log('Top-up clicked'),
             onViewHistory: () => console.log('View history clicked'),
           }}
           onManageClick={() => navigate('/dashboard/membership')}

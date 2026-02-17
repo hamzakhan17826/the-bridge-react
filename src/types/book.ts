@@ -16,6 +16,7 @@ export interface BookResponse {
   edition?: string;
   publisher?: string;
   pagesCount?: number;
+  format?: string;
   fileUrl?: string;
   readingTime?: string;
 }
@@ -31,6 +32,7 @@ export interface BookRequest {
   edition?: string;
   publisher?: string;
   pagesCount?: number;
+  format?: string;
   fileUrl?: string;
   readingTime?: string;
 }

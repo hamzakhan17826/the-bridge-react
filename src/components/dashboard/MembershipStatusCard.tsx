@@ -18,7 +18,6 @@ export function MembershipStatusCard(props: {
   credits?: {
     remainingCredits: number;
     totalCredits: number;
-    onTopUp?: () => void;
     onViewHistory?: () => void;
   };
   onManageClick?: () => void;

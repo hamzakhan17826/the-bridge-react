@@ -429,7 +429,10 @@ export default function CreditTopUp() {
                     <div className="text-2xl font-bold text-blue-600">
                       ${totalQuotaPrice.toFixed(2)}
                     </div>
-                    <Button size="sm" className="btn px-6">
+                    <Button
+                      size="sm"
+                      className="px-6 bg-green-300 hover:bg-green-400 text-green-900"
+                    >
                       <ShoppingCart className="mr-2 h-4 w-4" />
                       Add to Cart
                     </Button>

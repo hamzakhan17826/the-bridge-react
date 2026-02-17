@@ -39,7 +39,6 @@ export default function Overview() {
           credits={{
             remainingCredits: totalRemainingCredits,
             totalCredits: totalCredits,
-            onTopUp: () => navigate('/dashboard/membership/topup'),
             onViewHistory: () => navigate('/dashboard/credits-history'),
           }}
           onManageClick={() => navigate('/dashboard/membership')}
