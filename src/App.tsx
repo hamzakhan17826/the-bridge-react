@@ -61,7 +61,6 @@ import {
   BlogPreview,
   NotFound,
   CreditTopUp,
-  DevCreditTester,
 } from './pages';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
@@ -135,7 +134,6 @@ function App() {
           path: '/contact',
           element: <ContactUsPage />,
         },
-        { path: '/dev/credit-tester', element: <DevCreditTester /> },
         { path: '/payment-return', element: <PaymentReturn /> },
       ],
     },
