@@ -29,6 +29,7 @@ import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
 import { Checkbox } from '../../components/ui/checkbox';
 import { PaymentProcessor, PaymentStatus } from '@/constants/enums';
+import { toast } from 'react-toastify';
 
 export default function MembershipUpgrade() {
   const { plan } = useParams<{ plan: string }>();
@@ -213,12 +214,14 @@ export default function MembershipUpgrade() {
                 onSuccess: (res) => {
                   const statusNum = res.paymentStatus; // backend numeric status
                   if (res.isPaid && statusNum === PaymentStatus.Completed) {
-                    setPaymentState('success');
                     setShowPaymentWaiting(false);
                     if (id) {
                       clearInterval(id);
                     }
                     setPollTimer(null);
+
+                    navigate('/dashboard/membership/overview');
+                    toast.success('Payment completed successfully!');
                   } else if (
                     statusNum === PaymentStatus.Failed ||
                     statusNum === PaymentStatus.Cancelled
@@ -493,38 +496,6 @@ export default function MembershipUpgrade() {
                       }}
                     >
                       Cancel
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {paymentState === 'success' && (
-                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-600" />
-                    <div>
-                      <p className="font-medium text-green-900">
-                        Payment completed successfully!
-                      </p>
-                      <p className="text-sm text-green-700">
-                        Your membership upgrade is now active.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-3 flex gap-2">
-                    <Button
-                      size="sm"
-                      onClick={() => navigate('/dashboard')}
-                      className="btn"
-                    >
-                      Go to Dashboard
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => navigate('/dashboard/membership')}
-                    >
-                      Back to Membership
                     </Button>
                   </div>
                 </div>

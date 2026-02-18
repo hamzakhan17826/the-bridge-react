@@ -75,10 +75,22 @@ export const usePaypalWebhook = () => {
 };
 
 export const useOrderStatus = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (pubTrackId: string) => getOrderStatus(pubTrackId),
     onSuccess: (data: OrderStatusResponse) => {
       console.log('Order status retrieved:', data);
+
+      // If the order completed, refresh membership & credits caches so UI updates immediately
+      if (data.isPaid && data.paymentStatus === 2) {
+        queryClient.invalidateQueries({
+          queryKey: ['membership', 'myTotalAndRemainingCredits'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['membership', 'myActiveMemberships'],
+        });
+      }
     },
     onError: (error) => {
       console.error('Order status retrieval failed:', error);
