@@ -26,7 +26,6 @@ import { useAuthUser } from '@/hooks/useAuthUser';
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user: authUser, isAdmin, hasMembershipTier } = useAuthUser();
   const isProfessionalMedium = hasMembershipTier('PROFESSIONALMEDIUM');
-  const canManageContent = isAdmin || isProfessionalMedium;
 
   // Create user object from auth store
   const user = authUser
@@ -120,10 +119,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 { title: 'Payout', url: '/dashboard/pm/payout' },
               ],
             },
-          ]
-        : []),
-      ...(canManageContent
-        ? [
             {
               title: 'Events',
               url: '/dashboard/events/create',
@@ -169,10 +164,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 },
               ],
             },
-          ]
-        : []),
-      ...(canManageContent
-        ? [
             {
               title: 'Podcasts',
               url: '/dashboard/podcasts',

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   fetchSubscriptionTiers,
@@ -223,12 +223,26 @@ export const useAllOrdersHistory = (
 };
 
 export const useMyActiveMemberships = () => {
-  return useQuery<ActiveMembership[]>({
+  const query = useQuery<ActiveMembership[]>({
     queryKey: ['membership', 'myActiveMemberships'],
     queryFn: fetchMyActiveMemberships,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes
   });
+
+  // keep global auth store in sync with server-side memberships
+  useEffect(() => {
+    // update persisted zustand store so `useAuthUser()` reflects DB changes
+    import('@/stores/authStore')
+      .then(({ useAuthStore }) =>
+        useAuthStore.getState().setActiveMemberships?.(query.data ?? [])
+      )
+      .catch((err) =>
+        console.warn('Failed to sync active memberships to auth store:', err)
+      );
+  }, [query.data]);
+
+  return query;
 };
 
 export const useMyTotalAndRemainingCredits = () => {

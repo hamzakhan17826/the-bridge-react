@@ -18,9 +18,10 @@ export function useAuthUser() {
     normalizedRoles.includes(role.toLowerCase());
 
   const hasMembershipTier = (tierCode: string) =>
-    (activeMemberships as ActiveMembership[]).some(
-      (m) => m.tierCode?.toLowerCase() === tierCode.toLowerCase()
-    );
+    (activeMemberships as ActiveMembership[]).some((m) => {
+      console.log('Checking tier', m.tierCode, 'against', tierCode);
+      return m.tierCode?.toLowerCase() === tierCode.toLowerCase();
+    });
 
   const hasFeature = (featureCode: string) =>
     (activeMemberships as ActiveMembership[]).some((m) =>
