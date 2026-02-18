@@ -119,8 +119,12 @@ export function MembershipStatusCard(props: {
             <div>
               <div className="text-sm text-muted-foreground mb-1">Credits</div>
               <div className="font-medium">
-                {props.credits.remainingCredits}/{props.credits.totalCredits}{' '}
-                remaining
+                <span className="mr-3">
+                  Remaining credits: {props.credits.remainingCredits}
+                </span>
+                <span className="text-muted-foreground">
+                  Total credits: {props.credits.totalCredits}
+                </span>
               </div>
               <div className="h-2 bg-gray-200 rounded mt-2">
                 <div

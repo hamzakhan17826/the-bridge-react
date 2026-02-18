@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   fetchSubscriptionTiers,
   placeMembershipOrder,
+  placeTopupOrder,
   paypalWebhook,
   getOrderStatus,
   fetchMyOrdersHistory,
@@ -47,6 +49,19 @@ export const usePlaceMembershipOrder = () => {
   });
 };
 
+export const usePlaceTopupOrder = () => {
+  return useMutation({
+    mutationFn: (payload: { credits: number; processorId: number }) =>
+      placeTopupOrder(payload.credits, payload.processorId),
+    onSuccess: (data) => {
+      console.log('Top-up order placed successfully:', data);
+    },
+    onError: (error) => {
+      console.error('Top-up order failed:', error);
+    },
+  });
+};
+
 export const usePaypalWebhook = () => {
   return useMutation({
     mutationFn: (token: string) => paypalWebhook(token),
@@ -69,6 +84,102 @@ export const useOrderStatus = () => {
       console.error('Order status retrieval failed:', error);
     },
   });
+};
+
+// Top-up flow hook: encapsulates placeTopupOrder + polling + invalidation
+export const useTopupFlow = () => {
+  const queryClient = useQueryClient();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const topupMutation = useMutation({
+    mutationFn: (payload: { credits: number; processorId: number }) =>
+      placeTopupOrder(payload.credits, payload.processorId),
+  });
+
+  async function startTopup(credits: number, processorId: number) {
+    setIsProcessing(true);
+    try {
+      const response = await topupMutation.mutateAsync({
+        credits,
+        processorId,
+      });
+
+      // If provider redirect is returned, open it and poll order status
+      if (response.result && response.redirectUrl) {
+        // dev-only: call PayPal mock webhook if token present in redirect URL
+        if (window.location.hostname === 'localhost') {
+          try {
+            const url = new URL(response.redirectUrl);
+            const token = url.searchParams.get('token');
+            if (token) {
+              // lazy import to avoid circular deps in tests
+              import('../services/membership')
+                .then(({ paypalWebhookMock }) => paypalWebhookMock(token))
+                .catch((err) => console.error('Mock webhook failed:', err));
+            }
+          } catch (err) {
+            console.error('Failed to parse redirectUrl for token:', err);
+          }
+        }
+
+        if (response.redirectUrl) window.open(response.redirectUrl, '_blank');
+
+        // start polling
+        const pubTrackId = response.pubTrackId;
+        if (!pubTrackId) {
+          setIsProcessing(false);
+          return response;
+        }
+
+        const poll = setInterval(async () => {
+          try {
+            const status = await getOrderStatus(pubTrackId);
+            if (status.isPaid && status.paymentStatus === 2 /* Completed */) {
+              clearInterval(poll);
+              // refresh credits & memberships
+              queryClient.invalidateQueries({
+                queryKey: ['membership', 'myTotalAndRemainingCredits'],
+              });
+              queryClient.invalidateQueries({
+                queryKey: ['membership', 'myActiveMemberships'],
+              });
+              setIsProcessing(false);
+            } else if (
+              status.paymentStatus === 3 ||
+              status.paymentStatus === 4
+            ) {
+              // Failed or Cancelled
+              clearInterval(poll);
+              setIsProcessing(false);
+            }
+          } catch (err) {
+            console.error('Polling order status failed:', err);
+            clearInterval(poll);
+            setIsProcessing(false);
+          }
+        }, 3000);
+      } else if (response.result) {
+        // immediate success (no redirect)
+        queryClient.invalidateQueries({
+          queryKey: ['membership', 'myTotalAndRemainingCredits'],
+        });
+        setIsProcessing(false);
+      } else {
+        setIsProcessing(false);
+      }
+
+      return response;
+    } catch (err) {
+      console.error('Top-up flow failed:', err);
+      setIsProcessing(false);
+      throw err;
+    }
+  }
+
+  return {
+    startTopup,
+    isProcessing,
+  };
 };
 
 export const useMyOrdersHistory = () => {

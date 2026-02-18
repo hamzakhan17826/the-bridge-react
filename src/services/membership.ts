@@ -52,6 +52,39 @@ export async function placeMembershipOrder(
   }
 }
 
+// Place a credits top-up order (returns OrderResponse-like object)
+export async function placeTopupOrder(
+  credits: number,
+  paymentProcessor: number
+): Promise<PlaceMembershipOrderResponse> {
+  try {
+    const res = await api.post('/Member/AppUserPlaceTopupOrder', null, {
+      params: { credits, paymentProcessor },
+    });
+    console.log('placeTopupOrder API response:', res.data);
+    return res.data as PlaceMembershipOrderResponse;
+  } catch (error: unknown) {
+    console.error('placeTopupOrder API error:', error);
+    const err = error as {
+      response?: {
+        data?: { message?: string; errors?: string[] };
+        status?: number;
+      };
+    };
+
+    console.error('Error details:', {
+      status: err.response?.status,
+      data: err.response?.data,
+      message: err.response?.data?.message,
+      errors: err.response?.data?.errors,
+    });
+
+    throw new Error(
+      err.response?.data?.message || 'Failed to place top-up order.'
+    );
+  }
+}
+
 export async function paypalWebhook(token: string): Promise<string> {
   try {
     const res = await api.post('/Member/PayPalWebhook', token, {

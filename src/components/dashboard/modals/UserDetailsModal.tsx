@@ -123,8 +123,8 @@ export default function UserDetailsModal({
               typeof remainingCredits === 'number' && (
                 <div>
                   <label className="font-medium">Credits:</label>
-                  <div>Total: {totalCredits}</div>
-                  <div>Remaining: {remainingCredits}</div>
+                  <div>Total credits: {totalCredits}</div>
+                  <div>Remaining credits: {remainingCredits}</div>
                 </div>
               )}
             <div>

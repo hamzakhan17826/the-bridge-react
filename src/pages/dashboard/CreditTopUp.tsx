@@ -23,7 +23,11 @@ import {
   CheckCircle,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useMyTotalAndRemainingCredits } from '@/hooks/useMembership';
+import { PaymentProcessor } from '@/constants/enums';
+import {
+  useMyTotalAndRemainingCredits,
+  useTopupFlow,
+} from '@/hooks/useMembership';
 
 export default function CreditTopUp() {
   const { setItems } = useBreadcrumb();
@@ -34,8 +38,8 @@ export default function CreditTopUp() {
   const totalRemainingCredits = creditsData?.value ?? 0;
 
   // State for wallet credit selection
-  const [selectedCredits, setSelectedCredits] = useState(10);
-  const creditPricePerUnit = 0.5; // $0.50 per credit
+  const [selectedCredits, setSelectedCredits] = useState(500);
+  const creditPricePerUnit = 0.01; // $0.01 per credit
   const totalPrice = selectedCredits * creditPricePerUnit;
 
   // State for quota increments
@@ -70,6 +74,15 @@ export default function CreditTopUp() {
   const totalQuotaPrice =
     quotaIncrements.replayPass * quotaPrices.replayPass +
     quotaIncrements.eventPriority * quotaPrices.eventPriority;
+
+  // Payment / top-up state moved into hook
+  const { startTopup, isProcessing } = useTopupFlow();
+
+  function handleTopupPayment(processorId: number) {
+    startTopup(selectedCredits, processorId).catch((err) =>
+      console.error('Top-up failed:', err)
+    );
+  }
 
   if (creditsLoading) {
     return (
@@ -112,7 +125,7 @@ export default function CreditTopUp() {
                 {totalRemainingCredits}
               </div>
               <div className="text-xs text-muted-foreground">
-                Credits Available
+                Remaining credits
               </div>
             </div>
           </CardContent>
@@ -154,7 +167,7 @@ export default function CreditTopUp() {
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span>Price per credit:</span>
-                  <span className="font-medium">$0.50</span>
+                  <span className="font-medium">$0.01</span>
                 </div>
                 <div className="flex justify-between items-center text-lg font-semibold border-t pt-2">
                   <span>Total:</span>
@@ -167,16 +180,16 @@ export default function CreditTopUp() {
               <div className="space-y-3">
                 <input
                   type="range"
-                  min="5"
-                  max="200"
+                  min="500"
+                  max="5000"
                   step="5"
                   value={selectedCredits}
                   onChange={(e) => setSelectedCredits(Number(e.target.value))}
                   className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                 />
                 <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>5 credits</span>
-                  <span>200 credits</span>
+                  <span>500 credits</span>
+                  <span>5000 credits</span>
                 </div>
               </div>
 
@@ -206,10 +219,28 @@ export default function CreditTopUp() {
             </CardContent>
 
             <CardFooter>
-              <Button className="w-full btn text-lg py-3" size="lg">
-                <ShoppingCart className="mr-2 h-5 w-5" />
-                Add {selectedCredits} Credits - ${totalPrice.toFixed(2)}
-              </Button>
+              <div className="flex gap-3 w-full">
+                <Button
+                  className="w-full sm:flex-1 bg-[#0070ba] hover:bg-[#0070ba]/90 text-white"
+                  size="lg"
+                  onClick={() => handleTopupPayment(PaymentProcessor.PayPal)}
+                  disabled={isProcessing}
+                >
+                  <ShoppingCart className="mr-2 h-5 w-5" />
+                  Pay with PayPal
+                </Button>
+
+                <Button
+                  variant="outline"
+                  className="w-full sm:flex-1 border-[#635bff] text-[#635bff]"
+                  size="lg"
+                  onClick={() => handleTopupPayment(PaymentProcessor.Stripe)}
+                  disabled={isProcessing}
+                >
+                  <ShoppingCart className="mr-2 h-5 w-5" />
+                  Pay with Stripe
+                </Button>
+              </div>
             </CardFooter>
           </Card>
         </section>
