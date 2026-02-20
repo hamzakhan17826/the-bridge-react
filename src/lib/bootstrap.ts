@@ -22,7 +22,6 @@ export async function loadUserAndMemberships() {
   } catch (err) {
     // Non-fatal: auth session may still be valid without profile/memberships
     // Keep store consistent if partial data was loaded
-    // eslint-disable-next-line no-console
     console.warn('[bootstrap] Failed to load user/memberships:', err);
   }
 }

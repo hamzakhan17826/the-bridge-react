@@ -24,8 +24,15 @@ import {
 import { useAuthUser } from '@/hooks/useAuthUser';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user: authUser, isAdmin, hasMembershipTier } = useAuthUser();
-  const isProfessionalMedium = hasMembershipTier('PROFESSIONALMEDIUM');
+  const {
+    user: authUser,
+    isAdmin,
+    hasMembershipTier,
+    isInitialized,
+  } = useAuthUser();
+  // don't evaluate membership tiers until auth store has been initialized
+  const isProfessionalMedium =
+    isInitialized && hasMembershipTier('PROFESSIONALMEDIUM');
 
   // Create user object from auth store
   const user = authUser

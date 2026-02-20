@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
+import { ShoppingCart } from 'lucide-react';
 import { AppSidebar } from '@/components/app-sidebar';
 import {
   Breadcrumb,
@@ -82,7 +83,13 @@ function DashboardContent() {
             </BreadcrumbList>
           </Breadcrumb>
         </div>
-        <div className="px-4">
+        <div className="px-4 flex items-center gap-2">
+          <Link
+            to="/dashboard/checkout"
+            className="text-primary hover:text-primary/80"
+          >
+            <ShoppingCart className="h-5 w-5" />
+          </Link>
           <BreadcrumbPublicSiteButton
             onClick={() => window.open('/', '_blank')}
           >

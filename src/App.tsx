@@ -61,6 +61,7 @@ import {
   BlogPreview,
   NotFound,
   CreditTopUp,
+  Checkout,
 } from './pages';
 import { HelmetProvider } from 'react-helmet-async';
 import RefreshToken from './components/system/RefreshToken';
@@ -234,6 +235,7 @@ function App() {
         { path: 'membership/overview', element: <MembershipOverview /> },
         { path: 'membership/topup', element: <CreditTopUp /> },
         { path: 'membership/upgrade/:plan', element: <MembershipUpgrade /> },
+        { path: 'checkout', element: <Checkout /> },
         {
           path: 'users',
           element: (
