@@ -19,7 +19,6 @@ export function useAuthUser() {
 
   const hasMembershipTier = (tierCode: string) =>
     (activeMemberships as ActiveMembership[]).some((m) => {
-      console.log('Checking tier', m.tierCode, 'against', tierCode);
       return m.tierCode?.toLowerCase() === tierCode.toLowerCase();
     });
 

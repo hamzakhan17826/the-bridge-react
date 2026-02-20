@@ -1,6 +1,6 @@
 import { useBreadcrumb } from '@/components/ui/breadcrumb';
 import { useEffect } from 'react';
-import { ShoppingCart, Play, Star } from 'lucide-react';
+import { ShoppingCart, Play, Star, X } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -21,6 +21,7 @@ export default function Checkout() {
 
   const items = useCartStore((s) => s.items);
   const clearCart = useCartStore((s) => s.clear);
+  const removeItem = useCartStore((s) => s.removeItem);
 
   const grandTotal = items.reduce(
     (sum, item) => sum + item.qty * item.unitPrice,
@@ -66,8 +67,17 @@ export default function Checkout() {
                       </div>
                     </div>
                   </div>
-                  <div className="font-semibold text-lg">
-                    ${(it.qty * it.unitPrice).toFixed(2)}
+                  <div className="flex items-center gap-2">
+                    <div className="font-semibold text-lg">
+                      ${(it.qty * it.unitPrice).toFixed(2)}
+                    </div>
+                    <button
+                      className="text-red-500 hover:text-red-700"
+                      onClick={() => removeItem(it.id)}
+                      aria-label="Remove item"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
                   </div>
                 </div>
               </Card>
