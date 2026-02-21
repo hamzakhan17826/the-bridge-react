@@ -140,6 +140,7 @@ export interface ActiveMembershipFeature {
   name: string;
   code: string;
   description: string;
+  type?: FeatureType;
   displayOrder?: number;
 }
 
