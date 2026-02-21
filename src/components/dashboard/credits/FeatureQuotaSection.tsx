@@ -1,18 +1,8 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import {
-  Plus,
-  Minus,
-  Play,
-  Star,
-  CheckCircle,
-  ShoppingCart,
-} from 'lucide-react';
-import { useCartStore } from '@/stores/cartStore';
-import type { CartItem } from '@/stores/cartStore';
+import { Plus, Minus, Play, Star, CheckCircle } from 'lucide-react';
 
 export interface FeatureQuotaSectionProps {
   quotaIncrements: { replayPass: number; eventPriority: number };
@@ -28,15 +18,9 @@ const FeatureQuotaSection: React.FC<FeatureQuotaSectionProps> = ({
   quotaPrices,
   handleQuotaIncrement,
 }) => {
-  const navigate = useNavigate();
-
   const totalQuotaPrice =
     quotaIncrements.replayPass * quotaPrices.replayPass +
     quotaIncrements.eventPriority * quotaPrices.eventPriority;
-
-  const addItems = useCartStore(
-    (s) => s.addItems as (items: CartItem[]) => void
-  );
 
   return (
     <section className="space-y-6">
@@ -239,34 +223,6 @@ const FeatureQuotaSection: React.FC<FeatureQuotaSectionProps> = ({
                 <div className="text-2xl font-bold text-blue-600">
                   ${totalQuotaPrice.toFixed(2)}
                 </div>
-                <Button
-                  size="sm"
-                  className="px-6 btn"
-                  onClick={() => {
-                    const items: CartItem[] = [];
-                    if (quotaIncrements.replayPass > 0) {
-                      items.push({
-                        id: 'replayPass',
-                        name: 'Replay Pass',
-                        qty: quotaIncrements.replayPass,
-                        unitPrice: quotaPrices.replayPass,
-                      });
-                    }
-                    if (quotaIncrements.eventPriority > 0) {
-                      items.push({
-                        id: 'eventPriority',
-                        name: 'Event Priority',
-                        qty: quotaIncrements.eventPriority,
-                        unitPrice: quotaPrices.eventPriority,
-                      });
-                    }
-                    addItems(items);
-                    navigate('/dashboard/checkout');
-                  }}
-                >
-                  <ShoppingCart className="mr-2 h-4 w-4" />
-                  Checkout
-                </Button>
               </div>
             </div>
           </CardContent>

@@ -38,7 +38,6 @@ export { default as ActivityLogs } from './dashboard/ActivityLogs';
 export { default as DashboardAccessDenied } from './dashboard/AccessDenied';
 export { default as CreditsHistory } from './dashboard/CreditsHistory';
 export { default as CreditTopUp } from './dashboard/CreditTopUp';
-export { default as Checkout } from './dashboard/Checkout';
 export { default as MyEvents } from './dashboard/events/MyEvents';
 export { default as MyBooks } from './dashboard/books/MyBooks';
 export { default as CreateBook } from './dashboard/books/CreateBook';

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { ShoppingCart } from 'lucide-react';
 import { AppSidebar } from '@/components/app-sidebar';
 import {
   Breadcrumb,
@@ -24,7 +23,7 @@ import '@/styles/dashboard/dashboard.css';
 
 export default function Page() {
   return (
-    <SidebarProvider className="dashboard-theme overflow-x-hidden">
+    <SidebarProvider className="dashboard-theme">
       <AppSidebar />
       <DashboardContent />
     </SidebarProvider>
@@ -56,7 +55,7 @@ function DashboardContent() {
   };
 
   return (
-    <SidebarInset onClick={handleContentClick} className="overflow-x-hidden">
+    <SidebarInset onClick={handleContentClick}>
       <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
         <div className="flex items-center gap-2 px-4 flex-1">
           <SidebarTrigger className="-ml-1" data-sidebar-trigger />
@@ -84,12 +83,6 @@ function DashboardContent() {
           </Breadcrumb>
         </div>
         <div className="px-4 flex items-center gap-2">
-          <Link
-            to="/dashboard/checkout"
-            className="text-primary hover:text-primary/80"
-          >
-            <ShoppingCart className="h-5 w-5" />
-          </Link>
           <BreadcrumbPublicSiteButton
             onClick={() => window.open('/', '_blank')}
           >
